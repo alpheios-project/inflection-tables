@@ -8,15 +8,21 @@
 
 ### Install Dependencies
 
-`npm install`
+```
+npm install
+```
 
 ### Build
 
-`npm run build`
+```
+npm run build
+```
 
 ### Test
 
-`npm run test`
+```
+npm run test
+```
 
 
 ## Release Notes
