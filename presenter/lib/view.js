@@ -1,4 +1,5 @@
 import * as Lib from "../../lib/lib";
+import * as Models from 'alpheios-data-models';
 import * as Styles from "../styles/styles";
 import * as LibLatin from "../../lib/lang/latin/latin";
 export {Cell, RowTitleCell, HeaderCell, Column, Row, GroupFeatureType, GroupFeatureList,
@@ -429,7 +430,7 @@ class Column {
         this.hidden = false;
         this.empty = this.cells.every(cell => cell.empty);
         this.suffixMatches = !!this.cells.find(cell => cell.suffixMatches);
-        
+
         for (let cell of this.cells) {
             cell.column = this;
         }
@@ -605,7 +606,7 @@ class Row {
  * GroupFeatureType extends a Feature object so that it'll be able to store additional information
  * that is required for that.
  */
-class GroupFeatureType extends Lib.FeatureType {
+class GroupFeatureType extends Models.FeatureType {
 
     /**
      * GroupFeatureType extends FeatureType to serve as a grouping feature (i.e. a feature that forms
@@ -662,7 +663,7 @@ class GroupFeatureType extends Lib.FeatureType {
      * @returns {Feature[] | Feature[][]} A sorted array of feature values.
      */
     getOrderedFeatures(ancestorFeatures) {
-        return this.getOrderedValues(ancestorFeatures).map((value) => new Lib.Feature(value, this.type, this.language));
+        return this.getOrderedValues(ancestorFeatures).map((value) => new Models.Feature(value, this.type, this.language));
     }
 
     /**
@@ -741,7 +742,7 @@ class GroupFeatureType extends Lib.FeatureType {
 /**
  * Holds a list of all grouping features of a table.
  */
-class GroupFeatureList extends Lib.FeatureList {
+class GroupFeatureList extends Models.FeatureList {
 
     /**
      * Initializes object with an array of grouping feature objects.

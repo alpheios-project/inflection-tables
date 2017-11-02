@@ -122,7 +122,7 @@ class Presenter {
         // First view in a returned array will be a default one
         let views = [];
         for (let view of this.views) {
-            if (wordData.language === view.language && wordData[Lib.types.part].includes(view.partOfSpeech)) {
+            if (wordData.language === view.language && wordData[Models.Feature.types.part].includes(view.partOfSpeech)) {
                 views.push(view);
             }
         }

@@ -1,6 +1,6 @@
 // Import shared language data
 import * as Lib from "./lib/lib";
-import TuftsAdapter from "./analyzer/tufts/adapter";
+import * as AlpheiosTuftsAdapter from 'alpheios-tufts-adapter';
 import Presenter from "./presenter/presenter";
 
 // Load language data
@@ -38,7 +38,7 @@ let show = function show(word, fileNameBase) {
             json = JSON.parse(json);
 
             // Transform Morphological Analyzer's response into a library standard Homonym object
-            let homonym = new TuftsAdapter().transform(json);
+            let homonym = new AlpheiosTuftsAdapter().transform(json);
 
             // Get matching suffixes from an inflection library
             let wordData = langData.getSuffixes(homonym);
