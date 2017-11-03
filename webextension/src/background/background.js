@@ -1,5 +1,6 @@
 import * as Lib from "../../../lib/lib";
-import TuftsAdapter from "../../../analyzer/tufts/adapter";
+import AlpheiosTuftsAdapter from "alpheios-tufts-adapter";
+import * as Models from "alpheios-data-models"
 import * as ExtLib from '../lib/lib';
 // Import language data
 import * as LatinData from "../../../lib/lang/latin/latin";
@@ -121,18 +122,21 @@ class BackgroundProcess {
     messageListener(message, sender) {
         console.log("Message from the content script: ", message.body);
         if (message.type === ExtLib.Message.types.WORD_DATA_REQUEST) {
-            let selectedWord = Lib.SelectedWord.readObjects(message.body);
+            let selectedWord = { language: message.body.language, word: message.body.word };
             console.log(`Request for a "${selectedWord.word}" word`);
-
-            let adapter = new TuftsAdapter();
-            adapter.fetchTestData(selectedWord.language, selectedWord.word).then((json) => {
-                    let homonym = adapter.transform(json);
+            let adapterArgs = { engine: { lat: "whitakerLat"}, url: "http://morph.alpheios.net/api/v1/analysis/word?word=r_WORD&engine=r_ENGINE&lang=r_LANG"};
+            let adapter = new AlpheiosTuftsAdapter(adapterArgs);
+            adapter.fetch(selectedWord.language, selectedWord.word).then((json) => {
+                    let homonym = adapter.transform(json,selectedWord.word);
 
                     // Get matching suffixes from an inflection library
                     let wordData = this.langData.getSuffixes(homonym);
                     wordData.word = selectedWord.word;
-                    wordData.definition = encodeURIComponent(alpheiosTestData.definition);
-                    console.log(wordData);
+                    let definitions = [];
+                    for (let lexeme of homonym.lexemes) {
+                      definitions.push(`${lexeme.lemma.word}': ${lexeme.meaning}`)
+                    }
+                    wordData.definition = encodeURIComponent(definitions.join('\n'));
 
                     this.sendMessageToTab(new ExtLib.WordDataResponse(wordData, ExtLib.Message.statuses.DATA_FOUND, message));
                 },
@@ -169,6 +173,31 @@ class BackgroundProcess {
             id: alpheiosExtSettings.menuItemId,
             title: alpheiosExtSettings.menuItemText
         });
+    }
+
+    stringify(obj, replacer, spaces, cycleReplacer) {
+      return JSON.stringify(obj, this.serializer(replacer, cycleReplacer), spaces)
+    }
+
+    serializer(replacer, cycleReplacer) {
+      var stack = [], keys = []
+
+      if (cycleReplacer == null) cycleReplacer = function(key, value) {
+        if (stack[0] === value) return "[Circular ~]"
+        return "[Circular ~." + keys.slice(0, stack.indexOf(value)).join(".") + "]"
+      }
+
+      return function(key, value) {
+        if (stack.length > 0) {
+          var thisPos = stack.indexOf(this)
+          ~thisPos ? stack.splice(thisPos + 1) : stack.push(this)
+          ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key)
+          if (~stack.indexOf(value)) value = cycleReplacer.call(this, key, value)
+        }
+        else stack.push(value)
+
+        return replacer == null ? value : replacer.call(this, key, value)
+      }
     }
 }
 

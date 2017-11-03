@@ -31,7 +31,7 @@ class WordDataRequest extends Message {
     constructor(language, word) {
         super();
         this.type = Message.types.WORD_DATA_REQUEST;
-        this.body = new Lib.SelectedWord(language, word);
+        this.body = { language: language, word: word };
     }
 }
 

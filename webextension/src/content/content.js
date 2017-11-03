@@ -1,4 +1,5 @@
 import * as Lib from "../../../lib/lib";
+import * as Models from 'alpheios-data-models';
 import Presenter from "../../../presenter/presenter";
 import * as ExtLib from '../lib/lib';
 import * as UI from './ui';
@@ -118,9 +119,8 @@ class ContentProcess {
     static getSelectedText() {
         let selectedWord = document.getSelection().toString().trim();
         console.log(`Selected text is ${selectedWord}`);
-        ContentProcess.requestWordData('unknown', selectedWord);
+        ContentProcess.requestWordData('lat', selectedWord);
     }
 }
 
 let contentProcess = new ContentProcess();
-
