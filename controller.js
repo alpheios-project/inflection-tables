@@ -1,6 +1,6 @@
 // Import shared language data
 import * as Lib from "./lib/lib";
-import * as AlpheiosTuftsAdapter from 'alpheios-tufts-adapter';
+import AlpheiosTuftsAdapter from 'alpheios-tufts-adapter';
 import Presenter from "./presenter/presenter";
 
 // Load language data
@@ -37,8 +37,9 @@ let show = function show(word, fileNameBase) {
         .then(json => {
             json = JSON.parse(json);
 
+            let adapterArgs = { engine: { lat: "whitakerLat"}, url: "http://morph.alpheios.net/api/v1/analysis/word?word=r_WORD&engine=r_ENGINE&lang=r_LANG"};
             // Transform Morphological Analyzer's response into a library standard Homonym object
-            let homonym = new AlpheiosTuftsAdapter().transform(json);
+            let homonym = new AlpheiosTuftsAdapter(adapterArgs).transform(json);
 
             // Get matching suffixes from an inflection library
             let wordData = langData.getSuffixes(homonym);

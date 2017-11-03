@@ -14,11 +14,11 @@ class LatinView extends View.View {
         those values in child objects.
          */
         this.features = {
-            numbers: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.number], 'Number'),
-            cases: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.case], 'Case'),
-            declensions: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.declension], 'Declension'),
-            genders: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.gender], 'Gender'),
-            types: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.type], 'Type')
+            numbers: new View.GroupFeatureType(this.language_features[Models.Feature.types.number], 'Number'),
+            cases: new View.GroupFeatureType(this.language_features[Models.Feature.types.grmCase], 'Case'),
+            declensions: new View.GroupFeatureType(this.language_features[Models.Feature.types.declension], 'Declension'),
+            genders: new View.GroupFeatureType(this.language_features[Models.Feature.types.gender], 'Gender'),
+            types: new View.GroupFeatureType(this.language_features[Models.Feature.types.type], 'Type')
         };
     }
 
@@ -30,9 +30,9 @@ class LatinView extends View.View {
         this.table = new View.Table([this.features.declensions, this.features.genders,
             this.features.types, this.features.numbers, this.features.cases]);
         let features = this.table.features;
-        features.columns = [this.language_features[Models.Feature.types.declension], this.language_featuers[Models.Feature.types.gender], this.language_features[features.types.type]];
-        features.rows = [this.language_features[Models.Feature.types.number], this.language_feature[features.types.case]];
-        features.columnRowTitles = [this.language_features[Models.Feature.types.case]];
+        features.columns = [this.language_features[Models.Feature.types.declension], this.language_features[Models.Feature.types.gender], this.language_features[Models.Feature.types.type]];
+        features.rows = [this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.grmCase]];
+        features.columnRowTitles = [this.language_features[Models.Feature.types.grmCase]];
         features.fullWidthRowTitles = [this.language_features[Models.Feature.types.number]];
     }
 }
@@ -46,7 +46,7 @@ class NounView extends LatinView {
         this.partOfSpeech = this.language_features[Models.Feature.types.part].noun.value;
 
         // Models.Feature that are different from base class values
-        this.features.genders = new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.gender], 'Gender',
+        this.features.genders = new View.GroupFeatureType(this.language_features[Models.Feature.types.gender], 'Gender',
             [[this.language_features[Models.Feature.types.gender].masculine, this.language_features[Models.Feature.types.gender].feminine], this.language_features[Models.Feature.types.gender].neuter]);
 
         this.createTable();
@@ -62,7 +62,7 @@ class AdjectiveView extends LatinView {
         this.partOfSpeech = this.language_features[Models.Feature.types.part].adjective.value;
 
         // Models.Feature that are different from base class values
-        this.features.declensions = new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.declension], 'Declension',
+        this.features.declensions = new View.GroupFeatureType(this.language_features[Models.Feature.types.declension], 'Declension',
             [this.language_features[Models.Feature.types.declension].first, this.language_features[Models.Feature.types.declension].second, this.language_features[Models.Feature.types.declension].third]);
 
         this.createTable();
@@ -75,12 +75,12 @@ class VerbView extends LatinView {
         this.partOfSpeech = this.language_features[Models.Feature.types.part].verb.value;
 
         this.features = {
-            tenses: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.tense], 'Tenses'),
-            numbers: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.number], 'Number'),
-            persons: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.person], 'Person'),
-            voices: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.voice], 'Voice'),
-            conjugations: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.conjugation], 'Conjugation Stem'),
-            moods: new View.GroupModels.FeatureType(this.language_features[Models.Feature.types.mood], 'Mood')
+            tenses: new View.GroupFeatureType(this.language_features[Models.Feature.types.tense], 'Tenses'),
+            numbers: new View.GroupFeatureType(this.language_features[Models.Feature.types.number], 'Number'),
+            persons: new View.GroupFeatureType(this.language_features[Models.Feature.types.person], 'Person'),
+            voices: new View.GroupFeatureType(this.language_features[Models.Feature.types.voice], 'Voice'),
+            conjugations: new View.GroupFeatureType(this.language_features[Models.Feature.types.conjugation], 'Conjugation Stem'),
+            moods: new View.GroupFeatureType(this.language_features[Models.Feature.types.mood], 'Mood')
         };
     }
 }
@@ -121,7 +121,7 @@ class VoiceMoodConjugationView extends VerbView {
             this.features.tenses, this.features.numbers, this.features.persons]);
         let features = this.table.features;
         features.columns = [this.language_features[Models.Feature.types.voice], this.language_features[Models.Feature.types.mood], this.language_features[Models.Feature.types.conjugation]];
-        features.rows = [this.language_features[Models.Feature.types.tense], this.language_feautres[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
+        features.rows = [this.language_features[Models.Feature.types.tense], this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
         features.columnRowTitles = [this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
         features.fullWidthRowTitles = [this.language_features[Models.Feature.types.tense]];
     }
@@ -162,7 +162,7 @@ class ConjugationMoodVoiceView extends VerbView {
         this.table = new View.Table([this.features.conjugations, this.features.moods, this.features.voices,
             this.features.tenses, this.features.numbers, this.features.persons]);
         let features = this.table.features;
-        features.columns = [this.language_features[Models.Feature.types.conjugation], this.langage_features[Models.Feature.types.mood], this.language_features[Models.Feature.types.voice]];
+        features.columns = [this.language_features[Models.Feature.types.conjugation], this.language_features[Models.Feature.types.mood], this.language_features[Models.Feature.types.voice]];
         features.rows = [this.language_features[Models.Feature.types.tense], this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
         features.columnRowTitles = [this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
         features.fullWidthRowTitles = [this.language_features[Models.Feature.types.tense]];
@@ -184,9 +184,9 @@ class MoodVoiceConjugationView extends VerbView {
             this.features.tenses, this.features.numbers, this.features.persons]);
         let features = this.table.features;
         features.columns = [this.language_features[Models.Feature.types.mood], this.language_features[Models.Feature.types.voice], this.language_features[Models.Feature.types.conjugation]];
-        features.rows = [this.language_features[Models.Feature.types.tense], this.language_features[Models.Feature.types.number], this.langage_features[Models.Feature.types.person]];
+        features.rows = [this.language_features[Models.Feature.types.tense], this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
         features.columnRowTitles = [this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
-        features.fullWidthRowTitles = [this.language_feautres[Models.Feature.types.tense]];
+        features.fullWidthRowTitles = [this.language_features[Models.Feature.types.tense]];
     }
 }
 
@@ -204,7 +204,7 @@ class MoodConjugationVoiceView extends VerbView {
         this.table = new View.Table([this.features.moods, this.features.conjugations, this.features.voices,
             this.features.tenses, this.features.numbers, this.features.persons]);
         let features = this.table.features;
-        features.columns = [this.language_features[Models.Feature.types.mood], this.language_feautres[Models.Feature.types.conjugation], this.language_features[Models.Feature.types.voice]];
+        features.columns = [this.language_features[Models.Feature.types.mood], this.language_features[Models.Feature.types.conjugation], this.language_features[Models.Feature.types.voice]];
         features.rows = [this.language_features[Models.Feature.types.tense], this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
         features.columnRowTitles = [this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]];
         features.fullWidthRowTitles = [this.language_features[Models.Feature.types.tense]];

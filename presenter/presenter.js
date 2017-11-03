@@ -7,6 +7,7 @@ import * as L10n from '../l10n/l10n.js';
 import * as View from './lib/view';
 import viewsLatin from "./views/latin";
 import viewsGreek from "./views/greek";
+import * as Models from 'alpheios-data-models';
 
 
 class Presenter {
