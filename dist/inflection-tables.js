@@ -131,7 +131,7 @@ class Feature {
      * @param {string | string[]} value - A single feature value or, if this feature could have multiple
      * values, an array of values.
      * @param {string} type - A type of the feature, allowed values are specified in 'types' object.
-     * @param {LanguageModel} language - A language of a feature, allowed values are specified in 'languages' object.
+     * @param {string} language - A language of a feature, allowed values are specified in 'languages' object.
      */
     constructor (value, type, language) {
         if (!Feature.types.isAllowed(type)) {
@@ -143,7 +143,7 @@ class Feature {
         if (!type) {
             throw new Error('Feature should have a non-empty type.');
         }
-        if (!language || ! language instanceof LanguageModel) {
+        if (!language) {
           throw new Error('Feature constructor requires a language');
         }
         this.value = value;
@@ -211,7 +211,7 @@ class FeatureType$1 {
      * If an empty array is provided, there will be no
      * allowed values as well as no ordering (can be used for items that do not need or have a simple order,
      * such as footnotes).
-     * @param {LanguageModel} language - A language of a feature, allowed values are specified in 'languages' object.
+     * @param {string} language - A language of a feature, allowed values are specified in 'languages' object.
      */
     constructor(type, values, language) {
         if (!Feature.types.isAllowed(type)) {
@@ -220,7 +220,7 @@ class FeatureType$1 {
         if (!values || !Array.isArray(values)) {
             throw new Error('Values should be an array (or an empty array) of values.');
         }
-        if (!language || ! language instanceof LanguageModel) {
+        if (!language) {
           throw new Error('FeatureType constructor requires a language');
         }
 
@@ -471,17 +471,18 @@ class LatinLanguageModel$1 extends LanguageModel {
 
    _initializeFeatures() {
      let features = {};
-     features[Feature.types.part] = new FeatureType$1(Feature.types.part, ['noun', 'adjective', 'verb'],this);
-     features[Feature.types.number] = new FeatureType$1(Feature.types.number, ['singular', 'plural'],this);
-     features[Feature.types.grmCase] = new FeatureType$1(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'ablative', 'locative', 'vocative'],this);
-     features[Feature.types.declension] = new FeatureType$1(Feature.types.declension, ['first', 'second', 'third', 'fourth', 'fifth'],this);
-     features[Feature.types.gender] = new FeatureType$1(Feature.types.gender, ['masculine', 'feminine', 'neuter'],this);
-     features[Feature.types.type] = new FeatureType$1(Feature.types.type, ['regular', 'irregular'],this);
-     features[Feature.types.tense] = new FeatureType$1(Feature.types.tense, ['present', 'imperfect', 'future', 'perfect', 'pluperfect', 'future perfect'],this);
-     features[Feature.types.voice] = new FeatureType$1(Feature.types.voice, ['passive', 'active'],this);
-     features[Feature.types.mood] = new FeatureType$1(Feature.types.mood, ['indicative', 'subjunctive'],this);
-     features[Feature.types.person] =new FeatureType$1(Feature.types.person, ['first', 'second', 'third'],this);
-     features[Feature.types.conjugation] = new FeatureType$1(Feature.types.conjugation, ['first', 'second', 'third', 'fourth'],this);
+     let lang_code = this.toCode();
+     features[Feature.types.part] = new FeatureType$1(Feature.types.part, ['noun', 'adjective', 'verb'],lang_code);
+     features[Feature.types.number] = new FeatureType$1(Feature.types.number, ['singular', 'plural'],lang_code);
+     features[Feature.types.grmCase] = new FeatureType$1(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'ablative', 'locative', 'vocative'],lang_code);
+     features[Feature.types.declension] = new FeatureType$1(Feature.types.declension, ['first', 'second', 'third', 'fourth', 'fifth'],lang_code);
+     features[Feature.types.gender] = new FeatureType$1(Feature.types.gender, ['masculine', 'feminine', 'neuter'],lang_code);
+     features[Feature.types.type] = new FeatureType$1(Feature.types.type, ['regular', 'irregular'],lang_code);
+     features[Feature.types.tense] = new FeatureType$1(Feature.types.tense, ['present', 'imperfect', 'future', 'perfect', 'pluperfect', 'future perfect'],lang_code);
+     features[Feature.types.voice] = new FeatureType$1(Feature.types.voice, ['passive', 'active'],lang_code);
+     features[Feature.types.mood] = new FeatureType$1(Feature.types.mood, ['indicative', 'subjunctive'],lang_code);
+     features[Feature.types.person] =new FeatureType$1(Feature.types.person, ['first', 'second', 'third'],lang_code);
+     features[Feature.types.conjugation] = new FeatureType$1(Feature.types.conjugation, ['first', 'second', 'third', 'fourth'],lang_code);
      return features;
    }
 
@@ -691,7 +692,7 @@ class Inflection {
     /**
      * Initializes an Inflection object.
      * @param {string} stem - A stem of a word.
-     * @param {LanguageModel} language - A word's language.
+     * @param {string} language - A word's language.
      */
     constructor(stem, language) {
 
@@ -757,8 +758,9 @@ class Lexeme {
      * Initializes a Lexeme object.
      * @param {Lemma} lemma - A lemma object.
      * @param {Inflection[]} inflections - An array of inflections.
+     * @param {string} meaning - a short definition
      */
-    constructor(lemma, inflections) {
+    constructor(lemma, inflections, meaning="") {
         if (!lemma) {
             throw new Error('Lemma should not be empty.');
         }
@@ -783,6 +785,7 @@ class Lexeme {
 
         this.lemma = lemma;
         this.inflections = inflections;
+        this.meaning = meaning;
     }
 
     static readObject(jsonObject) {
@@ -795,7 +798,7 @@ class Lexeme {
     }
 }
 
-class Homonym$1 {
+class Homonym {
     /**
      * Initializes a Homonym object.
      * @param {Lexeme[]} lexemes - An array of Lexeme objects.
@@ -827,7 +830,7 @@ class Homonym$1 {
                 lexemes.push(Lexeme.readObject(lexeme));
             }
         }
-        let homonym = new Homonym$1(lexemes);
+        let homonym = new Homonym(lexemes);
         if (jsonObject.targetWord) {
             homonym.targetWord = jsonObject.targetWord;
         }
@@ -1147,7 +1150,7 @@ class Suffix {
 
         if (jsonObject[Feature.types.footnote]) {
             suffix[Feature.types.footnote] = [];
-            for (let footnote of jsonObject[types.footnote]) {
+            for (let footnote of jsonObject[Feature.types.footnote]) {
                 suffix[Feature.types.footnote].push(footnote);
             }
         }
@@ -1524,6 +1527,73 @@ let loadData = function loadData(filePath) {
     });
 };
 
+/**
+ * Base Adapter Class for a Morphology Service Client
+ */
+class BaseAdapter {
+  /**
+   * Method which is used to prepare a lookup request according
+   * to the adapter specific logic
+   * @param {string} lang - the language code
+   * @param {string} word - the word to lookup
+   * @returns {string} the url for the request
+   */
+  prepareRequestUrl (lang, word) {
+      /** must be overridden in the adapter implementation class **/
+    return null
+  }
+
+  /**
+   * Fetch response from a remote URL
+   * @param {string} lang - the language code
+   * @param {string} word - the word to lookup
+   * @returns {Promise} a promse which if successful resolves to json response object
+   *                    with the results of the analysis
+   */
+  fetch (lang, word) {
+    let url = this.prepareRequestUrl(lang, word);
+    return new Promise((resolve, reject) => {
+      window.fetch(url).then(
+          function (response) {
+            let json = response.json();
+            resolve(json);
+          }
+        ).catch((error) => {
+          reject(error);
+        }
+        );
+    })
+  }
+
+  /**
+   * Fetch test data to test the adapter
+   * @param {string} lang - the language code
+   * @param {string} word - the word to lookup
+   * @returns {Promise} a promse which if successful resolves to json response object
+   *                    with the test data
+   */
+  fetchTestData (lang, word) {
+    return new Promise((resolve, reject) => {
+      try {
+        let data = {};
+        resolve(data);
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
+  /**
+   * A function that maps a morphological service's specific data types and values into an inflection library standard.
+   * @param {object} jsonObj - A JSON data from the fetch request
+   * @param {object} targetWord - the original target word of the analysis
+   * @returns {Homonym} A library standard Homonym object.
+   */
+  transform (jsonObj, targetWord) {
+    return {}
+  }
+}
+
 /*
 Objects of a morphology analyzer's library
  */
@@ -1536,46 +1606,44 @@ class ImportData {
      * Creates an InmportData object for the language provided.
      * @param {Models.LanguageModel} language - A language of the import data.
      */
-    constructor(language) {
-        "use strict";
-        this.language = language;
-    }
+  constructor (language) {
+    'use strict';
+    this.language = language;
+  }
 
     /**
      * Adds a grammatical feature whose values to be mapped.
      * @param {string} featureName - A name of a grammatical feature (i.e. declension, number, etc.)
      * @return {Object} An object that represent a newly created grammatical feature.
      */
-    addFeature(featureName) {
-        this[featureName] = {};
-        let language = this.language;
+  addFeature (featureName) {
+    this[featureName] = {};
+    let language = this.language;
 
-        this[featureName].add = function add(providerValue, alpheiosValue) {
-            "use strict";
-            this[providerValue] = alpheiosValue;
-            return this;
-        };
+    this[featureName].add = function add (providerValue, alpheiosValue) {
+      'use strict';
+      this[providerValue] = alpheiosValue;
+      return this
+    };
 
-        this[featureName].get = function get(providerValue) {
-            "use strict";
-            if (!this.importer.has(providerValue)) {
-                throw new Error("Skipping an unknown value '"
-                    + providerValue + "' of a grammatical feature '" + featureName + "' of " + language + " language.");
-            }
-            else {
-                return this.importer.get(providerValue);
-            }
+    this[featureName].get = function get (providerValue) {
+      'use strict';
+      if (!this.importer.has(providerValue)) {
+        throw new Error("Skipping an unknown value '" +
+                    providerValue + "' of a grammatical feature '" + featureName + "' of " + language + ' language.')
+      } else {
+        return this.importer.get(providerValue)
+      }
+    };
 
-        };
+    this[featureName].importer = new FeatureImporter();
 
-        this[featureName].importer = new FeatureImporter();
-
-        return this[featureName];
-    }
+    return this[featureName]
+  }
 }
 
 let data = new ImportData(new LatinLanguageModel$1());
-let types$1 = Feature.types;
+let types = Feature.types;
 
 /*
 Below are value conversion maps for each grammatical feature to be parsed.
@@ -1585,63 +1653,63 @@ data.addFeature(typeName).add(providerValueName, LibValueName);
 Types and values that are unknown (undefined) will be skipped during parsing.
  */
 data.addFeature(Feature.types.part).importer
-    .map('noun', data.language.features[types$1.part].noun)
-    .map('adjective', data.language.features[types$1.part].adjective)
-    .map('verb', data.language.features[types$1.part].verb);
+    .map('noun', data.language.features[types.part].noun)
+    .map('adjective', data.language.features[types.part].adjective)
+    .map('verb', data.language.features[types.part].verb);
 
 data.addFeature(Feature.types.grmCase).importer
-    .map('nominative', data.language.features[types$1.grmCase].nominative)
-    .map('genitive', data.language.features[types$1.grmCase].genitive)
-    .map('dative', data.language.features[types$1.grmCase].dative)
-    .map('accusative', data.language.features[types$1.grmCase].accusative)
-    .map('ablative', data.language.features[types$1.grmCase].ablative)
-    .map('locative', data.language.features[types$1.grmCase].locative)
-    .map('vocative', data.language.features[types$1.grmCase].vocative);
+    .map('nominative', data.language.features[types.grmCase].nominative)
+    .map('genitive', data.language.features[types.grmCase].genitive)
+    .map('dative', data.language.features[types.grmCase].dative)
+    .map('accusative', data.language.features[types.grmCase].accusative)
+    .map('ablative', data.language.features[types.grmCase].ablative)
+    .map('locative', data.language.features[types.grmCase].locative)
+    .map('vocative', data.language.features[types.grmCase].vocative);
 
 data.addFeature(Feature.types.declension).importer
-    .map('1st', data.language.features[types$1.declension].first)
-    .map('2nd', data.language.features[types$1.declension].second)
-    .map('3rd', data.language.features[types$1.declension].third)
-    .map('4th', data.language.features[types$1.declension].fourth)
-    .map('5th', data.language.features[types$1.declension].fifth);
+    .map('1st', data.language.features[types.declension].first)
+    .map('2nd', data.language.features[types.declension].second)
+    .map('3rd', data.language.features[types.declension].third)
+    .map('4th', data.language.features[types.declension].fourth)
+    .map('5th', data.language.features[types.declension].fifth);
 
 data.addFeature(Feature.types.number).importer
-    .map('singular', data.language.features[types$1.number].singular)
-    .map('plural', data.language.features[types$1.number].plural);
+    .map('singular', data.language.features[types.number].singular)
+    .map('plural', data.language.features[types.number].plural);
 
 data.addFeature(Feature.types.gender).importer
-    .map('masculine', data.language.features[types$1.gender].masculine)
-    .map('feminine', data.language.features[types$1.gender].feminine)
-    .map('neuter', data.language.features[types$1.gender].neuter)
-    .map('common', [data.language.features[types$1.gender].masculine, data.language.features[types$1.gender].feminine])
-    .map('all', [data.language.features[types$1.gender].masculine, data.language.features[types$1.gender].feminine, data.language.features[types$1.gender].neuter]);
+    .map('masculine', data.language.features[types.gender].masculine)
+    .map('feminine', data.language.features[types.gender].feminine)
+    .map('neuter', data.language.features[types.gender].neuter)
+    .map('common', [data.language.features[types.gender].masculine, data.language.features[types.gender].feminine])
+    .map('all', [data.language.features[types.gender].masculine, data.language.features[types.gender].feminine, data.language.features[types.gender].neuter]);
 
 data.addFeature(Feature.types.conjugation).importer
-    .map('1st', data.language.features[types$1.conjugation].first)
-    .map('2nd', data.language.features[types$1.conjugation].second)
-    .map('3rd', data.language.features[types$1.conjugation].third)
-    .map('4th', data.language.features[types$1.conjugation].fourth);
+    .map('1st', data.language.features[types.conjugation].first)
+    .map('2nd', data.language.features[types.conjugation].second)
+    .map('3rd', data.language.features[types.conjugation].third)
+    .map('4th', data.language.features[types.conjugation].fourth);
 
 data.addFeature(Feature.types.tense).importer
-    .map('present', data.language.features[types$1.tense].present)
-    .map('imperfect', data.language.features[types$1.tense].imperfect)
-    .map('future', data.language.features[types$1.tense].future)
-    .map('perfect', data.language.features[types$1.tense].perfect)
-    .map('pluperfect', data.language.features[types$1.tense].pluperfect)
-    .map('future_perfect', data.language.features[types$1.tense]['future perfect']);
+    .map('present', data.language.features[types.tense].present)
+    .map('imperfect', data.language.features[types.tense].imperfect)
+    .map('future', data.language.features[types.tense].future)
+    .map('perfect', data.language.features[types.tense].perfect)
+    .map('pluperfect', data.language.features[types.tense].pluperfect)
+    .map('future_perfect', data.language.features[types.tense]['future perfect']);
 
 data.addFeature(Feature.types.voice).importer
-    .map('active', data.language.features[types$1.voice].active)
-    .map('passive', data.language.features[types$1.voice].passive);
+    .map('active', data.language.features[types.voice].active)
+    .map('passive', data.language.features[types.voice].passive);
 
 data.addFeature(Feature.types.mood).importer
-    .map('indicative', data.language.features[types$1.mood].indicative)
-    .map('subjunctive', data.language.features[types$1.mood].subjunctive);
+    .map('indicative', data.language.features[types.mood].indicative)
+    .map('subjunctive', data.language.features[types.mood].subjunctive);
 
 data.addFeature(Feature.types.person).importer
-    .map('1st', data.language.features[types$1.person].first)
-    .map('2nd', data.language.features[types$1.person].second)
-    .map('3rd', data.language.features[types$1.person].third);
+    .map('1st', data.language.features[types.person].first)
+    .map('2nd', data.language.features[types.person].second)
+    .map('3rd', data.language.features[types.person].third);
 
 var Cupidinibus = "{\n  \"RDF\": {\n    \"Annotation\": {\n      \"about\": \"urn:TuftsMorphologyService:cupidinibus:whitakerLat\",\n      \"creator\": {\n        \"Agent\": {\n          \"about\": \"net.alpheios:tools:wordsxml.v1\"\n        }\n      },\n      \"created\": {\n        \"$\": \"2017-08-10T23:15:29.185581\"\n      },\n      \"hasTarget\": {\n        \"Description\": {\n          \"about\": \"urn:word:cupidinibus\"\n        }\n      },\n      \"title\": {},\n      \"hasBody\": [\n        {\n          \"resource\": \"urn:uuid:idm140578094883136\"\n        },\n        {\n          \"resource\": \"urn:uuid:idm140578158026160\"\n        }\n      ],\n      \"Body\": [\n        {\n          \"about\": \"urn:uuid:idm140578094883136\",\n          \"type\": {\n            \"resource\": \"cnt:ContentAsXML\"\n          },\n          \"rest\": {\n            \"entry\": {\n              \"infl\": [\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 2,\n                    \"$\": \"locative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"masculine\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 5,\n                    \"$\": \"dative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"masculine\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 3,\n                    \"$\": \"ablative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"masculine\"\n                  }\n                }\n              ],\n              \"dict\": {\n                \"hdwd\": {\n                  \"lang\": \"lat\",\n                  \"$\": \"Cupido, Cupidinis\"\n                },\n                \"pofs\": {\n                  \"order\": 5,\n                  \"$\": \"noun\"\n                },\n                \"decl\": {\n                  \"$\": \"3rd\"\n                },\n                \"gend\": {\n                  \"$\": \"masculine\"\n                },\n                \"area\": {\n                  \"$\": \"religion\"\n                },\n                \"freq\": {\n                  \"order\": 4,\n                  \"$\": \"common\"\n                },\n                \"src\": {\n                  \"$\": \"Ox.Lat.Dict.\"\n                }\n              },\n              \"mean\": {\n                \"$\": \"Cupid, son of Venus; personification of carnal desire;\"\n              }\n            }\n          }\n        },\n        {\n          \"about\": \"urn:uuid:idm140578158026160\",\n          \"type\": {\n            \"resource\": \"cnt:ContentAsXML\"\n          },\n          \"rest\": {\n            \"entry\": {\n              \"infl\": [\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 2,\n                    \"$\": \"locative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"common\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 5,\n                    \"$\": \"dative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"common\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 3,\n                    \"$\": \"ablative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"common\"\n                  }\n                }\n              ],\n              \"dict\": {\n                \"hdwd\": {\n                  \"lang\": \"lat\",\n                  \"$\": \"cupido, cupidinis\"\n                },\n                \"pofs\": {\n                  \"order\": 5,\n                  \"$\": \"noun\"\n                },\n                \"decl\": {\n                  \"$\": \"3rd\"\n                },\n                \"gend\": {\n                  \"$\": \"common\"\n                },\n                \"freq\": {\n                  \"order\": 5,\n                  \"$\": \"frequent\"\n                },\n                \"src\": {\n                  \"$\": \"Ox.Lat.Dict.\"\n                }\n              },\n              \"mean\": {\n                \"$\": \"desire/love/wish/longing (passionate); lust; greed, appetite; desire for gain;\"\n              }\n            }\n          }\n        }\n      ]\n    }\n  }\n}\n";
 
@@ -1652,151 +1720,140 @@ var Cepit = "{\n  \"RDF\": {\n    \"Annotation\": {\n      \"about\": \"urn:Tuft
 var Pilsopo = "{\n  \"RDF\": {\n    \"Annotation\": {\n      \"about\": \"urn:TuftsMorphologyService:φιλόσοφος:morpheuslat\",\n      \"creator\": {\n        \"Agent\": {\n          \"about\": \"org.perseus:tools:morpheus.v1\"\n        }\n      },\n      \"created\": {\n        \"$\": \"2017-10-15T14:06:40.522369\"\n      },\n      \"hasTarget\": {\n        \"Description\": {\n          \"about\": \"urn:word:φιλόσοφος\"\n        }\n      },\n      \"title\": {},\n      \"hasBody\": {\n        \"resource\": \"urn:uuid:idm140446394225264\"\n      },\n      \"Body\": {\n        \"about\": \"urn:uuid:idm140446394225264\",\n        \"type\": {\n          \"resource\": \"cnt:ContentAsXML\"\n        },\n        \"rest\": {\n          \"entry\": {\n            \"uri\": \"http://data.perseus.org/collections/urn:cite:perseus:grclexent.lex78378.1\",\n            \"dict\": {\n              \"hdwd\": {\n                \"lang\": \"grc\",\n                \"$\": \"φιλόσοφος\"\n              },\n              \"pofs\": {\n                \"order\": 3,\n                \"$\": \"noun\"\n              },\n              \"decl\": {\n                \"$\": \"2nd\"\n              },\n              \"gend\": {\n                \"$\": \"masculine\"\n              }\n            },\n            \"infl\": {\n              \"term\": {\n                \"lang\": \"grc\",\n                \"stem\": {\n                  \"$\": \"φιλοσοφ\"\n                },\n                \"suff\": {\n                  \"$\": \"ος\"\n                }\n              },\n              \"pofs\": {\n                \"order\": 3,\n                \"$\": \"noun\"\n              },\n              \"decl\": {\n                \"$\": \"2nd\"\n              },\n              \"case\": {\n                \"order\": 7,\n                \"$\": \"nominative\"\n              },\n              \"gend\": {\n                \"$\": \"masculine\"\n              },\n              \"num\": {\n                \"$\": \"singular\"\n              },\n              \"stemtype\": {\n                \"$\": \"os_ou\"\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}";
 
 class WordTestData {
-    constructor() {
-        this._words = {
-            'cupidinibus': Cupidinibus,
-            'mare': Mare,
-            'cepit': Cepit,
-            'φιλόσοφος': Pilsopo
-        };
-    }
+  constructor () {
+    this._words = {
+      'cupidinibus': Cupidinibus,
+      'mare': Mare,
+      'cepit': Cepit,
+      'φιλόσοφος': Pilsopo
+    };
+  }
 
-    get(word) {
-        if (this._words.hasOwnProperty(word)) {
-            return this._words[word];
-        }
-        throw new Error(`Word "${word}" does not exist in test data`);
+  get (word) {
+    if (this._words.hasOwnProperty(word)) {
+      return this._words[word]
     }
+    throw new Error(`Word "${word}" does not exist in test data`)
+  }
 }
 
-class TuftsAdapter {
-    constructor({engine=null,url=null}) {
-      let latin_code = data.language.toCode();
-      this[latin_code] = data;
-      //this[Lib.languages.greek] = TuftsGreekData;
-      //this.langMap = new Map([['lat', TuftsLatinData]]);
-      //this.langMap = new Lib.Importer().map('lat', Lib.languages.latin).map('grc', Lib.languages.greek);
-      this.langMap = new FeatureImporter().map('lat', latin_code);
-      this.engineLookup = engine;
-      this.url = url;
-      return this;
-    }
+class TuftsAdapter extends BaseAdapter {
+  constructor ({engine = null, url = null}) {
+    super();
+    let latinCode = data.language.toCode();
+    this[latinCode] = data;
+      // this[Lib.languages.greek] = TuftsGreekData;
+      // this.langMap = new Map([['lat', TuftsLatinData]]);
+      // this.langMap = new Lib.Importer().map('lat', Lib.languages.latin).map('grc', Lib.languages.greek);
+    this.langMap = new FeatureImporter().map('lat', latinCode);
+    this.engineLookup = engine;
+    this.url = url;
+    return this
+  }
 
-    // Not implemented yet
-    fetch(lang, word) {
-      let engine = this.engineLookup[lang];
-      let url = this.url.replace('r_WORD',word).replace('r_ENGINE',engine).replace('r_LANG',lang);
-      return new Promise((resolve,reject) =>  {
-        fetch(url).then(
-          function(response) {
-            let json = response.json();
-            resolve(json);
-          }
-        ).catch((error) => {
-            reject(error);
-          }
-        );
+  prepareRequestUrl (lang, word) {
+    let engine = this.engineLookup[lang];
+    let url = this.url.replace('r_WORD', word).replace('r_ENGINE', engine).replace('r_LANG', lang);
+    return url
+  }
 
-      });
-    }
-
-    fetchTestData(lang, word) {
-        return new Promise((resolve, reject) => {
-            try {
-                let wordData = new WordTestData().get(word);
-                console.log(wordData);
-                let json = JSON.parse(wordData);
-                resolve(json);
-            }
-            catch (error) {
+  fetchTestData (lang, word) {
+    return new Promise((resolve, reject) => {
+      try {
+        let wordData = new WordTestData().get(word);
+        console.log(wordData);
+        let json = JSON.parse(wordData);
+        resolve(json);
+      } catch (error) {
                 // Word is not found in test data
-                reject(error);
-            }
-        });
-    }
+        reject(error);
+      }
+    })
+  }
 
-    /**
-     * A function that maps a morphological service's specific data types and values into an inflection library standard.
-     * @param {object} jsonObj - A JSON data from a Morphological Analyzer.
-     * @param {object} targetWord - the target of the analysis
-     * @returns {Homonym} A library standard Homonym object.
-     */
-    transform (jsonObj,targetWord) {
-        "use strict";
-        let lexemes = [];
-        let annotationBody = jsonObj.RDF.Annotation.Body;
-        if (!Array.isArray(annotationBody)) {
+  /**
+   * A function that maps a morphological service's specific data types and values into an inflection library standard.
+   * @param {object} jsonObj - A JSON data from a Morphological Analyzer.
+   * @param {object} targetWord - the target of the analysis
+   * @returns {Homonym} A library standard Homonym object.
+   */
+  transform (jsonObj, targetWord) {
+    'use strict';
+    let lexemes = [];
+    let annotationBody = jsonObj.RDF.Annotation.Body;
+    if (!Array.isArray(annotationBody)) {
             /*
             If only one lexeme is returned, Annotation Body will not be an array but rather a single object.
             Let's convert it to an array so we can work with it in the same way no matter what format it is.
              */
-            annotationBody = [annotationBody];
-        }
-        for (let lexeme of annotationBody) {
+      annotationBody = [annotationBody];
+    }
+    for (let lexeme of annotationBody) {
             // Get importer based on the language
-            let language = this.langMap.get(lexeme.rest.entry.dict.hdwd.lang);
-            let lemma = new Lemma(lexeme.rest.entry.dict.hdwd.$, language);
+      let language = this.langMap.get(lexeme.rest.entry.dict.hdwd.lang);
+      let lemma = new Lemma(lexeme.rest.entry.dict.hdwd.$, language);
+      let meaning = lexeme.rest.entry.mean ? lexeme.rest.entry.mean.$ : '';
 
-            let inflections = [];
-            let inflectionsJSON = lexeme.rest.entry.infl;
-            if (!Array.isArray(inflectionsJSON)) {
+      let inflections = [];
+      let inflectionsJSON = lexeme.rest.entry.infl;
+      if (!Array.isArray(inflectionsJSON)) {
                 // If only one inflection returned, it is a single object, not an array of objects. Convert it to an array for uniformity.
-                inflectionsJSON = [inflectionsJSON];
-            }
-            for (let inflectionJSON of inflectionsJSON) {
-                let inflection = new Inflection(inflectionJSON.term.stem.$, this[language].language);
-                if (inflectionJSON.term.suff) {
+        inflectionsJSON = [inflectionsJSON];
+      }
+      for (let inflectionJSON of inflectionsJSON) {
+        let inflection = new Inflection(inflectionJSON.term.stem.$, this[language].language.toCode());
+        if (inflectionJSON.term.suff) {
                     // Set suffix if provided by a morphological analyzer
-                    inflection.suffix = inflectionJSON.term.suff.$;
-                }
+          inflection.suffix = inflectionJSON.term.suff.$;
+        }
 
                 // Parse whatever grammatical features we're interested in
-                if (inflectionJSON.pofs) {
-                    inflection.feature = this[language][Feature.types.part].get(inflectionJSON.pofs.$);
-                }
-
-                if (inflectionJSON.case) {
-                    inflection.feature = this[language][Feature.types.grmCase].get(inflectionJSON.case.$);
-                }
-
-                if (inflectionJSON.decl) {
-                    inflection.feature = this[language][Feature.types.declension].get(inflectionJSON.decl.$);
-                }
-
-                if (inflectionJSON.num) {
-                    inflection.feature = this[language][Feature.types.number].get(inflectionJSON.num.$);
-                }
-
-                if (inflectionJSON.gend) {
-                    inflection.feature = this[language][Feature.types.gender].get(inflectionJSON.gend.$);
-                }
-
-                if (inflectionJSON.conj) {
-                    inflection.feature = this[language][Feature.types.conjugation].get(inflectionJSON.conj.$);
-                }
-
-                if (inflectionJSON.tense) {
-                    inflection.feature = this[language][Feature.types.tense].get(inflectionJSON.tense.$);
-                }
-
-                if (inflectionJSON.voice) {
-                    inflection.feature = this[language][Feature.types.voice].get(inflectionJSON.voice.$);
-                }
-
-                if (inflectionJSON.mood) {
-                    inflection.feature = this[language][Feature.types.mood].get(inflectionJSON.mood.$);
-                }
-
-                if (inflectionJSON.pers) {
-                    inflection.feature = this[language][Feature.types.person].get(inflectionJSON.pers.$);
-                }
-
-                inflections.push(inflection);
-            }
-            lexemes.push(new Lexeme(lemma, inflections));
+        if (inflectionJSON.pofs) {
+          inflection.feature = this[language][Feature.types.part].get(inflectionJSON.pofs.$);
         }
-        return new Homonym$1(lexemes,targetWord);
+
+        if (inflectionJSON.case) {
+          inflection.feature = this[language][Feature.types.grmCase].get(inflectionJSON.case.$);
+        }
+
+        if (inflectionJSON.decl) {
+          inflection.feature = this[language][Feature.types.declension].get(inflectionJSON.decl.$);
+        }
+
+        if (inflectionJSON.num) {
+          inflection.feature = this[language][Feature.types.number].get(inflectionJSON.num.$);
+        }
+
+        if (inflectionJSON.gend) {
+          inflection.feature = this[language][Feature.types.gender].get(inflectionJSON.gend.$);
+        }
+
+        if (inflectionJSON.conj) {
+          inflection.feature = this[language][Feature.types.conjugation].get(inflectionJSON.conj.$);
+        }
+
+        if (inflectionJSON.tense) {
+          inflection.feature = this[language][Feature.types.tense].get(inflectionJSON.tense.$);
+        }
+
+        if (inflectionJSON.voice) {
+          inflection.feature = this[language][Feature.types.voice].get(inflectionJSON.voice.$);
+        }
+
+        if (inflectionJSON.mood) {
+          inflection.feature = this[language][Feature.types.mood].get(inflectionJSON.mood.$);
+        }
+
+        if (inflectionJSON.pers) {
+          inflection.feature = this[language][Feature.types.person].get(inflectionJSON.pers.$);
+        }
+
+        inflections.push(inflection);
+      }
+      lexemes.push(new Lexeme(lemma, inflections, meaning));
     }
+    return new Homonym(lexemes, targetWord)
+  }
 }
 
 let messages$1 = {
@@ -5473,7 +5530,7 @@ var papaparse = createCommonjsModule(function (module, exports) {
  * Latin language data module
  */
 let languageModel = new LatinLanguageModel$1();
-let types$2 = Feature.types;
+let types$1 = Feature.types;
 // A language of this module
 const language = languages.latin;
 // Create a language data set that will keep all language-related information
@@ -5485,55 +5542,55 @@ let dataSet = new LanguageDataset(language);
  analyzer's language modules as well.
  */
 const importerName = 'csv';
-languageModel.features[types$2.number].addImporter(importerName)
-    .map('singular',  languageModel.features[types$2.number].singular)
-    .map('plural', languageModel.features[types$2.number].plural);
-languageModel.features[types$2.grmCase].addImporter(importerName)
-    .map('nominative', languageModel.features[types$2.grmCase].nominative)
-    .map('genitive', languageModel.features[types$2.grmCase].genitive)
-    .map('dative', languageModel.features[types$2.grmCase].dative)
-    .map('accusative', languageModel.features[types$2.grmCase].accusative)
-    .map('ablative', languageModel.features[types$2.grmCase].ablative)
-    .map('locative', languageModel.features[types$2.grmCase].locative)
-    .map('vocative', languageModel.features[types$2.grmCase].vocative);
-languageModel.features[types$2.declension].addImporter(importerName)
-    .map('1st', languageModel.features[types$2.declension].first)
-    .map('2nd', languageModel.features[types$2.declension].second)
-    .map('1st 2nd', [languageModel.features[types$2.declension].first, languageModel.features[types$2.declension].second])
-    .map('3rd', languageModel.features[types$2.declension].third)
-    .map('4th', languageModel.features[types$2.declension].fourth)
-    .map('5th', languageModel.features[types$2.declension].fifth);
-languageModel.features[types$2.gender].addImporter(importerName)
-    .map('masculine', languageModel.features[types$2.gender].masculine)
-    .map('feminine', languageModel.features[types$2.gender].feminine)
-    .map('neuter', languageModel.features[types$2.gender].neuter)
-    .map('masculine feminine', [languageModel.features[types$2.gender].masculine, languageModel.features[types$2.gender].feminine]);
-languageModel.features[types$2.type].addImporter(importerName)
-    .map('regular', languageModel.features[types$2.type].regular)
-    .map('irregular', languageModel.features[types$2.type].irregular);
-languageModel.features[types$2.conjugation].addImporter(importerName)
-    .map('1st', languageModel.features[types$2.conjugation].first)
-    .map('2nd', languageModel.features[types$2.conjugation].second)
-    .map('3rd', languageModel.features[types$2.conjugation].third)
-    .map('4th', languageModel.features[types$2.conjugation].fourth);
-languageModel.features[types$2.tense].addImporter(importerName)
-    .map('present', languageModel.features[types$2.tense].present)
-    .map('imperfect', languageModel.features[types$2.tense].imperfect)
-    .map('future', languageModel.features[types$2.tense].future)
-    .map('perfect', languageModel.features[types$2.tense].perfect)
-    .map('pluperfect', languageModel.features[types$2.tense].pluperfect)
-    .map('future_perfect', languageModel.features[types$2.tense]['future perfect']);
-languageModel.features[types$2.voice].addImporter(importerName)
-    .map('passive', languageModel.features[types$2.voice].passive)
-    .map('active', languageModel.features[types$2.voice].active);
-languageModel.features[types$2.mood].addImporter(importerName)
-    .map('indicative', languageModel.features[types$2.mood].indicative)
-    .map('subjunctive', languageModel.features[types$2.mood].subjunctive);
-languageModel.features[types$2.person].addImporter(importerName)
-    .map('1st', languageModel.features[types$2.person].first)
-    .map('2nd', languageModel.features[types$2.person].second)
-    .map('3rd', languageModel.features[types$2.person].third);
-const footnotes$1 = new FeatureType$1(types$2.footnote, [], languageModel);
+languageModel.features[types$1.number].addImporter(importerName)
+    .map('singular',  languageModel.features[types$1.number].singular)
+    .map('plural', languageModel.features[types$1.number].plural);
+languageModel.features[types$1.grmCase].addImporter(importerName)
+    .map('nominative', languageModel.features[types$1.grmCase].nominative)
+    .map('genitive', languageModel.features[types$1.grmCase].genitive)
+    .map('dative', languageModel.features[types$1.grmCase].dative)
+    .map('accusative', languageModel.features[types$1.grmCase].accusative)
+    .map('ablative', languageModel.features[types$1.grmCase].ablative)
+    .map('locative', languageModel.features[types$1.grmCase].locative)
+    .map('vocative', languageModel.features[types$1.grmCase].vocative);
+languageModel.features[types$1.declension].addImporter(importerName)
+    .map('1st', languageModel.features[types$1.declension].first)
+    .map('2nd', languageModel.features[types$1.declension].second)
+    .map('1st 2nd', [languageModel.features[types$1.declension].first, languageModel.features[types$1.declension].second])
+    .map('3rd', languageModel.features[types$1.declension].third)
+    .map('4th', languageModel.features[types$1.declension].fourth)
+    .map('5th', languageModel.features[types$1.declension].fifth);
+languageModel.features[types$1.gender].addImporter(importerName)
+    .map('masculine', languageModel.features[types$1.gender].masculine)
+    .map('feminine', languageModel.features[types$1.gender].feminine)
+    .map('neuter', languageModel.features[types$1.gender].neuter)
+    .map('masculine feminine', [languageModel.features[types$1.gender].masculine, languageModel.features[types$1.gender].feminine]);
+languageModel.features[types$1.type].addImporter(importerName)
+    .map('regular', languageModel.features[types$1.type].regular)
+    .map('irregular', languageModel.features[types$1.type].irregular);
+languageModel.features[types$1.conjugation].addImporter(importerName)
+    .map('1st', languageModel.features[types$1.conjugation].first)
+    .map('2nd', languageModel.features[types$1.conjugation].second)
+    .map('3rd', languageModel.features[types$1.conjugation].third)
+    .map('4th', languageModel.features[types$1.conjugation].fourth);
+languageModel.features[types$1.tense].addImporter(importerName)
+    .map('present', languageModel.features[types$1.tense].present)
+    .map('imperfect', languageModel.features[types$1.tense].imperfect)
+    .map('future', languageModel.features[types$1.tense].future)
+    .map('perfect', languageModel.features[types$1.tense].perfect)
+    .map('pluperfect', languageModel.features[types$1.tense].pluperfect)
+    .map('future_perfect', languageModel.features[types$1.tense]['future perfect']);
+languageModel.features[types$1.voice].addImporter(importerName)
+    .map('passive', languageModel.features[types$1.voice].passive)
+    .map('active', languageModel.features[types$1.voice].active);
+languageModel.features[types$1.mood].addImporter(importerName)
+    .map('indicative', languageModel.features[types$1.mood].indicative)
+    .map('subjunctive', languageModel.features[types$1.mood].subjunctive);
+languageModel.features[types$1.person].addImporter(importerName)
+    .map('1st', languageModel.features[types$1.person].first)
+    .map('2nd', languageModel.features[types$1.person].second)
+    .map('3rd', languageModel.features[types$1.person].third);
+const footnotes$1 = new FeatureType$1(types$1.footnote, [], language);
 
 // endregion definition of grammatical features
 
@@ -5551,11 +5608,11 @@ dataSet.addSuffixes = function(partofspeech, data) {
         }
 
         let features = [partofspeech,
-            languageModel.features[types$2.number].importer.csv.get(data[i][1]),
-            languageModel.features[types$2.grmCase].importer.csv.get(data[i][2]),
-            languageModel.features[types$2.declension].importer.csv.get(data[i][3]),
-            languageModel.features[types$2.gender].importer.csv.get(data[i][4]),
-            languageModel.features[types$2.type].importer.csv.get(data[i][5])];
+            languageModel.features[types$1.number].importer.csv.get(data[i][1]),
+            languageModel.features[types$1.grmCase].importer.csv.get(data[i][2]),
+            languageModel.features[types$1.declension].importer.csv.get(data[i][3]),
+            languageModel.features[types$1.gender].importer.csv.get(data[i][4]),
+            languageModel.features[types$1.type].importer.csv.get(data[i][5])];
         if (data[i][6]) {
             // there can be multiple footnote indexes separated by spaces
             let indexes = data[i][6].split(' ').map(function(index) {
@@ -5581,17 +5638,17 @@ dataSet.addVerbSuffixes = function(partofspeech, data) {
         }
 
         let features = [partofspeech,
-            languageModel.features[types$2.conjugation].importer.csv.get(data[i][1]),
-            languageModel.features[types$2.voice].importer.csv.get(data[i][2]),
-            languageModel.features[types$2.mood].importer.csv.get(data[i][3]),
-            languageModel.features[types$2.tense].importer.csv.get(data[i][4]),
-            languageModel.features[types$2.number].importer.csv.get(data[i][5]),
-            languageModel.features[types$2.person].importer.csv.get(data[i][6])];
+            languageModel.features[types$1.conjugation].importer.csv.get(data[i][1]),
+            languageModel.features[types$1.voice].importer.csv.get(data[i][2]),
+            languageModel.features[types$1.mood].importer.csv.get(data[i][3]),
+            languageModel.features[types$1.tense].importer.csv.get(data[i][4]),
+            languageModel.features[types$1.number].importer.csv.get(data[i][5]),
+            languageModel.features[types$1.person].importer.csv.get(data[i][6])];
 
         let grammartype = data[i][7];
         // type information can be empty if no ending is provided
         if (grammartype) {
-            features.push(languageModel.features[types$2.type].importer.csv.get(grammartype));
+            features.push(languageModel.features[types$1.type].importer.csv.get(grammartype));
         }
         // footnotes
         if (data[i][8]) {
@@ -5614,21 +5671,21 @@ dataSet.addFootnotes = function(partofspeech, data) {
 
 dataSet.loadData = function() {
     // nouns
-    let partofspeech = languageModel.features[types$2.part].noun;
+    let partofspeech = languageModel.features[types$1.part].noun;
     let suffixes = papaparse.parse(nounSuffixesCSV, {});
     this.addSuffixes(partofspeech, suffixes.data);
     let footnotes = papaparse.parse(nounFootnotesCSV, {});
     this.addFootnotes(partofspeech, footnotes.data);
 
     // adjectives
-    partofspeech = languageModel.features[types$2.part].adjective;
+    partofspeech = languageModel.features[types$1.part].adjective;
     suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
     this.addSuffixes(partofspeech, suffixes.data);
     footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
     this.addFootnotes(partofspeech, footnotes.data);
 
     // verbs
-    partofspeech = languageModel.features[types$2.part].verb;
+    partofspeech = languageModel.features[types$1.part].verb;
     suffixes = papaparse.parse(verbSuffixesCSV, {});
     this.addVerbSuffixes(partofspeech, suffixes.data);
     footnotes = papaparse.parse(verbFootnotesCSV, {});
@@ -5646,10 +5703,10 @@ dataSet.loadData = function() {
 dataSet.matcher = function(inflections, suffix) {
     "use strict";
     // all of those features must match between an inflection and an ending
-    let obligatoryMatches = [types$2.part];
+    let obligatoryMatches = [types$1.part];
 
     // any of those features must match between an inflection and an ending
-    let optionalMatches = [types$2.grmcase, types$2.declension, types$2.gender, types$2.number];
+    let optionalMatches = [types$1.grmcase, types$1.declension, types$1.gender, types$1.number];
     let bestMatchData = null; // information about the best match we would be able to find
 
     /*
@@ -7695,10 +7752,10 @@ genders.addImporter(importerName$1)
     .map('feminine', genders.feminine)
     .map('neuter', genders.neuter)
     .map('masculine feminine', [genders.masculine, genders.feminine]);
-const types$3 = new FeatureType$1(Feature.types.type, ['regular', 'irregular'],{});
-types$3.addImporter(importerName$1)
-    .map('regular', types$3.regular)
-    .map('irregular', types$3.irregular);
+const types$2 = new FeatureType$1(Feature.types.type, ['regular', 'irregular'],{});
+types$2.addImporter(importerName$1)
+    .map('regular', types$2.regular)
+    .map('irregular', types$2.irregular);
 /*const conjugations = new Models.FeatureType(Lib.types.conjugation, ['first', 'second', 'third', 'fourth']);
 conjugations.addImporter(importerName)
     .map('1st', conjugations.first)
@@ -7750,7 +7807,7 @@ dataSet$1.addSuffixes = function(partOfSpeech, data) {
             cases.importer.csv.get(dataItem[2]),
             declensions.importer.csv.get(dataItem[3]),
             genders.importer.csv.get(dataItem[4]),
-            types$3.importer.csv.get(dataItem[5])];
+            types$2.importer.csv.get(dataItem[5])];
         if (dataItem[6] === 'primary') {
             primary = true;
         }
@@ -7795,7 +7852,7 @@ dataSet$1.addVerbSuffixes = function(partOfSpeech, data) {
         let grammarType = data[i][7];
         // Type information can be empty if no ending is provided
         if (grammarType) {
-            features.push(types$3.importer.csv.get(grammarType));
+            features.push(types$2.importer.csv.get(grammarType));
         }
         // Footnotes
         if (data[i][8]) {
@@ -7963,7 +8020,7 @@ class GreekView extends View {
             cases: new GroupFeatureType(cases, 'Case'),
             declensions: new GroupFeatureType(declensions, 'Declension'),
             genders: new GroupFeatureType(genders, 'Gender'),
-            types: new GroupFeatureType(types$3, 'Type')
+            types: new GroupFeatureType(types$2, 'Type')
         };
     }
 
@@ -7975,7 +8032,7 @@ class GreekView extends View {
         this.table = new Table([this.features.declensions, this.features.genders,
             this.features.types, this.features.numbers, this.features.cases]);
         let features = this.table.features;
-        features.columns = [declensions, genders, types$3];
+        features.columns = [declensions, genders, types$2];
         features.rows = [numbers, cases];
         features.columnRowTitles = [cases];
         features.fullWidthRowTitles = [numbers];

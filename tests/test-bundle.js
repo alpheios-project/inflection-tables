@@ -131,7 +131,7 @@ class Feature {
      * @param {string | string[]} value - A single feature value or, if this feature could have multiple
      * values, an array of values.
      * @param {string} type - A type of the feature, allowed values are specified in 'types' object.
-     * @param {LanguageModel} language - A language of a feature, allowed values are specified in 'languages' object.
+     * @param {string} language - A language of a feature, allowed values are specified in 'languages' object.
      */
     constructor (value, type, language) {
         if (!Feature.types.isAllowed(type)) {
@@ -143,7 +143,7 @@ class Feature {
         if (!type) {
             throw new Error('Feature should have a non-empty type.');
         }
-        if (!language || ! language instanceof LanguageModel) {
+        if (!language) {
           throw new Error('Feature constructor requires a language');
         }
         this.value = value;
@@ -211,7 +211,7 @@ class FeatureType$1 {
      * If an empty array is provided, there will be no
      * allowed values as well as no ordering (can be used for items that do not need or have a simple order,
      * such as footnotes).
-     * @param {LanguageModel} language - A language of a feature, allowed values are specified in 'languages' object.
+     * @param {string} language - A language of a feature, allowed values are specified in 'languages' object.
      */
     constructor(type, values, language) {
         if (!Feature.types.isAllowed(type)) {
@@ -220,7 +220,7 @@ class FeatureType$1 {
         if (!values || !Array.isArray(values)) {
             throw new Error('Values should be an array (or an empty array) of values.');
         }
-        if (!language || ! language instanceof LanguageModel) {
+        if (!language) {
           throw new Error('FeatureType constructor requires a language');
         }
 
@@ -471,17 +471,18 @@ class LatinLanguageModel$1 extends LanguageModel {
 
    _initializeFeatures() {
      let features = {};
-     features[Feature.types.part] = new FeatureType$1(Feature.types.part, ['noun', 'adjective', 'verb'],this);
-     features[Feature.types.number] = new FeatureType$1(Feature.types.number, ['singular', 'plural'],this);
-     features[Feature.types.grmCase] = new FeatureType$1(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'ablative', 'locative', 'vocative'],this);
-     features[Feature.types.declension] = new FeatureType$1(Feature.types.declension, ['first', 'second', 'third', 'fourth', 'fifth'],this);
-     features[Feature.types.gender] = new FeatureType$1(Feature.types.gender, ['masculine', 'feminine', 'neuter'],this);
-     features[Feature.types.type] = new FeatureType$1(Feature.types.type, ['regular', 'irregular'],this);
-     features[Feature.types.tense] = new FeatureType$1(Feature.types.tense, ['present', 'imperfect', 'future', 'perfect', 'pluperfect', 'future perfect'],this);
-     features[Feature.types.voice] = new FeatureType$1(Feature.types.voice, ['passive', 'active'],this);
-     features[Feature.types.mood] = new FeatureType$1(Feature.types.mood, ['indicative', 'subjunctive'],this);
-     features[Feature.types.person] =new FeatureType$1(Feature.types.person, ['first', 'second', 'third'],this);
-     features[Feature.types.conjugation] = new FeatureType$1(Feature.types.conjugation, ['first', 'second', 'third', 'fourth'],this);
+     let lang_code = this.toCode();
+     features[Feature.types.part] = new FeatureType$1(Feature.types.part, ['noun', 'adjective', 'verb'],lang_code);
+     features[Feature.types.number] = new FeatureType$1(Feature.types.number, ['singular', 'plural'],lang_code);
+     features[Feature.types.grmCase] = new FeatureType$1(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'ablative', 'locative', 'vocative'],lang_code);
+     features[Feature.types.declension] = new FeatureType$1(Feature.types.declension, ['first', 'second', 'third', 'fourth', 'fifth'],lang_code);
+     features[Feature.types.gender] = new FeatureType$1(Feature.types.gender, ['masculine', 'feminine', 'neuter'],lang_code);
+     features[Feature.types.type] = new FeatureType$1(Feature.types.type, ['regular', 'irregular'],lang_code);
+     features[Feature.types.tense] = new FeatureType$1(Feature.types.tense, ['present', 'imperfect', 'future', 'perfect', 'pluperfect', 'future perfect'],lang_code);
+     features[Feature.types.voice] = new FeatureType$1(Feature.types.voice, ['passive', 'active'],lang_code);
+     features[Feature.types.mood] = new FeatureType$1(Feature.types.mood, ['indicative', 'subjunctive'],lang_code);
+     features[Feature.types.person] =new FeatureType$1(Feature.types.person, ['first', 'second', 'third'],lang_code);
+     features[Feature.types.conjugation] = new FeatureType$1(Feature.types.conjugation, ['first', 'second', 'third', 'fourth'],lang_code);
      return features;
    }
 
@@ -691,7 +692,7 @@ class Inflection {
     /**
      * Initializes an Inflection object.
      * @param {string} stem - A stem of a word.
-     * @param {LanguageModel} language - A word's language.
+     * @param {string} language - A word's language.
      */
     constructor(stem, language) {
 
@@ -757,8 +758,9 @@ class Lexeme {
      * Initializes a Lexeme object.
      * @param {Lemma} lemma - A lemma object.
      * @param {Inflection[]} inflections - An array of inflections.
+     * @param {string} meaning - a short definition
      */
-    constructor(lemma, inflections) {
+    constructor(lemma, inflections, meaning="") {
         if (!lemma) {
             throw new Error('Lemma should not be empty.');
         }
@@ -783,6 +785,7 @@ class Lexeme {
 
         this.lemma = lemma;
         this.inflections = inflections;
+        this.meaning = meaning;
     }
 
     static readObject(jsonObject) {
@@ -795,7 +798,7 @@ class Lexeme {
     }
 }
 
-class Homonym$1 {
+class Homonym {
     /**
      * Initializes a Homonym object.
      * @param {Lexeme[]} lexemes - An array of Lexeme objects.
@@ -827,7 +830,7 @@ class Homonym$1 {
                 lexemes.push(Lexeme.readObject(lexeme));
             }
         }
-        let homonym = new Homonym$1(lexemes);
+        let homonym = new Homonym(lexemes);
         if (jsonObject.targetWord) {
             homonym.targetWord = jsonObject.targetWord;
         }
@@ -1147,7 +1150,7 @@ class Suffix {
 
         if (jsonObject[Feature.types.footnote]) {
             suffix[Feature.types.footnote] = [];
-            for (let footnote of jsonObject[types.footnote]) {
+            for (let footnote of jsonObject[Feature.types.footnote]) {
                 suffix[Feature.types.footnote].push(footnote);
             }
         }
@@ -3113,7 +3116,7 @@ var papaparse = createCommonjsModule(function (module, exports) {
  * Latin language data module
  */
 let languageModel = new LatinLanguageModel$1();
-let types$1 = Feature.types;
+let types = Feature.types;
 // A language of this module
 const language = languages.latin;
 // Create a language data set that will keep all language-related information
@@ -3125,55 +3128,55 @@ let dataSet = new LanguageDataset(language);
  analyzer's language modules as well.
  */
 const importerName = 'csv';
-languageModel.features[types$1.number].addImporter(importerName)
-    .map('singular',  languageModel.features[types$1.number].singular)
-    .map('plural', languageModel.features[types$1.number].plural);
-languageModel.features[types$1.grmCase].addImporter(importerName)
-    .map('nominative', languageModel.features[types$1.grmCase].nominative)
-    .map('genitive', languageModel.features[types$1.grmCase].genitive)
-    .map('dative', languageModel.features[types$1.grmCase].dative)
-    .map('accusative', languageModel.features[types$1.grmCase].accusative)
-    .map('ablative', languageModel.features[types$1.grmCase].ablative)
-    .map('locative', languageModel.features[types$1.grmCase].locative)
-    .map('vocative', languageModel.features[types$1.grmCase].vocative);
-languageModel.features[types$1.declension].addImporter(importerName)
-    .map('1st', languageModel.features[types$1.declension].first)
-    .map('2nd', languageModel.features[types$1.declension].second)
-    .map('1st 2nd', [languageModel.features[types$1.declension].first, languageModel.features[types$1.declension].second])
-    .map('3rd', languageModel.features[types$1.declension].third)
-    .map('4th', languageModel.features[types$1.declension].fourth)
-    .map('5th', languageModel.features[types$1.declension].fifth);
-languageModel.features[types$1.gender].addImporter(importerName)
-    .map('masculine', languageModel.features[types$1.gender].masculine)
-    .map('feminine', languageModel.features[types$1.gender].feminine)
-    .map('neuter', languageModel.features[types$1.gender].neuter)
-    .map('masculine feminine', [languageModel.features[types$1.gender].masculine, languageModel.features[types$1.gender].feminine]);
-languageModel.features[types$1.type].addImporter(importerName)
-    .map('regular', languageModel.features[types$1.type].regular)
-    .map('irregular', languageModel.features[types$1.type].irregular);
-languageModel.features[types$1.conjugation].addImporter(importerName)
-    .map('1st', languageModel.features[types$1.conjugation].first)
-    .map('2nd', languageModel.features[types$1.conjugation].second)
-    .map('3rd', languageModel.features[types$1.conjugation].third)
-    .map('4th', languageModel.features[types$1.conjugation].fourth);
-languageModel.features[types$1.tense].addImporter(importerName)
-    .map('present', languageModel.features[types$1.tense].present)
-    .map('imperfect', languageModel.features[types$1.tense].imperfect)
-    .map('future', languageModel.features[types$1.tense].future)
-    .map('perfect', languageModel.features[types$1.tense].perfect)
-    .map('pluperfect', languageModel.features[types$1.tense].pluperfect)
-    .map('future_perfect', languageModel.features[types$1.tense]['future perfect']);
-languageModel.features[types$1.voice].addImporter(importerName)
-    .map('passive', languageModel.features[types$1.voice].passive)
-    .map('active', languageModel.features[types$1.voice].active);
-languageModel.features[types$1.mood].addImporter(importerName)
-    .map('indicative', languageModel.features[types$1.mood].indicative)
-    .map('subjunctive', languageModel.features[types$1.mood].subjunctive);
-languageModel.features[types$1.person].addImporter(importerName)
-    .map('1st', languageModel.features[types$1.person].first)
-    .map('2nd', languageModel.features[types$1.person].second)
-    .map('3rd', languageModel.features[types$1.person].third);
-const footnotes = new FeatureType$1(types$1.footnote, [], languageModel);
+languageModel.features[types.number].addImporter(importerName)
+    .map('singular',  languageModel.features[types.number].singular)
+    .map('plural', languageModel.features[types.number].plural);
+languageModel.features[types.grmCase].addImporter(importerName)
+    .map('nominative', languageModel.features[types.grmCase].nominative)
+    .map('genitive', languageModel.features[types.grmCase].genitive)
+    .map('dative', languageModel.features[types.grmCase].dative)
+    .map('accusative', languageModel.features[types.grmCase].accusative)
+    .map('ablative', languageModel.features[types.grmCase].ablative)
+    .map('locative', languageModel.features[types.grmCase].locative)
+    .map('vocative', languageModel.features[types.grmCase].vocative);
+languageModel.features[types.declension].addImporter(importerName)
+    .map('1st', languageModel.features[types.declension].first)
+    .map('2nd', languageModel.features[types.declension].second)
+    .map('1st 2nd', [languageModel.features[types.declension].first, languageModel.features[types.declension].second])
+    .map('3rd', languageModel.features[types.declension].third)
+    .map('4th', languageModel.features[types.declension].fourth)
+    .map('5th', languageModel.features[types.declension].fifth);
+languageModel.features[types.gender].addImporter(importerName)
+    .map('masculine', languageModel.features[types.gender].masculine)
+    .map('feminine', languageModel.features[types.gender].feminine)
+    .map('neuter', languageModel.features[types.gender].neuter)
+    .map('masculine feminine', [languageModel.features[types.gender].masculine, languageModel.features[types.gender].feminine]);
+languageModel.features[types.type].addImporter(importerName)
+    .map('regular', languageModel.features[types.type].regular)
+    .map('irregular', languageModel.features[types.type].irregular);
+languageModel.features[types.conjugation].addImporter(importerName)
+    .map('1st', languageModel.features[types.conjugation].first)
+    .map('2nd', languageModel.features[types.conjugation].second)
+    .map('3rd', languageModel.features[types.conjugation].third)
+    .map('4th', languageModel.features[types.conjugation].fourth);
+languageModel.features[types.tense].addImporter(importerName)
+    .map('present', languageModel.features[types.tense].present)
+    .map('imperfect', languageModel.features[types.tense].imperfect)
+    .map('future', languageModel.features[types.tense].future)
+    .map('perfect', languageModel.features[types.tense].perfect)
+    .map('pluperfect', languageModel.features[types.tense].pluperfect)
+    .map('future_perfect', languageModel.features[types.tense]['future perfect']);
+languageModel.features[types.voice].addImporter(importerName)
+    .map('passive', languageModel.features[types.voice].passive)
+    .map('active', languageModel.features[types.voice].active);
+languageModel.features[types.mood].addImporter(importerName)
+    .map('indicative', languageModel.features[types.mood].indicative)
+    .map('subjunctive', languageModel.features[types.mood].subjunctive);
+languageModel.features[types.person].addImporter(importerName)
+    .map('1st', languageModel.features[types.person].first)
+    .map('2nd', languageModel.features[types.person].second)
+    .map('3rd', languageModel.features[types.person].third);
+const footnotes = new FeatureType$1(types.footnote, [], language);
 
 // endregion definition of grammatical features
 
@@ -3191,11 +3194,11 @@ dataSet.addSuffixes = function(partofspeech, data) {
         }
 
         let features = [partofspeech,
-            languageModel.features[types$1.number].importer.csv.get(data[i][1]),
-            languageModel.features[types$1.grmCase].importer.csv.get(data[i][2]),
-            languageModel.features[types$1.declension].importer.csv.get(data[i][3]),
-            languageModel.features[types$1.gender].importer.csv.get(data[i][4]),
-            languageModel.features[types$1.type].importer.csv.get(data[i][5])];
+            languageModel.features[types.number].importer.csv.get(data[i][1]),
+            languageModel.features[types.grmCase].importer.csv.get(data[i][2]),
+            languageModel.features[types.declension].importer.csv.get(data[i][3]),
+            languageModel.features[types.gender].importer.csv.get(data[i][4]),
+            languageModel.features[types.type].importer.csv.get(data[i][5])];
         if (data[i][6]) {
             // there can be multiple footnote indexes separated by spaces
             let indexes = data[i][6].split(' ').map(function(index) {
@@ -3221,17 +3224,17 @@ dataSet.addVerbSuffixes = function(partofspeech, data) {
         }
 
         let features = [partofspeech,
-            languageModel.features[types$1.conjugation].importer.csv.get(data[i][1]),
-            languageModel.features[types$1.voice].importer.csv.get(data[i][2]),
-            languageModel.features[types$1.mood].importer.csv.get(data[i][3]),
-            languageModel.features[types$1.tense].importer.csv.get(data[i][4]),
-            languageModel.features[types$1.number].importer.csv.get(data[i][5]),
-            languageModel.features[types$1.person].importer.csv.get(data[i][6])];
+            languageModel.features[types.conjugation].importer.csv.get(data[i][1]),
+            languageModel.features[types.voice].importer.csv.get(data[i][2]),
+            languageModel.features[types.mood].importer.csv.get(data[i][3]),
+            languageModel.features[types.tense].importer.csv.get(data[i][4]),
+            languageModel.features[types.number].importer.csv.get(data[i][5]),
+            languageModel.features[types.person].importer.csv.get(data[i][6])];
 
         let grammartype = data[i][7];
         // type information can be empty if no ending is provided
         if (grammartype) {
-            features.push(languageModel.features[types$1.type].importer.csv.get(grammartype));
+            features.push(languageModel.features[types.type].importer.csv.get(grammartype));
         }
         // footnotes
         if (data[i][8]) {
@@ -3254,21 +3257,21 @@ dataSet.addFootnotes = function(partofspeech, data) {
 
 dataSet.loadData = function() {
     // nouns
-    let partofspeech = languageModel.features[types$1.part].noun;
+    let partofspeech = languageModel.features[types.part].noun;
     let suffixes = papaparse.parse(nounSuffixesCSV, {});
     this.addSuffixes(partofspeech, suffixes.data);
     let footnotes = papaparse.parse(nounFootnotesCSV, {});
     this.addFootnotes(partofspeech, footnotes.data);
 
     // adjectives
-    partofspeech = languageModel.features[types$1.part].adjective;
+    partofspeech = languageModel.features[types.part].adjective;
     suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
     this.addSuffixes(partofspeech, suffixes.data);
     footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
     this.addFootnotes(partofspeech, footnotes.data);
 
     // verbs
-    partofspeech = languageModel.features[types$1.part].verb;
+    partofspeech = languageModel.features[types.part].verb;
     suffixes = papaparse.parse(verbSuffixesCSV, {});
     this.addVerbSuffixes(partofspeech, suffixes.data);
     footnotes = papaparse.parse(verbFootnotesCSV, {});
@@ -3286,10 +3289,10 @@ dataSet.loadData = function() {
 dataSet.matcher = function(inflections, suffix) {
     "use strict";
     // all of those features must match between an inflection and an ending
-    let obligatoryMatches = [types$1.part];
+    let obligatoryMatches = [types.part];
 
     // any of those features must match between an inflection and an ending
-    let optionalMatches = [types$1.grmcase, types$1.declension, types$1.gender, types$1.number];
+    let optionalMatches = [types.grmcase, types.declension, types.gender, types.number];
     let bestMatchData = null; // information about the best match we would be able to find
 
     /*
@@ -7154,7 +7157,7 @@ exports.FeatureImporter = FeatureImporter;
 exports.Inflection = Inflection;
 exports.Lemma = Lemma;
 exports.Lexeme = Lexeme;
-exports.Homonym = Homonym$1;
+exports.Homonym = Homonym;
 exports.Suffix = Suffix;
 exports.LanguageDataset = LanguageDataset;
 exports.LanguageData = LanguageData;

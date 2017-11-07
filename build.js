@@ -7,7 +7,7 @@ const string = require('rollup-plugin-string');
 const defaultPlugins = [
     string({
         // Required to be specified
-        include: ['lib/lang/**/*.csv', 'tests/data/**/*.json', '../analyzer/tests/data/**/*.json'],
+        include: ['lib/lang/**/*.csv', 'tests/data/**/*.json', 'node_modules/alpheios-tufts-adapter/src/lib/lang/data/**/*.json'],
 
         // Undefined by default
         //exclude: ['**/index.html']

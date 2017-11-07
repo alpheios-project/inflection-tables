@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "coveralls": "^3.0.0",
-    "alpheios-tufts-adapter": "file:../analyzer",
-    "alpheios-data-models": "file:../data-models"
+    "alpheios-data-models": "git://github.com/alpheios-project/data-models.git",
+    "alpheios-tufts-adapter": "git://github.com/alpheios-project/tufts-adapter.git"
   }
 }
