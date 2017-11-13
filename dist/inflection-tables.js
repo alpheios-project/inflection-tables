@@ -2001,6 +2001,17 @@ class ExtendedGreekData extends ExtendedLanguageData {
   }
 }
 
+class SelectedWord {
+  constructor (language, word) {
+    this.language = language;
+    this.word = word;
+  }
+
+  static readObjects (jsonObject) {
+    return new SelectedWord(jsonObject.language, jsonObject.word)
+  }
+}
+
 /**
  * A return value for inflection queries
  */
@@ -8444,5 +8455,5 @@ class Presenter {
   }
 }
 
-export { dataSet as LatinDataSet, dataSet$1 as GreekDataSet, languages, LanguageDataset, LanguageData, Suffix, Footnote, MatchData, ExtendedLanguageData, ExtendedGreekData, WordData, loadData, Presenter };
+export { dataSet as LatinDataSet, dataSet$1 as GreekDataSet, languages, LanguageDataset, LanguageData, Suffix, Footnote, MatchData, ExtendedLanguageData, ExtendedGreekData, WordData, loadData, SelectedWord, Presenter };
 //# sourceMappingURL=inflection-tables.js.map
