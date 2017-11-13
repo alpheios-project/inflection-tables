@@ -25,11 +25,7 @@ exports.Footnote = Lib.Footnote
 exports.ResultSet = Lib.WordData
 
 // L10n
-exports.Latin = {
-    // genders: Latin.genders,
-    // types: Latin.types,
-    // numbers: Latin.numbers
-}
+exports.LatinLanguageModel = Models.LatinLanguageModel
 
 // L10n
 exports.L10n = {
