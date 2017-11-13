@@ -9,6 +9,7 @@ import viewsLatin from "./views/latin";
 import viewsGreek from "./views/greek";
 import * as Models from 'alpheios-data-models';
 
+export { Presenter }
 
 class Presenter {
     constructor(viewContainer, viewSelectorContainer, localeSelectorContainer, wordData, locale = 'en-US') {
@@ -130,5 +131,3 @@ class Presenter {
         return views;
     }
 }
-
-export default Presenter;

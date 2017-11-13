@@ -8496,12 +8496,5 @@ class Presenter {
     }
 }
 
-
-
-
-var presenter = Object.freeze({
-	default: Presenter
-});
-
-export { presenter as Presenter, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, languages, LanguageDataset, LanguageData, Suffix, Footnote, MatchData, ExtendedLanguageData, ExtendedGreekData, WordData, loadData };
+export { Presenter, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, languages, LanguageDataset, LanguageData, Suffix, Footnote, MatchData, ExtendedLanguageData, ExtendedGreekData, WordData, loadData };
 //# sourceMappingURL=inflection-tables.js.map
