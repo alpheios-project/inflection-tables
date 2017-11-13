@@ -3694,19 +3694,19 @@ const footnotes = new FeatureType(types.footnote, [], language);
 // endregion Definition of grammatical features
 
 // For noun and adjectives
-dataSet.addSuffixes = function (partofspeech, data) {
+dataSet.addSuffixes = function (partOfSpeech, data) {
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
-  let nosuffixvalue = '-';
+  let noSuffixValue = '-';
 
     // First row are headers
   for (let i = 1; i < data.length; i++) {
     let suffix = data[i][0];
         // Handle special suffix values
-    if (suffix === nosuffixvalue) {
+    if (suffix === noSuffixValue) {
       suffix = null;
     }
 
-    let features = [partofspeech,
+    let features = [partOfSpeech,
       languageModel.features[types.number].getFromImporter('csv', data[i][1]),
       languageModel.features[types.grmCase].getFromImporter('csv', data[i][2]),
       languageModel.features[types.declension].getFromImporter('csv', data[i][3]),
@@ -3724,19 +3724,19 @@ dataSet.addSuffixes = function (partofspeech, data) {
 };
 
 // For verbs
-dataSet.addVerbSuffixes = function (partofspeech, data) {
+dataSet.addVerbSuffixes = function (partOfSpeech, data) {
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
-  let nosuffixvalue = '-';
+  let noSuffixValue = '-';
 
     // First row are headers
   for (let i = 1; i < data.length; i++) {
     let suffix = data[i][0];
         // Handle special suffix values
-    if (suffix === nosuffixvalue) {
+    if (suffix === noSuffixValue) {
       suffix = null;
     }
 
-    let features = [partofspeech,
+    let features = [partOfSpeech,
       languageModel.features[types.conjugation].getFromImporter('csv', data[i][1]),
       languageModel.features[types.voice].getFromImporter('csv', data[i][2]),
       languageModel.features[types.mood].getFromImporter('csv', data[i][3]),
@@ -3761,34 +3761,34 @@ dataSet.addVerbSuffixes = function (partofspeech, data) {
   }
 };
 
-dataSet.addFootnotes = function (partofspeech, data) {
+dataSet.addFootnotes = function (partOfSpeech, data) {
     // First row are headers
   for (let i = 1; i < data.length; i++) {
-    this.addFootnote(partofspeech, data[i][0], data[i][1]);
+    this.addFootnote(partOfSpeech, data[i][0], data[i][1]);
   }
 };
 
 dataSet.loadData = function () {
     // Nouns
-  let partofspeech = languageModel.features[types.part][constants.POFS_NOUN];
+  let partOfSpeech = languageModel.features[types.part][constants.POFS_NOUN];
   let suffixes = papaparse.parse(nounSuffixesCSV, {});
-  this.addSuffixes(partofspeech, suffixes.data);
+  this.addSuffixes(partOfSpeech, suffixes.data);
   let footnotes = papaparse.parse(nounFootnotesCSV, {});
-  this.addFootnotes(partofspeech, footnotes.data);
+  this.addFootnotes(partOfSpeech, footnotes.data);
 
     // Adjectives
-  partofspeech = languageModel.features[types.part][constants.POFS_ADJECTIVE];
+  partOfSpeech = languageModel.features[types.part][constants.POFS_ADJECTIVE];
   suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
-  this.addSuffixes(partofspeech, suffixes.data);
+  this.addSuffixes(partOfSpeech, suffixes.data);
   footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
-  this.addFootnotes(partofspeech, footnotes.data);
+  this.addFootnotes(partOfSpeech, footnotes.data);
 
     // Verbs
-  partofspeech = languageModel.features[types.part][constants.POFS_VERB];
+  partOfSpeech = languageModel.features[types.part][constants.POFS_VERB];
   suffixes = papaparse.parse(verbSuffixesCSV, {});
-  this.addVerbSuffixes(partofspeech, suffixes.data);
+  this.addVerbSuffixes(partOfSpeech, suffixes.data);
   footnotes = papaparse.parse(verbFootnotesCSV, {});
-  this.addFootnotes(partofspeech, footnotes.data);
+  this.addFootnotes(partOfSpeech, footnotes.data);
 };
 
 /**
