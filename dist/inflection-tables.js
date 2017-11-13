@@ -8496,5 +8496,5 @@ class Presenter {
     }
 }
 
-export { Presenter, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, languages, LanguageDataset, LanguageData, Suffix, Footnote, MatchData, ExtendedLanguageData, ExtendedGreekData, WordData, loadData };
+export { dataSet as LatinDataSet, dataSet$1 as GreekDataSet, languages, LanguageDataset, LanguageData, Suffix, Footnote, MatchData, ExtendedLanguageData, ExtendedGreekData, WordData, loadData, Presenter };
 //# sourceMappingURL=inflection-tables.js.map
