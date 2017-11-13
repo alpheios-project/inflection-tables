@@ -1,131 +1,409 @@
-(function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? factory() :
-	typeof define === 'function' && define.amd ? define(factory) :
-	(factory());
-}(this, (function () { 'use strict';
+/* eslint-disable no-unused-vars */
+const LANG_UNIT_WORD = Symbol('word');
+const LANG_UNIT_CHAR = Symbol('char');
+const LANG_DIR_LTR = Symbol('ltr');
+const LANG_DIR_RTL = Symbol('rtl');
+const LANG_LATIN = Symbol('latin');
+const LANG_GREEK = Symbol('greek');
+const LANG_ARABIC = Symbol('arabic');
+const LANG_PERSIAN = Symbol('persian');
+const STR_LANG_CODE_LAT = 'lat';
+const STR_LANG_CODE_LA = 'la';
+const STR_LANG_CODE_GRC = 'grc';
+const STR_LANG_CODE_ARA = 'ara';
+const STR_LANG_CODE_AR = 'ar';
+const STR_LANG_CODE_FAR = 'far';
+const STR_LANG_CODE_PER = 'per';
+// parts of speech
+const POFS_ADJECTIVE = 'adjective';
+const POFS_ADVERB = 'adverb';
+const POFS_ADVERBIAL = 'adverbial';
+const POFS_ARTICLE = 'article';
+const POFS_CONJUNCTION = 'conjunction';
+const POFS_EXCLAMATION = 'exclamation';
+const POFS_INTERJECTION = 'interjection';
+const POFS_NOUN = 'noun';
+const POFS_NUMERAL = 'numeral';
+const POFS_PARTICLE = 'particle';
+const POFS_PREFIX = 'prefix';
+const POFS_PREPOSITION = 'preposition';
+const POFS_PRONOUN = 'pronoun';
+const POFS_SUFFIX = 'suffix';
+const POFS_SUPINE = 'supine';
+const POFS_VERB = 'verb';
+const POFS_VERB_PARTICIPLE = 'verb participle';
+// gender
+const GEND_MASCULINE = 'masculine';
+const GEND_FEMININE = 'feminine';
+const GEND_NEUTER = 'neuter';
+const GEND_COMMON = 'common';
+const GEND_ANIMATE = 'animate';
+const GEND_INANIMATE = 'inanimate';
+// Polish gender types
+const GEND_PERSONAL_MASCULINE = 'personal masculine';
+const GEND_ANIMATE_MASCULINE = 'animate masculine';
+const GEND_INANIMATE_MASCULINE = 'inanimate masculine';
+// comparative
+const COMP_POSITIVE = 'positive';
+const COMP_COMPARITIVE = 'comparative';
+const COMP_SUPERLATIVE = 'superlative';
+// case
+const CASE_ABESSIVE = 'abessive';
+const CASE_ABLATIVE = 'ablative';
+const CASE_ABSOLUTIVE = 'absolutive';
+const CASE_ACCUSATIVE = 'accusative';
+const CASE_ADDIRECTIVE = 'addirective';
+const CASE_ADELATIVE = 'adelative';
+const CASE_ADESSIVE = 'adessive';
+const CASE_ADVERBIAL = 'adverbial';
+const CASE_ALLATIVE = 'allative';
+const CASE_ANTESSIVE = 'antessive';
+const CASE_APUDESSIVE = 'apudessive';
+const CASE_AVERSIVE = 'aversive';
+const CASE_BENEFACTIVE = 'benefactive';
+const CASE_CARITIVE = 'caritive';
+const CASE_CAUSAL = 'causal';
+const CASE_CAUSAL_FINAL = 'causal-final';
+const CASE_COMITATIVE = 'comitative';
+const CASE_DATIVE = 'dative';
+const CASE_DELATIVE = 'delative';
+const CASE_DIRECT = 'direct';
+const CASE_DISTRIBUTIVE = 'distributive';
+const CASE_DISTRIBUTIVE_TEMPORAL = 'distributive-temporal';
+const CASE_ELATIVE = 'elative';
+const CASE_ERGATIVE = 'ergative';
+const CASE_ESSIVE = 'essive';
+const CASE_ESSIVE_FORMAL = 'essive-formal';
+const CASE_ESSIVE_MODAL = 'essive-modal';
+const CASE_EQUATIVE = 'equative';
+const CASE_EVITATIVE = 'evitative';
+const CASE_EXESSIVE = 'exessive';
+const CASE_FINAL = 'final';
+const CASE_FORMAL = 'formal';
+const CASE_GENITIVE = 'genitive';
+const CASE_ILLATIVE = 'illative';
+const CASE_INELATIVE = 'inelative';
+const CASE_INESSIVE = 'inessive';
+const CASE_INSTRUCTIVE = 'instructive';
+const CASE_INSTRUMENTAL = 'instrumental';
+const CASE_INSTRUMENTAL_COMITATIVE = 'instrumental-comitative';
+const CASE_INTRANSITIVE = 'intransitive';
+const CASE_LATIVE = 'lative';
+const CASE_LOCATIVE = 'locative';
+const CASE_MODAL = 'modal';
+const CASE_MULTIPLICATIVE = 'multiplicative';
+const CASE_NOMINATIVE = 'nominative';
+const CASE_PARTITIVE = 'partitive';
+const CASE_PEGATIVE = 'pegative';
+const CASE_PERLATIVE = 'perlative';
+const CASE_POSSESSIVE = 'possessive';
+const CASE_POSTELATIVE = 'postelative';
+const CASE_POSTDIRECTIVE = 'postdirective';
+const CASE_POSTESSIVE = 'postessive';
+const CASE_POSTPOSITIONAL = 'postpositional';
+const CASE_PREPOSITIONAL = 'prepositional';
+const CASE_PRIVATIVE = 'privative';
+const CASE_PROLATIVE = 'prolative';
+const CASE_PROSECUTIVE = 'prosecutive';
+const CASE_PROXIMATIVE = 'proximative';
+const CASE_SEPARATIVE = 'separative';
+const CASE_SOCIATIVE = 'sociative';
+const CASE_SUBDIRECTIVE = 'subdirective';
+const CASE_SUBESSIVE = 'subessive';
+const CASE_SUBELATIVE = 'subelative';
+const CASE_SUBLATIVE = 'sublative';
+const CASE_SUPERDIRECTIVE = 'superdirective';
+const CASE_SUPERESSIVE = 'superessive';
+const CASE_SUPERLATIVE = 'superlative';
+const CASE_SUPPRESSIVE = 'suppressive';
+const CASE_TEMPORAL = 'temporal';
+const CASE_TERMINATIVE = 'terminative';
+const CASE_TRANSLATIVE = 'translative';
+const CASE_VIALIS = 'vialis';
+const CASE_VOCATIVE = 'vocative';
+const MOOD_ADMIRATIVE = 'admirative';
+const MOOD_COHORTATIVE = 'cohortative';
+const MOOD_CONDITIONAL = 'conditional';
+const MOOD_DECLARATIVE = 'declarative';
+const MOOD_DUBITATIVE = 'dubitative';
+const MOOD_ENERGETIC = 'energetic';
+const MOOD_EVENTIVE = 'eventive';
+const MOOD_GENERIC = 'generic';
+const MOOD_GERUNDIVE = 'gerundive';
+const MOOD_HYPOTHETICAL = 'hypothetical';
+const MOOD_IMPERATIVE = 'imperative';
+const MOOD_INDICATIVE = 'indicative';
+const MOOD_INFERENTIAL = 'inferential';
+const MOOD_INFINITIVE = 'infinitive';
+const MOOD_INTERROGATIVE = 'interrogative';
+const MOOD_JUSSIVE = 'jussive';
+const MOOD_NEGATIVE = 'negative';
+const MOOD_OPTATIVE = 'optative';
+const MOOD_PARTICIPLE = 'participle';
+const MOOD_PRESUMPTIVE = 'presumptive';
+const MOOD_RENARRATIVE = 'renarrative';
+const MOOD_SUBJUNCTIVE = 'subjunctive';
+const MOOD_SUPINE = 'supine';
+const NUM_SINGULAR = 'singular';
+const NUM_PLURAL = 'plural';
+const NUM_DUAL = 'dual';
+const NUM_TRIAL = 'trial';
+const NUM_PAUCAL = 'paucal';
+const NUM_SINGULATIVE = 'singulative';
+const NUM_COLLECTIVE = 'collective';
+const NUM_DISTRIBUTIVE_PLURAL = 'distributive plural';
+const NRL_CARDINAL = 'cardinal';
+const NRL_ORDINAL = 'ordinal';
+const NRL_DISTRIBUTIVE = 'distributive';
+const NURL_NUMERAL_ADVERB = 'numeral adverb';
+const ORD_1ST = '1st';
+const ORD_2ND = '2nd';
+const ORD_3RD = '3rd';
+const ORD_4TH = '4th';
+const ORD_5TH = '5th';
+const ORD_6TH = '6th';
+const ORD_7TH = '7th';
+const ORD_8TH = '8th';
+const ORD_9TH = '9th';
+const TENSE_AORIST = 'aorist';
+const TENSE_FUTURE = 'future';
+const TENSE_FUTURE_PERFECT = 'future perfect';
+const TENSE_IMPERFECT = 'imperfect';
+const TENSE_PAST_ABSOLUTE = 'past absolute';
+const TENSE_PERFECT = 'perfect';
+const TENSE_PLUPERFECT = 'pluperfect';
+const TENSE_PRESENT = 'present';
+const VKIND_TO_BE = 'to be';
+const VKIND_COMPOUNDS_OF_TO_BE = 'compounds of to be';
+const VKIND_TAKING_ABLATIVE = 'taking ablative';
+const VKIND_TAKING_DATIVE = 'taking dative';
+const VKIND_TAKING_GENITIVE = 'taking genitive';
+const VKIND_TRANSITIVE = 'transitive';
+const VKIND_INTRANSITIVE = 'intransitive';
+const VKIND_IMPERSONAL = 'impersonal';
+const VKIND_DEPONENT = 'deponent';
+const VKIND_SEMIDEPONENT = 'semideponent';
+const VKIND_PERFECT_DEFINITE = 'perfect definite';
+const VOICE_ACTIVE = 'active';
+const VOICE_PASSIVE = 'passive';
+const VOICE_MEDIOPASSIVE = 'mediopassive';
+const VOICE_IMPERSONAL_PASSIVE = 'impersonal passive';
+const VOICE_MIDDLE = 'middle';
+const VOICE_ANTIPASSIVE = 'antipassive';
+const VOICE_REFLEXIVE = 'reflexive';
+const VOICE_RECIPROCAL = 'reciprocal';
+const VOICE_CAUSATIVE = 'causative';
+const VOICE_ADJUTATIVE = 'adjutative';
+const VOICE_APPLICATIVE = 'applicative';
+const VOICE_CIRCUMSTANTIAL = 'circumstantial';
+const VOICE_DEPONENT = 'deponent';
+const TYPE_IRREGULAR = 'irregular';
+const TYPE_REGULAR = 'regular';
+/* eslit-enable no-unused-vars */
 
-/**
- * @class  LanguageModel is the base class for language-specific behavior
- */
-class LanguageModel {
 
-   /**
-   */
-   constructor() {
-     this.source_language = null;
-     this.context_forward = 0;
-     this.context_backward = 0;
-     this.direction = LanguageModel.DIR_LTR;
-     this.base_unit = LanguageModel.UNIT_WORD;
-     this.language_codes = [];
-     this.features = {}; // Grammatical feature types (definitions) within supported by a specific language.
-   }
-
-  /**
-   * Handler which can be used as the contextHander.
-   * It uses language-specific configuration to identify
-   * the elements from the alph-text popup which should produce links
-   * to the language-specific grammar.
-   * @see #contextHandler
-   */
-  grammarContext(a_doc)
-  {
-      // used to bind a click handler on the .alph-entry items in the
-      // popup which retrieved the context attribute from the clicked
-      // term and used that to construct a link and open the grammar
-      // at the apporopriate place.
-      //var links = this.getGrammarLinks();
-
-      //for (var link_name in links)
-      //{
-      //   if (links.hasOwnProperty(link_name))
-      //    {
-              //Alph.$(".alph-entry ." + link_name,a_doc).bind('click',link_name,
-              //   function(a_e)
-              //    {
-                        // build target inside grammar
-                        //var target = a_e.data;
-                        //var rngContext = Alph.$(this).attr("context");
-                        //if (rngContext != null)
-                        //{
-                        //  target += "-" + rngContext.split(/-/)[0];
-                        //}
-                        //myobj.openGrammar(a_e.originaEvent,this,target);
-               //   }
-              //);
-       //   }
-      //}
-  }
-
-  /**
-   * Check to see if this language tool can produce an inflection table display
-   * for the current node
-   */
-  canInflect(a_node)
-  {
-    return false;
-  }
-
-  /**
-   * Check to see if the supplied language code is supported by this tool
-   * @param {String} a_code the language code
-   * @returns true if supported false if not
-   * @type Boolean
-   */
-  static supportsLanguage(a_code)
-  {
-      return false;
-  };
-
-  /**
-   * Return a normalized version of a word which can be used to compare the word for equality
-   * @param {String} a_word the source word
-   * @returns the normalized form of the word (default version just returns the same word,
-   *          override in language-specific subclass)
-   * @type String
-   */
-  normalizeWord(a_word)
-  {
-      return a_word;
-  }
-
-
-  /**
-   * Get a list of valid puncutation for this language
-   * @returns {String} a string containing valid puncutation symbols
-   */
-  getPunctuation()
-  {
-      return ".,;:!?'\"(){}\\[\\]<>\/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r";
-  }
-
-  toString()
-  {
-    return String(this.source_language);
-  }
-
-  isEqual(model)
-  {
-    return this.source_language === model.source_language;
-  }
-
-  toCode() {
-    return null;
-  }
-
-}
-LanguageModel.UNIT_WORD = Symbol('word');
-LanguageModel.UNIT_CHAR = Symbol('char');
-LanguageModel.DIR_LTR = Symbol('ltr');
-LanguageModel.DIR_RTL = Symbol('rtl');
-LanguageModel.LANG_LATIN = Symbol('latin');
-LanguageModel.LANG_GREEK = Symbol('greek');
+var constants = Object.freeze({
+	LANG_UNIT_WORD: LANG_UNIT_WORD,
+	LANG_UNIT_CHAR: LANG_UNIT_CHAR,
+	LANG_DIR_LTR: LANG_DIR_LTR,
+	LANG_DIR_RTL: LANG_DIR_RTL,
+	LANG_LATIN: LANG_LATIN,
+	LANG_GREEK: LANG_GREEK,
+	LANG_ARABIC: LANG_ARABIC,
+	LANG_PERSIAN: LANG_PERSIAN,
+	STR_LANG_CODE_LAT: STR_LANG_CODE_LAT,
+	STR_LANG_CODE_LA: STR_LANG_CODE_LA,
+	STR_LANG_CODE_GRC: STR_LANG_CODE_GRC,
+	STR_LANG_CODE_ARA: STR_LANG_CODE_ARA,
+	STR_LANG_CODE_AR: STR_LANG_CODE_AR,
+	STR_LANG_CODE_FAR: STR_LANG_CODE_FAR,
+	STR_LANG_CODE_PER: STR_LANG_CODE_PER,
+	POFS_ADJECTIVE: POFS_ADJECTIVE,
+	POFS_ADVERB: POFS_ADVERB,
+	POFS_ADVERBIAL: POFS_ADVERBIAL,
+	POFS_ARTICLE: POFS_ARTICLE,
+	POFS_CONJUNCTION: POFS_CONJUNCTION,
+	POFS_EXCLAMATION: POFS_EXCLAMATION,
+	POFS_INTERJECTION: POFS_INTERJECTION,
+	POFS_NOUN: POFS_NOUN,
+	POFS_NUMERAL: POFS_NUMERAL,
+	POFS_PARTICLE: POFS_PARTICLE,
+	POFS_PREFIX: POFS_PREFIX,
+	POFS_PREPOSITION: POFS_PREPOSITION,
+	POFS_PRONOUN: POFS_PRONOUN,
+	POFS_SUFFIX: POFS_SUFFIX,
+	POFS_SUPINE: POFS_SUPINE,
+	POFS_VERB: POFS_VERB,
+	POFS_VERB_PARTICIPLE: POFS_VERB_PARTICIPLE,
+	GEND_MASCULINE: GEND_MASCULINE,
+	GEND_FEMININE: GEND_FEMININE,
+	GEND_NEUTER: GEND_NEUTER,
+	GEND_COMMON: GEND_COMMON,
+	GEND_ANIMATE: GEND_ANIMATE,
+	GEND_INANIMATE: GEND_INANIMATE,
+	GEND_PERSONAL_MASCULINE: GEND_PERSONAL_MASCULINE,
+	GEND_ANIMATE_MASCULINE: GEND_ANIMATE_MASCULINE,
+	GEND_INANIMATE_MASCULINE: GEND_INANIMATE_MASCULINE,
+	COMP_POSITIVE: COMP_POSITIVE,
+	COMP_COMPARITIVE: COMP_COMPARITIVE,
+	COMP_SUPERLATIVE: COMP_SUPERLATIVE,
+	CASE_ABESSIVE: CASE_ABESSIVE,
+	CASE_ABLATIVE: CASE_ABLATIVE,
+	CASE_ABSOLUTIVE: CASE_ABSOLUTIVE,
+	CASE_ACCUSATIVE: CASE_ACCUSATIVE,
+	CASE_ADDIRECTIVE: CASE_ADDIRECTIVE,
+	CASE_ADELATIVE: CASE_ADELATIVE,
+	CASE_ADESSIVE: CASE_ADESSIVE,
+	CASE_ADVERBIAL: CASE_ADVERBIAL,
+	CASE_ALLATIVE: CASE_ALLATIVE,
+	CASE_ANTESSIVE: CASE_ANTESSIVE,
+	CASE_APUDESSIVE: CASE_APUDESSIVE,
+	CASE_AVERSIVE: CASE_AVERSIVE,
+	CASE_BENEFACTIVE: CASE_BENEFACTIVE,
+	CASE_CARITIVE: CASE_CARITIVE,
+	CASE_CAUSAL: CASE_CAUSAL,
+	CASE_CAUSAL_FINAL: CASE_CAUSAL_FINAL,
+	CASE_COMITATIVE: CASE_COMITATIVE,
+	CASE_DATIVE: CASE_DATIVE,
+	CASE_DELATIVE: CASE_DELATIVE,
+	CASE_DIRECT: CASE_DIRECT,
+	CASE_DISTRIBUTIVE: CASE_DISTRIBUTIVE,
+	CASE_DISTRIBUTIVE_TEMPORAL: CASE_DISTRIBUTIVE_TEMPORAL,
+	CASE_ELATIVE: CASE_ELATIVE,
+	CASE_ERGATIVE: CASE_ERGATIVE,
+	CASE_ESSIVE: CASE_ESSIVE,
+	CASE_ESSIVE_FORMAL: CASE_ESSIVE_FORMAL,
+	CASE_ESSIVE_MODAL: CASE_ESSIVE_MODAL,
+	CASE_EQUATIVE: CASE_EQUATIVE,
+	CASE_EVITATIVE: CASE_EVITATIVE,
+	CASE_EXESSIVE: CASE_EXESSIVE,
+	CASE_FINAL: CASE_FINAL,
+	CASE_FORMAL: CASE_FORMAL,
+	CASE_GENITIVE: CASE_GENITIVE,
+	CASE_ILLATIVE: CASE_ILLATIVE,
+	CASE_INELATIVE: CASE_INELATIVE,
+	CASE_INESSIVE: CASE_INESSIVE,
+	CASE_INSTRUCTIVE: CASE_INSTRUCTIVE,
+	CASE_INSTRUMENTAL: CASE_INSTRUMENTAL,
+	CASE_INSTRUMENTAL_COMITATIVE: CASE_INSTRUMENTAL_COMITATIVE,
+	CASE_INTRANSITIVE: CASE_INTRANSITIVE,
+	CASE_LATIVE: CASE_LATIVE,
+	CASE_LOCATIVE: CASE_LOCATIVE,
+	CASE_MODAL: CASE_MODAL,
+	CASE_MULTIPLICATIVE: CASE_MULTIPLICATIVE,
+	CASE_NOMINATIVE: CASE_NOMINATIVE,
+	CASE_PARTITIVE: CASE_PARTITIVE,
+	CASE_PEGATIVE: CASE_PEGATIVE,
+	CASE_PERLATIVE: CASE_PERLATIVE,
+	CASE_POSSESSIVE: CASE_POSSESSIVE,
+	CASE_POSTELATIVE: CASE_POSTELATIVE,
+	CASE_POSTDIRECTIVE: CASE_POSTDIRECTIVE,
+	CASE_POSTESSIVE: CASE_POSTESSIVE,
+	CASE_POSTPOSITIONAL: CASE_POSTPOSITIONAL,
+	CASE_PREPOSITIONAL: CASE_PREPOSITIONAL,
+	CASE_PRIVATIVE: CASE_PRIVATIVE,
+	CASE_PROLATIVE: CASE_PROLATIVE,
+	CASE_PROSECUTIVE: CASE_PROSECUTIVE,
+	CASE_PROXIMATIVE: CASE_PROXIMATIVE,
+	CASE_SEPARATIVE: CASE_SEPARATIVE,
+	CASE_SOCIATIVE: CASE_SOCIATIVE,
+	CASE_SUBDIRECTIVE: CASE_SUBDIRECTIVE,
+	CASE_SUBESSIVE: CASE_SUBESSIVE,
+	CASE_SUBELATIVE: CASE_SUBELATIVE,
+	CASE_SUBLATIVE: CASE_SUBLATIVE,
+	CASE_SUPERDIRECTIVE: CASE_SUPERDIRECTIVE,
+	CASE_SUPERESSIVE: CASE_SUPERESSIVE,
+	CASE_SUPERLATIVE: CASE_SUPERLATIVE,
+	CASE_SUPPRESSIVE: CASE_SUPPRESSIVE,
+	CASE_TEMPORAL: CASE_TEMPORAL,
+	CASE_TERMINATIVE: CASE_TERMINATIVE,
+	CASE_TRANSLATIVE: CASE_TRANSLATIVE,
+	CASE_VIALIS: CASE_VIALIS,
+	CASE_VOCATIVE: CASE_VOCATIVE,
+	MOOD_ADMIRATIVE: MOOD_ADMIRATIVE,
+	MOOD_COHORTATIVE: MOOD_COHORTATIVE,
+	MOOD_CONDITIONAL: MOOD_CONDITIONAL,
+	MOOD_DECLARATIVE: MOOD_DECLARATIVE,
+	MOOD_DUBITATIVE: MOOD_DUBITATIVE,
+	MOOD_ENERGETIC: MOOD_ENERGETIC,
+	MOOD_EVENTIVE: MOOD_EVENTIVE,
+	MOOD_GENERIC: MOOD_GENERIC,
+	MOOD_GERUNDIVE: MOOD_GERUNDIVE,
+	MOOD_HYPOTHETICAL: MOOD_HYPOTHETICAL,
+	MOOD_IMPERATIVE: MOOD_IMPERATIVE,
+	MOOD_INDICATIVE: MOOD_INDICATIVE,
+	MOOD_INFERENTIAL: MOOD_INFERENTIAL,
+	MOOD_INFINITIVE: MOOD_INFINITIVE,
+	MOOD_INTERROGATIVE: MOOD_INTERROGATIVE,
+	MOOD_JUSSIVE: MOOD_JUSSIVE,
+	MOOD_NEGATIVE: MOOD_NEGATIVE,
+	MOOD_OPTATIVE: MOOD_OPTATIVE,
+	MOOD_PARTICIPLE: MOOD_PARTICIPLE,
+	MOOD_PRESUMPTIVE: MOOD_PRESUMPTIVE,
+	MOOD_RENARRATIVE: MOOD_RENARRATIVE,
+	MOOD_SUBJUNCTIVE: MOOD_SUBJUNCTIVE,
+	MOOD_SUPINE: MOOD_SUPINE,
+	NUM_SINGULAR: NUM_SINGULAR,
+	NUM_PLURAL: NUM_PLURAL,
+	NUM_DUAL: NUM_DUAL,
+	NUM_TRIAL: NUM_TRIAL,
+	NUM_PAUCAL: NUM_PAUCAL,
+	NUM_SINGULATIVE: NUM_SINGULATIVE,
+	NUM_COLLECTIVE: NUM_COLLECTIVE,
+	NUM_DISTRIBUTIVE_PLURAL: NUM_DISTRIBUTIVE_PLURAL,
+	NRL_CARDINAL: NRL_CARDINAL,
+	NRL_ORDINAL: NRL_ORDINAL,
+	NRL_DISTRIBUTIVE: NRL_DISTRIBUTIVE,
+	NURL_NUMERAL_ADVERB: NURL_NUMERAL_ADVERB,
+	ORD_1ST: ORD_1ST,
+	ORD_2ND: ORD_2ND,
+	ORD_3RD: ORD_3RD,
+	ORD_4TH: ORD_4TH,
+	ORD_5TH: ORD_5TH,
+	ORD_6TH: ORD_6TH,
+	ORD_7TH: ORD_7TH,
+	ORD_8TH: ORD_8TH,
+	ORD_9TH: ORD_9TH,
+	TENSE_AORIST: TENSE_AORIST,
+	TENSE_FUTURE: TENSE_FUTURE,
+	TENSE_FUTURE_PERFECT: TENSE_FUTURE_PERFECT,
+	TENSE_IMPERFECT: TENSE_IMPERFECT,
+	TENSE_PAST_ABSOLUTE: TENSE_PAST_ABSOLUTE,
+	TENSE_PERFECT: TENSE_PERFECT,
+	TENSE_PLUPERFECT: TENSE_PLUPERFECT,
+	TENSE_PRESENT: TENSE_PRESENT,
+	VKIND_TO_BE: VKIND_TO_BE,
+	VKIND_COMPOUNDS_OF_TO_BE: VKIND_COMPOUNDS_OF_TO_BE,
+	VKIND_TAKING_ABLATIVE: VKIND_TAKING_ABLATIVE,
+	VKIND_TAKING_DATIVE: VKIND_TAKING_DATIVE,
+	VKIND_TAKING_GENITIVE: VKIND_TAKING_GENITIVE,
+	VKIND_TRANSITIVE: VKIND_TRANSITIVE,
+	VKIND_INTRANSITIVE: VKIND_INTRANSITIVE,
+	VKIND_IMPERSONAL: VKIND_IMPERSONAL,
+	VKIND_DEPONENT: VKIND_DEPONENT,
+	VKIND_SEMIDEPONENT: VKIND_SEMIDEPONENT,
+	VKIND_PERFECT_DEFINITE: VKIND_PERFECT_DEFINITE,
+	VOICE_ACTIVE: VOICE_ACTIVE,
+	VOICE_PASSIVE: VOICE_PASSIVE,
+	VOICE_MEDIOPASSIVE: VOICE_MEDIOPASSIVE,
+	VOICE_IMPERSONAL_PASSIVE: VOICE_IMPERSONAL_PASSIVE,
+	VOICE_MIDDLE: VOICE_MIDDLE,
+	VOICE_ANTIPASSIVE: VOICE_ANTIPASSIVE,
+	VOICE_REFLEXIVE: VOICE_REFLEXIVE,
+	VOICE_RECIPROCAL: VOICE_RECIPROCAL,
+	VOICE_CAUSATIVE: VOICE_CAUSATIVE,
+	VOICE_ADJUTATIVE: VOICE_ADJUTATIVE,
+	VOICE_APPLICATIVE: VOICE_APPLICATIVE,
+	VOICE_CIRCUMSTANTIAL: VOICE_CIRCUMSTANTIAL,
+	VOICE_DEPONENT: VOICE_DEPONENT,
+	TYPE_IRREGULAR: TYPE_IRREGULAR,
+	TYPE_REGULAR: TYPE_REGULAR
+});
 
 /**
  * Wrapper class for a (grammatical, usually) feature, such as part of speech or declension. Keeps both value and type information.
  */
 class Feature {
-
     /**
      * Initializes a Feature object
      * @param {string | string[]} value - A single feature value or, if this feature could have multiple
@@ -133,64 +411,124 @@ class Feature {
      * @param {string} type - A type of the feature, allowed values are specified in 'types' object.
      * @param {string} language - A language of a feature, allowed values are specified in 'languages' object.
      */
-    constructor (value, type, language) {
-        if (!Feature.types.isAllowed(type)) {
-            throw new Error('Features of "' + type + '" type are not supported.');
-        }
-        if (!value) {
-            throw new Error('Feature should have a non-empty value.');
-        }
-        if (!type) {
-            throw new Error('Feature should have a non-empty type.');
-        }
-        if (!language) {
-          throw new Error('Feature constructor requires a language');
-        }
-        this.value = value;
-        this.type = type;
-        this.language = language;
-
-    };
-
-    isEqual(feature) {
-        if (Array.isArray(feature.value)) {
-            if (!Array.isArray(this.value) || this.value.length !== feature.value.length) {
-                return false;
-            }
-            let equal = this.type===feature.type && this.language===feature.language;
-            equal = equal && this.value.every(function(element, index) {
-                return element === feature.value[index];
-            });
-            return equal;
-        }
-        else {
-            return this.value===feature.value && this.type===feature.type && this.language===feature.language;
-        }
+  constructor (value, type, language) {
+    if (!Feature.types.isAllowed(type)) {
+      throw new Error('Features of "' + type + '" type are not supported.')
     }
+    if (!value) {
+      throw new Error('Feature should have a non-empty value.')
+    }
+    if (!type) {
+      throw new Error('Feature should have a non-empty type.')
+    }
+    if (!language) {
+      throw new Error('Feature constructor requires a language')
+    }
+    this.value = value;
+    this.type = type;
+    this.language = language;
+  };
+
+  isEqual (feature) {
+    if (Array.isArray(feature.value)) {
+      if (!Array.isArray(this.value) || this.value.length !== feature.value.length) {
+        return false
+      }
+      let equal = this.type === feature.type && this.language === feature.language;
+      equal = equal && this.value.every(function (element, index) {
+        return element === feature.value[index]
+      });
+      return equal
+    } else {
+      return this.value === feature.value && this.type === feature.type && this.language === feature.language
+    }
+  }
 }
 // Should have no spaces in values in order to be used in HTML templates
 Feature.types = {
-    word: 'word',
-    part: 'part of speech', // Part of speech
-    number: 'number',
-    grmCase: 'case',
-    declension: 'declension',
-    gender: 'gender',
-    type: 'type',
-    conjugation: 'conjugation',
-    tense: 'tense',
-    voice: 'voice',
-    mood: 'mood',
-    person: 'person',
-    frequency: 'frequency', // How frequent this word is
-    meaning: 'meaning', // Meaning of a word
-    source: 'source', // Source of word definition
-    footnote: 'footnote', // A footnote for a word's ending
-    isAllowed(value) {
-        let v = `${value}`;
-        return Object.values(this).includes(v);
-    }
+  word: 'word',
+  part: 'part of speech', // Part of speech
+  number: 'number',
+  grmCase: 'case',
+  declension: 'declension',
+  gender: 'gender',
+  type: 'type',
+  conjugation: 'conjugation',
+  comparison: 'comparison',
+  tense: 'tense',
+  voice: 'voice',
+  mood: 'mood',
+  person: 'person',
+  frequency: 'frequency', // How frequent this word is
+  meaning: 'meaning', // Meaning of a word
+  source: 'source', // Source of word definition
+  footnote: 'footnote', // A footnote for a word's ending
+  dialect: 'dialect', // a dialect iderntifier
+  note: 'note', // a general note
+  pronunciation: 'pronunciation',
+  area: 'area',
+  geo: 'geo', // geographical data
+  kind: 'kind', // verb kind informatin
+  derivtype: 'derivtype',
+  stemtype: 'stemtype',
+  morph: 'morph', // general morphological information
+  var: 'var', // variance?
+  isAllowed (value) {
+    let v = `${value}`;
+    return Object.values(this).includes(v)
+  }
 };
+
+class FeatureImporter {
+  constructor (defaults = []) {
+    this.hash = {};
+    for (let value of defaults) {
+      this.map(value, value);
+    }
+    return this
+  }
+
+    /**
+     * Sets mapping between external imported value and one or more library standard values. If an importedValue
+     * is already in a hash table, old libraryValue will be overwritten with the new one.
+     * @param {string} importedValue - External value
+     * @param {Object | Object[] | string | string[]} libraryValue - Library standard value
+     */
+  map (importedValue, libraryValue) {
+    if (!importedValue) {
+      throw new Error('Imported value should not be empty.')
+    }
+
+    if (!libraryValue) {
+      throw new Error('Library value should not be empty.')
+    }
+
+    this.hash[importedValue] = libraryValue;
+    return this
+  }
+
+    /**
+     * Checks if value is in a map.
+     * @param {string} importedValue - A value to test.
+     * @returns {boolean} - Tru if value is in a map, false otherwise.
+     */
+  has (importedValue) {
+    return this.hash.hasOwnProperty(importedValue)
+  }
+
+    /**
+     * Returns one or more library standard values that match an external value
+     * @param {string} importedValue - External value
+     * @returns {Object | string} One or more of library standard values
+     */
+  get (importedValue) {
+    if (this.has(importedValue)) {
+      return this.hash[importedValue]
+    } else {
+      throw new Error('A value "' + importedValue + '" is not found in the importer.')
+    }
+  }
+}
 
 /**
  * Definition class for a (grammatical) feature. Stores type information and (optionally) all possible values of the feature.
@@ -202,7 +540,7 @@ Feature.types = {
  * they should be grouped within an array: value1, [value2, value3], value4. Here 'value2' and 'value3' have
  * the same priority for sorting and grouping.
  */
-class FeatureType$1 {
+class FeatureType {
     // TODO: value checking
     /**
      * Creates and initializes a Feature Type object.
@@ -213,41 +551,40 @@ class FeatureType$1 {
      * such as footnotes).
      * @param {string} language - A language of a feature, allowed values are specified in 'languages' object.
      */
-    constructor(type, values, language) {
-        if (!Feature.types.isAllowed(type)) {
-            throw new Error('Features of "' + type + '" type are not supported.');
-        }
-        if (!values || !Array.isArray(values)) {
-            throw new Error('Values should be an array (or an empty array) of values.');
-        }
-        if (!language) {
-          throw new Error('FeatureType constructor requires a language');
-        }
+  constructor (type, values, language) {
+    if (!Feature.types.isAllowed(type)) {
+      throw new Error('Features of "' + type + '" type are not supported.')
+    }
+    if (!values || !Array.isArray(values)) {
+      throw new Error('Values should be an array (or an empty array) of values.')
+    }
+    if (!language) {
+      throw new Error('FeatureType constructor requires a language')
+    }
 
-        this.type = type;
-        this.language = language;
+    this.type = type;
+    this.language = language;
 
         /*
          This is a sort order index for a grammatical feature values. It is determined by the order of values in
          a 'values' array.
          */
-        this._orderIndex = [];
-        this._orderLookup = {};
+    this._orderIndex = [];
+    this._orderLookup = {};
 
-        for (const [index, value] of values.entries()) {
-            this._orderIndex.push(value);
-            if (Array.isArray(value)) {
-                for (let element of value) {
-                    this[element] = new Feature(element, this.type, this.language);
-                    this._orderLookup[element] = index;
-                }
-            }
-            else {
-                this[value] = new Feature(value, this.type, this.language);
-                this._orderLookup[value] = index;
-            }
+    for (const [index, value] of values.entries()) {
+      this._orderIndex.push(value);
+      if (Array.isArray(value)) {
+        for (let element of value) {
+          this[element] = new Feature(element, this.type, this.language);
+          this._orderLookup[element] = index;
         }
-    };
+      } else {
+        this[value] = new Feature(value, this.type, this.language);
+        this._orderLookup[value] = index;
+      }
+    }
+  };
 
     /**
      * Return a Feature with an arbitrary value. This value would not be necessarily present among FeatureType values.
@@ -255,15 +592,24 @@ class FeatureType$1 {
      * @param value
      * @returns {Feature}
      */
-    get(value) {
-        if (value) {
-            return new Feature(value, this.type, this.language);
-        }
-        else {
-            throw new Error('A non-empty value should be provided.');
-        }
-
+  get (value) {
+    if (value) {
+      return new Feature(value, this.type, this.language)
+    } else {
+      throw new Error('A non-empty value should be provided.')
     }
+  }
+
+  getFromImporter (importerName, value) {
+    let mapped;
+    try {
+      mapped = this.importer[importerName].get(value);
+    } catch (e) {
+      // quietly catch not found and replace with default
+      mapped = this.get(value);
+    }
+    return mapped
+  }
 
     /**
      * Creates and returns a new importer with a specific name. If an importer with this name already exists,
@@ -271,14 +617,14 @@ class FeatureType$1 {
      * @param {string} name - A name of an importer object
      * @returns {Importer} A new or existing Importer object that matches a name provided
      */
-    addImporter(name) {
-        if (!name) {
-            throw new Error('Importer should have a non-empty name.');
-        }
-        this.importer = this.importer || {};
-        this.importer[name] = this.importer[name] || new Importer();
-        return this.importer[name];
+  addImporter (name) {
+    if (!name) {
+      throw new Error('Importer should have a non-empty name.')
     }
+    this.importer = this.importer || {};
+    this.importer[name] = this.importer[name] || new FeatureImporter();
+    return this.importer[name]
+  }
 
     /**
      * Return copies of all feature values as Feature objects in a sorted array, according to feature type's sort order.
@@ -287,9 +633,9 @@ class FeatureType$1 {
      * If particular feature contains multiple feature values (i.e. `masculine` and `feminine` values combined),
      * an array of Feature objects will be returned instead of a single Feature object, as for single feature values.
      */
-    get orderedFeatures() {
-        return this.orderedValues.map((value) => new Feature(value, this.type, this.language));
-    }
+  get orderedFeatures () {
+    return this.orderedValues.map((value) => new Feature(value, this.type, this.language))
+  }
 
     /**
      * Return all feature values as strings in a sorted array, according to feature type's sort order.
@@ -303,9 +649,9 @@ class FeatureType$1 {
      * If particular feature contains multiple feature values (i.e. `masculine` and `feminine` values combined),
      * an array of strings will be returned instead of a single strings, as for single feature values.
      */
-    get orderedValues() {
-        return this._orderIndex;
-    }
+  get orderedValues () {
+    return this._orderIndex
+  }
 
     /**
      * Returns a lookup table for type values as:
@@ -313,9 +659,9 @@ class FeatureType$1 {
      *  their order value will be the same.
      * @returns {object}
      */
-    get orderLookup() {
-        return this._orderLookup;
-    }
+  get orderLookup () {
+    return this._orderLookup
+  }
 
     /**
      * Sets an order of grammatical feature values for a grammatical feature. Used mostly for sorting, filtering,
@@ -328,197 +674,66 @@ class FeatureType$1 {
      * during filtering and will be in the same bin during sorting.
      *
      */
-    set order(values) {
-        if (!values || (Array.isArray(values) && values.length === 0)) {
-            throw new Error("A non-empty list of values should be provided.");
-        }
+  set order (values) {
+    if (!values || (Array.isArray(values) && values.length === 0)) {
+      throw new Error('A non-empty list of values should be provided.')
+    }
 
         // If a single value is provided, convert it into an array
-        if (!Array.isArray(values)) {
-            values = [values];
+    if (!Array.isArray(values)) {
+      values = [values];
+    }
+
+    for (let value of values) {
+      if (Array.isArray(value)) {
+        for (let element of value) {
+          if (!this.hasOwnProperty(element.value)) {
+            throw new Error('Trying to order an element with "' + element.value + '" value that is not stored in a "' + this.type + '" type.')
+          }
+
+          if (element.type !== this.type) {
+            throw new Error('Trying to order an element with type "' + element.type + '" that is different from "' + this.type + '".')
+          }
+
+          if (element.language !== this.language) {
+            throw new Error('Trying to order an element with language "' + element.language + '" that is different from "' + this.language + '".')
+          }
+        }
+      } else {
+        if (!this.hasOwnProperty(value.value)) {
+          throw new Error('Trying to order an element with "' + value.value + '" value that is not stored in a "' + this.type + '" type.')
         }
 
-        for (let value of values) {
-            if (Array.isArray(value)) {
-                for (let element of value) {
-                    if (!this.hasOwnProperty(element.value)) {
-                        throw new Error('Trying to order an element with "' + element.value + '" value that is not stored in a "' + this.type + '" type.');
-                    }
-
-                    if (element.type !== this.type) {
-                        throw new Error('Trying to order an element with type "' + element.type + '" that is different from "' + this.type + '".')
-                    }
-
-                    if (element.language !== this.language) {
-                        throw new Error('Trying to order an element with language "' + element.language + '" that is different from "' + this.language + '".')
-                    }
-                }
-            }
-            else {
-                if (!this.hasOwnProperty(value.value)) {
-                    throw new Error('Trying to order an element with "' + value.value + '" value that is not stored in a "' + this.type + '" type.');
-                }
-
-                if (value.type !== this.type) {
-                    throw new Error('Trying to order an element with type "' + value.type + '" that is different from "' + this.type + '".')
-                }
-
-                if (value.language !== this.language) {
-                    throw new Error('Trying to order an element with language "' + value.language + '" that is different from "' + this.language + '".')
-                }
-            }
+        if (value.type !== this.type) {
+          throw new Error('Trying to order an element with type "' + value.type + '" that is different from "' + this.type + '".')
         }
+
+        if (value.language !== this.language) {
+          throw new Error('Trying to order an element with language "' + value.language + '" that is different from "' + this.language + '".')
+        }
+      }
+    }
 
         // Erase whatever sort order was set previously
-        this._orderLookup = {};
-        this._orderIndex = [];
+    this._orderLookup = {};
+    this._orderIndex = [];
 
         // Define a new sort order
-        for (const [index, element] of values.entries()) {
-
-            if (Array.isArray(element)) {
+    for (const [index, element] of values.entries()) {
+      if (Array.isArray(element)) {
                 // If it is an array, all values should have the same order
-                let elements = [];
-                for (const subElement of element) {
-                    this._orderLookup[subElement.value] = index;
-                    elements.push(subElement.value);
-                }
-                this._orderIndex[index] = elements;
-            }
-            else {
+        let elements = [];
+        for (const subElement of element) {
+          this._orderLookup[subElement.value] = index;
+          elements.push(subElement.value);
+        }
+        this._orderIndex[index] = elements;
+      } else {
                 // If is a single value
-                this._orderLookup[element.value] = index;
-                this._orderIndex[index] = element.value;
-            }
-        }
+        this._orderLookup[element.value] = index;
+        this._orderIndex[index] = element.value;
+      }
     }
-}
-
-
-/**
- * This is a hash table that maps values to be imported from an external file or service to library standard values.
- */
-class Importer {
-    constructor() {
-        this.hash = {};
-        return this;
-    }
-
-    /**
-     * Sets mapping between external imported value and one or more library standard values. If an importedValue
-     * is already in a hash table, old libraryValue will be overwritten with the new one.
-     * @param {string} importedValue - External value
-     * @param {Object | Object[] | string | string[]} libraryValue - Library standard value
-     */
-    map(importedValue, libraryValue) {
-        if (!importedValue) {
-            throw new Error('Imported value should not be empty.')
-        }
-
-        if (!libraryValue) {
-            throw new Error('Library value should not be empty.')
-        }
-
-        this.hash[importedValue] = libraryValue;
-        return this;
-    }
-
-    /**
-     * Checks if value is in a map.
-     * @param {string} importedValue - A value to test.
-     * @returns {boolean} - Tru if value is in a map, false otherwise.
-     */
-    has(importedValue) {
-        return this.hash.hasOwnProperty(importedValue);
-    }
-
-    /**
-     * Returns one or more library standard values that match an external value
-     * @param {string} importedValue - External value
-     * @returns {Object | string} One or more of library standard values
-     */
-    get(importedValue) {
-        if (this.has(importedValue)) {
-            return this.hash[importedValue];
-        }
-        else {
-            throw new Error('A value "' + importedValue + '" is not found in the importer.');
-        }
-    }
-}
-
-/**
- * @class  LatinLanguageModel is the lass for Latin specific behavior
- */
-class LatinLanguageModel$1 extends LanguageModel {
-
-   /**
-   */
-   constructor() {
-     super();
-     this.source_language = LanguageModel.LANG_LATIN;
-     this.context_forward = 0;
-     this.context_backward = 0;
-     this.direction = LanguageModel.DIR_LTR;
-     this.base_unit = LanguageModel.UNIT_WORD;
-     this.language_codes = ['la','lat'];
-     this.features = this._initializeFeatures();
-   }
-
-   static supportsLanguage(a_code) {
-     return ['la','lat'].includes(a_code);
-   }
-
-   _initializeFeatures() {
-     let features = {};
-     let lang_code = this.toCode();
-     features[Feature.types.part] = new FeatureType$1(Feature.types.part, ['noun', 'adjective', 'verb'],lang_code);
-     features[Feature.types.number] = new FeatureType$1(Feature.types.number, ['singular', 'plural'],lang_code);
-     features[Feature.types.grmCase] = new FeatureType$1(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'ablative', 'locative', 'vocative'],lang_code);
-     features[Feature.types.declension] = new FeatureType$1(Feature.types.declension, ['first', 'second', 'third', 'fourth', 'fifth'],lang_code);
-     features[Feature.types.gender] = new FeatureType$1(Feature.types.gender, ['masculine', 'feminine', 'neuter'],lang_code);
-     features[Feature.types.type] = new FeatureType$1(Feature.types.type, ['regular', 'irregular'],lang_code);
-     features[Feature.types.tense] = new FeatureType$1(Feature.types.tense, ['present', 'imperfect', 'future', 'perfect', 'pluperfect', 'future perfect'],lang_code);
-     features[Feature.types.voice] = new FeatureType$1(Feature.types.voice, ['passive', 'active'],lang_code);
-     features[Feature.types.mood] = new FeatureType$1(Feature.types.mood, ['indicative', 'subjunctive'],lang_code);
-     features[Feature.types.person] =new FeatureType$1(Feature.types.person, ['first', 'second', 'third'],lang_code);
-     features[Feature.types.conjugation] = new FeatureType$1(Feature.types.conjugation, ['first', 'second', 'third', 'fourth'],lang_code);
-     return features;
-   }
-
-  /**
-   * Check to see if this language tool can produce an inflection table display
-   * for the current node
-   */
-  canInflect(a_node)
-  {
-    return true;
-  }
-
-  /**
-   * Return a normalized version of a word which can be used to compare the word for equality
-   * @param {String} a_word the source word
-   * @returns the normalized form of the word (default version just returns the same word,
-   *          override in language-specific subclass)
-   * @type String
-   */
-  normalizeWord(a_word)
-  {
-      return a_word;
-  }
-
-
-  /**
-   * Get a list of valid puncutation for this language
-   * @returns {String} a string containing valid puncutation symbols
-   */
-  getPunctuation()
-  {
-      return ".,;:!?'\"(){}\\[\\]<>\/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r";
-  }
-
-  toCode() {
-    return 'lat';
   }
 }
 
@@ -526,110 +741,440 @@ class LatinLanguageModel$1 extends LanguageModel {
  * A list of grammatical features that characterizes a language unit. Has some additional service methods,
  * compared with standard storage objects.
  */
-class FeatureList$1 {
-
+class FeatureList {
     /**
      * Initializes a feature list.
      * @param {FeatureType[]} features - Features that build the list (optional, can be set later).
      */
-    constructor(features = []) {
-        this._features = [];
-        this._types = {};
-        this.add(features);
+  constructor (features = []) {
+    this._features = [];
+    this._types = {};
+    this.add(features);
+  }
+
+  add (features) {
+    if (!features || !Array.isArray(features)) {
+      throw new Error('Features must be defined and must come in an array.')
     }
 
-    add(features) {
-        if (!features || !Array.isArray(features)) {
-            throw new Error('Features must be defined and must come in an array.');
-        }
-
-        for (let feature of features) {
-            this._features.push(feature);
-            this._types[feature.type] = feature;
-        }
+    for (let feature of features) {
+      this._features.push(feature);
+      this._types[feature.type] = feature;
     }
-
+  }
 
     /**
      * Returns an array of grouping features.
      * @returns {FeatureType[]} - An array of grouping features.
      */
-    get items() {
-        return this._features;
-    }
+  get items () {
+    return this._features
+  }
 
-    forEach(callback) {
-        this._features.forEach(callback);
-    }
+  forEach (callback) {
+    this._features.forEach(callback);
+  }
 
     /**
      * Returns a feature of a particular type. If such feature does not exist in a list, returns undefined.
      * @param {string} type - Feature type as defined in `types` object.
      * @return {FeatureType | undefined} A feature if a particular type if contains it. Undefined otherwise.
      */
-    ofType(type) {
-        if (this.hasType(type)) {
-            return this._types[type];
-        }
+  ofType (type) {
+    if (this.hasType(type)) {
+      return this._types[type]
     }
+  }
 
     /**
      * Checks whether a feature list has a feature of a specific type.
      * @param {string} type - Feature type as defined in `types` object.
      * @return {boolean} Whether a feature list has a feature of a particular type.
      */
-    hasType(type) {
-        return this._types.hasOwnProperty(type);
-    }
+  hasType (type) {
+    return this._types.hasOwnProperty(type)
+  }
 }
 
-class FeatureImporter {
-    constructor() {
-        this.hash = {};
-        return this;
+/**
+ * @class  LanguageModel is the base class for language-specific behavior
+ */
+class LanguageModel {
+   /**
+   */
+  constructor () {
+    this.sourceLanguage = null;
+    this.contextForward = 0;
+    this.context_backward = 0;
+    this.direction = LANG_DIR_LTR;
+    this.baseUnit = LANG_UNIT_WORD;
+    this.codes = [];
+  }
+
+  _initializeFeatures () {
+    let features = {};
+    let code = this.toCode();
+    features[Feature.types.part] = new FeatureType(Feature.types.part,
+      [ POFS_ADVERB,
+        POFS_ADVERBIAL,
+        POFS_ADJECTIVE,
+        POFS_ARTICLE,
+        POFS_CONJUNCTION,
+        POFS_EXCLAMATION,
+        POFS_INTERJECTION,
+        POFS_NOUN,
+        POFS_NUMERAL,
+        POFS_PARTICLE,
+        POFS_PREFIX,
+        POFS_PREPOSITION,
+        POFS_PRONOUN,
+        POFS_SUFFIX,
+        POFS_SUPINE,
+        POFS_VERB,
+        POFS_VERB_PARTICIPLE ], code);
+    features[Feature.types.gender] = new FeatureType(Feature.types.gender,
+      [ GEND_MASCULINE, GEND_FEMININE, GEND_NEUTER ], code);
+    features[Feature.types.type] = new FeatureType(Feature.types.type,
+      [TYPE_REGULAR, TYPE_IRREGULAR], code);
+    features[Feature.types.person] = new FeatureType(Feature.types.person,
+      [ORD_1ST, ORD_2ND, ORD_3RD], code);
+    return features
+  }
+
+  /**
+   * Handler which can be used as the contextHander.
+   * It uses language-specific configuration to identify
+   * the elements from the alph-text popup which should produce links
+   * to the language-specific grammar.
+   * @see #contextHandler
+   */
+  grammarContext (doc) {
+      // used to bind a click handler on the .alph-entry items in the
+      // popup which retrieved the context attribute from the clicked
+      // term and used that to construct a link and open the grammar
+      // at the apporopriate place.
+      // var links = this.getGrammarLinks();
+
+      // for (var link_name in links)
+      // {
+      //   if (links.hasOwnProperty(link_name))
+      //    {
+              // Alph.$(".alph-entry ." + link_name,a_doc).bind('click',link_name,
+              //   function(a_e)
+              //    {
+                        // build target inside grammar
+                        // var target = a_e.data;
+                        // var rngContext = Alph.$(this).attr("context");
+                        // if (rngContext != null)
+                        // {
+                        //  target += "-" + rngContext.split(/-/)[0];
+                        // }
+                        // myobj.openGrammar(a_e.originaEvent,this,target);
+               //   }
+              // );
+       //   }
+      // }
+  }
+
+  /**
+   * Check to see if this language tool can produce an inflection table display
+   * for the current node
+   */
+  canInflect (node) {
+    return false
+  }
+
+  /**
+   * Check to see if the supplied language code is supported by this tool
+   * @param {string} code the language code
+   * @returns true if supported false if not
+   * @type Boolean
+   */
+  static supportsLanguage (code) {
+    return this.codes.includes[code]
+  }
+
+  /**
+   * Return a normalized version of a word which can be used to compare the word for equality
+   * @param {string} word the source word
+   * @returns the normalized form of the word (default version just returns the same word,
+   *          override in language-specific subclass)
+   * @type String
+   */
+  normalizeWord (word) {
+    return word
+  }
+
+  /**
+   * Get a list of valid puncutation for this language
+   * @returns {String} a string containing valid puncutation symbols
+   */
+  getPunctuation () {
+    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+  }
+
+  toString () {
+    return String(this.sourceLanguage)
+  }
+
+  isEqual (model) {
+    return this.sourceLanguage === model.sourceLanguage
+  }
+
+  toCode () {
+    return null
+  }
+}
+
+/**
+ * @class  LatinLanguageModel is the lass for Latin specific behavior
+ */
+class LatinLanguageModel extends LanguageModel {
+   /**
+   */
+  constructor () {
+    super();
+    this.sourceLanguage = LANG_LATIN;
+    this.contextForward = 0;
+    this.contextBackward = 0;
+    this.direction = LANG_DIR_LTR;
+    this.baseUnit = LANG_UNIT_WORD;
+    this.codes = [STR_LANG_CODE_LA, STR_LANG_CODE_LAT];
+    this.features = this._initializeFeatures();
+  }
+
+  _initializeFeatures () {
+    let features = super._initializeFeatures();
+    let code = this.toCode();
+    features[Feature.types.number] = new FeatureType(Feature.types.number, [NUM_SINGULAR, NUM_PLURAL], code);
+    features[Feature.types.grmCase] = new FeatureType(Feature.types.grmCase,
+      [ CASE_NOMINATIVE,
+        CASE_GENITIVE,
+        CASE_DATIVE,
+        CASE_ACCUSATIVE,
+        CASE_ABLATIVE,
+        CASE_LOCATIVE,
+        CASE_VOCATIVE
+      ], code);
+    features[Feature.types.declension] = new FeatureType(Feature.types.declension,
+      [ ORD_1ST, ORD_2ND, ORD_3RD, ORD_4TH, ORD_5TH ], code);
+    features[Feature.types.tense] = new FeatureType(Feature.types.tense,
+      [ TENSE_PRESENT,
+        TENSE_IMPERFECT,
+        TENSE_FUTURE,
+        TENSE_PERFECT,
+        TENSE_PLUPERFECT,
+        TENSE_FUTURE_PERFECT
+      ], code);
+    features[Feature.types.voice] = new FeatureType(Feature.types.voice, [VOICE_PASSIVE, VOICE_ACTIVE], code);
+    features[Feature.types.mood] = new FeatureType(Feature.types.mood, [MOOD_INDICATIVE, MOOD_SUBJUNCTIVE], code);
+    features[Feature.types.conjugation] = new FeatureType(Feature.types.conjugation,
+      [ ORD_1ST,
+        ORD_2ND,
+        ORD_3RD,
+        ORD_4TH
+      ], code);
+    return features
+  }
+
+  /**
+   * Check to see if this language tool can produce an inflection table display
+   * for the current node
+   */
+  canInflect (node) {
+    return true
+  }
+
+  /**
+   * Return a normalized version of a word which can be used to compare the word for equality
+   * @param {String} word the source word
+   * @returns the normalized form of the word (default version just returns the same word,
+   *          override in language-specific subclass)
+   * @type String
+   */
+  normalizeWord (word) {
+    return word
+  }
+
+  /**
+   * Get a list of valid puncutation for this language
+   * @returns {String} a string containing valid puncutation symbols
+   */
+  getPunctuation () {
+    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+  }
+
+  toCode () {
+    return STR_LANG_CODE_LAT
+  }
+}
+
+/**
+ * @class  LatinLanguageModel is the lass for Latin specific behavior
+ */
+class GreekLanguageModel extends LanguageModel {
+   /**
+   * @constructor
+   */
+  constructor () {
+    super();
+    this.sourceLanguage = LANG_GREEK;
+    this.contextForward = 0;
+    this.contextBackward = 0;
+    this.direction = LANG_DIR_LTR;
+    this.baseUnit = LANG_UNIT_WORD;
+    this.languageCodes = [STR_LANG_CODE_GRC];
+    this.features = this._initializeFeatures();
+  }
+
+  _initializeFeatures () {
+    let features = super._initializeFeatures();
+    let code = this.toCode();
+    features[Feature.types.number] = new FeatureType(Feature.types.number, [NUM_SINGULAR, NUM_PLURAL, NUM_DUAL], code);
+    features[Feature.types.grmCase] = new FeatureType(Feature.types.grmCase,
+      [ CASE_NOMINATIVE,
+        CASE_GENITIVE,
+        CASE_DATIVE,
+        CASE_ACCUSATIVE,
+        CASE_VOCATIVE
+      ], code);
+    features[Feature.types.declension] = new FeatureType(Feature.types.declension,
+      [ ORD_1ST, ORD_2ND, ORD_3RD ], code);
+    features[Feature.types.tense] = new FeatureType(Feature.types.tense,
+      [ TENSE_PRESENT,
+        TENSE_IMPERFECT,
+        TENSE_FUTURE,
+        TENSE_PERFECT,
+        TENSE_PLUPERFECT,
+        TENSE_FUTURE_PERFECT,
+        TENSE_AORIST
+      ], code);
+    features[Feature.types.voice] = new FeatureType(Feature.types.voice,
+      [ VOICE_PASSIVE,
+        VOICE_ACTIVE,
+        VOICE_MEDIOPASSIVE,
+        VOICE_MIDDLE
+      ], code);
+    features[Feature.types.mood] = new FeatureType(Feature.types.mood,
+      [ MOOD_INDICATIVE,
+        MOOD_SUBJUNCTIVE,
+        MOOD_OPTATIVE,
+        MOOD_IMPERATIVE
+      ], code);
+    // TODO full list of greek dialects
+    features[Feature.types.dialect] = new FeatureType(Feature.types.dialect, ['attic', 'epic', 'doric'], code);
+    return features
+  }
+
+  toCode () {
+    return STR_LANG_CODE_GRC
+  }
+
+  /**
+   * Check to see if this language tool can produce an inflection table display
+   * for the current node
+   */
+  canInflect (node) {
+    return true
+  }
+
+  /**
+   * Return a normalized version of a word which can be used to compare the word for equality
+   * @param {String} word the source word
+   * @returns the normalized form of the word (default version just returns the same word,
+   *          override in language-specific subclass)
+   * @type String
+   */
+  normalizeWord (word) {
+    return word
+  }
+
+  /**
+   * Get a list of valid puncutation for this language
+   * @returns {String} a string containing valid puncutation symbols
+   */
+  getPunctuation () {
+    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+  }
+}
+
+/**
+ * @class  LatinLanguageModel is the lass for Latin specific behavior
+ */
+class ArabicLanguageModel extends LanguageModel {
+   /**
+   * @constructor
+   */
+  constructor () {
+    super();
+    this.sourceLanguage = LANG_ARABIC;
+    this.contextForward = 0;
+    this.contextBackward = 0;
+    this.direction = LANG_DIR_RTL;
+    this.baseUnit = LANG_UNIT_WORD;
+    this.languageCodes = [STR_LANG_CODE_ARA, STR_LANG_CODE_AR];
+    this._initializeFeatures();
+  }
+
+  _initializeFeatures () {
+    this.features = super._initializeFeatures();
+  }
+
+  toCode () {
+    return STR_LANG_CODE_ARA
+  }
+
+  /**
+   * Check to see if this language tool can produce an inflection table display
+   * for the current node
+   */
+  canInflect (node) {
+    return false
+  }
+
+  /**
+   * Return a normalized version of a word which can be used to compare the word for equality
+   * @param {String} word the source word
+   * @returns the normalized form of the word (default version just returns the same word,
+   *          override in language-specific subclass)
+   * @type String
+   */
+  normalizeWord (word) {
+    // TODO
+    return word
+  }
+
+  /**
+   * Get a list of valid puncutation for this language
+   * @returns {String} a string containing valid puncutation symbols
+   */
+  getPunctuation () {
+    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+  }
+}
+
+const MODELS = new Map([
+  [ STR_LANG_CODE_LA, LatinLanguageModel ],
+  [ STR_LANG_CODE_LAT, LatinLanguageModel ],
+  [ STR_LANG_CODE_GRC, GreekLanguageModel ],
+  [ STR_LANG_CODE_ARA, ArabicLanguageModel ],
+  [ STR_LANG_CODE_AR, ArabicLanguageModel ]
+]);
+
+class LanguageModelFactory {
+  static supportsLanguage (code) {
+    return MODELS.has(code)
+  }
+
+  static getLanguageForCode (code = null) {
+    let Model = MODELS.get(code);
+    if (Model) {
+      return new Model()
     }
-
-    /**
-     * Sets mapping between external imported value and one or more library standard values. If an importedValue
-     * is already in a hash table, old libraryValue will be overwritten with the new one.
-     * @param {string} importedValue - External value
-     * @param {Object | Object[] | string | string[]} libraryValue - Library standard value
-     */
-    map(importedValue, libraryValue) {
-        if (!importedValue) {
-            throw new Error('Imported value should not be empty.')
-        }
-
-        if (!libraryValue) {
-            throw new Error('Library value should not be empty.')
-        }
-
-        this.hash[importedValue] = libraryValue;
-        return this;
-    }
-
-    /**
-     * Checks if value is in a map.
-     * @param {string} importedValue - A value to test.
-     * @returns {boolean} - Tru if value is in a map, false otherwise.
-     */
-    has(importedValue) {
-        return this.hash.hasOwnProperty(importedValue);
-    }
-
-    /**
-     * Returns one or more library standard values that match an external value
-     * @param {string} importedValue - External value
-     * @returns {Object | string} One or more of library standard values
-     */
-    get(importedValue) {
-        if (this.has(importedValue)) {
-            return this.hash[importedValue];
-        }
-        else {
-            throw new Error('A value "' + importedValue + '" is not found in the importer.');
-        }
-    }
+    // for now return a default Model
+    // TODO may want to throw an error
+    return new LanguageModel()
+  }
 }
 
 /**
@@ -641,27 +1186,26 @@ class Lemma {
      * @param {string} word - A word.
      * @param {string} language - A language of a word.
      */
-    constructor(word, language) {
+  constructor (word, language) {
+    if (!word) {
+      throw new Error('Word should not be empty.')
+    }
 
-        if (!word) {
-            throw new Error('Word should not be empty.');
-        }
+    if (!language) {
+      throw new Error('Langauge should not be empty.')
+    }
 
-        if (!language) {
-            throw new Error('Langauge should not be empty.');
-        }
-
-        //if (!languages.isAllowed(language)) {
+        // if (!languages.isAllowed(language)) {
         //    throw new Error('Language "' + language + '" is not supported.');
-        //}
+        // }
 
-        this.word = word;
-        this.language = language;
-    }
+    this.word = word;
+    this.language = language;
+  }
 
-    static readObject(jsonObject) {
-        return new Lemma(jsonObject.word, jsonObject.language);
-    }
+  static readObject (jsonObject) {
+    return new Lemma(jsonObject.word, jsonObject.language)
+  }
 }
 
 /*
@@ -688,36 +1232,50 @@ class Lemma {
  * Represents an inflection of a word
  */
 class Inflection {
-
     /**
      * Initializes an Inflection object.
      * @param {string} stem - A stem of a word.
      * @param {string} language - A word's language.
      */
-    constructor(stem, language) {
-
-        if (!stem) {
-            throw new Error('Stem should not be empty.');
-        }
-
-        if (!language) {
-            throw new Error('Langauge should not be empty.');
-        }
-
-        this.stem = stem;
-        this.language = language;
-
-        // Suffix may not be present in every word. If missing, it will set to null.
-        this.suffix = null;
+  constructor (stem, language) {
+    if (!stem) {
+      throw new Error('Stem should not be empty.')
     }
 
-    static readObject(jsonObject) {
-        let inflection = new Inflection(jsonObject.stem, jsonObject.language);
-        if (jsonObject.suffix) {
-            inflection.suffix = jsonObject.suffix;
-        }
-        return inflection;
+    if (!language) {
+      throw new Error('Langauge should not be empty.')
     }
+
+    if (!LanguageModelFactory.supportsLanguage(language)) {
+      throw new Error(`language ${language} not supported.`)
+    }
+
+    this.stem = stem;
+    this.language = language;
+
+    // Suffix may not be present in every word. If missing, it will set to null.
+    this.suffix = null;
+
+    // Prefix may not be present in every word. If missing, it will set to null.
+    this.prefix = null;
+
+    // Example may not be provided
+    this.example = null;
+  }
+
+  static readObject (jsonObject) {
+    let inflection = new Inflection(jsonObject.stem, jsonObject.language);
+    if (jsonObject.suffix) {
+      inflection.suffix = jsonObject.suffix;
+    }
+    if (jsonObject.prefix) {
+      inflection.prefix = jsonObject.prefix;
+    }
+    if (jsonObject.example) {
+      inflection.example = jsonObject.example;
+    }
+    return inflection
+  }
 
     /**
      * Sets a grammatical feature in an inflection. Some features can have multiple values, In this case
@@ -725,29 +1283,29 @@ class Inflection {
      * Values are taken from features and stored in a 'feature.type' property as an array of values.
      * @param {Feature | Feature[]} data
      */
-    set feature(data) {
-        if (!data) {
-            throw new Error('Inflection feature data cannot be empty.');
-        }
-        if (!Array.isArray(data)) {
-            data = [data];
-        }
-
-        let type = data[0].type;
-        this[type] = [];
-        for (let element of data) {
-            if (!(element instanceof Feature)) {
-                throw new Error('Inflection feature data must be a Feature object.');
-            }
-
-            if (element.language !== this.language) {
-                throw new Error('Language "' + element.language + '" of a feature does not match a language "'
-                + this.language + '" of an Inflection object.');
-            }
-
-            this[type].push(element.value);
-        }
+  set feature (data) {
+    if (!data) {
+      throw new Error('Inflection feature data cannot be empty.')
     }
+    if (!Array.isArray(data)) {
+      data = [data];
+    }
+
+    let type = data[0].type;
+    this[type] = [];
+    for (let element of data) {
+      if (!(element instanceof Feature)) {
+        throw new Error('Inflection feature data must be a Feature object.')
+      }
+
+      if (element.language !== this.language) {
+        throw new Error('Language "' + element.language + '" of a feature does not match a language "' +
+                this.language + '" of an Inflection object.')
+      }
+
+      this[type].push(element.value);
+    }
+  }
 }
 
 /**
@@ -760,42 +1318,42 @@ class Lexeme {
      * @param {Inflection[]} inflections - An array of inflections.
      * @param {string} meaning - a short definition
      */
-    constructor(lemma, inflections, meaning="") {
-        if (!lemma) {
-            throw new Error('Lemma should not be empty.');
-        }
-
-        if (!(lemma instanceof Lemma)) {
-            throw new Error('Lemma should be of Lemma object type.');
-        }
-
-        if (!inflections) {
-            throw new Error('Inflections data should not be empty.');
-        }
-
-        if (!Array.isArray(inflections)) {
-            throw new Error('Inflection data should be provided in an array.');
-        }
-
-        for (let inflection of inflections) {
-            if (!(inflection instanceof Inflection)) {
-                throw new Error('All inflection data should be of Inflection object type.');
-            }
-        }
-
-        this.lemma = lemma;
-        this.inflections = inflections;
-        this.meaning = meaning;
+  constructor (lemma, inflections, meaning = '') {
+    if (!lemma) {
+      throw new Error('Lemma should not be empty.')
     }
 
-    static readObject(jsonObject) {
-        let lemma = Lemma.readObject(jsonObject.lemma);
-        let inflections = [];
-        for (let inflection of jsonObject.inflections) {
-            inflections.push(Inflection.readObject(inflection));
-        }
-        return new Lexeme(lemma, inflections);
+    if (!(lemma instanceof Lemma)) {
+      throw new Error('Lemma should be of Lemma object type.')
     }
+
+    if (!inflections) {
+      throw new Error('Inflections data should not be empty.')
+    }
+
+    if (!Array.isArray(inflections)) {
+      throw new Error('Inflection data should be provided in an array.')
+    }
+
+    for (let inflection of inflections) {
+      if (!(inflection instanceof Inflection)) {
+        throw new Error('All inflection data should be of Inflection object type.')
+      }
+    }
+
+    this.lemma = lemma;
+    this.inflections = inflections;
+    this.meaning = meaning;
+  }
+
+  static readObject (jsonObject) {
+    let lemma = Lemma.readObject(jsonObject.lemma);
+    let inflections = [];
+    for (let inflection of jsonObject.inflections) {
+      inflections.push(Inflection.readObject(inflection));
+    }
+    return new Lexeme(lemma, inflections)
+  }
 }
 
 class Homonym {
@@ -804,38 +1362,38 @@ class Homonym {
      * @param {Lexeme[]} lexemes - An array of Lexeme objects.
      * @param {string} form - the form which produces the homonyms
      */
-    constructor (lexemes, form) {
-        if (!lexemes) {
-            throw new Error('Lexemes data should not be empty.');
-        }
-
-        if (!Array.isArray(lexemes)) {
-            throw new Error('Lexeme data should be provided in an array.');
-        }
-
-        for (let lexeme of lexemes) {
-            if (!(lexeme instanceof Lexeme)) {
-                throw new Error('All lexeme data should be of Lexeme object type.');
-            }
-        }
-
-        this.lexemes = lexemes;
-        this.targetWord = form;
+  constructor (lexemes, form) {
+    if (!lexemes) {
+      throw new Error('Lexemes data should not be empty.')
     }
 
-    static readObject(jsonObject) {
-        let lexemes = [];
-        if (jsonObject.lexemes) {
-            for (let lexeme of jsonObject.lexemes) {
-                lexemes.push(Lexeme.readObject(lexeme));
-            }
-        }
-        let homonym = new Homonym(lexemes);
-        if (jsonObject.targetWord) {
-            homonym.targetWord = jsonObject.targetWord;
-        }
-        return homonym;
+    if (!Array.isArray(lexemes)) {
+      throw new Error('Lexeme data should be provided in an array.')
     }
+
+    for (let lexeme of lexemes) {
+      if (!(lexeme instanceof Lexeme)) {
+        throw new Error('All lexeme data should be of Lexeme object type.')
+      }
+    }
+
+    this.lexemes = lexemes;
+    this.targetWord = form;
+  }
+
+  static readObject (jsonObject) {
+    let lexemes = [];
+    if (jsonObject.lexemes) {
+      for (let lexeme of jsonObject.lexemes) {
+        lexemes.push(Lexeme.readObject(lexeme));
+      }
+    }
+    let homonym = new Homonym(lexemes);
+    if (jsonObject.targetWord) {
+      homonym.targetWord = jsonObject.targetWord;
+    }
+    return homonym
+  }
 
     /**
      * Returns language of a homonym.
@@ -844,14 +1402,13 @@ class Homonym {
      * by using language property of the first lemma. We chan change this logic in the future if we'll need to.
      * @returns {string} A language code, as defined in the `languages` object.
      */
-    get language() {
-        if (this.lexemes && this.lexemes[0] && this.lexemes[0].lemma && this.lexemes[0].lemma.language) {
-            return this.lexemes[0].lemma.language;
-        }
-        else {
-            throw new Error('Homonym has not been initialized properly. Unable to obtain language information.');
-        }
+  get language () {
+    if (this.lexemes && this.lexemes[0] && this.lexemes[0].lemma && this.lexemes[0].lemma.language) {
+      return this.lexemes[0].lemma.language
+    } else {
+      throw new Error('Homonym has not been initialized properly. Unable to obtain language information.')
     }
+  }
 }
 
 const languages = {
@@ -924,9 +1481,13 @@ class LanguageDataset {
             if (Array.isArray(feature)) {
 
                 if (feature.length > 0) {
+                  if (feature[0]) {
                     let type = feature[0].type;
                     // Store all multi-value features to create a separate copy of a a Suffix object for each of them
                     multiValueFeatures.push({type: type, features: feature});
+                  } else {
+                    console.log(feature);
+                  }
                 }
                 else {
                     // Array is empty
@@ -1527,357 +2088,28 @@ let loadData = function loadData(filePath) {
     });
 };
 
-/**
- * Base Adapter Class for a Morphology Service Client
- */
-class BaseAdapter {
-  /**
-   * Method which is used to prepare a lookup request according
-   * to the adapter specific logic
-   * @param {string} lang - the language code
-   * @param {string} word - the word to lookup
-   * @returns {string} the url for the request
-   */
-  prepareRequestUrl (lang, word) {
-      /** must be overridden in the adapter implementation class **/
-    return null
-  }
-
-  /**
-   * Fetch response from a remote URL
-   * @param {string} lang - the language code
-   * @param {string} word - the word to lookup
-   * @returns {Promise} a promse which if successful resolves to json response object
-   *                    with the results of the analysis
-   */
-  fetch (lang, word) {
-    let url = this.prepareRequestUrl(lang, word);
-    return new Promise((resolve, reject) => {
-      window.fetch(url).then(
-          function (response) {
-            let json = response.json();
-            resolve(json);
-          }
-        ).catch((error) => {
-          reject(error);
-        }
-        );
-    })
-  }
-
-  /**
-   * Fetch test data to test the adapter
-   * @param {string} lang - the language code
-   * @param {string} word - the word to lookup
-   * @returns {Promise} a promse which if successful resolves to json response object
-   *                    with the test data
-   */
-  fetchTestData (lang, word) {
-    return new Promise((resolve, reject) => {
-      try {
-        let data = {};
-        resolve(data);
-      } catch (error) {
-        reject(error);
-      }
-    })
-  }
-
-  /**
-   * A function that maps a morphological service's specific data types and values into an inflection library standard.
-   * @param {object} jsonObj - A JSON data from the fetch request
-   * @param {object} targetWord - the original target word of the analysis
-   * @returns {Homonym} A library standard Homonym object.
-   */
-  transform (jsonObj, targetWord) {
-    return {}
-  }
-}
-
-/*
-Objects of a morphology analyzer's library
- */
-/**
- * Holds all information required to transform from morphological analyzer's grammatical feature values to the
- * library standards. There is one ImportData object per language.
- */
-class ImportData {
-    /**
-     * Creates an InmportData object for the language provided.
-     * @param {Models.LanguageModel} language - A language of the import data.
-     */
-  constructor (language) {
-    'use strict';
-    this.language = language;
-  }
-
-    /**
-     * Adds a grammatical feature whose values to be mapped.
-     * @param {string} featureName - A name of a grammatical feature (i.e. declension, number, etc.)
-     * @return {Object} An object that represent a newly created grammatical feature.
-     */
-  addFeature (featureName) {
-    this[featureName] = {};
-    let language = this.language;
-
-    this[featureName].add = function add (providerValue, alpheiosValue) {
-      'use strict';
-      this[providerValue] = alpheiosValue;
-      return this
-    };
-
-    this[featureName].get = function get (providerValue) {
-      'use strict';
-      if (!this.importer.has(providerValue)) {
-        throw new Error("Skipping an unknown value '" +
-                    providerValue + "' of a grammatical feature '" + featureName + "' of " + language + ' language.')
-      } else {
-        return this.importer.get(providerValue)
-      }
-    };
-
-    this[featureName].importer = new FeatureImporter();
-
-    return this[featureName]
-  }
-}
-
-let data = new ImportData(new LatinLanguageModel$1());
-let types = Feature.types;
-
-/*
-Below are value conversion maps for each grammatical feature to be parsed.
-Format:
-data.addFeature(typeName).add(providerValueName, LibValueName);
-(functions are chainable)
-Types and values that are unknown (undefined) will be skipped during parsing.
- */
-data.addFeature(Feature.types.part).importer
-    .map('noun', data.language.features[types.part].noun)
-    .map('adjective', data.language.features[types.part].adjective)
-    .map('verb', data.language.features[types.part].verb);
-
-data.addFeature(Feature.types.grmCase).importer
-    .map('nominative', data.language.features[types.grmCase].nominative)
-    .map('genitive', data.language.features[types.grmCase].genitive)
-    .map('dative', data.language.features[types.grmCase].dative)
-    .map('accusative', data.language.features[types.grmCase].accusative)
-    .map('ablative', data.language.features[types.grmCase].ablative)
-    .map('locative', data.language.features[types.grmCase].locative)
-    .map('vocative', data.language.features[types.grmCase].vocative);
-
-data.addFeature(Feature.types.declension).importer
-    .map('1st', data.language.features[types.declension].first)
-    .map('2nd', data.language.features[types.declension].second)
-    .map('3rd', data.language.features[types.declension].third)
-    .map('4th', data.language.features[types.declension].fourth)
-    .map('5th', data.language.features[types.declension].fifth);
-
-data.addFeature(Feature.types.number).importer
-    .map('singular', data.language.features[types.number].singular)
-    .map('plural', data.language.features[types.number].plural);
-
-data.addFeature(Feature.types.gender).importer
-    .map('masculine', data.language.features[types.gender].masculine)
-    .map('feminine', data.language.features[types.gender].feminine)
-    .map('neuter', data.language.features[types.gender].neuter)
-    .map('common', [data.language.features[types.gender].masculine, data.language.features[types.gender].feminine])
-    .map('all', [data.language.features[types.gender].masculine, data.language.features[types.gender].feminine, data.language.features[types.gender].neuter]);
-
-data.addFeature(Feature.types.conjugation).importer
-    .map('1st', data.language.features[types.conjugation].first)
-    .map('2nd', data.language.features[types.conjugation].second)
-    .map('3rd', data.language.features[types.conjugation].third)
-    .map('4th', data.language.features[types.conjugation].fourth);
-
-data.addFeature(Feature.types.tense).importer
-    .map('present', data.language.features[types.tense].present)
-    .map('imperfect', data.language.features[types.tense].imperfect)
-    .map('future', data.language.features[types.tense].future)
-    .map('perfect', data.language.features[types.tense].perfect)
-    .map('pluperfect', data.language.features[types.tense].pluperfect)
-    .map('future_perfect', data.language.features[types.tense]['future perfect']);
-
-data.addFeature(Feature.types.voice).importer
-    .map('active', data.language.features[types.voice].active)
-    .map('passive', data.language.features[types.voice].passive);
-
-data.addFeature(Feature.types.mood).importer
-    .map('indicative', data.language.features[types.mood].indicative)
-    .map('subjunctive', data.language.features[types.mood].subjunctive);
-
-data.addFeature(Feature.types.person).importer
-    .map('1st', data.language.features[types.person].first)
-    .map('2nd', data.language.features[types.person].second)
-    .map('3rd', data.language.features[types.person].third);
-
-var Cupidinibus = "{\n  \"RDF\": {\n    \"Annotation\": {\n      \"about\": \"urn:TuftsMorphologyService:cupidinibus:whitakerLat\",\n      \"creator\": {\n        \"Agent\": {\n          \"about\": \"net.alpheios:tools:wordsxml.v1\"\n        }\n      },\n      \"created\": {\n        \"$\": \"2017-08-10T23:15:29.185581\"\n      },\n      \"hasTarget\": {\n        \"Description\": {\n          \"about\": \"urn:word:cupidinibus\"\n        }\n      },\n      \"title\": {},\n      \"hasBody\": [\n        {\n          \"resource\": \"urn:uuid:idm140578094883136\"\n        },\n        {\n          \"resource\": \"urn:uuid:idm140578158026160\"\n        }\n      ],\n      \"Body\": [\n        {\n          \"about\": \"urn:uuid:idm140578094883136\",\n          \"type\": {\n            \"resource\": \"cnt:ContentAsXML\"\n          },\n          \"rest\": {\n            \"entry\": {\n              \"infl\": [\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 2,\n                    \"$\": \"locative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"masculine\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 5,\n                    \"$\": \"dative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"masculine\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 3,\n                    \"$\": \"ablative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"masculine\"\n                  }\n                }\n              ],\n              \"dict\": {\n                \"hdwd\": {\n                  \"lang\": \"lat\",\n                  \"$\": \"Cupido, Cupidinis\"\n                },\n                \"pofs\": {\n                  \"order\": 5,\n                  \"$\": \"noun\"\n                },\n                \"decl\": {\n                  \"$\": \"3rd\"\n                },\n                \"gend\": {\n                  \"$\": \"masculine\"\n                },\n                \"area\": {\n                  \"$\": \"religion\"\n                },\n                \"freq\": {\n                  \"order\": 4,\n                  \"$\": \"common\"\n                },\n                \"src\": {\n                  \"$\": \"Ox.Lat.Dict.\"\n                }\n              },\n              \"mean\": {\n                \"$\": \"Cupid, son of Venus; personification of carnal desire;\"\n              }\n            }\n          }\n        },\n        {\n          \"about\": \"urn:uuid:idm140578158026160\",\n          \"type\": {\n            \"resource\": \"cnt:ContentAsXML\"\n          },\n          \"rest\": {\n            \"entry\": {\n              \"infl\": [\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 2,\n                    \"$\": \"locative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"common\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 5,\n                    \"$\": \"dative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"common\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"cupidin\"\n                    },\n                    \"suff\": {\n                      \"$\": \"ibus\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 5,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"var\": {\n                    \"$\": \"1st\"\n                  },\n                  \"case\": {\n                    \"order\": 3,\n                    \"$\": \"ablative\"\n                  },\n                  \"num\": {\n                    \"$\": \"plural\"\n                  },\n                  \"gend\": {\n                    \"$\": \"common\"\n                  }\n                }\n              ],\n              \"dict\": {\n                \"hdwd\": {\n                  \"lang\": \"lat\",\n                  \"$\": \"cupido, cupidinis\"\n                },\n                \"pofs\": {\n                  \"order\": 5,\n                  \"$\": \"noun\"\n                },\n                \"decl\": {\n                  \"$\": \"3rd\"\n                },\n                \"gend\": {\n                  \"$\": \"common\"\n                },\n                \"freq\": {\n                  \"order\": 5,\n                  \"$\": \"frequent\"\n                },\n                \"src\": {\n                  \"$\": \"Ox.Lat.Dict.\"\n                }\n              },\n              \"mean\": {\n                \"$\": \"desire/love/wish/longing (passionate); lust; greed, appetite; desire for gain;\"\n              }\n            }\n          }\n        }\n      ]\n    }\n  }\n}\n";
-
-var Mare = "{\n  \"RDF\": {\n    \"Annotation\": {\n      \"about\": \"urn:TuftsMorphologyService:mare:morpheuslat\",\n      \"creator\": {\n        \"Agent\": {\n          \"about\": \"org.perseus:tools:morpheus.v1\"\n        }\n      },\n      \"created\": {\n        \"$\": \"2017-09-08T06:59:48.639180\"\n      },\n      \"hasTarget\": {\n        \"Description\": {\n          \"about\": \"urn:word:mare\"\n        }\n      },\n      \"title\": {},\n      \"hasBody\": [\n        {\n          \"resource\": \"urn:uuid:idm140446402389888\"\n        },\n        {\n          \"resource\": \"urn:uuid:idm140446402332400\"\n        },\n        {\n          \"resource\": \"urn:uuid:idm140446402303648\"\n        }\n      ],\n      \"Body\": [\n        {\n          \"about\": \"urn:uuid:idm140446402389888\",\n          \"type\": {\n            \"resource\": \"cnt:ContentAsXML\"\n          },\n          \"rest\": {\n            \"entry\": {\n              \"uri\": \"http://data.perseus.org/collections/urn:cite:perseus:latlexent.lex34070.1\",\n              \"dict\": {\n                \"hdwd\": {\n                  \"lang\": \"lat\",\n                  \"$\": \"mare\"\n                },\n                \"pofs\": {\n                  \"order\": 3,\n                  \"$\": \"noun\"\n                },\n                \"decl\": {\n                  \"$\": \"3rd\"\n                },\n                \"gend\": {\n                  \"$\": \"neuter\"\n                }\n              },\n              \"infl\": [\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"mar\"\n                    },\n                    \"suff\": {\n                      \"$\": \"e\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 3,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"case\": {\n                    \"order\": 3,\n                    \"$\": \"ablative\"\n                  },\n                  \"gend\": {\n                    \"$\": \"neuter\"\n                  },\n                  \"num\": {\n                    \"$\": \"singular\"\n                  },\n                  \"stemtype\": {\n                    \"$\": \"is_is\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"mar\"\n                    },\n                    \"suff\": {\n                      \"$\": \"e\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 3,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"case\": {\n                    \"order\": 7,\n                    \"$\": \"nominative\"\n                  },\n                  \"gend\": {\n                    \"$\": \"neuter\"\n                  },\n                  \"num\": {\n                    \"$\": \"singular\"\n                  },\n                  \"stemtype\": {\n                    \"$\": \"is_is\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"mar\"\n                    },\n                    \"suff\": {\n                      \"$\": \"e\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 3,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"case\": {\n                    \"order\": 1,\n                    \"$\": \"vocative\"\n                  },\n                  \"gend\": {\n                    \"$\": \"neuter\"\n                  },\n                  \"num\": {\n                    \"$\": \"singular\"\n                  },\n                  \"stemtype\": {\n                    \"$\": \"is_is\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"mar\"\n                    },\n                    \"suff\": {\n                      \"$\": \"e\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 3,\n                    \"$\": \"noun\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"case\": {\n                    \"order\": 4,\n                    \"$\": \"accusative\"\n                  },\n                  \"gend\": {\n                    \"$\": \"neuter\"\n                  },\n                  \"num\": {\n                    \"$\": \"singular\"\n                  },\n                  \"stemtype\": {\n                    \"$\": \"is_is\"\n                  }\n                }\n              ]\n            }\n          }\n        },\n        {\n          \"about\": \"urn:uuid:idm140446402332400\",\n          \"type\": {\n            \"resource\": \"cnt:ContentAsXML\"\n          },\n          \"rest\": {\n            \"entry\": {\n              \"uri\": \"http://data.perseus.org/collections/urn:cite:perseus:latlexent.lex34118.1\",\n              \"dict\": {\n                \"hdwd\": {\n                  \"lang\": \"lat\",\n                  \"$\": \"marum\"\n                },\n                \"pofs\": {\n                  \"order\": 3,\n                  \"$\": \"noun\"\n                },\n                \"decl\": {\n                  \"$\": \"2nd\"\n                },\n                \"gend\": {\n                  \"$\": \"neuter\"\n                }\n              },\n              \"infl\": {\n                \"term\": {\n                  \"lang\": \"lat\",\n                  \"stem\": {\n                    \"$\": \"mar\"\n                  },\n                  \"suff\": {\n                    \"$\": \"e\"\n                  }\n                },\n                \"pofs\": {\n                  \"order\": 3,\n                  \"$\": \"noun\"\n                },\n                \"decl\": {\n                  \"$\": \"2nd\"\n                },\n                \"case\": {\n                  \"order\": 1,\n                  \"$\": \"vocative\"\n                },\n                \"gend\": {\n                  \"$\": \"neuter\"\n                },\n                \"num\": {\n                  \"$\": \"singular\"\n                },\n                \"stemtype\": {\n                  \"$\": \"us_i\"\n                }\n              }\n            }\n          }\n        },\n        {\n          \"about\": \"urn:uuid:idm140446402303648\",\n          \"type\": {\n            \"resource\": \"cnt:ContentAsXML\"\n          },\n          \"rest\": {\n            \"entry\": {\n              \"uri\": \"http://data.perseus.org/collections/urn:cite:perseus:latlexent.lex34119.1\",\n              \"dict\": {\n                \"hdwd\": {\n                  \"lang\": \"lat\",\n                  \"$\": \"mas\"\n                },\n                \"pofs\": {\n                  \"order\": 2,\n                  \"$\": \"adjective\"\n                },\n                \"decl\": {\n                  \"$\": \"3rd\"\n                }\n              },\n              \"infl\": [\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"mare\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 2,\n                    \"$\": \"adjective\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"case\": {\n                    \"order\": 3,\n                    \"$\": \"ablative\"\n                  },\n                  \"gend\": {\n                    \"$\": \"masculine\"\n                  },\n                  \"num\": {\n                    \"$\": \"singular\"\n                  },\n                  \"stemtype\": {\n                    \"$\": \"irreg_adj3\"\n                  },\n                  \"morph\": {\n                    \"$\": \"indeclform\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"mare\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 2,\n                    \"$\": \"adjective\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"case\": {\n                    \"order\": 3,\n                    \"$\": \"ablative\"\n                  },\n                  \"gend\": {\n                    \"$\": \"feminine\"\n                  },\n                  \"num\": {\n                    \"$\": \"singular\"\n                  },\n                  \"stemtype\": {\n                    \"$\": \"irreg_adj3\"\n                  },\n                  \"morph\": {\n                    \"$\": \"indeclform\"\n                  }\n                },\n                {\n                  \"term\": {\n                    \"lang\": \"lat\",\n                    \"stem\": {\n                      \"$\": \"mare\"\n                    }\n                  },\n                  \"pofs\": {\n                    \"order\": 2,\n                    \"$\": \"adjective\"\n                  },\n                  \"decl\": {\n                    \"$\": \"3rd\"\n                  },\n                  \"case\": {\n                    \"order\": 3,\n                    \"$\": \"ablative\"\n                  },\n                  \"gend\": {\n                    \"$\": \"neuter\"\n                  },\n                  \"num\": {\n                    \"$\": \"singular\"\n                  },\n                  \"stemtype\": {\n                    \"$\": \"irreg_adj3\"\n                  },\n                  \"morph\": {\n                    \"$\": \"indeclform\"\n                  }\n                }\n              ]\n            }\n          }\n        }\n      ]\n    }\n  }\n}";
-
-var Cepit = "{\n  \"RDF\": {\n    \"Annotation\": {\n      \"about\": \"urn:TuftsMorphologyService:cepit:whitakerLat\",\n      \"creator\": {\n        \"Agent\": {\n          \"about\": \"net.alpheios:tools:wordsxml.v1\"\n        }\n      },\n      \"created\": {\n        \"$\": \"2017-08-10T23:16:53.672068\"\n      },\n      \"hasTarget\": {\n        \"Description\": {\n          \"about\": \"urn:word:cepit\"\n        }\n      },\n      \"title\": {},\n      \"hasBody\": {\n        \"resource\": \"urn:uuid:idm140578133848416\"\n      },\n      \"Body\": {\n        \"about\": \"urn:uuid:idm140578133848416\",\n        \"type\": {\n          \"resource\": \"cnt:ContentAsXML\"\n        },\n        \"rest\": {\n          \"entry\": {\n            \"infl\": {\n              \"term\": {\n                \"lang\": \"lat\",\n                \"stem\": {\n                  \"$\": \"cep\"\n                },\n                \"suff\": {\n                  \"$\": \"it\"\n                }\n              },\n              \"pofs\": {\n                \"order\": 3,\n                \"$\": \"verb\"\n              },\n              \"conj\": {\n                \"$\": \"3rd\"\n              },\n              \"var\": {\n                \"$\": \"1st\"\n              },\n              \"tense\": {\n                \"$\": \"perfect\"\n              },\n              \"voice\": {\n                \"$\": \"active\"\n              },\n              \"mood\": {\n                \"$\": \"indicative\"\n              },\n              \"pers\": {\n                \"$\": \"3rd\"\n              },\n              \"num\": {\n                \"$\": \"singular\"\n              }\n            },\n            \"dict\": {\n              \"hdwd\": {\n                \"lang\": \"lat\",\n                \"$\": \"capio, capere, cepi, captus\"\n              },\n              \"pofs\": {\n                \"order\": 3,\n                \"$\": \"verb\"\n              },\n              \"conj\": {\n                \"$\": \"3rd\"\n              },\n              \"kind\": {\n                \"$\": \"transitive\"\n              },\n              \"freq\": {\n                \"order\": 6,\n                \"$\": \"very frequent\"\n              },\n              \"src\": {\n                \"$\": \"Ox.Lat.Dict.\"\n              }\n            },\n            \"mean\": {\n              \"$\": \"take hold, seize; grasp; take bribe; arrest/capture; put on; occupy; captivate;\"\n            }\n          }\n        }\n      }\n    }\n  }\n}\n";
-
-var Pilsopo = "{\n  \"RDF\": {\n    \"Annotation\": {\n      \"about\": \"urn:TuftsMorphologyService:φιλόσοφος:morpheuslat\",\n      \"creator\": {\n        \"Agent\": {\n          \"about\": \"org.perseus:tools:morpheus.v1\"\n        }\n      },\n      \"created\": {\n        \"$\": \"2017-10-15T14:06:40.522369\"\n      },\n      \"hasTarget\": {\n        \"Description\": {\n          \"about\": \"urn:word:φιλόσοφος\"\n        }\n      },\n      \"title\": {},\n      \"hasBody\": {\n        \"resource\": \"urn:uuid:idm140446394225264\"\n      },\n      \"Body\": {\n        \"about\": \"urn:uuid:idm140446394225264\",\n        \"type\": {\n          \"resource\": \"cnt:ContentAsXML\"\n        },\n        \"rest\": {\n          \"entry\": {\n            \"uri\": \"http://data.perseus.org/collections/urn:cite:perseus:grclexent.lex78378.1\",\n            \"dict\": {\n              \"hdwd\": {\n                \"lang\": \"grc\",\n                \"$\": \"φιλόσοφος\"\n              },\n              \"pofs\": {\n                \"order\": 3,\n                \"$\": \"noun\"\n              },\n              \"decl\": {\n                \"$\": \"2nd\"\n              },\n              \"gend\": {\n                \"$\": \"masculine\"\n              }\n            },\n            \"infl\": {\n              \"term\": {\n                \"lang\": \"grc\",\n                \"stem\": {\n                  \"$\": \"φιλοσοφ\"\n                },\n                \"suff\": {\n                  \"$\": \"ος\"\n                }\n              },\n              \"pofs\": {\n                \"order\": 3,\n                \"$\": \"noun\"\n              },\n              \"decl\": {\n                \"$\": \"2nd\"\n              },\n              \"case\": {\n                \"order\": 7,\n                \"$\": \"nominative\"\n              },\n              \"gend\": {\n                \"$\": \"masculine\"\n              },\n              \"num\": {\n                \"$\": \"singular\"\n              },\n              \"stemtype\": {\n                \"$\": \"os_ou\"\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}";
-
-class WordTestData {
-  constructor () {
-    this._words = {
-      'cupidinibus': Cupidinibus,
-      'mare': Mare,
-      'cepit': Cepit,
-      'φιλόσοφος': Pilsopo
-    };
-  }
-
-  get (word) {
-    if (this._words.hasOwnProperty(word)) {
-      return this._words[word]
-    }
-    throw new Error(`Word "${word}" does not exist in test data`)
-  }
-}
-
-class TuftsAdapter extends BaseAdapter {
-  constructor ({engine = null, url = null}) {
-    super();
-    let latinCode = data.language.toCode();
-    this[latinCode] = data;
-      // this[Lib.languages.greek] = TuftsGreekData;
-      // this.langMap = new Map([['lat', TuftsLatinData]]);
-      // this.langMap = new Lib.Importer().map('lat', Lib.languages.latin).map('grc', Lib.languages.greek);
-    this.langMap = new FeatureImporter().map('lat', latinCode);
-    this.engineLookup = engine;
-    this.url = url;
-    return this
-  }
-
-  prepareRequestUrl (lang, word) {
-    let engine = this.engineLookup[lang];
-    let url = this.url.replace('r_WORD', word).replace('r_ENGINE', engine).replace('r_LANG', lang);
-    return url
-  }
-
-  fetchTestData (lang, word) {
-    return new Promise((resolve, reject) => {
-      try {
-        let wordData = new WordTestData().get(word);
-        console.log(wordData);
-        let json = JSON.parse(wordData);
-        resolve(json);
-      } catch (error) {
-                // Word is not found in test data
-        reject(error);
-      }
-    })
-  }
-
-  /**
-   * A function that maps a morphological service's specific data types and values into an inflection library standard.
-   * @param {object} jsonObj - A JSON data from a Morphological Analyzer.
-   * @param {object} targetWord - the target of the analysis
-   * @returns {Homonym} A library standard Homonym object.
-   */
-  transform (jsonObj, targetWord) {
-    'use strict';
-    let lexemes = [];
-    let annotationBody = jsonObj.RDF.Annotation.Body;
-    if (!Array.isArray(annotationBody)) {
-            /*
-            If only one lexeme is returned, Annotation Body will not be an array but rather a single object.
-            Let's convert it to an array so we can work with it in the same way no matter what format it is.
-             */
-      annotationBody = [annotationBody];
-    }
-    for (let lexeme of annotationBody) {
-            // Get importer based on the language
-      let language = this.langMap.get(lexeme.rest.entry.dict.hdwd.lang);
-      let lemma = new Lemma(lexeme.rest.entry.dict.hdwd.$, language);
-      let meaning = lexeme.rest.entry.mean ? lexeme.rest.entry.mean.$ : '';
-
-      let inflections = [];
-      let inflectionsJSON = lexeme.rest.entry.infl;
-      if (!Array.isArray(inflectionsJSON)) {
-                // If only one inflection returned, it is a single object, not an array of objects. Convert it to an array for uniformity.
-        inflectionsJSON = [inflectionsJSON];
-      }
-      for (let inflectionJSON of inflectionsJSON) {
-        let inflection = new Inflection(inflectionJSON.term.stem.$, this[language].language.toCode());
-        if (inflectionJSON.term.suff) {
-                    // Set suffix if provided by a morphological analyzer
-          inflection.suffix = inflectionJSON.term.suff.$;
-        }
-
-                // Parse whatever grammatical features we're interested in
-        if (inflectionJSON.pofs) {
-          inflection.feature = this[language][Feature.types.part].get(inflectionJSON.pofs.$);
-        }
-
-        if (inflectionJSON.case) {
-          inflection.feature = this[language][Feature.types.grmCase].get(inflectionJSON.case.$);
-        }
-
-        if (inflectionJSON.decl) {
-          inflection.feature = this[language][Feature.types.declension].get(inflectionJSON.decl.$);
-        }
-
-        if (inflectionJSON.num) {
-          inflection.feature = this[language][Feature.types.number].get(inflectionJSON.num.$);
-        }
-
-        if (inflectionJSON.gend) {
-          inflection.feature = this[language][Feature.types.gender].get(inflectionJSON.gend.$);
-        }
-
-        if (inflectionJSON.conj) {
-          inflection.feature = this[language][Feature.types.conjugation].get(inflectionJSON.conj.$);
-        }
-
-        if (inflectionJSON.tense) {
-          inflection.feature = this[language][Feature.types.tense].get(inflectionJSON.tense.$);
-        }
-
-        if (inflectionJSON.voice) {
-          inflection.feature = this[language][Feature.types.voice].get(inflectionJSON.voice.$);
-        }
-
-        if (inflectionJSON.mood) {
-          inflection.feature = this[language][Feature.types.mood].get(inflectionJSON.mood.$);
-        }
-
-        if (inflectionJSON.pers) {
-          inflection.feature = this[language][Feature.types.person].get(inflectionJSON.pers.$);
-        }
-
-        inflections.push(inflection);
-      }
-      lexemes.push(new Lexeme(lemma, inflections, meaning));
-    }
-    return new Homonym(lexemes, targetWord)
-  }
-}
-
 let messages$1 = {
-    Number: 'Number',
-    Case: 'Case',
-    Declension: 'Declension',
-    Gender: 'Gender',
-    Type: 'Type',
-    Voice: 'Voice',
-    'Conjugation Stem': 'Conjugation Stem',
-    Mood: 'Mood',
-    Person: 'Person'
+  Number: 'Number',
+  Case: 'Case',
+  Declension: 'Declension',
+  Gender: 'Gender',
+  Type: 'Type',
+  Voice: 'Voice',
+  'Conjugation Stem': 'Conjugation Stem',
+  Mood: 'Mood',
+  Person: 'Person'
 };
 
 let messages$2 = {
-    Number: 'Number (GB)',
-    Case: 'Case (GB)',
-    Declension: 'Declension (GB)',
-    Gender: 'Gender (GB)',
-    Type: 'Type (GB)',
-    Voice: 'Voice (GB)',
-    'Conjugation Stem': 'Conjugation Stem (GB)',
-    Mood: 'Mood (GB)',
-    Person: 'Person (GB)'
+  Number: 'Number (GB)',
+  Case: 'Case (GB)',
+  Declension: 'Declension (GB)',
+  Gender: 'Gender (GB)',
+  Type: 'Type (GB)',
+  Voice: 'Voice (GB)',
+  'Conjugation Stem': 'Conjugation Stem (GB)',
+  Mood: 'Mood (GB)',
+  Person: 'Person (GB)'
 };
 
 /*
@@ -2156,10 +2388,12 @@ SelectFormat.prototype.getOption = function (value) {
 };
 
 var parser = (function() {
+  "use strict";
+
   /*
-   * Generated by PEG.js 0.8.0.
+   * Generated by PEG.js 0.9.0.
    *
-   * http://pegjs.majda.cz/
+   * http://pegjs.org/
    */
 
   function peg$subclass(child, parent) {
@@ -2168,36 +2402,37 @@ var parser = (function() {
     child.prototype = new ctor();
   }
 
-  function SyntaxError(message, expected, found, offset, line, column) {
+  function peg$SyntaxError(message, expected, found, location) {
     this.message  = message;
     this.expected = expected;
     this.found    = found;
-    this.offset   = offset;
-    this.line     = line;
-    this.column   = column;
-
+    this.location = location;
     this.name     = "SyntaxError";
+
+    if (typeof Error.captureStackTrace === "function") {
+      Error.captureStackTrace(this, peg$SyntaxError);
+    }
   }
 
-  peg$subclass(SyntaxError, Error);
+  peg$subclass(peg$SyntaxError, Error);
 
-  function parse(input) {
+  function peg$parse(input) {
     var options = arguments.length > 1 ? arguments[1] : {},
+        parser  = this,
 
         peg$FAILED = {},
 
         peg$startRuleFunctions = { start: peg$parsestart },
         peg$startRuleFunction  = peg$parsestart,
 
-        peg$c0 = [],
-        peg$c1 = function(elements) {
+        peg$c0 = function(elements) {
                 return {
                     type    : 'messageFormatPattern',
-                    elements: elements
+                    elements: elements,
+                    location: location()
                 };
             },
-        peg$c2 = peg$FAILED,
-        peg$c3 = function(text) {
+        peg$c1 = function(text) {
                 var string = '',
                     i, j, outerLen, inner, innerLen;
 
@@ -2211,129 +2446,135 @@ var parser = (function() {
 
                 return string;
             },
-        peg$c4 = function(messageText) {
+        peg$c2 = function(messageText) {
                 return {
                     type : 'messageTextElement',
-                    value: messageText
+                    value: messageText,
+                    location: location()
                 };
             },
-        peg$c5 = /^[^ \t\n\r,.+={}#]/,
-        peg$c6 = { type: "class", value: "[^ \\t\\n\\r,.+={}#]", description: "[^ \\t\\n\\r,.+={}#]" },
-        peg$c7 = "{",
-        peg$c8 = { type: "literal", value: "{", description: "\"{\"" },
-        peg$c9 = null,
-        peg$c10 = ",",
-        peg$c11 = { type: "literal", value: ",", description: "\",\"" },
-        peg$c12 = "}",
-        peg$c13 = { type: "literal", value: "}", description: "\"}\"" },
-        peg$c14 = function(id, format) {
+        peg$c3 = /^[^ \t\n\r,.+={}#]/,
+        peg$c4 = { type: "class", value: "[^ \\t\\n\\r,.+={}#]", description: "[^ \\t\\n\\r,.+={}#]" },
+        peg$c5 = "{",
+        peg$c6 = { type: "literal", value: "{", description: "\"{\"" },
+        peg$c7 = ",",
+        peg$c8 = { type: "literal", value: ",", description: "\",\"" },
+        peg$c9 = "}",
+        peg$c10 = { type: "literal", value: "}", description: "\"}\"" },
+        peg$c11 = function(id, format) {
                 return {
                     type  : 'argumentElement',
                     id    : id,
-                    format: format && format[2]
+                    format: format && format[2],
+                    location: location()
                 };
             },
-        peg$c15 = "number",
-        peg$c16 = { type: "literal", value: "number", description: "\"number\"" },
-        peg$c17 = "date",
-        peg$c18 = { type: "literal", value: "date", description: "\"date\"" },
-        peg$c19 = "time",
-        peg$c20 = { type: "literal", value: "time", description: "\"time\"" },
-        peg$c21 = function(type, style) {
+        peg$c12 = "number",
+        peg$c13 = { type: "literal", value: "number", description: "\"number\"" },
+        peg$c14 = "date",
+        peg$c15 = { type: "literal", value: "date", description: "\"date\"" },
+        peg$c16 = "time",
+        peg$c17 = { type: "literal", value: "time", description: "\"time\"" },
+        peg$c18 = function(type, style) {
                 return {
                     type : type + 'Format',
-                    style: style && style[2]
+                    style: style && style[2],
+                    location: location()
                 };
             },
-        peg$c22 = "plural",
-        peg$c23 = { type: "literal", value: "plural", description: "\"plural\"" },
-        peg$c24 = function(pluralStyle) {
+        peg$c19 = "plural",
+        peg$c20 = { type: "literal", value: "plural", description: "\"plural\"" },
+        peg$c21 = function(pluralStyle) {
                 return {
                     type   : pluralStyle.type,
                     ordinal: false,
                     offset : pluralStyle.offset || 0,
-                    options: pluralStyle.options
+                    options: pluralStyle.options,
+                    location: location()
                 };
             },
-        peg$c25 = "selectordinal",
-        peg$c26 = { type: "literal", value: "selectordinal", description: "\"selectordinal\"" },
-        peg$c27 = function(pluralStyle) {
+        peg$c22 = "selectordinal",
+        peg$c23 = { type: "literal", value: "selectordinal", description: "\"selectordinal\"" },
+        peg$c24 = function(pluralStyle) {
                 return {
                     type   : pluralStyle.type,
                     ordinal: true,
                     offset : pluralStyle.offset || 0,
-                    options: pluralStyle.options
+                    options: pluralStyle.options,
+                    location: location()
                 }
             },
-        peg$c28 = "select",
-        peg$c29 = { type: "literal", value: "select", description: "\"select\"" },
-        peg$c30 = function(options) {
+        peg$c25 = "select",
+        peg$c26 = { type: "literal", value: "select", description: "\"select\"" },
+        peg$c27 = function(options) {
                 return {
                     type   : 'selectFormat',
-                    options: options
+                    options: options,
+                    location: location()
                 };
             },
-        peg$c31 = "=",
-        peg$c32 = { type: "literal", value: "=", description: "\"=\"" },
-        peg$c33 = function(selector, pattern) {
+        peg$c28 = "=",
+        peg$c29 = { type: "literal", value: "=", description: "\"=\"" },
+        peg$c30 = function(selector, pattern) {
                 return {
                     type    : 'optionalFormatPattern',
                     selector: selector,
-                    value   : pattern
+                    value   : pattern,
+                    location: location()
                 };
             },
-        peg$c34 = "offset:",
-        peg$c35 = { type: "literal", value: "offset:", description: "\"offset:\"" },
-        peg$c36 = function(number) {
+        peg$c31 = "offset:",
+        peg$c32 = { type: "literal", value: "offset:", description: "\"offset:\"" },
+        peg$c33 = function(number) {
                 return number;
             },
-        peg$c37 = function(offset, options) {
+        peg$c34 = function(offset, options) {
                 return {
                     type   : 'pluralFormat',
                     offset : offset,
-                    options: options
+                    options: options,
+                    location: location()
                 };
             },
-        peg$c38 = { type: "other", description: "whitespace" },
-        peg$c39 = /^[ \t\n\r]/,
-        peg$c40 = { type: "class", value: "[ \\t\\n\\r]", description: "[ \\t\\n\\r]" },
-        peg$c41 = { type: "other", description: "optionalWhitespace" },
-        peg$c42 = /^[0-9]/,
-        peg$c43 = { type: "class", value: "[0-9]", description: "[0-9]" },
-        peg$c44 = /^[0-9a-f]/i,
-        peg$c45 = { type: "class", value: "[0-9a-f]i", description: "[0-9a-f]i" },
-        peg$c46 = "0",
-        peg$c47 = { type: "literal", value: "0", description: "\"0\"" },
-        peg$c48 = /^[1-9]/,
-        peg$c49 = { type: "class", value: "[1-9]", description: "[1-9]" },
-        peg$c50 = function(digits) {
+        peg$c35 = { type: "other", description: "whitespace" },
+        peg$c36 = /^[ \t\n\r]/,
+        peg$c37 = { type: "class", value: "[ \\t\\n\\r]", description: "[ \\t\\n\\r]" },
+        peg$c38 = { type: "other", description: "optionalWhitespace" },
+        peg$c39 = /^[0-9]/,
+        peg$c40 = { type: "class", value: "[0-9]", description: "[0-9]" },
+        peg$c41 = /^[0-9a-f]/i,
+        peg$c42 = { type: "class", value: "[0-9a-f]i", description: "[0-9a-f]i" },
+        peg$c43 = "0",
+        peg$c44 = { type: "literal", value: "0", description: "\"0\"" },
+        peg$c45 = /^[1-9]/,
+        peg$c46 = { type: "class", value: "[1-9]", description: "[1-9]" },
+        peg$c47 = function(digits) {
             return parseInt(digits, 10);
         },
-        peg$c51 = /^[^{}\\\0-\x1F \t\n\r]/,
-        peg$c52 = { type: "class", value: "[^{}\\\\\\0-\\x1F \\t\\n\\r]", description: "[^{}\\\\\\0-\\x1F \\t\\n\\r]" },
-        peg$c53 = "\\\\",
-        peg$c54 = { type: "literal", value: "\\\\", description: "\"\\\\\\\\\"" },
-        peg$c55 = function() { return '\\'; },
-        peg$c56 = "\\#",
-        peg$c57 = { type: "literal", value: "\\#", description: "\"\\\\#\"" },
-        peg$c58 = function() { return '\\#'; },
-        peg$c59 = "\\{",
-        peg$c60 = { type: "literal", value: "\\{", description: "\"\\\\{\"" },
-        peg$c61 = function() { return '\u007B'; },
-        peg$c62 = "\\}",
-        peg$c63 = { type: "literal", value: "\\}", description: "\"\\\\}\"" },
-        peg$c64 = function() { return '\u007D'; },
-        peg$c65 = "\\u",
-        peg$c66 = { type: "literal", value: "\\u", description: "\"\\\\u\"" },
-        peg$c67 = function(digits) {
+        peg$c48 = /^[^{}\\\0-\x1F \t\n\r]/,
+        peg$c49 = { type: "class", value: "[^{}\\\\\\0-\\x1F\\x7f \\t\\n\\r]", description: "[^{}\\\\\\0-\\x1F\\x7f \\t\\n\\r]" },
+        peg$c50 = "\\\\",
+        peg$c51 = { type: "literal", value: "\\\\", description: "\"\\\\\\\\\"" },
+        peg$c52 = function() { return '\\'; },
+        peg$c53 = "\\#",
+        peg$c54 = { type: "literal", value: "\\#", description: "\"\\\\#\"" },
+        peg$c55 = function() { return '\\#'; },
+        peg$c56 = "\\{",
+        peg$c57 = { type: "literal", value: "\\{", description: "\"\\\\{\"" },
+        peg$c58 = function() { return '\u007B'; },
+        peg$c59 = "\\}",
+        peg$c60 = { type: "literal", value: "\\}", description: "\"\\\\}\"" },
+        peg$c61 = function() { return '\u007D'; },
+        peg$c62 = "\\u",
+        peg$c63 = { type: "literal", value: "\\u", description: "\"\\\\u\"" },
+        peg$c64 = function(digits) {
                 return String.fromCharCode(parseInt(digits, 16));
             },
-        peg$c68 = function(chars) { return chars.join(''); },
+        peg$c65 = function(chars) { return chars.join(''); },
 
         peg$currPos          = 0,
-        peg$reportedPos      = 0,
-        peg$cachedPos        = 0,
-        peg$cachedPosDetails = { line: 1, column: 1, seenCR: false },
+        peg$savedPos         = 0,
+        peg$posDetailsCache  = [{ line: 1, column: 1, seenCR: false }],
         peg$maxFailPos       = 0,
         peg$maxFailExpected  = [],
         peg$silentFails      = 0,
@@ -2348,11 +2589,30 @@ var parser = (function() {
       peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
     }
 
-    function peg$computePosDetails(pos) {
-      function advance(details, startPos, endPos) {
-        var p, ch;
+    function location() {
+      return peg$computeLocation(peg$savedPos, peg$currPos);
+    }
 
-        for (p = startPos; p < endPos; p++) {
+    function peg$computePosDetails(pos) {
+      var details = peg$posDetailsCache[pos],
+          p, ch;
+
+      if (details) {
+        return details;
+      } else {
+        p = pos - 1;
+        while (!peg$posDetailsCache[p]) {
+          p--;
+        }
+
+        details = peg$posDetailsCache[p];
+        details = {
+          line:   details.line,
+          column: details.column,
+          seenCR: details.seenCR
+        };
+
+        while (p < pos) {
           ch = input.charAt(p);
           if (ch === "\n") {
             if (!details.seenCR) { details.line++; }
@@ -2366,19 +2626,31 @@ var parser = (function() {
             details.column++;
             details.seenCR = false;
           }
-        }
-      }
 
-      if (peg$cachedPos !== pos) {
-        if (peg$cachedPos > pos) {
-          peg$cachedPos = 0;
-          peg$cachedPosDetails = { line: 1, column: 1, seenCR: false };
+          p++;
         }
-        advance(peg$cachedPosDetails, peg$cachedPos, pos);
-        peg$cachedPos = pos;
-      }
 
-      return peg$cachedPosDetails;
+        peg$posDetailsCache[pos] = details;
+        return details;
+      }
+    }
+
+    function peg$computeLocation(startPos, endPos) {
+      var startPosDetails = peg$computePosDetails(startPos),
+          endPosDetails   = peg$computePosDetails(endPos);
+
+      return {
+        start: {
+          offset: startPos,
+          line:   startPosDetails.line,
+          column: startPosDetails.column
+        },
+        end: {
+          offset: endPos,
+          line:   endPosDetails.line,
+          column: endPosDetails.column
+        }
+      };
     }
 
     function peg$fail(expected) {
@@ -2392,7 +2664,7 @@ var parser = (function() {
       peg$maxFailExpected.push(expected);
     }
 
-    function peg$buildException(message, expected, pos) {
+    function peg$buildException(message, expected, found, location) {
       function cleanupExpected(expected) {
         var i = 1;
 
@@ -2429,8 +2701,8 @@ var parser = (function() {
             .replace(/\r/g,   '\\r')
             .replace(/[\x00-\x07\x0B\x0E\x0F]/g, function(ch) { return '\\x0' + hex(ch); })
             .replace(/[\x10-\x1F\x80-\xFF]/g,    function(ch) { return '\\x'  + hex(ch); })
-            .replace(/[\u0180-\u0FFF]/g,         function(ch) { return '\\u0' + hex(ch); })
-            .replace(/[\u1080-\uFFFF]/g,         function(ch) { return '\\u'  + hex(ch); });
+            .replace(/[\u0100-\u0FFF]/g,         function(ch) { return '\\u0' + hex(ch); })
+            .replace(/[\u1000-\uFFFF]/g,         function(ch) { return '\\u'  + hex(ch); });
         }
 
         var expectedDescs = new Array(expected.length),
@@ -2451,20 +2723,15 @@ var parser = (function() {
         return "Expected " + expectedDesc + " but " + foundDesc + " found.";
       }
 
-      var posDetails = peg$computePosDetails(pos),
-          found      = pos < input.length ? input.charAt(pos) : null;
-
       if (expected !== null) {
         cleanupExpected(expected);
       }
 
-      return new SyntaxError(
+      return new peg$SyntaxError(
         message !== null ? message : buildMessage(expected, found),
         expected,
         found,
-        pos,
-        posDetails.line,
-        posDetails.column
+        location
       );
     }
 
@@ -2487,8 +2754,8 @@ var parser = (function() {
         s2 = peg$parsemessageFormatElement();
       }
       if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c1(s1);
+        peg$savedPos = s0;
+        s1 = peg$c0(s1);
       }
       s0 = s1;
 
@@ -2522,15 +2789,15 @@ var parser = (function() {
             s2 = s3;
           } else {
             peg$currPos = s2;
-            s2 = peg$c2;
+            s2 = peg$FAILED;
           }
         } else {
           peg$currPos = s2;
-          s2 = peg$c2;
+          s2 = peg$FAILED;
         }
       } else {
         peg$currPos = s2;
-        s2 = peg$c2;
+        s2 = peg$FAILED;
       }
       if (s2 !== peg$FAILED) {
         while (s2 !== peg$FAILED) {
@@ -2546,32 +2813,33 @@ var parser = (function() {
                 s2 = s3;
               } else {
                 peg$currPos = s2;
-                s2 = peg$c2;
+                s2 = peg$FAILED;
               }
             } else {
               peg$currPos = s2;
-              s2 = peg$c2;
+              s2 = peg$FAILED;
             }
           } else {
             peg$currPos = s2;
-            s2 = peg$c2;
+            s2 = peg$FAILED;
           }
         }
       } else {
-        s1 = peg$c2;
+        s1 = peg$FAILED;
       }
       if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c3(s1);
+        peg$savedPos = s0;
+        s1 = peg$c1(s1);
       }
       s0 = s1;
       if (s0 === peg$FAILED) {
         s0 = peg$currPos;
         s1 = peg$parsews();
         if (s1 !== peg$FAILED) {
-          s1 = input.substring(s0, peg$currPos);
+          s0 = input.substring(s0, peg$currPos);
+        } else {
+          s0 = s1;
         }
-        s0 = s1;
       }
 
       return s0;
@@ -2583,8 +2851,8 @@ var parser = (function() {
       s0 = peg$currPos;
       s1 = peg$parsemessageText();
       if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c4(s1);
+        peg$savedPos = s0;
+        s1 = peg$c2(s1);
       }
       s0 = s1;
 
@@ -2598,31 +2866,32 @@ var parser = (function() {
       if (s0 === peg$FAILED) {
         s0 = peg$currPos;
         s1 = [];
-        if (peg$c5.test(input.charAt(peg$currPos))) {
+        if (peg$c3.test(input.charAt(peg$currPos))) {
           s2 = input.charAt(peg$currPos);
           peg$currPos++;
         } else {
           s2 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c6); }
+          if (peg$silentFails === 0) { peg$fail(peg$c4); }
         }
         if (s2 !== peg$FAILED) {
           while (s2 !== peg$FAILED) {
             s1.push(s2);
-            if (peg$c5.test(input.charAt(peg$currPos))) {
+            if (peg$c3.test(input.charAt(peg$currPos))) {
               s2 = input.charAt(peg$currPos);
               peg$currPos++;
             } else {
               s2 = peg$FAILED;
-              if (peg$silentFails === 0) { peg$fail(peg$c6); }
+              if (peg$silentFails === 0) { peg$fail(peg$c4); }
             }
           }
         } else {
-          s1 = peg$c2;
+          s1 = peg$FAILED;
         }
         if (s1 !== peg$FAILED) {
-          s1 = input.substring(s0, peg$currPos);
+          s0 = input.substring(s0, peg$currPos);
+        } else {
+          s0 = s1;
         }
-        s0 = s1;
       }
 
       return s0;
@@ -2633,11 +2902,11 @@ var parser = (function() {
 
       s0 = peg$currPos;
       if (input.charCodeAt(peg$currPos) === 123) {
-        s1 = peg$c7;
+        s1 = peg$c5;
         peg$currPos++;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c8); }
+        if (peg$silentFails === 0) { peg$fail(peg$c6); }
       }
       if (s1 !== peg$FAILED) {
         s2 = peg$parse_();
@@ -2648,11 +2917,11 @@ var parser = (function() {
             if (s4 !== peg$FAILED) {
               s5 = peg$currPos;
               if (input.charCodeAt(peg$currPos) === 44) {
-                s6 = peg$c10;
+                s6 = peg$c7;
                 peg$currPos++;
               } else {
                 s6 = peg$FAILED;
-                if (peg$silentFails === 0) { peg$fail(peg$c11); }
+                if (peg$silentFails === 0) { peg$fail(peg$c8); }
               }
               if (s6 !== peg$FAILED) {
                 s7 = peg$parse_();
@@ -2663,60 +2932,60 @@ var parser = (function() {
                     s5 = s6;
                   } else {
                     peg$currPos = s5;
-                    s5 = peg$c2;
+                    s5 = peg$FAILED;
                   }
                 } else {
                   peg$currPos = s5;
-                  s5 = peg$c2;
+                  s5 = peg$FAILED;
                 }
               } else {
                 peg$currPos = s5;
-                s5 = peg$c2;
+                s5 = peg$FAILED;
               }
               if (s5 === peg$FAILED) {
-                s5 = peg$c9;
+                s5 = null;
               }
               if (s5 !== peg$FAILED) {
                 s6 = peg$parse_();
                 if (s6 !== peg$FAILED) {
                   if (input.charCodeAt(peg$currPos) === 125) {
-                    s7 = peg$c12;
+                    s7 = peg$c9;
                     peg$currPos++;
                   } else {
                     s7 = peg$FAILED;
-                    if (peg$silentFails === 0) { peg$fail(peg$c13); }
+                    if (peg$silentFails === 0) { peg$fail(peg$c10); }
                   }
                   if (s7 !== peg$FAILED) {
-                    peg$reportedPos = s0;
-                    s1 = peg$c14(s3, s5);
+                    peg$savedPos = s0;
+                    s1 = peg$c11(s3, s5);
                     s0 = s1;
                   } else {
                     peg$currPos = s0;
-                    s0 = peg$c2;
+                    s0 = peg$FAILED;
                   }
                 } else {
                   peg$currPos = s0;
-                  s0 = peg$c2;
+                  s0 = peg$FAILED;
                 }
               } else {
                 peg$currPos = s0;
-                s0 = peg$c2;
+                s0 = peg$FAILED;
               }
             } else {
               peg$currPos = s0;
-              s0 = peg$c2;
+              s0 = peg$FAILED;
             }
           } else {
             peg$currPos = s0;
-            s0 = peg$c2;
+            s0 = peg$FAILED;
           }
         } else {
           peg$currPos = s0;
-          s0 = peg$c2;
+          s0 = peg$FAILED;
         }
       } else {
         peg$currPos = s0;
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
 
       return s0;
@@ -2743,28 +3012,28 @@ var parser = (function() {
       var s0, s1, s2, s3, s4, s5, s6;
 
       s0 = peg$currPos;
-      if (input.substr(peg$currPos, 6) === peg$c15) {
-        s1 = peg$c15;
+      if (input.substr(peg$currPos, 6) === peg$c12) {
+        s1 = peg$c12;
         peg$currPos += 6;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c16); }
+        if (peg$silentFails === 0) { peg$fail(peg$c13); }
       }
       if (s1 === peg$FAILED) {
-        if (input.substr(peg$currPos, 4) === peg$c17) {
-          s1 = peg$c17;
+        if (input.substr(peg$currPos, 4) === peg$c14) {
+          s1 = peg$c14;
           peg$currPos += 4;
         } else {
           s1 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c18); }
+          if (peg$silentFails === 0) { peg$fail(peg$c15); }
         }
         if (s1 === peg$FAILED) {
-          if (input.substr(peg$currPos, 4) === peg$c19) {
-            s1 = peg$c19;
+          if (input.substr(peg$currPos, 4) === peg$c16) {
+            s1 = peg$c16;
             peg$currPos += 4;
           } else {
             s1 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c20); }
+            if (peg$silentFails === 0) { peg$fail(peg$c17); }
           }
         }
       }
@@ -2773,11 +3042,11 @@ var parser = (function() {
         if (s2 !== peg$FAILED) {
           s3 = peg$currPos;
           if (input.charCodeAt(peg$currPos) === 44) {
-            s4 = peg$c10;
+            s4 = peg$c7;
             peg$currPos++;
           } else {
             s4 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c11); }
+            if (peg$silentFails === 0) { peg$fail(peg$c8); }
           }
           if (s4 !== peg$FAILED) {
             s5 = peg$parse_();
@@ -2788,34 +3057,34 @@ var parser = (function() {
                 s3 = s4;
               } else {
                 peg$currPos = s3;
-                s3 = peg$c2;
+                s3 = peg$FAILED;
               }
             } else {
               peg$currPos = s3;
-              s3 = peg$c2;
+              s3 = peg$FAILED;
             }
           } else {
             peg$currPos = s3;
-            s3 = peg$c2;
+            s3 = peg$FAILED;
           }
           if (s3 === peg$FAILED) {
-            s3 = peg$c9;
+            s3 = null;
           }
           if (s3 !== peg$FAILED) {
-            peg$reportedPos = s0;
-            s1 = peg$c21(s1, s3);
+            peg$savedPos = s0;
+            s1 = peg$c18(s1, s3);
             s0 = s1;
           } else {
             peg$currPos = s0;
-            s0 = peg$c2;
+            s0 = peg$FAILED;
           }
         } else {
           peg$currPos = s0;
-          s0 = peg$c2;
+          s0 = peg$FAILED;
         }
       } else {
         peg$currPos = s0;
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
 
       return s0;
@@ -2825,50 +3094,50 @@ var parser = (function() {
       var s0, s1, s2, s3, s4, s5;
 
       s0 = peg$currPos;
-      if (input.substr(peg$currPos, 6) === peg$c22) {
-        s1 = peg$c22;
+      if (input.substr(peg$currPos, 6) === peg$c19) {
+        s1 = peg$c19;
         peg$currPos += 6;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c23); }
+        if (peg$silentFails === 0) { peg$fail(peg$c20); }
       }
       if (s1 !== peg$FAILED) {
         s2 = peg$parse_();
         if (s2 !== peg$FAILED) {
           if (input.charCodeAt(peg$currPos) === 44) {
-            s3 = peg$c10;
+            s3 = peg$c7;
             peg$currPos++;
           } else {
             s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c11); }
+            if (peg$silentFails === 0) { peg$fail(peg$c8); }
           }
           if (s3 !== peg$FAILED) {
             s4 = peg$parse_();
             if (s4 !== peg$FAILED) {
               s5 = peg$parsepluralStyle();
               if (s5 !== peg$FAILED) {
-                peg$reportedPos = s0;
-                s1 = peg$c24(s5);
+                peg$savedPos = s0;
+                s1 = peg$c21(s5);
                 s0 = s1;
               } else {
                 peg$currPos = s0;
-                s0 = peg$c2;
+                s0 = peg$FAILED;
               }
             } else {
               peg$currPos = s0;
-              s0 = peg$c2;
+              s0 = peg$FAILED;
             }
           } else {
             peg$currPos = s0;
-            s0 = peg$c2;
+            s0 = peg$FAILED;
           }
         } else {
           peg$currPos = s0;
-          s0 = peg$c2;
+          s0 = peg$FAILED;
         }
       } else {
         peg$currPos = s0;
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
 
       return s0;
@@ -2878,50 +3147,50 @@ var parser = (function() {
       var s0, s1, s2, s3, s4, s5;
 
       s0 = peg$currPos;
-      if (input.substr(peg$currPos, 13) === peg$c25) {
-        s1 = peg$c25;
+      if (input.substr(peg$currPos, 13) === peg$c22) {
+        s1 = peg$c22;
         peg$currPos += 13;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c26); }
+        if (peg$silentFails === 0) { peg$fail(peg$c23); }
       }
       if (s1 !== peg$FAILED) {
         s2 = peg$parse_();
         if (s2 !== peg$FAILED) {
           if (input.charCodeAt(peg$currPos) === 44) {
-            s3 = peg$c10;
+            s3 = peg$c7;
             peg$currPos++;
           } else {
             s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c11); }
+            if (peg$silentFails === 0) { peg$fail(peg$c8); }
           }
           if (s3 !== peg$FAILED) {
             s4 = peg$parse_();
             if (s4 !== peg$FAILED) {
               s5 = peg$parsepluralStyle();
               if (s5 !== peg$FAILED) {
-                peg$reportedPos = s0;
-                s1 = peg$c27(s5);
+                peg$savedPos = s0;
+                s1 = peg$c24(s5);
                 s0 = s1;
               } else {
                 peg$currPos = s0;
-                s0 = peg$c2;
+                s0 = peg$FAILED;
               }
             } else {
               peg$currPos = s0;
-              s0 = peg$c2;
+              s0 = peg$FAILED;
             }
           } else {
             peg$currPos = s0;
-            s0 = peg$c2;
+            s0 = peg$FAILED;
           }
         } else {
           peg$currPos = s0;
-          s0 = peg$c2;
+          s0 = peg$FAILED;
         }
       } else {
         peg$currPos = s0;
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
 
       return s0;
@@ -2931,22 +3200,22 @@ var parser = (function() {
       var s0, s1, s2, s3, s4, s5, s6;
 
       s0 = peg$currPos;
-      if (input.substr(peg$currPos, 6) === peg$c28) {
-        s1 = peg$c28;
+      if (input.substr(peg$currPos, 6) === peg$c25) {
+        s1 = peg$c25;
         peg$currPos += 6;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c29); }
+        if (peg$silentFails === 0) { peg$fail(peg$c26); }
       }
       if (s1 !== peg$FAILED) {
         s2 = peg$parse_();
         if (s2 !== peg$FAILED) {
           if (input.charCodeAt(peg$currPos) === 44) {
-            s3 = peg$c10;
+            s3 = peg$c7;
             peg$currPos++;
           } else {
             s3 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c11); }
+            if (peg$silentFails === 0) { peg$fail(peg$c8); }
           }
           if (s3 !== peg$FAILED) {
             s4 = peg$parse_();
@@ -2959,31 +3228,31 @@ var parser = (function() {
                   s6 = peg$parseoptionalFormatPattern();
                 }
               } else {
-                s5 = peg$c2;
+                s5 = peg$FAILED;
               }
               if (s5 !== peg$FAILED) {
-                peg$reportedPos = s0;
-                s1 = peg$c30(s5);
+                peg$savedPos = s0;
+                s1 = peg$c27(s5);
                 s0 = s1;
               } else {
                 peg$currPos = s0;
-                s0 = peg$c2;
+                s0 = peg$FAILED;
               }
             } else {
               peg$currPos = s0;
-              s0 = peg$c2;
+              s0 = peg$FAILED;
             }
           } else {
             peg$currPos = s0;
-            s0 = peg$c2;
+            s0 = peg$FAILED;
           }
         } else {
           peg$currPos = s0;
-          s0 = peg$c2;
+          s0 = peg$FAILED;
         }
       } else {
         peg$currPos = s0;
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
 
       return s0;
@@ -2995,11 +3264,11 @@ var parser = (function() {
       s0 = peg$currPos;
       s1 = peg$currPos;
       if (input.charCodeAt(peg$currPos) === 61) {
-        s2 = peg$c31;
+        s2 = peg$c28;
         peg$currPos++;
       } else {
         s2 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c32); }
+        if (peg$silentFails === 0) { peg$fail(peg$c29); }
       }
       if (s2 !== peg$FAILED) {
         s3 = peg$parsenumber();
@@ -3008,16 +3277,17 @@ var parser = (function() {
           s1 = s2;
         } else {
           peg$currPos = s1;
-          s1 = peg$c2;
+          s1 = peg$FAILED;
         }
       } else {
         peg$currPos = s1;
-        s1 = peg$c2;
+        s1 = peg$FAILED;
       }
       if (s1 !== peg$FAILED) {
-        s1 = input.substring(s0, peg$currPos);
+        s0 = input.substring(s0, peg$currPos);
+      } else {
+        s0 = s1;
       }
-      s0 = s1;
       if (s0 === peg$FAILED) {
         s0 = peg$parsechars();
       }
@@ -3036,11 +3306,11 @@ var parser = (function() {
           s3 = peg$parse_();
           if (s3 !== peg$FAILED) {
             if (input.charCodeAt(peg$currPos) === 123) {
-              s4 = peg$c7;
+              s4 = peg$c5;
               peg$currPos++;
             } else {
               s4 = peg$FAILED;
-              if (peg$silentFails === 0) { peg$fail(peg$c8); }
+              if (peg$silentFails === 0) { peg$fail(peg$c6); }
             }
             if (s4 !== peg$FAILED) {
               s5 = peg$parse_();
@@ -3050,47 +3320,47 @@ var parser = (function() {
                   s7 = peg$parse_();
                   if (s7 !== peg$FAILED) {
                     if (input.charCodeAt(peg$currPos) === 125) {
-                      s8 = peg$c12;
+                      s8 = peg$c9;
                       peg$currPos++;
                     } else {
                       s8 = peg$FAILED;
-                      if (peg$silentFails === 0) { peg$fail(peg$c13); }
+                      if (peg$silentFails === 0) { peg$fail(peg$c10); }
                     }
                     if (s8 !== peg$FAILED) {
-                      peg$reportedPos = s0;
-                      s1 = peg$c33(s2, s6);
+                      peg$savedPos = s0;
+                      s1 = peg$c30(s2, s6);
                       s0 = s1;
                     } else {
                       peg$currPos = s0;
-                      s0 = peg$c2;
+                      s0 = peg$FAILED;
                     }
                   } else {
                     peg$currPos = s0;
-                    s0 = peg$c2;
+                    s0 = peg$FAILED;
                   }
                 } else {
                   peg$currPos = s0;
-                  s0 = peg$c2;
+                  s0 = peg$FAILED;
                 }
               } else {
                 peg$currPos = s0;
-                s0 = peg$c2;
+                s0 = peg$FAILED;
               }
             } else {
               peg$currPos = s0;
-              s0 = peg$c2;
+              s0 = peg$FAILED;
             }
           } else {
             peg$currPos = s0;
-            s0 = peg$c2;
+            s0 = peg$FAILED;
           }
         } else {
           peg$currPos = s0;
-          s0 = peg$c2;
+          s0 = peg$FAILED;
         }
       } else {
         peg$currPos = s0;
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
 
       return s0;
@@ -3100,32 +3370,32 @@ var parser = (function() {
       var s0, s1, s2, s3;
 
       s0 = peg$currPos;
-      if (input.substr(peg$currPos, 7) === peg$c34) {
-        s1 = peg$c34;
+      if (input.substr(peg$currPos, 7) === peg$c31) {
+        s1 = peg$c31;
         peg$currPos += 7;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c35); }
+        if (peg$silentFails === 0) { peg$fail(peg$c32); }
       }
       if (s1 !== peg$FAILED) {
         s2 = peg$parse_();
         if (s2 !== peg$FAILED) {
           s3 = peg$parsenumber();
           if (s3 !== peg$FAILED) {
-            peg$reportedPos = s0;
-            s1 = peg$c36(s3);
+            peg$savedPos = s0;
+            s1 = peg$c33(s3);
             s0 = s1;
           } else {
             peg$currPos = s0;
-            s0 = peg$c2;
+            s0 = peg$FAILED;
           }
         } else {
           peg$currPos = s0;
-          s0 = peg$c2;
+          s0 = peg$FAILED;
         }
       } else {
         peg$currPos = s0;
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
 
       return s0;
@@ -3137,7 +3407,7 @@ var parser = (function() {
       s0 = peg$currPos;
       s1 = peg$parseoffset();
       if (s1 === peg$FAILED) {
-        s1 = peg$c9;
+        s1 = null;
       }
       if (s1 !== peg$FAILED) {
         s2 = peg$parse_();
@@ -3150,23 +3420,23 @@ var parser = (function() {
               s4 = peg$parseoptionalFormatPattern();
             }
           } else {
-            s3 = peg$c2;
+            s3 = peg$FAILED;
           }
           if (s3 !== peg$FAILED) {
-            peg$reportedPos = s0;
-            s1 = peg$c37(s1, s3);
+            peg$savedPos = s0;
+            s1 = peg$c34(s1, s3);
             s0 = s1;
           } else {
             peg$currPos = s0;
-            s0 = peg$c2;
+            s0 = peg$FAILED;
           }
         } else {
           peg$currPos = s0;
-          s0 = peg$c2;
+          s0 = peg$FAILED;
         }
       } else {
         peg$currPos = s0;
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
 
       return s0;
@@ -3177,31 +3447,31 @@ var parser = (function() {
 
       peg$silentFails++;
       s0 = [];
-      if (peg$c39.test(input.charAt(peg$currPos))) {
+      if (peg$c36.test(input.charAt(peg$currPos))) {
         s1 = input.charAt(peg$currPos);
         peg$currPos++;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c40); }
+        if (peg$silentFails === 0) { peg$fail(peg$c37); }
       }
       if (s1 !== peg$FAILED) {
         while (s1 !== peg$FAILED) {
           s0.push(s1);
-          if (peg$c39.test(input.charAt(peg$currPos))) {
+          if (peg$c36.test(input.charAt(peg$currPos))) {
             s1 = input.charAt(peg$currPos);
             peg$currPos++;
           } else {
             s1 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c40); }
+            if (peg$silentFails === 0) { peg$fail(peg$c37); }
           }
         }
       } else {
-        s0 = peg$c2;
+        s0 = peg$FAILED;
       }
       peg$silentFails--;
       if (s0 === peg$FAILED) {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c38); }
+        if (peg$silentFails === 0) { peg$fail(peg$c35); }
       }
 
       return s0;
@@ -3219,13 +3489,14 @@ var parser = (function() {
         s2 = peg$parsews();
       }
       if (s1 !== peg$FAILED) {
-        s1 = input.substring(s0, peg$currPos);
+        s0 = input.substring(s0, peg$currPos);
+      } else {
+        s0 = s1;
       }
-      s0 = s1;
       peg$silentFails--;
       if (s0 === peg$FAILED) {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c41); }
+        if (peg$silentFails === 0) { peg$fail(peg$c38); }
       }
 
       return s0;
@@ -3234,12 +3505,12 @@ var parser = (function() {
     function peg$parsedigit() {
       var s0;
 
-      if (peg$c42.test(input.charAt(peg$currPos))) {
+      if (peg$c39.test(input.charAt(peg$currPos))) {
         s0 = input.charAt(peg$currPos);
         peg$currPos++;
       } else {
         s0 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c43); }
+        if (peg$silentFails === 0) { peg$fail(peg$c40); }
       }
 
       return s0;
@@ -3248,12 +3519,12 @@ var parser = (function() {
     function peg$parsehexDigit() {
       var s0;
 
-      if (peg$c44.test(input.charAt(peg$currPos))) {
+      if (peg$c41.test(input.charAt(peg$currPos))) {
         s0 = input.charAt(peg$currPos);
         peg$currPos++;
       } else {
         s0 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c45); }
+        if (peg$silentFails === 0) { peg$fail(peg$c42); }
       }
 
       return s0;
@@ -3264,21 +3535,21 @@ var parser = (function() {
 
       s0 = peg$currPos;
       if (input.charCodeAt(peg$currPos) === 48) {
-        s1 = peg$c46;
+        s1 = peg$c43;
         peg$currPos++;
       } else {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c47); }
+        if (peg$silentFails === 0) { peg$fail(peg$c44); }
       }
       if (s1 === peg$FAILED) {
         s1 = peg$currPos;
         s2 = peg$currPos;
-        if (peg$c48.test(input.charAt(peg$currPos))) {
+        if (peg$c45.test(input.charAt(peg$currPos))) {
           s3 = input.charAt(peg$currPos);
           peg$currPos++;
         } else {
           s3 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c49); }
+          if (peg$silentFails === 0) { peg$fail(peg$c46); }
         }
         if (s3 !== peg$FAILED) {
           s4 = [];
@@ -3292,20 +3563,21 @@ var parser = (function() {
             s2 = s3;
           } else {
             peg$currPos = s2;
-            s2 = peg$c2;
+            s2 = peg$FAILED;
           }
         } else {
           peg$currPos = s2;
-          s2 = peg$c2;
+          s2 = peg$FAILED;
         }
         if (s2 !== peg$FAILED) {
-          s2 = input.substring(s1, peg$currPos);
+          s1 = input.substring(s1, peg$currPos);
+        } else {
+          s1 = s2;
         }
-        s1 = s2;
       }
       if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c50(s1);
+        peg$savedPos = s0;
+        s1 = peg$c47(s1);
       }
       s0 = s1;
 
@@ -3315,77 +3587,77 @@ var parser = (function() {
     function peg$parsechar() {
       var s0, s1, s2, s3, s4, s5, s6, s7;
 
-      if (peg$c51.test(input.charAt(peg$currPos))) {
+      if (peg$c48.test(input.charAt(peg$currPos))) {
         s0 = input.charAt(peg$currPos);
         peg$currPos++;
       } else {
         s0 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c52); }
+        if (peg$silentFails === 0) { peg$fail(peg$c49); }
       }
       if (s0 === peg$FAILED) {
         s0 = peg$currPos;
-        if (input.substr(peg$currPos, 2) === peg$c53) {
-          s1 = peg$c53;
+        if (input.substr(peg$currPos, 2) === peg$c50) {
+          s1 = peg$c50;
           peg$currPos += 2;
         } else {
           s1 = peg$FAILED;
-          if (peg$silentFails === 0) { peg$fail(peg$c54); }
+          if (peg$silentFails === 0) { peg$fail(peg$c51); }
         }
         if (s1 !== peg$FAILED) {
-          peg$reportedPos = s0;
-          s1 = peg$c55();
+          peg$savedPos = s0;
+          s1 = peg$c52();
         }
         s0 = s1;
         if (s0 === peg$FAILED) {
           s0 = peg$currPos;
-          if (input.substr(peg$currPos, 2) === peg$c56) {
-            s1 = peg$c56;
+          if (input.substr(peg$currPos, 2) === peg$c53) {
+            s1 = peg$c53;
             peg$currPos += 2;
           } else {
             s1 = peg$FAILED;
-            if (peg$silentFails === 0) { peg$fail(peg$c57); }
+            if (peg$silentFails === 0) { peg$fail(peg$c54); }
           }
           if (s1 !== peg$FAILED) {
-            peg$reportedPos = s0;
-            s1 = peg$c58();
+            peg$savedPos = s0;
+            s1 = peg$c55();
           }
           s0 = s1;
           if (s0 === peg$FAILED) {
             s0 = peg$currPos;
-            if (input.substr(peg$currPos, 2) === peg$c59) {
-              s1 = peg$c59;
+            if (input.substr(peg$currPos, 2) === peg$c56) {
+              s1 = peg$c56;
               peg$currPos += 2;
             } else {
               s1 = peg$FAILED;
-              if (peg$silentFails === 0) { peg$fail(peg$c60); }
+              if (peg$silentFails === 0) { peg$fail(peg$c57); }
             }
             if (s1 !== peg$FAILED) {
-              peg$reportedPos = s0;
-              s1 = peg$c61();
+              peg$savedPos = s0;
+              s1 = peg$c58();
             }
             s0 = s1;
             if (s0 === peg$FAILED) {
               s0 = peg$currPos;
-              if (input.substr(peg$currPos, 2) === peg$c62) {
-                s1 = peg$c62;
+              if (input.substr(peg$currPos, 2) === peg$c59) {
+                s1 = peg$c59;
                 peg$currPos += 2;
               } else {
                 s1 = peg$FAILED;
-                if (peg$silentFails === 0) { peg$fail(peg$c63); }
+                if (peg$silentFails === 0) { peg$fail(peg$c60); }
               }
               if (s1 !== peg$FAILED) {
-                peg$reportedPos = s0;
-                s1 = peg$c64();
+                peg$savedPos = s0;
+                s1 = peg$c61();
               }
               s0 = s1;
               if (s0 === peg$FAILED) {
                 s0 = peg$currPos;
-                if (input.substr(peg$currPos, 2) === peg$c65) {
-                  s1 = peg$c65;
+                if (input.substr(peg$currPos, 2) === peg$c62) {
+                  s1 = peg$c62;
                   peg$currPos += 2;
                 } else {
                   s1 = peg$FAILED;
-                  if (peg$silentFails === 0) { peg$fail(peg$c66); }
+                  if (peg$silentFails === 0) { peg$fail(peg$c63); }
                 }
                 if (s1 !== peg$FAILED) {
                   s2 = peg$currPos;
@@ -3402,35 +3674,36 @@ var parser = (function() {
                           s3 = s4;
                         } else {
                           peg$currPos = s3;
-                          s3 = peg$c2;
+                          s3 = peg$FAILED;
                         }
                       } else {
                         peg$currPos = s3;
-                        s3 = peg$c2;
+                        s3 = peg$FAILED;
                       }
                     } else {
                       peg$currPos = s3;
-                      s3 = peg$c2;
+                      s3 = peg$FAILED;
                     }
                   } else {
                     peg$currPos = s3;
-                    s3 = peg$c2;
+                    s3 = peg$FAILED;
                   }
                   if (s3 !== peg$FAILED) {
-                    s3 = input.substring(s2, peg$currPos);
+                    s2 = input.substring(s2, peg$currPos);
+                  } else {
+                    s2 = s3;
                   }
-                  s2 = s3;
                   if (s2 !== peg$FAILED) {
-                    peg$reportedPos = s0;
-                    s1 = peg$c67(s2);
+                    peg$savedPos = s0;
+                    s1 = peg$c64(s2);
                     s0 = s1;
                   } else {
                     peg$currPos = s0;
-                    s0 = peg$c2;
+                    s0 = peg$FAILED;
                   }
                 } else {
                   peg$currPos = s0;
-                  s0 = peg$c2;
+                  s0 = peg$FAILED;
                 }
               }
             }
@@ -3453,11 +3726,11 @@ var parser = (function() {
           s2 = peg$parsechar();
         }
       } else {
-        s1 = peg$c2;
+        s1 = peg$FAILED;
       }
       if (s1 !== peg$FAILED) {
-        peg$reportedPos = s0;
-        s1 = peg$c68(s1);
+        peg$savedPos = s0;
+        s1 = peg$c65(s1);
       }
       s0 = s1;
 
@@ -3473,13 +3746,20 @@ var parser = (function() {
         peg$fail({ type: "end", description: "end of input" });
       }
 
-      throw peg$buildException(null, peg$maxFailExpected, peg$maxFailPos);
+      throw peg$buildException(
+        null,
+        peg$maxFailExpected,
+        peg$maxFailPos < input.length ? input.charAt(peg$maxFailPos) : null,
+        peg$maxFailPos < input.length
+          ? peg$computeLocation(peg$maxFailPos, peg$maxFailPos + 1)
+          : peg$computeLocation(peg$maxFailPos, peg$maxFailPos)
+      );
     }
   }
 
   return {
-    SyntaxError: SyntaxError,
-    parse:       parse
+    SyntaxError: peg$SyntaxError,
+    parse:       peg$parse
   };
 })();
 
@@ -3768,52 +4048,52 @@ MessageFormat.defaultLocale = 'en';
  */
 class MessageBundle {
 
-    /**
-     * Creates a message bundle (a list of messages) for a locale.
-     * @param {string} locale - A locale code for a message group. IETF language tag format is recommended.
-     * @param {Object} messages - Messages for a locale in an object. Object keys are message IDss, strings that
-     * are used to reference a message, and key values are message texts in a string format.
-     */
-    constructor(locale, messages) {
-        if (!locale) {
-            throw new Error('Locale data is missing');
-        }
-        if (!messages) {
-            throw new Error('Messages data is missing');
-        }
-
-        this._locale = locale;
-
-        for (let messageID in messages) {
-            if (messages.hasOwnProperty(messageID)) {
-                this[messageID] = new MessageFormat(messages[messageID], this._locale);
-            }
-        }
+  /**
+   * Creates a message bundle (a list of messages) for a locale.
+   * @param {string} locale - A locale code for a message group. IETF language tag format is recommended.
+   * @param {Object} messages - Messages for a locale in an object. Object keys are message IDss, strings that
+   * are used to reference a message, and key values are message texts in a string format.
+   */
+  constructor (locale, messages) {
+    if (!locale) {
+      throw new Error('Locale data is missing')
+    }
+    if (!messages) {
+      throw new Error('Messages data is missing')
     }
 
-    /**
-     * Returns a (formatted) message for a message ID provided.
-     * @param messageID - An ID of a message.
-     * @param options - Options that can be used for message formatting.
-     * @returns {string} A formatted message. If message not found, returns a message that contains an error text.
-     */
-    get(messageID, options = undefined) {
-        if (this[messageID]) {
-            return this[messageID].format(options);
-        }
-        else {
-            // If message with the ID provided is not in translation data, generate a warning.
-            return `Not in translation data: "${messageID}"`;
-        }
-    }
+    this._locale = locale;
 
-    /**
-     * Returns a locale of a current message bundle.
-     * @return {string} A locale of this message bundle.
-     */
-    get locale() {
-        return this._locale;
+    for (let messageID in messages) {
+      if (messages.hasOwnProperty(messageID)) {
+        this[messageID] = new MessageFormat(messages[messageID], this._locale);
+      }
     }
+  }
+
+  /**
+   * Returns a (formatted) message for a message ID provided.
+   * @param messageID - An ID of a message.
+   * @param options - Options that can be used for message formatting.
+   * @returns {string} A formatted message. If message not found, returns a message that contains an error text.
+   */
+  get (messageID, options = undefined) {
+    if (this[messageID]) {
+      return this[messageID].format(options)
+    }
+    else {
+      // If message with the ID provided is not in translation data, generate a warning.
+      return `Not in translation data: "${messageID}"`
+    }
+  }
+
+  /**
+   * Returns a locale of a current message bundle.
+   * @return {string} A locale of this message bundle.
+   */
+  get locale () {
+    return this._locale
+  }
 }
 
 /**
@@ -3821,107 +4101,107 @@ class MessageBundle {
  */
 class L10n {
 
-    /**
-     * Creates an object. If an array of message bundle data is provided, initializes an object with this data.
-     * This function is chainable.
-     * @param {MessageBundle[]} messageData - An array of message bundles to be stored within.
-     * @returns {L10n} Returns a reference to self for chaining.
-     */
-    constructor(messageData) {
-        this._locales = {};
-        this._localeList = [];
+  /**
+   * Creates an object. If an array of message bundle data is provided, initializes an object with this data.
+   * This function is chainable.
+   * @param {MessageBundle[]} messageData - An array of message bundles to be stored within.
+   * @returns {L10n} Returns a reference to self for chaining.
+   */
+  constructor (messageData) {
+    this._locales = {};
+    this._localeList = [];
 
-        if (messageData) {
-            this.addLocaleData(messageData);
-        }
-        return this;
+    if (messageData) {
+      this.addLocaleData(messageData);
     }
+    return this
+  }
 
-    /**
-     * Adds one or several message bundles.
-     * This function is chainable.
-     * @param {MessageBundle[]} messageData - An array of message bundles to be stored within.
-     * @return {L10n} - Returns self for chaining.
-     */
-    addLocaleData(messageData) {
-        for (let messageBundle of messageData) {
-            this._localeList.push(messageBundle.locale);
-            this._locales[messageBundle.locale] = messageBundle;
-        }
-        return this;
+  /**
+   * Adds one or several message bundles.
+   * This function is chainable.
+   * @param {MessageBundle[]} messageData - An array of message bundles to be stored within.
+   * @return {L10n} - Returns self for chaining.
+   */
+  addLocaleData (messageData) {
+    for (let messageBundle of messageData) {
+      this._localeList.push(messageBundle.locale);
+      this._locales[messageBundle.locale] = messageBundle;
     }
+    return this
+  }
 
-    /**
-     * Returns a message bundle for a locale.
-     * @param {string} locale - A locale code for a message bundle. IETF language tag format is recommended.
-     * @returns {MessageBundle} A message bundle for a locale.
-     */
-    messages(locale) {
-        if (!this._locales[locale]) {
-            throw new Error('Locale "' + locale + '" is not found.');
-        }
-        return this._locales[locale];
+  /**
+   * Returns a message bundle for a locale.
+   * @param {string} locale - A locale code for a message bundle. IETF language tag format is recommended.
+   * @returns {MessageBundle} A message bundle for a locale.
+   */
+  messages (locale) {
+    if (!this._locales[locale]) {
+      throw new Error('Locale "' + locale + '" is not found.')
     }
+    return this._locales[locale]
+  }
 
-    /**
-     * Returns a list of available locale codes.
-     * @returns {string[]} Array of local codes.
-     */
-    get locales() {
-        return this._localeList;
-    }
+  /**
+   * Returns a list of available locale codes.
+   * @returns {string[]} Array of local codes.
+   */
+  get locales () {
+    return this._localeList
+  }
 }
 
 const messages = [
-    new MessageBundle('en-US', messages$1),
-    new MessageBundle('en-GB', messages$2)
+  new MessageBundle('en-US', messages$1),
+  new MessageBundle('en-GB', messages$2)
 ];
 
 let classNames = {
-    cell: 'infl-cell',
-    widthPrefix: 'infl-cell--sp',
-    fullWidth: 'infl-cell--fw',
-    header: 'infl-cell--hdr',
-    highlight: 'infl-cell--hl',
-    hidden: 'hidden',
-    suffix: 'infl-suff',
-    suffixMatch: 'infl-suff--suffix-match',
-    suffixFullFeatureMatch: 'infl-suff--full-feature-match',
-    inflectionTable: 'infl-table',
-    wideView: 'infl-table--wide',
-    narrowViewsContainer: 'infl-table-narrow-views-cont',
-    narrowView: 'infl-table--narrow',
-    footnotesContainer: 'infl-footnotes'
+  cell: 'infl-cell',
+  widthPrefix: 'infl-cell--sp',
+  fullWidth: 'infl-cell--fw',
+  header: 'infl-cell--hdr',
+  highlight: 'infl-cell--hl',
+  hidden: 'hidden',
+  suffix: 'infl-suff',
+  suffixMatch: 'infl-suff--suffix-match',
+  suffixFullFeatureMatch: 'infl-suff--full-feature-match',
+  inflectionTable: 'infl-table',
+  wideView: 'infl-table--wide',
+  narrowViewsContainer: 'infl-table-narrow-views-cont',
+  narrowView: 'infl-table--narrow',
+  footnotesContainer: 'infl-footnotes'
 };
 
 let wideView = {
-    column: {
-        width: 1,
-        unit: 'fr'
-    }
+  column: {
+    width: 1,
+    unit: 'fr'
+  }
 };
 
 let narrowView = {
-    column: {
-        width: 100,
-        unit: 'px'
-    }
+  column: {
+    width: 100,
+    unit: 'px'
+  }
 };
 
 let footnotes = {
-    id: "inlection-table-footer"
+  id: 'inlection-table-footer'
 };
 
 let pageHeader = {
-    html: `
+  html: `
         <button id="hide-empty-columns" class="switch-btn">Hide empty columns</button><button id="show-empty-columns" class="switch-btn hidden">Show empty columns</button>
         <button id="hide-no-suffix-groups" class="switch-btn">Hide top-level groups with no suffix matches</button><button id="show-no-suffix-groups" class="switch-btn hidden">Show top-level groups with no suffix matches</button><br>
         <p>Hover over the suffix to see its grammar features</p>
         `,
-    hideEmptyColumnsBtnSel: '#hide-empty-columns',
-    showEmptyColumnsBtnSel: '#show-empty-columns',
-    hideNoSuffixGroupsBtnSel: '#hide-no-suffix-groups',
-    showNoSuffixGroupsBtnSel: '#show-no-suffix-groups'
+  hideEmptyColumnsBtnSel: '#hide-empty-columns',
+  showEmptyColumnsBtnSel: '#show-empty-columns',
+  hideNoSuffixGroupsBtnSel: '#hide-no-suffix-groups',
+  showNoSuffixGroupsBtnSel: '#show-no-suffix-groups'
 };
 
 var nounSuffixesCSV = "Ending,Number,Case,Declension,Gender,Type,Footnote\na,singular,nominative,1st,feminine,regular,\nē,singular,nominative,1st,feminine,irregular,\nēs,singular,nominative,1st,feminine,irregular,\nā,singular,nominative,1st,feminine,irregular,7\nus,singular,nominative,2nd,masculine feminine,regular,\ner,singular,nominative,2nd,masculine feminine,regular,\nir,singular,nominative,2nd,masculine feminine,regular,\n-,singular,nominative,2nd,masculine feminine,irregular,\nos,singular,nominative,2nd,masculine feminine,irregular,1\nōs,singular,nominative,2nd,masculine feminine,irregular,\nō,singular,nominative,2nd,masculine feminine,irregular,7\num,singular,nominative,2nd,neuter,regular,\nus,singular,nominative,2nd,neuter,irregular,10\non,singular,nominative,2nd,neuter,irregular,7\n-,singular,nominative,3rd,masculine feminine,regular,\nos,singular,nominative,3rd,masculine feminine,irregular,\nōn,singular,nominative,3rd,masculine feminine,irregular,7\n-,singular,nominative,3rd,neuter,regular,\nus,singular,nominative,4th,masculine feminine,regular,\nū,singular,nominative,4th,neuter,regular,\nēs,singular,nominative,5th,feminine,regular,\nae,singular,genitive,1st,feminine,regular,\nāī,singular,genitive,1st,feminine,irregular,1\nās,singular,genitive,1st,feminine,irregular,2\nēs,singular,genitive,1st,feminine,irregular,7\nī,singular,genitive,2nd,masculine feminine,regular,\nō,singular,genitive,2nd,masculine feminine,irregular,7\nī,singular,genitive,2nd,neuter,regular,\nis,singular,genitive,3rd,masculine feminine,regular,\nis,singular,genitive,3rd,neuter,regular,\nūs,singular,genitive,4th,masculine feminine,regular,\nuis,singular,genitive,4th,masculine feminine,irregular,1\nuos,singular,genitive,4th,masculine feminine,irregular,1\nī,singular,genitive,4th,masculine feminine,irregular,15\nūs,singular,genitive,4th,neuter,regular,\nēī,singular,genitive,5th,feminine,regular,\neī,singular,genitive,5th,feminine,regular,\nī,singular,genitive,5th,feminine,irregular,\nē,singular,genitive,5th,feminine,irregular,\nēs,singular,genitive,5th,feminine,irregular,6\nae,singular,dative,1st,feminine,regular,\nāī,singular,dative,1st,feminine,irregular,1\nō,singular,dative,2nd,masculine feminine,regular,\nō,singular,dative,2nd,neuter,regular,\nī,singular,dative,3rd,masculine feminine,regular,\ne,singular,dative,3rd,masculine feminine,irregular,17\nī,singular,dative,3rd,neuter,regular,\nūī,singular,dative,4th,masculine feminine,regular,\nū,singular,dative,4th,masculine feminine,regular,\nū,singular,dative,4th,neuter,regular,\nēī,singular,dative,5th,feminine,regular,\neī,singular,dative,5th,feminine,regular,\nī,singular,dative,5th,feminine,irregular,\nē,singular,dative,5th,feminine,irregular,6\nam,singular,accusative,1st,feminine,regular,\nēn,singular,accusative,1st,feminine,irregular,\nān,singular,accusative,1st,feminine,irregular,7\num,singular,accusative,2nd,masculine feminine,regular,\nom,singular,accusative,2nd,masculine feminine,irregular,1\nōn,singular,accusative,2nd,masculine feminine,irregular,7\num,singular,accusative,2nd,neuter,regular,\nus,singular,accusative,2nd,neuter,irregular,10\non,singular,accusative,2nd,neuter,irregular,7\nem,singular,accusative,3rd,masculine feminine,regular,\nim,singular,accusative,3rd,masculine feminine,irregular,11\na,singular,accusative,3rd,masculine feminine,irregular,7\n-,singular,accusative,3rd,neuter,regular,\num,singular,accusative,4th,masculine feminine,regular,\nū,singular,accusative,4th,neuter,regular,\nem,singular,accusative,5th,feminine,regular,\nā,singular,ablative,1st,feminine,regular,\nād,singular,ablative,1st,feminine,irregular,5\nē,singular,ablative,1st,feminine,irregular,7\nō,singular,ablative,2nd,masculine feminine,regular,\nōd,singular,ablative,2nd,masculine feminine,irregular,1\nō,singular,ablative,2nd,neuter,regular,\ne,singular,ablative,3rd,masculine feminine,regular,\nī,singular,ablative,3rd,masculine feminine,irregular,11\ne,singular,ablative,3rd,neuter,regular,\nī,singular,ablative,3rd,neuter,irregular,11\nū,singular,ablative,4th,masculine feminine,regular,\nūd,singular,ablative,4th,masculine feminine,irregular,1\nū,singular,ablative,4th,neuter,regular,\nē,singular,ablative,5th,feminine,regular,\nae,singular,locative,1st,feminine,regular,\nō,singular,locative,2nd,masculine feminine,regular,\nō,singular,locative,2nd,neuter,regular,\ne,singular,locative,3rd,masculine feminine,regular,\nī,singular,locative,3rd,masculine feminine,regular,\nī,singular,locative,3rd,neuter,regular,\nū,singular,locative,4th,masculine feminine,regular,\nū,singular,locative,4th,neuter,regular,\nē,singular,locative,5th,feminine,regular,\na,singular,vocative,1st,feminine,regular,\nē,singular,vocative,1st,feminine,irregular,\nā,singular,vocative,1st,feminine,irregular,7\ne,singular,vocative,2nd,masculine feminine,regular,\ner,singular,vocative,2nd,masculine feminine,regular,\nir,singular,vocative,2nd,masculine feminine,regular,\n-,singular,vocative,2nd,masculine feminine,irregular,\nī,singular,vocative,2nd,masculine feminine,irregular,8\nōs,singular,vocative,2nd,masculine feminine,irregular,\ne,singular,vocative,2nd,masculine feminine,irregular,7\num,singular,vocative,2nd,neuter,regular,\non,singular,vocative,2nd,neuter,irregular,7\n-,singular,vocative,3rd,masculine feminine,regular,\n-,singular,vocative,3rd,neuter,regular,\nus,singular,vocative,4th,masculine feminine,regular,\nū,singular,vocative,4th,neuter,regular,\nēs,singular,vocative,5th,feminine,regular,\nae,plural,nominative,1st,feminine,regular,\nī,plural,nominative,2nd,masculine feminine,regular,\noe,plural,nominative,2nd,masculine feminine,irregular,7 9\na,plural,nominative,2nd,neuter,regular,\nēs,plural,nominative,3rd,masculine feminine,regular,\nes,plural,nominative,3rd,masculine feminine,irregular,7\na,plural,nominative,3rd,neuter,regular,\nia,plural,nominative,3rd,neuter,irregular,11\nūs,plural,nominative,4th,masculine feminine,regular,\nua,plural,nominative,4th,neuter,regular,\nēs,plural,nominative,5th,feminine,regular,\nārum,plural,genitive,1st,feminine,regular,\num,plural,genitive,1st,feminine,irregular,3\nōrum,plural,genitive,2nd,masculine feminine,regular,\num,plural,genitive,2nd,masculine feminine,irregular,\nom,plural,genitive,2nd,masculine feminine,irregular,8\nōrum,plural,genitive,2nd,neuter,regular,\num,plural,genitive,2nd,neuter,irregular,\num,plural,genitive,3rd,masculine feminine,regular,\nium,plural,genitive,3rd,masculine feminine,irregular,11\nōn,plural,genitive,3rd,masculine feminine,irregular,7\num,plural,genitive,3rd,neuter,regular,\nium,plural,genitive,3rd,neuter,irregular,11\nuum,plural,genitive,4th,masculine feminine,regular,\num,plural,genitive,4th,masculine feminine,irregular,16\nuom,plural,genitive,4th,masculine feminine,irregular,1\nuum,plural,genitive,4th,neuter,regular,\nērum,plural,genitive,5th,feminine,regular,\nīs,plural,dative,1st,feminine,regular,\nābus,plural,dative,1st,feminine,irregular,4\neis,plural,dative,1st,feminine,irregular,6\nīs,plural,dative,2nd,masculine feminine,regular,\nīs,plural,dative,2nd,neuter,regular,\nibus,plural,dative,3rd,masculine feminine,regular,\nibus,plural,dative,3rd,neuter,regular,\nibus,plural,dative,4th,masculine feminine,regular,\nubus,plural,dative,4th,masculine feminine,irregular,14\nibus,plural,dative,4th,neuter,regular,\nēbus,plural,dative,5th,feminine,regular,\nās,plural,accusative,1st,feminine,regular,\nōs,plural,accusative,2nd,masculine feminine,regular,\na,plural,accusative,2nd,neuter,regular,\nēs,plural,accusative,3rd,masculine feminine,regular,\nīs,plural,accusative,3rd,masculine feminine,irregular,11\nas,plural,accusative,3rd,masculine feminine,irregular,7\na,plural,accusative,3rd,neuter,regular,\nia,plural,accusative,3rd,neuter,irregular,11\nūs,plural,accusative,4th,masculine feminine,regular,\nua,plural,accusative,4th,neuter,regular,\nēs,plural,accusative,5th,feminine,regular,\nīs,plural,ablative,1st,feminine,regular,\nābus,plural,ablative,1st,feminine,irregular,4\neis,plural,ablative,1st,feminine,irregular,6\nīs,plural,ablative,2nd,masculine feminine,regular,\nīs,plural,ablative,2nd,neuter,regular,\nibus,plural,ablative,3rd,masculine feminine,regular,\nibus,plural,ablative,3rd,neuter,regular,\nibus,plural,ablative,4th,masculine feminine,regular,\nubus,plural,ablative,4th,masculine feminine,irregular,14\nibus,plural,ablative,4th,neuter,regular,\nēbus,plural,ablative,5th,feminine,regular,\nīs,plural,locative,1st,feminine,regular,\nīs,plural,locative,2nd,masculine feminine,regular,\nīs,plural,locative,2nd,neuter,regular,\nibus,plural,locative,3rd,masculine feminine,regular,\nibus,plural,locative,3rd,neuter,regular,\nibus,plural,locative,4th,masculine feminine,regular,\nibus,plural,locative,4th,neuter,regular,\nēbus,plural,locative,5th,feminine,regular,\nae,plural,vocative,1st,feminine,regular,\nī,plural,vocative,2nd,masculine feminine,regular,\na,plural,vocative,2nd,neuter,regular,\nēs,plural,vocative,3rd,masculine feminine,regular,\na,plural,vocative,3rd,neuter,regular,\nia,plural,vocative,3rd,neuter,irregular,11\nūs,plural,vocative,4th,masculine feminine,regular,\nua,plural,vocative,4th,neuter,regular,\nēs,plural,vocative,5th,feminine,regular,";
@@ -5529,8 +5809,8 @@ var papaparse = createCommonjsModule(function (module, exports) {
 /*
  * Latin language data module
  */
-let languageModel = new LatinLanguageModel$1();
-let types$1 = Feature.types;
+let languageModel = new LatinLanguageModel();
+let types = Feature.types;
 // A language of this module
 const language = languages.latin;
 // Create a language data set that will keep all language-related information
@@ -5542,55 +5822,19 @@ let dataSet = new LanguageDataset(language);
  analyzer's language modules as well.
  */
 const importerName = 'csv';
-languageModel.features[types$1.number].addImporter(importerName)
-    .map('singular',  languageModel.features[types$1.number].singular)
-    .map('plural', languageModel.features[types$1.number].plural);
-languageModel.features[types$1.grmCase].addImporter(importerName)
-    .map('nominative', languageModel.features[types$1.grmCase].nominative)
-    .map('genitive', languageModel.features[types$1.grmCase].genitive)
-    .map('dative', languageModel.features[types$1.grmCase].dative)
-    .map('accusative', languageModel.features[types$1.grmCase].accusative)
-    .map('ablative', languageModel.features[types$1.grmCase].ablative)
-    .map('locative', languageModel.features[types$1.grmCase].locative)
-    .map('vocative', languageModel.features[types$1.grmCase].vocative);
-languageModel.features[types$1.declension].addImporter(importerName)
-    .map('1st', languageModel.features[types$1.declension].first)
-    .map('2nd', languageModel.features[types$1.declension].second)
-    .map('1st 2nd', [languageModel.features[types$1.declension].first, languageModel.features[types$1.declension].second])
-    .map('3rd', languageModel.features[types$1.declension].third)
-    .map('4th', languageModel.features[types$1.declension].fourth)
-    .map('5th', languageModel.features[types$1.declension].fifth);
-languageModel.features[types$1.gender].addImporter(importerName)
-    .map('masculine', languageModel.features[types$1.gender].masculine)
-    .map('feminine', languageModel.features[types$1.gender].feminine)
-    .map('neuter', languageModel.features[types$1.gender].neuter)
-    .map('masculine feminine', [languageModel.features[types$1.gender].masculine, languageModel.features[types$1.gender].feminine]);
-languageModel.features[types$1.type].addImporter(importerName)
-    .map('regular', languageModel.features[types$1.type].regular)
-    .map('irregular', languageModel.features[types$1.type].irregular);
-languageModel.features[types$1.conjugation].addImporter(importerName)
-    .map('1st', languageModel.features[types$1.conjugation].first)
-    .map('2nd', languageModel.features[types$1.conjugation].second)
-    .map('3rd', languageModel.features[types$1.conjugation].third)
-    .map('4th', languageModel.features[types$1.conjugation].fourth);
-languageModel.features[types$1.tense].addImporter(importerName)
-    .map('present', languageModel.features[types$1.tense].present)
-    .map('imperfect', languageModel.features[types$1.tense].imperfect)
-    .map('future', languageModel.features[types$1.tense].future)
-    .map('perfect', languageModel.features[types$1.tense].perfect)
-    .map('pluperfect', languageModel.features[types$1.tense].pluperfect)
-    .map('future_perfect', languageModel.features[types$1.tense]['future perfect']);
-languageModel.features[types$1.voice].addImporter(importerName)
-    .map('passive', languageModel.features[types$1.voice].passive)
-    .map('active', languageModel.features[types$1.voice].active);
-languageModel.features[types$1.mood].addImporter(importerName)
-    .map('indicative', languageModel.features[types$1.mood].indicative)
-    .map('subjunctive', languageModel.features[types$1.mood].subjunctive);
-languageModel.features[types$1.person].addImporter(importerName)
-    .map('1st', languageModel.features[types$1.person].first)
-    .map('2nd', languageModel.features[types$1.person].second)
-    .map('3rd', languageModel.features[types$1.person].third);
-const footnotes$1 = new FeatureType$1(types$1.footnote, [], language);
+languageModel.features[types.declension].addImporter(importerName)
+    .map('1st 2nd',
+      [ languageModel.features[types.declension][constants.ORD_1ST],
+        languageModel.features[types.declension][constants.ORD_2ND]
+      ]);
+languageModel.features[types.gender].addImporter(importerName)
+    .map('masculine feminine',
+      [ languageModel.features[types.gender][constants.GEND_MASCULINE],
+        languageModel.features[types.gender][constants.GEND_FEMININE]
+      ]);
+languageModel.features[types.tense].addImporter(importerName)
+    .map('future_perfect', languageModel.features[types.tense][constants.TENSE_FUTURE_PERFECT]);
+const footnotes$1 = new FeatureType(types.footnote, [], language);
 
 // endregion definition of grammatical features
 
@@ -5608,11 +5852,11 @@ dataSet.addSuffixes = function(partofspeech, data) {
         }
 
         let features = [partofspeech,
-            languageModel.features[types$1.number].importer.csv.get(data[i][1]),
-            languageModel.features[types$1.grmCase].importer.csv.get(data[i][2]),
-            languageModel.features[types$1.declension].importer.csv.get(data[i][3]),
-            languageModel.features[types$1.gender].importer.csv.get(data[i][4]),
-            languageModel.features[types$1.type].importer.csv.get(data[i][5])];
+            languageModel.features[types.number].getFromImporter('csv',data[i][1]),
+            languageModel.features[types.grmCase].getFromImporter('csv', data[i][2]),
+            languageModel.features[types.declension].getFromImporter('csv',data[i][3]),
+            languageModel.features[types.gender].getFromImporter('csv',data[i][4]),
+            languageModel.features[types.type].getFromImporter('csv',data[i][5])];
         if (data[i][6]) {
             // there can be multiple footnote indexes separated by spaces
             let indexes = data[i][6].split(' ').map(function(index) {
@@ -5638,17 +5882,17 @@ dataSet.addVerbSuffixes = function(partofspeech, data) {
         }
 
         let features = [partofspeech,
-            languageModel.features[types$1.conjugation].importer.csv.get(data[i][1]),
-            languageModel.features[types$1.voice].importer.csv.get(data[i][2]),
-            languageModel.features[types$1.mood].importer.csv.get(data[i][3]),
-            languageModel.features[types$1.tense].importer.csv.get(data[i][4]),
-            languageModel.features[types$1.number].importer.csv.get(data[i][5]),
-            languageModel.features[types$1.person].importer.csv.get(data[i][6])];
+            languageModel.features[types.conjugation].getFromImporter('csv',data[i][1]),
+            languageModel.features[types.voice].getFromImporter('csv',data[i][2]),
+            languageModel.features[types.mood].getFromImporter('csv',data[i][3]),
+            languageModel.features[types.tense].getFromImporter('csv',data[i][4]),
+            languageModel.features[types.number].getFromImporter('csv',data[i][5]),
+            languageModel.features[types.person].getFromImporter('csv',data[i][6])];
 
         let grammartype = data[i][7];
         // type information can be empty if no ending is provided
         if (grammartype) {
-            features.push(languageModel.features[types$1.type].importer.csv.get(grammartype));
+            features.push(languageModel.features[types.type].getFromImporter('csv',grammartype));
         }
         // footnotes
         if (data[i][8]) {
@@ -5671,21 +5915,21 @@ dataSet.addFootnotes = function(partofspeech, data) {
 
 dataSet.loadData = function() {
     // nouns
-    let partofspeech = languageModel.features[types$1.part].noun;
+    let partofspeech = languageModel.features[types.part][constants.POFS_NOUN];
     let suffixes = papaparse.parse(nounSuffixesCSV, {});
     this.addSuffixes(partofspeech, suffixes.data);
     let footnotes = papaparse.parse(nounFootnotesCSV, {});
     this.addFootnotes(partofspeech, footnotes.data);
 
     // adjectives
-    partofspeech = languageModel.features[types$1.part].adjective;
+    partofspeech = languageModel.features[types.part][constants.POFS_ADJECTIVE];
     suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
     this.addSuffixes(partofspeech, suffixes.data);
     footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
     this.addFootnotes(partofspeech, footnotes.data);
 
     // verbs
-    partofspeech = languageModel.features[types$1.part].verb;
+    partofspeech = languageModel.features[types.part][constants.POFS_VERB];
     suffixes = papaparse.parse(verbSuffixesCSV, {});
     this.addVerbSuffixes(partofspeech, suffixes.data);
     footnotes = papaparse.parse(verbFootnotesCSV, {});
@@ -5703,10 +5947,10 @@ dataSet.loadData = function() {
 dataSet.matcher = function(inflections, suffix) {
     "use strict";
     // all of those features must match between an inflection and an ending
-    let obligatoryMatches = [types$1.part];
+    let obligatoryMatches = [types.part];
 
     // any of those features must match between an inflection and an ending
-    let optionalMatches = [types$1.grmcase, types$1.declension, types$1.gender, types$1.number];
+    let optionalMatches = [types.grmcase, types.declension, types.gender, types.number];
     let bestMatchData = null; // information about the best match we would be able to find
 
     /*
@@ -6402,7 +6646,7 @@ class Row {
  * GroupFeatureType extends a Feature object so that it'll be able to store additional information
  * that is required for that.
  */
-class GroupFeatureType extends FeatureType$1 {
+class GroupFeatureType extends FeatureType {
 
     /**
      * GroupFeatureType extends FeatureType to serve as a grouping feature (i.e. a feature that forms
@@ -6538,7 +6782,7 @@ class GroupFeatureType extends FeatureType$1 {
 /**
  * Holds a list of all grouping features of a table.
  */
-class GroupFeatureList extends FeatureList$1 {
+class GroupFeatureList extends FeatureList {
 
     /**
      * Initializes object with an array of grouping feature objects.
@@ -7512,9 +7756,9 @@ class LatinView extends View {
         };
     }
 
-    /**
-     * Creates and initializes an inflection table. Redefine this method in child objects in order to create
-     * an inflection table differently.
+    /*
+    Default grammatical features of a view. It child views need to have different feature values, redefine
+    those values in child objects.
      */
     createTable() {
         this.table = new Table([this.features.declensions, this.features.genders,
@@ -7533,12 +7777,14 @@ class NounView extends LatinView {
         this.id = 'nounDeclension';
         this.name = 'noun declension';
         this.title = 'Noun declension';
-        this.partOfSpeech = this.language_features[Feature.types.part].noun.value;
+        this.partOfSpeech = this.language_features[Feature.types.part][constants.POFS_NOUN].value;
 
         // Models.Feature that are different from base class values
         this.features.genders = new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender',
-            [[this.language_features[Feature.types.gender].masculine, this.language_features[Feature.types.gender].feminine], this.language_features[Feature.types.gender].neuter]);
-
+            [ this.language_features[Feature.types.gender][constants.GEND_MASCULINE],
+              this.language_features[Feature.types.gender][constants.GEND_FEMININE],
+              this.language_features[Feature.types.gender][constants.GEND_NEUTER]
+            ]);
         this.createTable();
     }
 }
@@ -7553,8 +7799,10 @@ class AdjectiveView extends LatinView {
 
         // Models.Feature that are different from base class values
         this.features.declensions = new GroupFeatureType(this.language_features[Feature.types.declension], 'Declension',
-            [this.language_features[Feature.types.declension].first, this.language_features[Feature.types.declension].second, this.language_features[Feature.types.declension].third]);
-
+            [ this.language_features[Feature.types.declension][constants.ORD_1ST],
+              this.language_features[Feature.types.declension][constants.ORD_2ND],
+              this.language_features[Feature.types.declension][constants.ORD_3RD]
+            ]);
         this.createTable();
     }
 }
@@ -7562,7 +7810,7 @@ class AdjectiveView extends LatinView {
 class VerbView extends LatinView {
     constructor() {
         super();
-        this.partOfSpeech = this.language_features[Feature.types.part].verb.value;
+        this.partOfSpeech = this.language_features[Feature.types.part][constants.POFS_VERB].value;
 
         this.features = {
             tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
@@ -7589,9 +7837,17 @@ class VoiceConjugationMoodView extends VerbView {
         this.table = new Table([this.features.voices, this.features.conjugations, this.features.moods,
             this.features.tenses, this.features.numbers, this.features.persons]);
         let features = this.table.features;
-        features.columns = [this.language_features[Feature.types.voice], this.language_features[Feature.types.conjugation], this.language_features[Feature.types.mood]];
-        features.rows = [this.language_features[Feature.types.tense], this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
-        features.columnRowTitles = [this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
+        features.columns = [
+          this.language_features[Feature.types.voice],
+          this.language_features[Feature.types.conjugation],
+          this.language_features[Feature.types.mood]];
+        features.rows = [
+          this.language_features[Feature.types.tense],
+          this.language_features[Feature.types.number],
+          this.language_features[Feature.types.person]];
+        features.columnRowTitles = [
+          this.language_features[Feature.types.number],
+          this.language_features[Feature.types.person]];
         features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
     }
 }
@@ -7610,9 +7866,17 @@ class VoiceMoodConjugationView extends VerbView {
         this.table = new Table([this.features.voices, this.features.moods, this.features.conjugations,
             this.features.tenses, this.features.numbers, this.features.persons]);
         let features = this.table.features;
-        features.columns = [this.language_features[Feature.types.voice], this.language_features[Feature.types.mood], this.language_features[Feature.types.conjugation]];
-        features.rows = [this.language_features[Feature.types.tense], this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
-        features.columnRowTitles = [this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
+        features.columns = [
+          this.language_features[Feature.types.voice],
+          this.language_features[Feature.types.mood],
+          this.language_features[Feature.types.conjugation]];
+        features.rows = [
+          this.language_features[Feature.types.tense],
+          this.language_features[Feature.types.number],
+          this.language_features[Feature.types.person]];
+        features.columnRowTitles = [
+          this.language_features[Feature.types.number],
+          this.language_features[Feature.types.person]];
         features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
     }
 }
@@ -7631,9 +7895,16 @@ class ConjugationVoiceMoodView extends VerbView {
         this.table = new Table([this.features.conjugations, this.features.voices, this.features.moods,
             this.features.tenses, this.features.numbers, this.features.persons]);
         let features = this.table.features;
-        features.columns = [this.language_features[Feature.types.conjugation], this.language_features[Feature.types.voice], this.language_features[Feature.types.mood]];
-        features.rows = [this.language_features[Feature.types.tense], this.language_features[Feature.types.number],this.language_features[Feature.types.person]];
-        features.columnRowTitles = [this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
+        features.columns = [
+          this.language_features[Feature.types.conjugation],
+          this.language_features[Feature.types.voice], this.language_features[Feature.types.mood]];
+        features.rows = [
+          this.language_features[Feature.types.tense],
+          this.language_features[Feature.types.number],
+          this.language_features[Feature.types.person]];
+        features.columnRowTitles = [
+          this.language_features[Feature.types.number],
+          this.language_features[Feature.types.person]];
         features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
     }
 }
@@ -7652,9 +7923,17 @@ class ConjugationMoodVoiceView extends VerbView {
         this.table = new Table([this.features.conjugations, this.features.moods, this.features.voices,
             this.features.tenses, this.features.numbers, this.features.persons]);
         let features = this.table.features;
-        features.columns = [this.language_features[Feature.types.conjugation], this.language_features[Feature.types.mood], this.language_features[Feature.types.voice]];
-        features.rows = [this.language_features[Feature.types.tense], this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
-        features.columnRowTitles = [this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
+        features.columns = [
+          this.language_features[Feature.types.conjugation],
+          this.language_features[Feature.types.mood],
+          this.language_features[Feature.types.voice]];
+        features.rows = [
+          this.language_features[Feature.types.tense],
+          this.language_features[Feature.types.number],
+          this.language_features[Feature.types.person]];
+        features.columnRowTitles = [
+          this.language_features[Feature.types.number],
+          this.language_features[Feature.types.person]];
         features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
     }
 }
@@ -7728,34 +8007,34 @@ let dataSet$1 = new LanguageDataset(language$1);
  analyzer's language modules as well.
  */
 const importerName$1 = 'csv';
-const parts = new FeatureType$1(Feature.types.part, ['noun', 'adjective', 'verb'],{});
-const numbers = new FeatureType$1(Feature.types.number, ['singular', 'dual', 'plural'],{});
+const parts = new FeatureType(Feature.types.part, ['noun', 'adjective', 'verb'],{});
+const numbers = new FeatureType(Feature.types.number, ['singular', 'dual', 'plural'],{});
 numbers.addImporter(importerName$1)
     .map('singular', numbers.singular)
     .map('dual', numbers.dual)
     .map('plural', numbers.plural);
-const cases = new FeatureType$1(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'vocative'],{});
+const cases = new FeatureType(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'vocative'],{});
 cases.addImporter(importerName$1)
     .map('nominative', cases.nominative)
     .map('genitive', cases.genitive)
     .map('dative', cases.dative)
     .map('accusative', cases.accusative)
     .map('vocative', cases.vocative);
-const declensions = new FeatureType$1(Feature.types.declension, ['first', 'second', 'third'],{});
+const declensions = new FeatureType(Feature.types.declension, ['first', 'second', 'third'],{});
 declensions.addImporter(importerName$1)
     .map('1st', declensions.first)
     .map('2nd', declensions.second)
     .map('3rd', declensions.third);
-const genders = new FeatureType$1(Feature.types.gender, ['masculine', 'feminine', 'neuter'],{});
+const genders = new FeatureType(Feature.types.gender, ['masculine', 'feminine', 'neuter'],{});
 genders.addImporter(importerName$1)
     .map('masculine', genders.masculine)
     .map('feminine', genders.feminine)
     .map('neuter', genders.neuter)
     .map('masculine feminine', [genders.masculine, genders.feminine]);
-const types$2 = new FeatureType$1(Feature.types.type, ['regular', 'irregular'],{});
-types$2.addImporter(importerName$1)
-    .map('regular', types$2.regular)
-    .map('irregular', types$2.irregular);
+const types$1 = new FeatureType(Feature.types.type, ['regular', 'irregular'],{});
+types$1.addImporter(importerName$1)
+    .map('regular', types$1.regular)
+    .map('irregular', types$1.irregular);
 /*const conjugations = new Models.FeatureType(Lib.types.conjugation, ['first', 'second', 'third', 'fourth']);
 conjugations.addImporter(importerName)
     .map('1st', conjugations.first)
@@ -7783,120 +8062,119 @@ persons.addImporter(importerName)
     .map('1st', persons.first)
     .map('2nd', persons.second)
     .map('3rd', persons.third);*/
-const footnotes$2 = new FeatureType$1(Feature.types.footnote, [],{});
+const footnotes$2 = new FeatureType(Feature.types.footnote, [],{});
 
 // endregion Definition of grammatical features
 
 // For noun and adjectives
-dataSet$1.addSuffixes = function(partOfSpeech, data) {
-    // Some suffix values will mean a lack of suffix, they will be mapped to a null
-    let noSuffixValue = '-';
+dataSet$1.addSuffixes = function (partOfSpeech, data) {
+  // Some suffix values will mean a lack of suffix, they will be mapped to a null
+  let noSuffixValue = '-';
 
-    // First row are headers
-    for (let i = 1; i < data.length; i++) {
-        let dataItem = data[i];
-        let suffixValue = dataItem[0];
-        // Handle special suffix values
-        if (suffixValue === noSuffixValue) {
-            suffixValue = null;
-        }
-
-        let primary = false;
-        let features = [partOfSpeech,
-            numbers.importer.csv.get(dataItem[1]),
-            cases.importer.csv.get(dataItem[2]),
-            declensions.importer.csv.get(dataItem[3]),
-            genders.importer.csv.get(dataItem[4]),
-            types$2.importer.csv.get(dataItem[5])];
-        if (dataItem[6] === 'primary') {
-            primary = true;
-        }
-        if (dataItem[7]) {
-            // There can be multiple footnote indexes separated by spaces
-            let language = this.language;
-            let indexes = dataItem[7].split(' ').map(function(index) {
-                return footnotes$2.get(index);
-            });
-            features.push(...indexes);
-        }
-        let extendedGreekData = new ExtendedGreekData();
-        extendedGreekData.primary = primary;
-        let extendedLangData = {
-            [languages.greek]: extendedGreekData
-        };
-        this.addSuffix(suffixValue, features, extendedLangData);
+  // First row are headers
+  for (let i = 1; i < data.length; i++) {
+    let dataItem = data[i];
+    let suffixValue = dataItem[0];
+    // Handle special suffix values
+    if (suffixValue === noSuffixValue) {
+      suffixValue = null;
     }
+
+    let primary = false;
+    let features = [partOfSpeech,
+      numbers.importer.csv.get(dataItem[1]),
+      cases.importer.csv.get(dataItem[2]),
+      declensions.importer.csv.get(dataItem[3]),
+      genders.importer.csv.get(dataItem[4]),
+      types$1.importer.csv.get(dataItem[5])];
+    if (dataItem[6] === 'primary') {
+      primary = true;
+    }
+    if (dataItem[7]) {
+      // There can be multiple footnote indexes separated by spaces
+      let language = this.language;
+      let indexes = dataItem[7].split(' ').map(function (index) {
+        return footnotes$2.get(index)
+      });
+      features.push(...indexes);
+    }
+    let extendedGreekData = new ExtendedGreekData();
+    extendedGreekData.primary = primary;
+    let extendedLangData = {
+      [languages.greek]: extendedGreekData
+    };
+    this.addSuffix(suffixValue, features, extendedLangData);
+  }
 };
 
 // For verbs
-dataSet$1.addVerbSuffixes = function(partOfSpeech, data) {
-    // Some suffix values will mean a lack of suffix, they will be mapped to a null
-    let noSuffixValue = '-';
+dataSet$1.addVerbSuffixes = function (partOfSpeech, data) {
+  // Some suffix values will mean a lack of suffix, they will be mapped to a null
+  let noSuffixValue = '-';
 
-    // First row are headers
-    for (let i = 1; i < data.length; i++) {
-        let suffix = data[i][0];
-        // Handle special suffix values
-        if (suffix === noSuffixValue) {
-            suffix = null;
-        }
-
-        let features = [partOfSpeech,
-            conjugations.importer.csv.get(data[i][1]),
-            voices.importer.csv.get(data[i][2]),
-            moods.importer.csv.get(data[i][3]),
-            tenses.importer.csv.get(data[i][4]),
-            numbers.importer.csv.get(data[i][5]),
-            persons.importer.csv.get(data[i][6])];
-
-        let grammarType = data[i][7];
-        // Type information can be empty if no ending is provided
-        if (grammarType) {
-            features.push(types$2.importer.csv.get(grammarType));
-        }
-        // Footnotes
-        if (data[i][8]) {
-            // There can be multiple footnote indexes separated by spaces
-            let language = this.language;
-            let indexes = data[i][8].split(' ').map(function(index) {
-                return footnotes$2.get(index);
-            });
-            features.push(...indexes);
-        }
-        this.addSuffix(suffix, features);
+  // First row are headers
+  for (let i = 1; i < data.length; i++) {
+    let suffix = data[i][0];
+    // Handle special suffix values
+    if (suffix === noSuffixValue) {
+      suffix = null;
     }
-};
 
-dataSet$1.addFootnotes = function(partOfSpeech, data) {
-    // First row are headers
-    for (let i = 1; i < data.length; i++) {
-        this.addFootnote(partOfSpeech, data[i][0], data[i][1]);
+    let features = [partOfSpeech,
+      conjugations.importer.csv.get(data[i][1]),
+      voices.importer.csv.get(data[i][2]),
+      moods.importer.csv.get(data[i][3]),
+      tenses.importer.csv.get(data[i][4]),
+      numbers.importer.csv.get(data[i][5]),
+      persons.importer.csv.get(data[i][6])];
+
+    let grammarType = data[i][7];
+    // Type information can be empty if no ending is provided
+    if (grammarType) {
+      features.push(types$1.importer.csv.get(grammarType));
     }
+    // Footnotes
+    if (data[i][8]) {
+      // There can be multiple footnote indexes separated by spaces
+      let language = this.language;
+      let indexes = data[i][8].split(' ').map(function (index) {
+        return footnotes$2.get(index)
+      });
+      features.push(...indexes);
+    }
+    this.addSuffix(suffix, features);
+  }
 };
 
-dataSet$1.loadData = function() {
-    // Nouns
-    let partOfSpeech = parts.noun;
-    let suffixes = papaparse.parse(nounSuffixesCSV$1, {});
-    this.addSuffixes(partOfSpeech, suffixes.data);
-    let footnotes = papaparse.parse(nounFootnotesCSV$1, {});
-    this.addFootnotes(partOfSpeech, footnotes.data);
-
-    // Adjectives
-    /*partOfSpeech = parts.adjective;
-    suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
-    this.addSuffixes(partOfSpeech, suffixes.data);
-    footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
-    this.addFootnotes(partOfSpeech, footnotes.data);*/
-
-    // Verbs
-    /*partOfSpeech = parts.verb;
-    suffixes = papaparse.parse(verbSuffixesCSV, {});
-    this.addVerbSuffixes(partOfSpeech, suffixes.data);
-    footnotes = papaparse.parse(verbFootnotesCSV, {});
-    this.addFootnotes(partOfSpeech, footnotes.data);*/
+dataSet$1.addFootnotes = function (partOfSpeech, data) {
+  // First row are headers
+  for (let i = 1; i < data.length; i++) {
+    this.addFootnote(partOfSpeech, data[i][0], data[i][1]);
+  }
 };
 
+dataSet$1.loadData = function () {
+  // Nouns
+  let partOfSpeech = parts.noun;
+  let suffixes = papaparse.parse(nounSuffixesCSV$1, {});
+  this.addSuffixes(partOfSpeech, suffixes.data);
+  let footnotes = papaparse.parse(nounFootnotesCSV$1, {});
+  this.addFootnotes(partOfSpeech, footnotes.data);
+
+  // Adjectives
+  /*partOfSpeech = parts.adjective;
+  suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
+  this.addSuffixes(partOfSpeech, suffixes.data);
+  footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
+  this.addFootnotes(partOfSpeech, footnotes.data);*/
+
+  // Verbs
+  /*partOfSpeech = parts.verb;
+  suffixes = papaparse.parse(verbSuffixesCSV, {});
+  this.addVerbSuffixes(partOfSpeech, suffixes.data);
+  footnotes = papaparse.parse(verbFootnotesCSV, {});
+  this.addFootnotes(partOfSpeech, footnotes.data);*/
+};
 
 /**
  * Decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
@@ -7914,60 +8192,60 @@ dataSet$1.matcher = function(inflections, suffix) {
     let optionalMatches = [Feature.types.grmCase, Feature.types.declension, Feature.types.gender, Feature.types.number];
     let bestMatchData = null; // Information about the best match we would be able to find
 
-    /*
-     There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
-     But there could be multiple partial matches. So we should try to find the best match possible and return it.
-     A fullFeature match is when one of inflections has all grammatical features fully matching those of a suffix
-     */
-    for (let inflection of inflections) {
-        let matchData = new MatchData(); // Create a match profile
+  /*
+   There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
+   But there could be multiple partial matches. So we should try to find the best match possible and return it.
+   A fullFeature match is when one of inflections has all grammatical features fully matching those of a suffix
+   */
+  for (let inflection of inflections) {
+    let matchData = new MatchData(); // Create a match profile
 
-        if (inflection.suffix === suffix.value) {
-            matchData.suffixMatch = true;
-        }
-
-        // Check obligatory matches
-        for (let feature of  obligatoryMatches) {
-            let featureMatch = suffix.featureMatch(feature, inflection[feature]);
-            //matchFound = matchFound && featureMatch;
-
-            if (!featureMatch) {
-                // If an obligatory match is not found, there is no reason to check other items
-                break;
-            }
-            // Inflection's value of this feature is matching the one of the suffix
-            matchData.matchedFeatures.push(feature);
-        }
-
-        if (matchData.matchedFeatures.length < obligatoryMatches.length) {
-            // Not all obligatory matches are found, this is not a match
-            break;
-        }
-
-        // Check optional matches now
-        for (let feature of optionalMatches) {
-            let matchedValue = suffix.featureMatch(feature, inflection[feature]);
-            if (matchedValue) {
-                matchData.matchedFeatures.push(feature);
-            }
-        }
-
-        if (matchData.suffixMatch && (matchData.matchedFeatures.length === obligatoryMatches.length + optionalMatches.length)) {
-            // This is a full match
-            matchData.fullMatch = true;
-
-            // There can be only one full match, no need to search any further
-            suffix.match = matchData;
-            return suffix;
-        }
-        bestMatchData = this.bestMatch(bestMatchData, matchData);
+    if (inflection.suffix === suffix.value) {
+      matchData.suffixMatch = true;
     }
-    if (bestMatchData) {
-        // There is some match found
-        suffix.match = bestMatchData;
-        return suffix;
+
+    // Check obligatory matches
+    for (let feature of  obligatoryMatches) {
+      let featureMatch = suffix.featureMatch(feature, inflection[feature]);
+      //matchFound = matchFound && featureMatch;
+
+      if (!featureMatch) {
+        // If an obligatory match is not found, there is no reason to check other items
+        break
+      }
+      // Inflection's value of this feature is matching the one of the suffix
+      matchData.matchedFeatures.push(feature);
     }
-    return null;
+
+    if (matchData.matchedFeatures.length < obligatoryMatches.length) {
+      // Not all obligatory matches are found, this is not a match
+      break
+    }
+
+    // Check optional matches now
+    for (let feature of optionalMatches) {
+      let matchedValue = suffix.featureMatch(feature, inflection[feature]);
+      if (matchedValue) {
+        matchData.matchedFeatures.push(feature);
+      }
+    }
+
+    if (matchData.suffixMatch && (matchData.matchedFeatures.length === obligatoryMatches.length + optionalMatches.length)) {
+      // This is a full match
+      matchData.fullMatch = true;
+
+      // There can be only one full match, no need to search any further
+      suffix.match = matchData;
+      return suffix
+    }
+    bestMatchData = this.bestMatch(bestMatchData, matchData);
+  }
+  if (bestMatchData) {
+    // There is some match found
+    suffix.match = bestMatchData;
+    return suffix
+  }
+  return null
 };
 
 /**
@@ -7976,119 +8254,119 @@ dataSet$1.matcher = function(inflections, suffix) {
  * @param {MatchData} matchB
  * @returns {MatchData} A best of two matches
  */
-dataSet$1.bestMatch = function(matchA, matchB) {
-    // If one of the arguments is not set, return the other one
-    if (!matchA && matchB) {
-        return matchB;
-    }
+dataSet$1.bestMatch = function (matchA, matchB) {
+  // If one of the arguments is not set, return the other one
+  if (!matchA && matchB) {
+    return matchB
+  }
 
-    if (!matchB && matchA) {
-        return matchA;
-    }
+  if (!matchB && matchA) {
+    return matchA
+  }
 
-    // Suffix match has a priority
-    if (matchA.suffixMatch !== matchB.suffixMatch) {
-        if (matchA.suffixMatch > matchB.suffixMatch) {
-            return matchA;
-        }
-        else {
-            return matchB;
-        }
-    }
-
-    // If same on suffix matche, compare by how many features matched
-    if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
-        // Arbitrarily return matchA if matches are the same
-        return matchA;
+  // Suffix match has a priority
+  if (matchA.suffixMatch !== matchB.suffixMatch) {
+    if (matchA.suffixMatch > matchB.suffixMatch) {
+      return matchA
     }
     else {
-        return matchB;
+      return matchB
     }
+  }
+
+  // If same on suffix matche, compare by how many features matched
+  if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
+    // Arbitrarily return matchA if matches are the same
+    return matchA
+  }
+  else {
+    return matchB
+  }
 };
 
 class GreekView extends View {
-    constructor() {
-        super();
-        this.language = languages.greek;
+  constructor () {
+    super();
+    this.language = languages.greek;
 
-        /*
-        Default grammatical features of a view. It child views need to have different feature values, redefine
-        those values in child objects.
-         */
-        this.features = {
-            numbers: new GroupFeatureType(numbers, 'Number'),
-            cases: new GroupFeatureType(cases, 'Case'),
-            declensions: new GroupFeatureType(declensions, 'Declension'),
-            genders: new GroupFeatureType(genders, 'Gender'),
-            types: new GroupFeatureType(types$2, 'Type')
-        };
-    }
-
-    /**
-     * Creates and initializes an inflection table. Redefine this method in child objects in order to create
-     * an inflection table differently.
+    /*
+    Default grammatical features of a view. It child views need to have different feature values, redefine
+    those values in child objects.
      */
-    createTable() {
-        this.table = new Table([this.features.declensions, this.features.genders,
-            this.features.types, this.features.numbers, this.features.cases]);
-        let features = this.table.features;
-        features.columns = [declensions, genders, types$2];
-        features.rows = [numbers, cases];
-        features.columnRowTitles = [cases];
-        features.fullWidthRowTitles = [numbers];
-    }
+    this.features = {
+      numbers: new GroupFeatureType(numbers, 'Number'),
+      cases: new GroupFeatureType(cases, 'Case'),
+      declensions: new GroupFeatureType(declensions, 'Declension'),
+      genders: new GroupFeatureType(genders, 'Gender'),
+      types: new GroupFeatureType(types$1, 'Type')
+    };
+  }
+
+  /**
+   * Creates and initializes an inflection table. Redefine this method in child objects in order to create
+   * an inflection table differently.
+   */
+  createTable () {
+    this.table = new Table([this.features.declensions, this.features.genders,
+      this.features.types, this.features.numbers, this.features.cases]);
+    let features = this.table.features;
+    features.columns = [declensions, genders, types$1];
+    features.rows = [numbers, cases];
+    features.columnRowTitles = [cases];
+    features.fullWidthRowTitles = [numbers];
+  }
 }
 
 class NounView$1 extends GreekView {
-    constructor() {
-        super();
-        this.id = 'nounDeclension';
-        this.name = 'noun declension';
-        this.title = 'Noun declension';
-        this.partOfSpeech = parts.noun.value;
+  constructor () {
+    super();
+    this.id = 'nounDeclension';
+    this.name = 'noun declension';
+    this.title = 'Noun declension';
+    this.partOfSpeech = parts.noun.value;
 
-        this.features.genders.getOrderedValues = function getOrderedValues(ancestorFeatures) {
-            if (ancestorFeatures) {
-                if (ancestorFeatures[0].value === declensions.second.value ||
-                    ancestorFeatures[0].value === declensions.third.value) {
-                    return [[genders.masculine.value, genders.feminine.value], genders.neuter.value];
-                }
-            }
-            return [genders.masculine.value, genders.feminine.value, genders.neuter.value];
-        };
+    this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
+      if (ancestorFeatures) {
+        if (ancestorFeatures[0].value === declensions.second.value ||
+          ancestorFeatures[0].value === declensions.third.value) {
+          return [[genders.masculine.value, genders.feminine.value], genders.neuter.value]
+        }
+      }
+      return [genders.masculine.value, genders.feminine.value, genders.neuter.value]
+    };
 
-        this.createTable();
-    }
+    this.createTable();
+  }
 }
 
 class NounViewSimplified extends NounView$1 {
-    constructor() {
-        super();
-        this.id = 'nounDeclensionSimplified';
-        this.name = 'noun declension simplified';
-        this.title = 'Noun declension (simplified)';
-        this.partOfSpeech = parts.noun.value;
+  constructor () {
+    super();
+    this.id = 'nounDeclensionSimplified';
+    this.name = 'noun declension simplified';
+    this.title = 'Noun declension (simplified)';
+    this.partOfSpeech = parts.noun.value;
 
-        this.features.genders.getOrderedValues = function getOrderedValues(ancestorFeatures) {
-            if (ancestorFeatures) {
-                if (ancestorFeatures[0].value === declensions.second.value) {
-                    return [[genders.masculine.value, genders.feminine.value], genders.neuter.value];
-                }
-                if (ancestorFeatures[0].value === declensions.third.value) {
-                    return [[genders.masculine.value, genders.feminine.value, genders.neuter.value]];
-                }
-            }
-            return [genders.masculine.value, genders.feminine.value, genders.neuter.value];
-        };
+    this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
+      if (ancestorFeatures) {
+        if (ancestorFeatures[0].value === declensions.second.value) {
+          return [[genders.masculine.value, genders.feminine.value], genders.neuter.value]
+        }
+        if (ancestorFeatures[0].value === declensions.third.value) {
+          return [[genders.masculine.value, genders.feminine.value, genders.neuter.value]]
+        }
+      }
+      return [genders.masculine.value, genders.feminine.value, genders.neuter.value]
+    };
 
-        this.createTable();
+    this.createTable();
 
-        this.table.suffixCellFilter = NounViewSimplified.suffixCellFilter;
-    }
+    this.table.suffixCellFilter = NounViewSimplified.suffixCellFilter;
+  }
 
-    static suffixCellFilter(suffix) {
-        return suffix.extendedLangData[languages.greek].primary;
-    }
+  static suffixCellFilter (suffix) {
+    return suffix.extendedLangData[languages.greek].primary
+  }
 }
 
 var viewsGreek = [new NounView$1(), new NounViewSimplified()];
@@ -8218,57 +8496,12 @@ class Presenter {
     }
 }
 
-// Import shared language data
-// Load language data
-let langData = new LanguageData([dataSet, dataSet$1]).loadData();
 
-let testCases = [
-    {word: "cupidinibus", value: "latin_noun_cupidinibus", type: "noun", language: 'latin'},
-    {word: "mare", value: "latin_noun_adj_mare", type: "noun, adjective", language: 'latin'},
-    {word: "cepit", value: "latin_verb_cepit", type: "regular verb", language: 'latin'},
-    {word: "φιλόσοφος", value: "greek_noun_pilsopo", type: "noun", language: 'greek'},
-];
-let selectList = document.querySelector("#test-selector");
 
-for (const testCase of testCases) {
-    let option = document.createElement("option");
-    option.value = testCase.value;
-    option.text = `${testCase.word} (${testCase.language} ${testCase.type})`;
-    selectList.appendChild(option);
-}
 
-selectList.addEventListener('change', event => {
-    if (event.target.value !== 'select') {
-        show(event.target.selectedOptions[0].innerHTML, event.target.value);
-    }
+var presenter = Object.freeze({
+	default: Presenter
 });
 
-
-let show = function show(word, fileNameBase) {
-    let dir = 'tests/data/';
-    let extension = '.json';
-    loadData(dir + fileNameBase + extension)
-        .then(json => {
-            json = JSON.parse(json);
-
-            let adapterArgs = { engine: { lat: "whitakerLat"}, url: "http://morph.alpheios.net/api/v1/analysis/word?word=r_WORD&engine=r_ENGINE&lang=r_LANG"};
-            // Transform Morphological Analyzer's response into a library standard Homonym object
-            let homonym = new TuftsAdapter(adapterArgs).transform(json);
-
-            // Get matching suffixes from an inflection library
-            let wordData = langData.getSuffixes(homonym);
-            wordData.homonym.targetWord = word;
-
-            // Insert rendered view to a page
-            let container = document.querySelector('#id-inflections-table');
-            let viewSelectorContainer = document.querySelector('#view-switcher');
-            let localeSwitcherContainer = document.querySelector('#locale-selector');
-            new Presenter(container, viewSelectorContainer, localeSwitcherContainer, wordData).render();
-
-        }).catch(error => {
-        console.error(error);
-    });
-};
-
-})));
+export { presenter as Presenter, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, languages, LanguageDataset, LanguageData, Suffix, Footnote, MatchData, ExtendedLanguageData, ExtendedGreekData, WordData, loadData };
 //# sourceMappingURL=inflection-tables.js.map
