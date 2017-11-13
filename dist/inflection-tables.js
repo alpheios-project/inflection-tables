@@ -1411,18 +1411,21 @@ class Homonym {
   }
 }
 
+/**
+ * Shared data structures and functions
+ */
+
 const languages = {
-    type: 'language',
-    latin: 'lat',
-    greek: 'grc',
-    isAllowed(language) {
-        if (language === this.type) {
-            return false;
-        }
-        else {
-            return Object.values(this).includes(language);
-        }
+  type: 'language',
+  latin: 'lat',
+  greek: 'grc',
+  isAllowed (language) {
+    if (language === this.type) {
+      return false
+    } else {
+      return Object.values(this).includes(language)
     }
+  }
 };
 
 /**
@@ -1433,20 +1436,20 @@ class LanguageDataset {
      * Initializes a LanguageDataset.
      * @param {string} language - A language of a data set, from an allowed languages list (see 'languages' object).
      */
-    constructor(language) {
-        if (!language) {
+  constructor (language) {
+    if (!language) {
             // Language is not supported
-            throw new Error('Language data cannot be empty.');
-        }
+      throw new Error('Language data cannot be empty.')
+    }
 
-        if (!languages.isAllowed(language)) {
+    if (!languages.isAllowed(language)) {
             // Language is not supported
-            throw new Error('Language "' + language + '" is not supported.');
-        }
-        this.language = language;
-        this.suffixes = []; // An array of suffixes.
-        this.footnotes = []; // Footnotes
-    };
+      throw new Error('Language "' + language + '" is not supported.')
+    }
+    this.language = language;
+    this.suffixes = []; // An array of suffixes.
+    this.footnotes = []; // Footnotes
+  };
 
     /**
      * Each grammatical feature can be either a single or an array of Feature objects. The latter is the case when
@@ -1457,59 +1460,53 @@ class LanguageDataset {
      * @param {Feature[]} featureValue
      * @return {Suffix} A newly added suffix value (can be used to add more data to the suffix).
      */
-    addSuffix(suffixValue, featureValue, extendedLangData) {
+  addSuffix (suffixValue, featureValue, extendedLangData) {
         // TODO: implement run-time error checking
-        let suffixItem = new Suffix(suffixValue);
-        suffixItem.extendedLangData = extendedLangData;
+    let suffixItem = new Suffix(suffixValue);
+    suffixItem.extendedLangData = extendedLangData;
 
         // Build all possible combinations of features
-        let multiValueFeatures = [];
-
+    let multiValueFeatures = [];
 
         // Go through all features provided
-        for (let feature of featureValue) {
-
+    for (let feature of featureValue) {
             // If this is a footnote. Footnotes should go in a flat array
             // because we don't need to split by them
-            if (feature.type === Feature.types.footnote) {
-                suffixItem[Feature.types.footnote] = suffixItem[Feature.types.footnote] || [];
-                suffixItem[Feature.types.footnote].push(feature.value);
-                continue;
-            }
+      if (feature.type === Feature.types.footnote) {
+        suffixItem[Feature.types.footnote] = suffixItem[Feature.types.footnote] || [];
+        suffixItem[Feature.types.footnote].push(feature.value);
+        continue
+      }
 
             // If this ending has several grammatical feature values then they will be in an array
-            if (Array.isArray(feature)) {
-
-                if (feature.length > 0) {
-                  if (feature[0]) {
-                    let type = feature[0].type;
+      if (Array.isArray(feature)) {
+        if (feature.length > 0) {
+          if (feature[0]) {
+            let type = feature[0].type;
                     // Store all multi-value features to create a separate copy of a a Suffix object for each of them
-                    multiValueFeatures.push({type: type, features: feature});
-                  } else {
-                    console.log(feature);
-                  }
-                }
-                else {
+            multiValueFeatures.push({type: type, features: feature});
+          } else {
+            console.log(feature);
+          }
+        } else {
                     // Array is empty
-                    throw new Error('An empty array is provided as a feature argument to the "addSuffix" method.')
-                }
-            }
-            else {
-                suffixItem.features[feature.type] = feature.value;
-            }
+          throw new Error('An empty array is provided as a feature argument to the "addSuffix" method.')
         }
+      } else {
+        suffixItem.features[feature.type] = feature.value;
+      }
+    }
 
         // Create a copy of an Suffix object for each multi-value item
-        if (multiValueFeatures.length > 0) {
-            for (let featureGroup of multiValueFeatures) {
-                let endingItems = suffixItem.split(featureGroup.type, featureGroup.features);
-                this.suffixes = this.suffixes.concat(endingItems);
-            }
-        }
-        else {
-            this.suffixes.push(suffixItem);
-        }
-    };
+    if (multiValueFeatures.length > 0) {
+      for (let featureGroup of multiValueFeatures) {
+        let endingItems = suffixItem.split(featureGroup.type, featureGroup.features);
+        this.suffixes = this.suffixes.concat(endingItems);
+      }
+    } else {
+      this.suffixes.push(suffixItem);
+    }
+  };
 
     /**
      * Stores a footnote item.
@@ -1517,91 +1514,88 @@ class LanguageDataset {
      * @param {number} index - A footnote's index.
      * @param {string} text - A footnote's text.
      */
-    addFootnote(partOfSpeech, index, text) {
+  addFootnote (partOfSpeech, index, text) {
+    if (!index) {
+      throw new Error('Footnote index data should not be empty.')
+    }
 
-        if (!index) {
-            throw new Error('Footnote index data should not be empty.');
-        }
+    if (!text) {
+      throw new Error('Footnote text data should not be empty.')
+    }
 
-        if (!text) {
-            throw new Error('Footnote text data should not be empty.');
-        }
+    let footnote = new Footnote(index, text, partOfSpeech.value);
+    footnote.index = index;
 
-        let footnote = new Footnote(index, text, partOfSpeech.value);
-        footnote.index = index;
+    this.footnotes.push(footnote);
+  };
 
-        this.footnotes.push(footnote);
-    };
-
-    getSuffixes(homonym) {
-
+  getSuffixes (homonym) {
         // Add support for languages
-        let result = new WordData(homonym);
-        let inflections = {};
+    let result = new WordData(homonym);
+    let inflections = {};
 
         // Find partial matches first, and then full among them
 
         // TODO: do we ever need lemmas?
-        for (let lexema of homonym.lexemes) {
-            for (let inflection of lexema.inflections) {
+    for (let lexema of homonym.lexemes) {
+      for (let inflection of lexema.inflections) {
                 // Group inflections by a part of speech
-                let partOfSpeech = inflection[Feature.types.part];
-                if (!partOfSpeech) {
-                    throw new Error("Part of speech data is missing in an inflection.");
-                }
-
-                if (!inflections.hasOwnProperty(partOfSpeech)) {
-                    inflections[partOfSpeech] = [];
-                }
-                inflections[partOfSpeech].push(inflection);
-            }
+        let partOfSpeech = inflection[Feature.types.part];
+        if (!partOfSpeech) {
+          throw new Error('Part of speech data is missing in an inflection.')
         }
+
+        if (!inflections.hasOwnProperty(partOfSpeech)) {
+          inflections[partOfSpeech] = [];
+        }
+        inflections[partOfSpeech].push(inflection);
+      }
+    }
 
         // Scan for matches for all parts of speech separately
-        for (const partOfSpeech in inflections) {
-            if (inflections.hasOwnProperty(partOfSpeech)) {
-                let inflectionsGroup = inflections[partOfSpeech];
+    for (const partOfSpeech in inflections) {
+      if (inflections.hasOwnProperty(partOfSpeech)) {
+        let inflectionsGroup = inflections[partOfSpeech];
 
-                result[Feature.types.part].push(partOfSpeech);
-                result[partOfSpeech] = {};
-                result[partOfSpeech].suffixes = this.suffixes.reduce(this['reducer'].bind(this, inflectionsGroup), []);
-                result[partOfSpeech].footnotes = [];
+        result[Feature.types.part].push(partOfSpeech);
+        result[partOfSpeech] = {};
+        result[partOfSpeech].suffixes = this.suffixes.reduce(this['reducer'].bind(this, inflectionsGroup), []);
+        result[partOfSpeech].footnotes = [];
 
                 // Create a set so all footnote indexes be unique
-                let footnotesIndex = new Set();
+        let footnotesIndex = new Set();
                 // Scan all selected suffixes to build a unique set of footnote indexes
-                for (let suffix of result[partOfSpeech].suffixes) {
-                    if (suffix.hasOwnProperty(Feature.types.footnote)) {
+        for (let suffix of result[partOfSpeech].suffixes) {
+          if (suffix.hasOwnProperty(Feature.types.footnote)) {
                         // Footnote indexes are stored in an array
-                        for (let index of suffix[Feature.types.footnote]) {
-                            footnotesIndex.add(index);
-                        }
-                    }
-                }
+            for (let index of suffix[Feature.types.footnote]) {
+              footnotesIndex.add(index);
+            }
+          }
+        }
                 // Add footnote indexes and their texts to a result
-                for (let index of footnotesIndex) {
-                    let footnote = this.footnotes.find(footnoteElement =>
+        for (let index of footnotesIndex) {
+          let footnote = this.footnotes.find(footnoteElement =>
                         footnoteElement.index === index && footnoteElement[Feature.types.part] === partOfSpeech
                     );
-                    result[partOfSpeech].footnotes.push({index: index, text: footnote.text});
-                }
+          result[partOfSpeech].footnotes.push({index: index, text: footnote.text});
+        }
                 // Sort footnotes according to their index numbers
-                result[partOfSpeech].footnotes.sort( (a, b) => parseInt(a.index) - parseInt(b.index) );
-            }
-        }
-
-        return result;
+        result[partOfSpeech].footnotes.sort((a, b) => parseInt(a.index) - parseInt(b.index));
+      }
     }
 
-    reducer(inflections, accumulator, suffix) {
-        let result = this.matcher(inflections, suffix);
-        if (result) {
-            accumulator.push(result);
-        }
-        return accumulator;
+    return result
+  }
+
+  reducer (inflections, accumulator, suffix) {
+    let result = this.matcher(inflections, suffix);
+    if (result) {
+      accumulator.push(result);
     }
+    return accumulator
+  }
 }
-
 
 /**
  * Stores one or several language datasets, one for each language
@@ -1613,48 +1607,47 @@ class LanguageData {
      * @param {LanguageDataset[]} languageData - Language datasets of different languages.
      * @return {LanguageData} Self instance for chaining.
      */
-    constructor(languageData) {
-        this.supportedLanguages = [];
+  constructor (languageData) {
+    this.supportedLanguages = [];
 
-        if (languageData) {
-            for (let dataset of languageData) {
-                this[dataset.language] = dataset;
-                this.supportedLanguages.push(dataset.language);
-            }
-        }
-        return this;
+    if (languageData) {
+      for (let dataset of languageData) {
+        this[dataset.language] = dataset;
+        this.supportedLanguages.push(dataset.language);
+      }
     }
+    return this
+  }
 
     /**
      * Loads data for all data sets.
      * This function is chainable.
      * @return {LanguageData} Self instance for chaining.
      */
-    loadData() {
-        for (let language of this.supportedLanguages) {
-          try {
-            this[language].loadData();
-          } catch(e) {
-            console.log(e);
-          }
-        }
-        return this;
+  loadData () {
+    for (let language of this.supportedLanguages) {
+      try {
+        this[language].loadData();
+      } catch (e) {
+        console.log(e);
+      }
     }
+    return this
+  }
 
     /**
      * Finds matching suffixes for a homonym.
      * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
      * @return {WordData} A return value of an inflection query.
      */
-    getSuffixes(homonym) {
-        let language = homonym.language;
-        if (this.supportedLanguages.includes(language)) {
-            return this[homonym.language].getSuffixes(homonym);
-        }
-        else {
-            throw new Error(`"${language}" language data is missing. Unable to get suffix data.`);
-        }
+  getSuffixes (homonym) {
+    let language = homonym.language;
+    if (this.supportedLanguages.includes(language)) {
+      return this[homonym.language].getSuffixes(homonym)
+    } else {
+      throw new Error(`"${language}" language data is missing. Unable to get suffix data.`)
     }
+  }
 }
 
 /**
@@ -1668,14 +1661,13 @@ class Suffix {
      * Initializes a Suffix object.
      * @param {string | null} suffixValue - A suffix text or null if suffix is empty.
      */
-    constructor(suffixValue) {
-
-        if (suffixValue === undefined) {
-            throw new Error('Suffix should not be empty.')
-        }
-        this.value = suffixValue;
-        this.features = {};
-        this.featureGroups = {};
+  constructor (suffixValue) {
+    if (suffixValue === undefined) {
+      throw new Error('Suffix should not be empty.')
+    }
+    this.value = suffixValue;
+    this.features = {};
+    this.featureGroups = {};
 
         /*
         Extended language data stores additional suffix information that is specific for a particular language.
@@ -1683,81 +1675,80 @@ class Suffix {
         {string} language(key): {object} extended language data. This object is specific for each language
         and is defined in a language model.
          */
-        this.extendedLangData = {};
-        this.match = undefined;
+    this.extendedLangData = {};
+    this.match = undefined;
+  }
+
+  static readObject (jsonObject) {
+    let suffix = new Suffix(jsonObject.value);
+
+    if (jsonObject.features) {
+      for (let key in jsonObject.features) {
+        if (jsonObject.features.hasOwnProperty(key)) {
+          suffix.features[key] = jsonObject.features[key];
+        }
+      }
     }
 
-    static readObject(jsonObject) {
-        let suffix = new Suffix(jsonObject.value);
-
-        if (jsonObject.features) {
-            for (let key in jsonObject.features) {
-                if (jsonObject.features.hasOwnProperty(key)) {
-                    suffix.features[key] = jsonObject.features[key];
-                }
-            }
+    if (jsonObject.featureGroups) {
+      for (let key in jsonObject.featureGroups) {
+        if (jsonObject.featureGroups.hasOwnProperty(key)) {
+          suffix.featureGroups[key] = [];
+          for (let value of jsonObject.featureGroups[key]) {
+            suffix.featureGroups[key].push(value);
+          }
         }
-
-        if (jsonObject.featureGroups) {
-            for (let key in jsonObject.featureGroups) {
-                if (jsonObject.featureGroups.hasOwnProperty(key)) {
-                    suffix.featureGroups[key] = [];
-                    for (let value of jsonObject.featureGroups[key]) {
-                        suffix.featureGroups[key].push(value);
-                    }
-                }
-            }
-        }
-
-        if (jsonObject[Feature.types.footnote]) {
-            suffix[Feature.types.footnote] = [];
-            for (let footnote of jsonObject[Feature.types.footnote]) {
-                suffix[Feature.types.footnote].push(footnote);
-            }
-        }
-
-        if (jsonObject.match) {
-            suffix.match = MatchData.readObject(jsonObject.match);
-        }
-
-        for (const lang in jsonObject.extendedLangData) {
-            if (jsonObject.extendedLangData.hasOwnProperty(lang)) {
-                suffix.extendedLangData[lang] = ExtendedLanguageData.readObject(jsonObject.extendedLangData[lang]);
-            }
-        }
-        return suffix;
+      }
     }
+
+    if (jsonObject[Feature.types.footnote]) {
+      suffix[Feature.types.footnote] = [];
+      for (let footnote of jsonObject[Feature.types.footnote]) {
+        suffix[Feature.types.footnote].push(footnote);
+      }
+    }
+
+    if (jsonObject.match) {
+      suffix.match = MatchData.readObject(jsonObject.match);
+    }
+
+    for (const lang in jsonObject.extendedLangData) {
+      if (jsonObject.extendedLangData.hasOwnProperty(lang)) {
+        suffix.extendedLangData[lang] = ExtendedLanguageData.readObject(jsonObject.extendedLangData[lang]);
+      }
+    }
+    return suffix
+  }
 
     /**
      * Returns a copy of itself. Used in splitting suffixes with multi-value features.
      * @returns {Suffix}
      */
-    clone() {
-
+  clone () {
         // TODO: do all-feature two-level cloning
-        let clone = new Suffix(this.value);
-        for (const key in this.features) {
-            if (this.features.hasOwnProperty(key)) {
-                clone.features[key] = this.features[key];
-            }
-        }
-        for (const key in this.featureGroups) {
-            if (this.featureGroups.hasOwnProperty(key)) {
-                clone.featureGroups[key] = this.featureGroups[key];
-            }
-        }
+    let clone = new Suffix(this.value);
+    for (const key in this.features) {
+      if (this.features.hasOwnProperty(key)) {
+        clone.features[key] = this.features[key];
+      }
+    }
+    for (const key in this.featureGroups) {
+      if (this.featureGroups.hasOwnProperty(key)) {
+        clone.featureGroups[key] = this.featureGroups[key];
+      }
+    }
 
-        if (this.hasOwnProperty(Feature.types.footnote)) {
-            clone[Feature.types.footnote] = this[Feature.types.footnote];
-        }
+    if (this.hasOwnProperty(Feature.types.footnote)) {
+      clone[Feature.types.footnote] = this[Feature.types.footnote];
+    }
 
-        for (const lang in this.extendedLangData) {
-            if (this.extendedLangData.hasOwnProperty(lang)) {
-                clone.extendedLangData[lang] = this.extendedLangData[lang];
-            }
-        }
-        return clone;
-    };
+    for (const lang in this.extendedLangData) {
+      if (this.extendedLangData.hasOwnProperty(lang)) {
+        clone.extendedLangData[lang] = this.extendedLangData[lang];
+      }
+    }
+    return clone
+  };
 
     /**
      * Checks if suffix has a feature that is a match to the one provided.
@@ -1766,34 +1757,33 @@ class Suffix {
      * @returns {string | undefined} - If provided feature is a match, returns a first feature that matched.
      * If no match found, return undefined.
      */
-    featureMatch(featureType, featureValues) {
-        if (this.features.hasOwnProperty(featureType)) {
-            for (let value of featureValues) {
-                if (value === this.features[featureType]) {
-                    return value;
-                }
-            }
+  featureMatch (featureType, featureValues) {
+    if (this.features.hasOwnProperty(featureType)) {
+      for (let value of featureValues) {
+        if (value === this.features[featureType]) {
+          return value
         }
-        return undefined;
+      }
     }
+    return undefined
+  }
 
     /**
      * Find feature groups in Suffix.featureGroups that are the same between suffixes provided
      * @param suffixes
      */
-    static getCommonGroups(suffixes) {
+  static getCommonGroups (suffixes) {
+    let features = Object.keys(suffixes[0].featureGroups);
 
-        let features = Object.keys(suffixes[0].featureGroups);
-
-        let commonGroups = features.filter( feature => {
-            let result = true;
-            for (let i=1; i<suffixes.length; i++) {
-                result = result && suffixes[i].features.hasOwnProperty(feature);
-            }
-            return result;
-        });
-        return commonGroups;
-    }
+    let commonGroups = features.filter(feature => {
+      let result = true;
+      for (let i = 1; i < suffixes.length; i++) {
+        result = result && suffixes[i].features.hasOwnProperty(feature);
+      }
+      return result
+    });
+    return commonGroups
+  }
 
     /**
      * Finds out if an suffix is in the same group with some other suffix. The other suffix is provided as a function argument.
@@ -1808,45 +1798,44 @@ class Suffix {
      * @param {Suffix} suffix - An other suffix that we compare this suffix with.
      * @returns {boolean} - True if both suffixes are in the same group, false otherwise.
      */
-    isInSameGroupWith(suffix) {
-
-        let commonGroups = Suffix.getCommonGroups([this, suffix]);
-        if (commonGroups.length < 1) {
+  isInSameGroupWith (suffix) {
+    let commonGroups = Suffix.getCommonGroups([this, suffix]);
+    if (commonGroups.length < 1) {
             // If elements do not have common groups in Suffix.featureGroups then they are not in the same group
-            return false;
-        }
+      return false
+    }
 
-        let commonValues = {};
-        commonGroups.forEach(feature => commonValues[feature] = new Set([this.features[feature]]));
+    let commonValues = {};
+    commonGroups.forEach((feature) => { commonValues[feature] = new Set([this.features[feature]]); });
 
-        let result = true;
-        result = result && this.value === suffix.value;
+    let result = true;
+    result = result && this.value === suffix.value;
         // If suffixes does not match don't check any further
-        if (!result) {
-            return false;
-        }
+    if (!result) {
+      return false
+    }
 
         // Check all features to be a match, except those that are possible group values
-        for (let feature of Object.keys(this.features)) {
-            if (commonGroups.indexOf(feature)>=0) {
-                commonValues[feature].add(suffix.features[feature]);
+    for (let feature of Object.keys(this.features)) {
+      if (commonGroups.indexOf(feature) >= 0) {
+        commonValues[feature].add(suffix.features[feature]);
 
                 // Do not compare common groups
-                continue;
-            }
-            result = result && this.features[feature] === suffix.features[feature];
+        continue
+      }
+      result = result && this.features[feature] === suffix.features[feature];
             // If feature mismatch discovered, do not check any further
-            if (!result) {
-                return false;
-            }
-        }
-
-        commonGroups.forEach(feature => {
-            result = result && commonValues[feature].size === 2;
-        });
-
-        return result;
+      if (!result) {
+        return false
+      }
     }
+
+    commonGroups.forEach(feature => {
+      result = result && commonValues[feature].size === 2;
+    });
+
+    return result
+  }
 
     /**
      * Splits a suffix that has multiple values of one or more grammatical features into an array of Suffix objects
@@ -1856,22 +1845,21 @@ class Suffix {
      * @param {Feature[]} featureValues - Multiple grammatical feature values.
      * @returns {Suffix[]} - An array of suffixes.
      */
-    split(featureType, featureValues) {
-
-        let copy = this.clone();
-        let values = [];
-        featureValues.forEach(element => values.push(element.value));
-        copy.features[featureType] = featureValues[0].value;
-        copy.featureGroups[featureType] = values;
-        let suffixItems = [copy];
-        for (let i = 1; i < featureValues.length; i++) {
-            copy = this.clone();
-            copy.features[featureType] = featureValues[i].value;
-            copy.featureGroups[featureType] = values;
-            suffixItems.push(copy);
-        }
-        return suffixItems;
-    };
+  split (featureType, featureValues) {
+    let copy = this.clone();
+    let values = [];
+    featureValues.forEach(element => values.push(element.value));
+    copy.features[featureType] = featureValues[0].value;
+    copy.featureGroups[featureType] = values;
+    let suffixItems = [copy];
+    for (let i = 1; i < featureValues.length; i++) {
+      copy = this.clone();
+      copy.features[featureType] = featureValues[i].value;
+      copy.featureGroups[featureType] = values;
+      suffixItems.push(copy);
+    }
+    return suffixItems
+  };
 
     /**
      * Combines suffixes that are in the same group together. Suffixes to be combined must have their values listed
@@ -1882,13 +1870,12 @@ class Suffix {
      * information on function format.
      * @returns {Suffix[]} An array of suffixes with some items possibly combined together.
      */
-    static combine(suffixes, mergeFunction = Suffix.merge) {
+  static combine (suffixes, mergeFunction = Suffix.merge) {
+    let matchFound = false;
+    let matchIdx;
 
-        let matchFound = false;
-        let matchIdx;
-
-        do {
-            matchFound = false;
+    do {
+      matchFound = false;
 
             /*
             Go through an array of suffixes end compare each suffix with each other (two-way compare) one time. \
@@ -1896,26 +1883,26 @@ class Suffix {
             and remove one matching suffix (the second one) from an array.
             Then repeat on a modified array until no further matches found.
              */
-            for (let i=0; i<suffixes.length; i++) {
-                if (matchFound) {
-                    continue;
-                }
-                for (let j=i+1; j < suffixes.length; j++) {
-                    if (suffixes[i].isInSameGroupWith(suffixes[j])) {
-                        matchIdx = j;
-                        matchFound = true;
-                        mergeFunction(suffixes[i], suffixes[j]);
-                    }
-                }
-            }
-
-            if (matchFound) {
-                suffixes.splice(matchIdx, 1);
-            }
+      for (let i = 0; i < suffixes.length; i++) {
+        if (matchFound) {
+          continue
         }
-        while (matchFound);
-        return suffixes;
+        for (let j = i + 1; j < suffixes.length; j++) {
+          if (suffixes[i].isInSameGroupWith(suffixes[j])) {
+            matchIdx = j;
+            matchFound = true;
+            mergeFunction(suffixes[i], suffixes[j]);
+          }
+        }
+      }
+
+      if (matchFound) {
+        suffixes.splice(matchIdx, 1);
+      }
     }
+    while (matchFound)
+    return suffixes
+  }
 
     /**
      * This function provide a logic of to merge data of two suffix object that were previously split together.
@@ -1923,152 +1910,147 @@ class Suffix {
      * @param {Suffix} suffixB - A second ending to merge (to be discarded).
      * @returns {Suffix} A modified value of ending A.
      */
-    static merge(suffixA, suffixB) {
-        let commonGroups = Suffix.getCommonGroups([suffixA, suffixB]);
-        for (let type of commonGroups) {
+  static merge (suffixA, suffixB) {
+    let commonGroups = Suffix.getCommonGroups([suffixA, suffixB]);
+    for (let type of commonGroups) {
             // Combine values using a comma separator. Can do anything else if we need to.
-            suffixA.features[type] = suffixA.features[type] + ', ' + suffixB.features[type];
-        }
-        return suffixA;
-    };
+      suffixA.features[type] = suffixA.features[type] + ', ' + suffixB.features[type];
+    }
+    return suffixA
+  };
 }
 
-
 class Footnote {
-    constructor(index, text, partOfSpeech) {
-        this.index = index;
-        this.text = text;
-        this[Feature.types.part] = partOfSpeech;
-    }
+  constructor (index, text, partOfSpeech) {
+    this.index = index;
+    this.text = text;
+    this[Feature.types.part] = partOfSpeech;
+  }
 
-    static readObject(jsonObject) {
-        this.index = jsonObject.index;
-        this.text = jsonObject.text;
-        this[Feature.types.part] = jsonObject[Feature.types.part];
-        return new Footnote(jsonObject.index, jsonObject.text, jsonObject[Feature.types.part]);
-    }
+  static readObject (jsonObject) {
+    this.index = jsonObject.index;
+    this.text = jsonObject.text;
+    this[Feature.types.part] = jsonObject[Feature.types.part];
+    return new Footnote(jsonObject.index, jsonObject.text, jsonObject[Feature.types.part])
+  }
 }
 
 /**
  * Detailed information about a match type.
  */
 class MatchData {
-    constructor() {
-        this.suffixMatch = false; // Whether two suffixes are the same.
-        this.fullMatch = false; // Whether two suffixes and all grammatical features, including part of speech, are the same.
-        this.matchedFeatures = []; // How many features matches each other.
-    }
+  constructor () {
+    this.suffixMatch = false; // Whether two suffixes are the same.
+    this.fullMatch = false; // Whether two suffixes and all grammatical features, including part of speech, are the same.
+    this.matchedFeatures = []; // How many features matches each other.
+  }
 
-    static readObject(jsonObject) {
-        let matchData = new MatchData();
-        matchData.suffixMatch = jsonObject.suffixMatch;
-        matchData.fullMatch = jsonObject.fullMatch;
-        for (let feature of jsonObject.matchedFeatures) {
-            matchData.matchedFeatures.push(feature);
-        }
-        return matchData;
+  static readObject (jsonObject) {
+    let matchData = new MatchData();
+    matchData.suffixMatch = jsonObject.suffixMatch;
+    matchData.fullMatch = jsonObject.fullMatch;
+    for (let feature of jsonObject.matchedFeatures) {
+      matchData.matchedFeatures.push(feature);
     }
+    return matchData
+  }
 }
 
-
 class ExtendedLanguageData {
-    constructor() {
-        this._type = undefined; // This is a base class
-    }
+  constructor () {
+    this._type = undefined; // This is a base class
+  }
 
-    static types() {
-        return {
-            EXTENDED_GREEK_DATA: "ExtendedGreekData"
-        }
+  static types () {
+    return {
+      EXTENDED_GREEK_DATA: 'ExtendedGreekData'
     }
+  }
 
-    static readObject(jsonObject) {
-        if (!jsonObject._type) {
-            throw new Error('Extended language data has no type information. Unable to deserialize.');
-        }
-        else if(jsonObject._type === ExtendedLanguageData.types().EXTENDED_GREEK_DATA) {
-            return ExtendedGreekData.readObject(jsonObject);
-        }
-        else {
-            throw new Error(`Unsupported extended language data of type "${jsonObject._type}".`);
-        }
+  static readObject (jsonObject) {
+    if (!jsonObject._type) {
+      throw new Error('Extended language data has no type information. Unable to deserialize.')
+    } else if (jsonObject._type === ExtendedLanguageData.types().EXTENDED_GREEK_DATA) {
+      return ExtendedGreekData.readObject(jsonObject)
+    } else {
+      throw new Error(`Unsupported extended language data of type "${jsonObject._type}".`)
     }
+  }
 }
 
 class ExtendedGreekData extends ExtendedLanguageData {
-    constructor() {
-        super();
-        this._type = ExtendedLanguageData.types().EXTENDED_GREEK_DATA; // For deserialization
-        this.primary = false;
-    }
+  constructor () {
+    super();
+    this._type = ExtendedLanguageData.types().EXTENDED_GREEK_DATA; // For deserialization
+    this.primary = false;
+  }
 
-    static readObject(jsonObject) {
-        let data = new ExtendedGreekData();
-        data.primary = jsonObject.primary;
-        return data;
-    }
+  static readObject (jsonObject) {
+    let data = new ExtendedGreekData();
+    data.primary = jsonObject.primary;
+    return data
+  }
 
-    merge(extendedGreekData) {
-        if (this.primary !== extendedGreekData.primary) {
-            console.log('Mismatch', this.primary, extendedGreekData.primary);
-        }
-        let merged = new ExtendedGreekData();
-        merged.primary = this.primary;
-        return merged;
+  merge (extendedGreekData) {
+    if (this.primary !== extendedGreekData.primary) {
+      console.log('Mismatch', this.primary, extendedGreekData.primary);
     }
+    let merged = new ExtendedGreekData();
+    merged.primary = this.primary;
+    return merged
+  }
 }
-
 
 /**
  * A return value for inflection queries
  */
 class WordData {
-    constructor(homonym) {
-        this.homonym = homonym;
-        this.definition = undefined;
-        this[Feature.types.part] = []; // What parts of speech are represented by this object.
-    }
+  constructor (homonym) {
+    this.homonym = homonym;
+    this.definition = undefined;
+    this[Feature.types.part] = []; // What parts of speech are represented by this object.
+  }
 
-    static readObject(jsonObject) {
-        let homonym = Homonym.readObject(jsonObject.homonym);
+  static readObject (jsonObject) {
+    let homonym = Homonym.readObject(jsonObject.homonym);
 
-        let wordData = new WordData(homonym);
-        wordData.definition = jsonObject.definition;
-        wordData[Feature.types.part] = jsonObject[Feature.types.part];
+    let wordData = new WordData(homonym);
+    wordData.definition = jsonObject.definition;
+    wordData[Feature.types.part] = jsonObject[Feature.types.part];
 
-        for (let part of wordData[Feature.types.part]) {
-            let partData = jsonObject[part];
-            wordData[part] = {};
+    for (let part of wordData[Feature.types.part]) {
+      let partData = jsonObject[part];
+      wordData[part] = {};
 
-            if (partData.suffixes) {
-                wordData[part].suffixes = [];
-                for (let suffix of partData.suffixes) {
-                    wordData[part].suffixes.push(Suffix.readObject(suffix));
-                }
-            }
-
-            if (partData.footnotes) {
-                wordData[part].footnotes = [];
-                for (let footnote of partData.footnotes) {
-                    wordData[part].footnotes.push(Footnote.readObject(footnote));
-                }
-            }
+      if (partData.suffixes) {
+        wordData[part].suffixes = [];
+        for (let suffix of partData.suffixes) {
+          wordData[part].suffixes.push(Suffix.readObject(suffix));
         }
+      }
 
-        return wordData;
+      if (partData.footnotes) {
+        wordData[part].footnotes = [];
+        for (let footnote of partData.footnotes) {
+          wordData[part].footnotes.push(Footnote.readObject(footnote));
+        }
+      }
     }
 
-    get word() {
-        return this.homonym.targetWord;
-    }
+    return wordData
+  }
 
-    set word(word) {
-        this.homonym.targetWord = word;
-    }
+  get word () {
+    return this.homonym.targetWord
+  }
 
-    get language() {
-        return this.homonym.language;
-    }
+  set word (word) {
+    this.homonym.targetWord = word;
+  }
+
+  get language () {
+    return this.homonym.language
+  }
 }
 
 /**
@@ -2078,14 +2060,14 @@ class WordData {
  * file content (a string) in case of success of with a status message
  * in case of failure.
  */
-let loadData = function loadData(filePath) {
-    return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", filePath);
-        xhr.onload = () => resolve(xhr.responseText);
-        xhr.onerror = () => reject(xhr.statusText);
-        xhr.send();
-    });
+let loadData = function loadData (filePath) {
+  return new Promise((resolve, reject) => {
+    const xhr = new window.XMLHttpRequest();
+    xhr.open('GET', filePath);
+    xhr.onload = () => resolve(xhr.responseText);
+    xhr.onerror = () => reject(xhr.statusText);
+    xhr.send();
+  })
 };
 
 let messages$1 = {
@@ -4047,7 +4029,6 @@ MessageFormat.defaultLocale = 'en';
  * Combines messages with the same locale code.
  */
 class MessageBundle {
-
   /**
    * Creates a message bundle (a list of messages) for a locale.
    * @param {string} locale - A locale code for a message group. IETF language tag format is recommended.
@@ -4080,8 +4061,7 @@ class MessageBundle {
   get (messageID, options = undefined) {
     if (this[messageID]) {
       return this[messageID].format(options)
-    }
-    else {
+    } else {
       // If message with the ID provided is not in translation data, generate a warning.
       return `Not in translation data: "${messageID}"`
     }
@@ -4100,7 +4080,6 @@ class MessageBundle {
  * Combines several message bundle for different locales.
  */
 class L10n {
-
   /**
    * Creates an object. If an array of message bundle data is provided, initializes an object with this data.
    * This function is chainable.
@@ -4156,53 +4135,6 @@ const messages = [
   new MessageBundle('en-US', messages$1),
   new MessageBundle('en-GB', messages$2)
 ];
-
-let classNames = {
-  cell: 'infl-cell',
-  widthPrefix: 'infl-cell--sp',
-  fullWidth: 'infl-cell--fw',
-  header: 'infl-cell--hdr',
-  highlight: 'infl-cell--hl',
-  hidden: 'hidden',
-  suffix: 'infl-suff',
-  suffixMatch: 'infl-suff--suffix-match',
-  suffixFullFeatureMatch: 'infl-suff--full-feature-match',
-  inflectionTable: 'infl-table',
-  wideView: 'infl-table--wide',
-  narrowViewsContainer: 'infl-table-narrow-views-cont',
-  narrowView: 'infl-table--narrow',
-  footnotesContainer: 'infl-footnotes'
-};
-
-let wideView = {
-  column: {
-    width: 1,
-    unit: 'fr'
-  }
-};
-
-let narrowView = {
-  column: {
-    width: 100,
-    unit: 'px'
-  }
-};
-
-let footnotes = {
-  id: 'inlection-table-footer'
-};
-
-let pageHeader = {
-  html: `
-        <button id="hide-empty-columns" class="switch-btn">Hide empty columns</button><button id="show-empty-columns" class="switch-btn hidden">Show empty columns</button>
-        <button id="hide-no-suffix-groups" class="switch-btn">Hide top-level groups with no suffix matches</button><button id="show-no-suffix-groups" class="switch-btn hidden">Show top-level groups with no suffix matches</button><br>
-        <p>Hover over the suffix to see its grammar features</p>
-        `,
-  hideEmptyColumnsBtnSel: '#hide-empty-columns',
-  showEmptyColumnsBtnSel: '#show-empty-columns',
-  hideNoSuffixGroupsBtnSel: '#hide-no-suffix-groups',
-  showNoSuffixGroupsBtnSel: '#show-no-suffix-groups'
-};
 
 var nounSuffixesCSV = "Ending,Number,Case,Declension,Gender,Type,Footnote\na,singular,nominative,1st,feminine,regular,\nē,singular,nominative,1st,feminine,irregular,\nēs,singular,nominative,1st,feminine,irregular,\nā,singular,nominative,1st,feminine,irregular,7\nus,singular,nominative,2nd,masculine feminine,regular,\ner,singular,nominative,2nd,masculine feminine,regular,\nir,singular,nominative,2nd,masculine feminine,regular,\n-,singular,nominative,2nd,masculine feminine,irregular,\nos,singular,nominative,2nd,masculine feminine,irregular,1\nōs,singular,nominative,2nd,masculine feminine,irregular,\nō,singular,nominative,2nd,masculine feminine,irregular,7\num,singular,nominative,2nd,neuter,regular,\nus,singular,nominative,2nd,neuter,irregular,10\non,singular,nominative,2nd,neuter,irregular,7\n-,singular,nominative,3rd,masculine feminine,regular,\nos,singular,nominative,3rd,masculine feminine,irregular,\nōn,singular,nominative,3rd,masculine feminine,irregular,7\n-,singular,nominative,3rd,neuter,regular,\nus,singular,nominative,4th,masculine feminine,regular,\nū,singular,nominative,4th,neuter,regular,\nēs,singular,nominative,5th,feminine,regular,\nae,singular,genitive,1st,feminine,regular,\nāī,singular,genitive,1st,feminine,irregular,1\nās,singular,genitive,1st,feminine,irregular,2\nēs,singular,genitive,1st,feminine,irregular,7\nī,singular,genitive,2nd,masculine feminine,regular,\nō,singular,genitive,2nd,masculine feminine,irregular,7\nī,singular,genitive,2nd,neuter,regular,\nis,singular,genitive,3rd,masculine feminine,regular,\nis,singular,genitive,3rd,neuter,regular,\nūs,singular,genitive,4th,masculine feminine,regular,\nuis,singular,genitive,4th,masculine feminine,irregular,1\nuos,singular,genitive,4th,masculine feminine,irregular,1\nī,singular,genitive,4th,masculine feminine,irregular,15\nūs,singular,genitive,4th,neuter,regular,\nēī,singular,genitive,5th,feminine,regular,\neī,singular,genitive,5th,feminine,regular,\nī,singular,genitive,5th,feminine,irregular,\nē,singular,genitive,5th,feminine,irregular,\nēs,singular,genitive,5th,feminine,irregular,6\nae,singular,dative,1st,feminine,regular,\nāī,singular,dative,1st,feminine,irregular,1\nō,singular,dative,2nd,masculine feminine,regular,\nō,singular,dative,2nd,neuter,regular,\nī,singular,dative,3rd,masculine feminine,regular,\ne,singular,dative,3rd,masculine feminine,irregular,17\nī,singular,dative,3rd,neuter,regular,\nūī,singular,dative,4th,masculine feminine,regular,\nū,singular,dative,4th,masculine feminine,regular,\nū,singular,dative,4th,neuter,regular,\nēī,singular,dative,5th,feminine,regular,\neī,singular,dative,5th,feminine,regular,\nī,singular,dative,5th,feminine,irregular,\nē,singular,dative,5th,feminine,irregular,6\nam,singular,accusative,1st,feminine,regular,\nēn,singular,accusative,1st,feminine,irregular,\nān,singular,accusative,1st,feminine,irregular,7\num,singular,accusative,2nd,masculine feminine,regular,\nom,singular,accusative,2nd,masculine feminine,irregular,1\nōn,singular,accusative,2nd,masculine feminine,irregular,7\num,singular,accusative,2nd,neuter,regular,\nus,singular,accusative,2nd,neuter,irregular,10\non,singular,accusative,2nd,neuter,irregular,7\nem,singular,accusative,3rd,masculine feminine,regular,\nim,singular,accusative,3rd,masculine feminine,irregular,11\na,singular,accusative,3rd,masculine feminine,irregular,7\n-,singular,accusative,3rd,neuter,regular,\num,singular,accusative,4th,masculine feminine,regular,\nū,singular,accusative,4th,neuter,regular,\nem,singular,accusative,5th,feminine,regular,\nā,singular,ablative,1st,feminine,regular,\nād,singular,ablative,1st,feminine,irregular,5\nē,singular,ablative,1st,feminine,irregular,7\nō,singular,ablative,2nd,masculine feminine,regular,\nōd,singular,ablative,2nd,masculine feminine,irregular,1\nō,singular,ablative,2nd,neuter,regular,\ne,singular,ablative,3rd,masculine feminine,regular,\nī,singular,ablative,3rd,masculine feminine,irregular,11\ne,singular,ablative,3rd,neuter,regular,\nī,singular,ablative,3rd,neuter,irregular,11\nū,singular,ablative,4th,masculine feminine,regular,\nūd,singular,ablative,4th,masculine feminine,irregular,1\nū,singular,ablative,4th,neuter,regular,\nē,singular,ablative,5th,feminine,regular,\nae,singular,locative,1st,feminine,regular,\nō,singular,locative,2nd,masculine feminine,regular,\nō,singular,locative,2nd,neuter,regular,\ne,singular,locative,3rd,masculine feminine,regular,\nī,singular,locative,3rd,masculine feminine,regular,\nī,singular,locative,3rd,neuter,regular,\nū,singular,locative,4th,masculine feminine,regular,\nū,singular,locative,4th,neuter,regular,\nē,singular,locative,5th,feminine,regular,\na,singular,vocative,1st,feminine,regular,\nē,singular,vocative,1st,feminine,irregular,\nā,singular,vocative,1st,feminine,irregular,7\ne,singular,vocative,2nd,masculine feminine,regular,\ner,singular,vocative,2nd,masculine feminine,regular,\nir,singular,vocative,2nd,masculine feminine,regular,\n-,singular,vocative,2nd,masculine feminine,irregular,\nī,singular,vocative,2nd,masculine feminine,irregular,8\nōs,singular,vocative,2nd,masculine feminine,irregular,\ne,singular,vocative,2nd,masculine feminine,irregular,7\num,singular,vocative,2nd,neuter,regular,\non,singular,vocative,2nd,neuter,irregular,7\n-,singular,vocative,3rd,masculine feminine,regular,\n-,singular,vocative,3rd,neuter,regular,\nus,singular,vocative,4th,masculine feminine,regular,\nū,singular,vocative,4th,neuter,regular,\nēs,singular,vocative,5th,feminine,regular,\nae,plural,nominative,1st,feminine,regular,\nī,plural,nominative,2nd,masculine feminine,regular,\noe,plural,nominative,2nd,masculine feminine,irregular,7 9\na,plural,nominative,2nd,neuter,regular,\nēs,plural,nominative,3rd,masculine feminine,regular,\nes,plural,nominative,3rd,masculine feminine,irregular,7\na,plural,nominative,3rd,neuter,regular,\nia,plural,nominative,3rd,neuter,irregular,11\nūs,plural,nominative,4th,masculine feminine,regular,\nua,plural,nominative,4th,neuter,regular,\nēs,plural,nominative,5th,feminine,regular,\nārum,plural,genitive,1st,feminine,regular,\num,plural,genitive,1st,feminine,irregular,3\nōrum,plural,genitive,2nd,masculine feminine,regular,\num,plural,genitive,2nd,masculine feminine,irregular,\nom,plural,genitive,2nd,masculine feminine,irregular,8\nōrum,plural,genitive,2nd,neuter,regular,\num,plural,genitive,2nd,neuter,irregular,\num,plural,genitive,3rd,masculine feminine,regular,\nium,plural,genitive,3rd,masculine feminine,irregular,11\nōn,plural,genitive,3rd,masculine feminine,irregular,7\num,plural,genitive,3rd,neuter,regular,\nium,plural,genitive,3rd,neuter,irregular,11\nuum,plural,genitive,4th,masculine feminine,regular,\num,plural,genitive,4th,masculine feminine,irregular,16\nuom,plural,genitive,4th,masculine feminine,irregular,1\nuum,plural,genitive,4th,neuter,regular,\nērum,plural,genitive,5th,feminine,regular,\nīs,plural,dative,1st,feminine,regular,\nābus,plural,dative,1st,feminine,irregular,4\neis,plural,dative,1st,feminine,irregular,6\nīs,plural,dative,2nd,masculine feminine,regular,\nīs,plural,dative,2nd,neuter,regular,\nibus,plural,dative,3rd,masculine feminine,regular,\nibus,plural,dative,3rd,neuter,regular,\nibus,plural,dative,4th,masculine feminine,regular,\nubus,plural,dative,4th,masculine feminine,irregular,14\nibus,plural,dative,4th,neuter,regular,\nēbus,plural,dative,5th,feminine,regular,\nās,plural,accusative,1st,feminine,regular,\nōs,plural,accusative,2nd,masculine feminine,regular,\na,plural,accusative,2nd,neuter,regular,\nēs,plural,accusative,3rd,masculine feminine,regular,\nīs,plural,accusative,3rd,masculine feminine,irregular,11\nas,plural,accusative,3rd,masculine feminine,irregular,7\na,plural,accusative,3rd,neuter,regular,\nia,plural,accusative,3rd,neuter,irregular,11\nūs,plural,accusative,4th,masculine feminine,regular,\nua,plural,accusative,4th,neuter,regular,\nēs,plural,accusative,5th,feminine,regular,\nīs,plural,ablative,1st,feminine,regular,\nābus,plural,ablative,1st,feminine,irregular,4\neis,plural,ablative,1st,feminine,irregular,6\nīs,plural,ablative,2nd,masculine feminine,regular,\nīs,plural,ablative,2nd,neuter,regular,\nibus,plural,ablative,3rd,masculine feminine,regular,\nibus,plural,ablative,3rd,neuter,regular,\nibus,plural,ablative,4th,masculine feminine,regular,\nubus,plural,ablative,4th,masculine feminine,irregular,14\nibus,plural,ablative,4th,neuter,regular,\nēbus,plural,ablative,5th,feminine,regular,\nīs,plural,locative,1st,feminine,regular,\nīs,plural,locative,2nd,masculine feminine,regular,\nīs,plural,locative,2nd,neuter,regular,\nibus,plural,locative,3rd,masculine feminine,regular,\nibus,plural,locative,3rd,neuter,regular,\nibus,plural,locative,4th,masculine feminine,regular,\nibus,plural,locative,4th,neuter,regular,\nēbus,plural,locative,5th,feminine,regular,\nae,plural,vocative,1st,feminine,regular,\nī,plural,vocative,2nd,masculine feminine,regular,\na,plural,vocative,2nd,neuter,regular,\nēs,plural,vocative,3rd,masculine feminine,regular,\na,plural,vocative,3rd,neuter,regular,\nia,plural,vocative,3rd,neuter,irregular,11\nūs,plural,vocative,4th,masculine feminine,regular,\nua,plural,vocative,4th,neuter,regular,\nēs,plural,vocative,5th,feminine,regular,";
 
@@ -5824,118 +5756,117 @@ let dataSet = new LanguageDataset(language);
 const importerName = 'csv';
 languageModel.features[types.declension].addImporter(importerName)
     .map('1st 2nd',
-      [ languageModel.features[types.declension][constants.ORD_1ST],
-        languageModel.features[types.declension][constants.ORD_2ND]
-      ]);
+  [ languageModel.features[types.declension][constants.ORD_1ST],
+    languageModel.features[types.declension][constants.ORD_2ND]
+  ]);
 languageModel.features[types.gender].addImporter(importerName)
     .map('masculine feminine',
-      [ languageModel.features[types.gender][constants.GEND_MASCULINE],
-        languageModel.features[types.gender][constants.GEND_FEMININE]
-      ]);
+  [ languageModel.features[types.gender][constants.GEND_MASCULINE],
+    languageModel.features[types.gender][constants.GEND_FEMININE]
+  ]);
 languageModel.features[types.tense].addImporter(importerName)
     .map('future_perfect', languageModel.features[types.tense][constants.TENSE_FUTURE_PERFECT]);
-const footnotes$1 = new FeatureType(types.footnote, [], language);
+const footnotes = new FeatureType(types.footnote, [], language);
 
-// endregion definition of grammatical features
+// endregion Definition of grammatical features
 
-// for noun and adjectives
-dataSet.addSuffixes = function(partofspeech, data) {
-    // some suffix values will mean a lack of suffix, they will be mapped to a null
-    let nosuffixvalue = '-';
+// For noun and adjectives
+dataSet.addSuffixes = function (partofspeech, data) {
+    // Some suffix values will mean a lack of suffix, they will be mapped to a null
+  let nosuffixvalue = '-';
 
-    // first row are headers
-    for (let i = 1; i < data.length; i++) {
-        let suffix = data[i][0];
-        // handle special suffix values
-        if (suffix === nosuffixvalue) {
-            suffix = null;
-        }
-
-        let features = [partofspeech,
-            languageModel.features[types.number].getFromImporter('csv',data[i][1]),
-            languageModel.features[types.grmCase].getFromImporter('csv', data[i][2]),
-            languageModel.features[types.declension].getFromImporter('csv',data[i][3]),
-            languageModel.features[types.gender].getFromImporter('csv',data[i][4]),
-            languageModel.features[types.type].getFromImporter('csv',data[i][5])];
-        if (data[i][6]) {
-            // there can be multiple footnote indexes separated by spaces
-            let indexes = data[i][6].split(' ').map(function(index) {
-                return footnotes$1.get(index);
-            });
-            features.push(...indexes);
-        }
-        this.addSuffix(suffix, features);
+    // First row are headers
+  for (let i = 1; i < data.length; i++) {
+    let suffix = data[i][0];
+        // Handle special suffix values
+    if (suffix === nosuffixvalue) {
+      suffix = null;
     }
-};
 
-// for verbs
-dataSet.addVerbSuffixes = function(partofspeech, data) {
-    // some suffix values will mean a lack of suffix, they will be mapped to a null
-    let nosuffixvalue = '-';
-
-    // first row are headers
-    for (let i = 1; i < data.length; i++) {
-        let suffix = data[i][0];
-        // handle special suffix values
-        if (suffix === nosuffixvalue) {
-            suffix = null;
-        }
-
-        let features = [partofspeech,
-            languageModel.features[types.conjugation].getFromImporter('csv',data[i][1]),
-            languageModel.features[types.voice].getFromImporter('csv',data[i][2]),
-            languageModel.features[types.mood].getFromImporter('csv',data[i][3]),
-            languageModel.features[types.tense].getFromImporter('csv',data[i][4]),
-            languageModel.features[types.number].getFromImporter('csv',data[i][5]),
-            languageModel.features[types.person].getFromImporter('csv',data[i][6])];
-
-        let grammartype = data[i][7];
-        // type information can be empty if no ending is provided
-        if (grammartype) {
-            features.push(languageModel.features[types.type].getFromImporter('csv',grammartype));
-        }
-        // footnotes
-        if (data[i][8]) {
-            // there can be multiple footnote indexes separated by spaces
-            let indexes = data[i][8].split(' ').map(function(index) {
-                return footnotes$1.get(index);
-            });
-            features.push(...indexes);
-        }
-        this.addSuffix(suffix, features);
+    let features = [partofspeech,
+      languageModel.features[types.number].getFromImporter('csv', data[i][1]),
+      languageModel.features[types.grmCase].getFromImporter('csv', data[i][2]),
+      languageModel.features[types.declension].getFromImporter('csv', data[i][3]),
+      languageModel.features[types.gender].getFromImporter('csv', data[i][4]),
+      languageModel.features[types.type].getFromImporter('csv', data[i][5])];
+    if (data[i][6]) {
+            // There can be multiple footnote indexes separated by spaces
+      let indexes = data[i][6].split(' ').map(function (index) {
+        return footnotes.get(index)
+      });
+      features.push(...indexes);
     }
+    this.addSuffix(suffix, features);
+  }
 };
 
-dataSet.addFootnotes = function(partofspeech, data) {
-    // first row are headers
-    for (let i = 1; i < data.length; i++) {
-        this.addFootnote(partofspeech, data[i][0], data[i][1]);
+// For verbs
+dataSet.addVerbSuffixes = function (partofspeech, data) {
+    // Some suffix values will mean a lack of suffix, they will be mapped to a null
+  let nosuffixvalue = '-';
+
+    // First row are headers
+  for (let i = 1; i < data.length; i++) {
+    let suffix = data[i][0];
+        // Handle special suffix values
+    if (suffix === nosuffixvalue) {
+      suffix = null;
     }
+
+    let features = [partofspeech,
+      languageModel.features[types.conjugation].getFromImporter('csv', data[i][1]),
+      languageModel.features[types.voice].getFromImporter('csv', data[i][2]),
+      languageModel.features[types.mood].getFromImporter('csv', data[i][3]),
+      languageModel.features[types.tense].getFromImporter('csv', data[i][4]),
+      languageModel.features[types.number].getFromImporter('csv', data[i][5]),
+      languageModel.features[types.person].getFromImporter('csv', data[i][6])];
+
+    let grammartype = data[i][7];
+        // Type information can be empty if no ending is provided
+    if (grammartype) {
+      features.push(languageModel.features[types.type].getFromImporter('csv', grammartype));
+    }
+        // Footnotes
+    if (data[i][8]) {
+            // There can be multiple footnote indexes separated by spaces
+      let indexes = data[i][8].split(' ').map(function (index) {
+        return footnotes.get(index)
+      });
+      features.push(...indexes);
+    }
+    this.addSuffix(suffix, features);
+  }
 };
 
-dataSet.loadData = function() {
-    // nouns
-    let partofspeech = languageModel.features[types.part][constants.POFS_NOUN];
-    let suffixes = papaparse.parse(nounSuffixesCSV, {});
-    this.addSuffixes(partofspeech, suffixes.data);
-    let footnotes = papaparse.parse(nounFootnotesCSV, {});
-    this.addFootnotes(partofspeech, footnotes.data);
-
-    // adjectives
-    partofspeech = languageModel.features[types.part][constants.POFS_ADJECTIVE];
-    suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
-    this.addSuffixes(partofspeech, suffixes.data);
-    footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
-    this.addFootnotes(partofspeech, footnotes.data);
-
-    // verbs
-    partofspeech = languageModel.features[types.part][constants.POFS_VERB];
-    suffixes = papaparse.parse(verbSuffixesCSV, {});
-    this.addVerbSuffixes(partofspeech, suffixes.data);
-    footnotes = papaparse.parse(verbFootnotesCSV, {});
-    this.addFootnotes(partofspeech, footnotes.data);
+dataSet.addFootnotes = function (partofspeech, data) {
+    // First row are headers
+  for (let i = 1; i < data.length; i++) {
+    this.addFootnote(partofspeech, data[i][0], data[i][1]);
+  }
 };
 
+dataSet.loadData = function () {
+    // Nouns
+  let partofspeech = languageModel.features[types.part][constants.POFS_NOUN];
+  let suffixes = papaparse.parse(nounSuffixesCSV, {});
+  this.addSuffixes(partofspeech, suffixes.data);
+  let footnotes = papaparse.parse(nounFootnotesCSV, {});
+  this.addFootnotes(partofspeech, footnotes.data);
+
+    // Adjectives
+  partofspeech = languageModel.features[types.part][constants.POFS_ADJECTIVE];
+  suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
+  this.addSuffixes(partofspeech, suffixes.data);
+  footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
+  this.addFootnotes(partofspeech, footnotes.data);
+
+    // Verbs
+  partofspeech = languageModel.features[types.part][constants.POFS_VERB];
+  suffixes = papaparse.parse(verbSuffixesCSV, {});
+  this.addVerbSuffixes(partofspeech, suffixes.data);
+  footnotes = papaparse.parse(verbFootnotesCSV, {});
+  this.addFootnotes(partofspeech, footnotes.data);
+};
 
 /**
  * decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
@@ -5944,69 +5875,69 @@ dataSet.loadData = function() {
  * @returns {suffix | null} if a match is found, returns a suffix object modified with some
  * additional information about a match. if no matches found, returns null.
  */
-dataSet.matcher = function(inflections, suffix) {
-    "use strict";
-    // all of those features must match between an inflection and an ending
-    let obligatoryMatches = [types.part];
+dataSet.matcher = function (inflections, suffix) {
+  'use strict';
+    // All of those features must match between an inflection and an ending
+  let obligatoryMatches = [types.part];
 
-    // any of those features must match between an inflection and an ending
-    let optionalMatches = [types.grmcase, types.declension, types.gender, types.number];
-    let bestMatchData = null; // information about the best match we would be able to find
+    // Any of those features must match between an inflection and an ending
+  let optionalMatches = [types.grmcase, types.declension, types.gender, types.number];
+  let bestMatchData = null; // information about the best match we would be able to find
 
     /*
-     there can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
+     There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
      but there could be multiple partial matches. so we should try to find the best match possible and return it.
      a fullfeature match is when one of inflections has all grammatical features fully matching those of a suffix
      */
-    for (let inflection of inflections) {
-        let matchData = new MatchData(); // Create a match profile
+  for (let inflection of inflections) {
+    let matchData = new MatchData(); // Create a match profile
 
-        if (inflection.suffix === suffix.value) {
-           matchData.suffixMatch = true;
-        }
+    if (inflection.suffix === suffix.value) {
+      matchData.suffixMatch = true;
+    }
 
         // Check obligatory matches
-        for (let feature of  obligatoryMatches) {
-            let featureMatch = suffix.featureMatch(feature, inflection[feature]);
-            //matchFound = matchFound && featureMatch;
+    for (let feature of obligatoryMatches) {
+      let featureMatch = suffix.featureMatch(feature, inflection[feature]);
+            // matchFound = matchFound && featureMatch;
 
-            if (!featureMatch) {
+      if (!featureMatch) {
                 // If an obligatory match is not found, there is no reason to check other items
-                break;
-            }
+        break
+      }
             // Inflection's value of this feature is matching the one of the suffix
-            matchData.matchedFeatures.push(feature);
-        }
+      matchData.matchedFeatures.push(feature);
+    }
 
-        if (matchData.matchedFeatures.length < obligatoryMatches.length) {
+    if (matchData.matchedFeatures.length < obligatoryMatches.length) {
             // Not all obligatory matches are found, this is not a match
-            break;
-        }
+      break
+    }
 
         // Check optional matches now
-        for (let feature of optionalMatches) {
-            let matchedValue = suffix.featureMatch(feature, inflection[feature]);
-            if (matchedValue) {
-                matchData.matchedFeatures.push(feature);
-            }
-        }
+    for (let feature of optionalMatches) {
+      let matchedValue = suffix.featureMatch(feature, inflection[feature]);
+      if (matchedValue) {
+        matchData.matchedFeatures.push(feature);
+      }
+    }
 
-        if (matchData.suffixMatch && (matchData.matchedFeatures.length === obligatoryMatches.length + optionalMatches.length)) {
+    if (matchData.suffixMatch && (matchData.matchedFeatures.length === obligatoryMatches.length + optionalMatches.length)) {
             // This is a full match
-            matchData.fullMatch = true;
+      matchData.fullMatch = true;
 
             // There can be only one full match, no need to search any further
-            suffix.match = matchData;
-            return suffix;
-        }
-        bestMatchData = this.bestMatch(bestMatchData, matchData);
+      suffix.match = matchData;
+      return suffix
     }
-    if (bestMatchData) {
+    bestMatchData = this.bestMatch(bestMatchData, matchData);
+  }
+  if (bestMatchData) {
         // There is some match found
-        suffix.match = bestMatchData;
-        return suffix;
-    }
-    return null;
+    suffix.match = bestMatchData;
+    return suffix
+  }
+  return null
 };
 
 /**
@@ -6015,34 +5946,79 @@ dataSet.matcher = function(inflections, suffix) {
  * @param {MatchData} matchB
  * @returns {MatchData} A best of two matches
  */
-dataSet.bestMatch = function(matchA, matchB) {
+dataSet.bestMatch = function (matchA, matchB) {
     // If one of the arguments is not set, return the other one
-    if (!matchA && matchB) {
-        return matchB;
-    }
+  if (!matchA && matchB) {
+    return matchB
+  }
 
-    if (!matchB && matchA) {
-        return matchA;
-    }
+  if (!matchB && matchA) {
+    return matchA
+  }
 
     // Suffix match has a priority
-    if (matchA.suffixMatch !== matchB.suffixMatch) {
-        if (matchA.suffixMatch > matchB.suffixMatch) {
-            return matchA;
-        }
-        else {
-            return matchB;
-        }
+  if (matchA.suffixMatch !== matchB.suffixMatch) {
+    if (matchA.suffixMatch > matchB.suffixMatch) {
+      return matchA
+    } else {
+      return matchB
     }
+  }
 
     // If same on suffix matche, compare by how many features matched
-    if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
+  if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
         // Arbitrarily return matchA if matches are the same
-        return matchA;
-    }
-    else {
-        return matchB;
-    }
+    return matchA
+  } else {
+    return matchB
+  }
+};
+
+let classNames = {
+  cell: 'infl-cell',
+  widthPrefix: 'infl-cell--sp',
+  fullWidth: 'infl-cell--fw',
+  header: 'infl-cell--hdr',
+  highlight: 'infl-cell--hl',
+  hidden: 'hidden',
+  suffix: 'infl-suff',
+  suffixMatch: 'infl-suff--suffix-match',
+  suffixFullFeatureMatch: 'infl-suff--full-feature-match',
+  inflectionTable: 'infl-table',
+  wideView: 'infl-table--wide',
+  narrowViewsContainer: 'infl-table-narrow-views-cont',
+  narrowView: 'infl-table--narrow',
+  footnotesContainer: 'infl-footnotes'
+};
+
+let wideView = {
+  column: {
+    width: 1,
+    unit: 'fr'
+  }
+};
+
+let narrowView = {
+  column: {
+    width: 100,
+    unit: 'px'
+  }
+};
+
+let footnotes$1 = {
+  id: 'inlection-table-footer'
+};
+
+let pageHeader = {
+  html: `
+        <button id="hide-empty-columns" class="switch-btn">Hide empty columns</button><button id="show-empty-columns" class="switch-btn hidden">Show empty columns</button>
+        <button id="hide-no-suffix-groups" class="switch-btn">Hide top-level groups with no suffix matches</button><button id="show-no-suffix-groups" class="switch-btn hidden">Show top-level groups with no suffix matches</button><br>
+        <p>Hover over the suffix to see its grammar features</p>
+        `,
+  hideEmptyColumnsBtnSel: '#hide-empty-columns',
+  showEmptyColumnsBtnSel: '#show-empty-columns',
+  hideNoSuffixGroupsBtnSel: '#hide-no-suffix-groups',
+  showNoSuffixGroupsBtnSel: '#show-no-suffix-groups'
 };
 
 class Cell {
@@ -6051,167 +6027,166 @@ class Cell {
      * @param {Suffix[]} suffixes - A list of suffixes that belongs to this cell.
      * @param {Feature[]} features - A list of features this cell corresponds to.
      */
-    constructor(suffixes, features) {
-        this.suffixes = suffixes;
-        if (!this.suffixes) {
-            this.suffixes = [];
-        }
-        this.features = features;
-        this.empty = (this.suffixes.length === 0);
-        this.suffixMatches = !!this.suffixes.find(element => {
-            if (element.match && element.match.suffixMatch) {
-                return element.match.suffixMatch;
-            }
-        });
-
-        this.column = undefined; // A column this cell belongs to
-        this.row = undefined; // A row this cell belongs to
-
-        this._index = undefined;
-
-        this.render();
+  constructor (suffixes, features) {
+    this.suffixes = suffixes;
+    if (!this.suffixes) {
+      this.suffixes = [];
     }
+    this.features = features;
+    this.empty = (this.suffixes.length === 0);
+    this.suffixMatches = !!this.suffixes.find(element => {
+      if (element.match && element.match.suffixMatch) {
+        return element.match.suffixMatch
+      }
+    });
+
+    this.column = undefined; // A column this cell belongs to
+    this.row = undefined; // A row this cell belongs to
+
+    this._index = undefined;
+
+    this.render();
+  }
 
     /**
      * Renders an element's HTML representation.
      */
-    render() {
-        let element = document.createElement('div');
-        element.classList.add(classNames.cell);
-        for (let [index, suffix] of this.suffixes.entries()) {
+  render () {
+    let element = document.createElement('div');
+    element.classList.add(classNames.cell);
+    for (let [index, suffix] of this.suffixes.entries()) {
             // Render each suffix
-            let suffixElement = document.createElement('a');
-            suffixElement.classList.add(classNames.suffix);
-            if (suffix.match && suffix.match.suffixMatch) {
-                suffixElement.classList.add(classNames.suffixMatch);
-            }
-            if (suffix.match && suffix.match.fullMatch) {
-                suffixElement.classList.add(classNames.suffixFullFeatureMatch);
-            }
-            let suffixValue = suffix.value? suffix.value: '-';
-            if (suffix.footnote && suffix.footnote.length) {
-                suffixValue += '[' + suffix.footnote + ']';
-            }
-            suffixElement.innerHTML = suffixValue;
-            element.appendChild(suffixElement);
-            if (index < this.suffixes.length - 1) {
-                element.appendChild(document.createTextNode(',\u00A0'));
-            }
-        }
-        this.wNode = element;
-        this.nNode = element.cloneNode(true);
+      let suffixElement = document.createElement('a');
+      suffixElement.classList.add(classNames.suffix);
+      if (suffix.match && suffix.match.suffixMatch) {
+        suffixElement.classList.add(classNames.suffixMatch);
+      }
+      if (suffix.match && suffix.match.fullMatch) {
+        suffixElement.classList.add(classNames.suffixFullFeatureMatch);
+      }
+      let suffixValue = suffix.value ? suffix.value : '-';
+      if (suffix.footnote && suffix.footnote.length) {
+        suffixValue += '[' + suffix.footnote + ']';
+      }
+      suffixElement.innerHTML = suffixValue;
+      element.appendChild(suffixElement);
+      if (index < this.suffixes.length - 1) {
+        element.appendChild(document.createTextNode(',\u00A0'));
+      }
     }
+    this.wNode = element;
+    this.nNode = element.cloneNode(true);
+  }
 
     /**
      * Returns an HTML element for a wide view.
      * @returns {HTMLElement}
      */
-    get wvNode() {
-        return this.wNode;
-    }
+  get wvNode () {
+    return this.wNode
+  }
 
     /**
      * Returns an HTML element for a narrow view.
      * @returns {HTMLElement}
      */
-    get nvNode() {
-        return this.nNode;
-    }
+  get nvNode () {
+    return this.nNode
+  }
 
     /**
      * Sets a unique index of the cell that can be used for cell identification via 'data-index' attribute.
      * @param {number} index - A unique cell index.
      */
-    set index(index) {
-        this._index = index;
-        this.wNode.dataset.index = this._index;
-        this.nNode.dataset.index = this._index;
-    }
+  set index (index) {
+    this._index = index;
+    this.wNode.dataset.index = this._index;
+    this.nNode.dataset.index = this._index;
+  }
 
     /**
      * A proxy for adding an event listener for both wide and narrow view HTML elements.
      * @param {string} type - Listener type.
      * @param {EventListener} listener - Event listener function.
      */
-    addEventListener(type, listener) {
-        this.wNode.addEventListener(type, listener);
-        this.nNode.addEventListener(type, listener);
-    }
+  addEventListener (type, listener) {
+    this.wNode.addEventListener(type, listener);
+    this.nNode.addEventListener(type, listener);
+  }
 
     /**
      * Hides an element.
      */
-    hide() {
-        if (!this.wNode.classList.contains(classNames.hidden)) {
-            this.wNode.classList.add(classNames.hidden);
-            this.nNode.classList.add(classNames.hidden);
-        }
+  hide () {
+    if (!this.wNode.classList.contains(classNames.hidden)) {
+      this.wNode.classList.add(classNames.hidden);
+      this.nNode.classList.add(classNames.hidden);
     }
+  }
 
     /**
      * Shows a previously hidden element.
      */
-    show() {
-        if (this.wNode.classList.contains(classNames.hidden)) {
-            this.wNode.classList.remove(classNames.hidden);
-            this.nNode.classList.remove(classNames.hidden);
-        }
+  show () {
+    if (this.wNode.classList.contains(classNames.hidden)) {
+      this.wNode.classList.remove(classNames.hidden);
+      this.nNode.classList.remove(classNames.hidden);
     }
+  }
 
     /**
      * Highlights a cell with color.
      */
-    highlight() {
-        if (!this.wNode.classList.contains(classNames.highlight)) {
-            this.wNode.classList.add(classNames.highlight);
-            this.nNode.classList.add(classNames.highlight);
-        }
+  highlight () {
+    if (!this.wNode.classList.contains(classNames.highlight)) {
+      this.wNode.classList.add(classNames.highlight);
+      this.nNode.classList.add(classNames.highlight);
     }
+  }
 
     /**
      * Removes highlighting from a previously highlighted cell.
      */
-    clearHighlighting() {
-        if (this.wNode.classList.contains(classNames.highlight)) {
-            this.wNode.classList.remove(classNames.highlight);
-            this.nNode.classList.remove(classNames.highlight);
-        }
+  clearHighlighting () {
+    if (this.wNode.classList.contains(classNames.highlight)) {
+      this.wNode.classList.remove(classNames.highlight);
+      this.nNode.classList.remove(classNames.highlight);
     }
+  }
 
     /**
      * Highlights a row and a column this cell belongs to.
      */
-    highlightRowAndColumn() {
-        if (!this.column) {
-            throw new Error('Column is undefined.');
-        }
-        if (!this.row) {
-            throw new Error('Row is undefined.');
-        }
-        this.column.highlight();
-        this.row.highlight();
+  highlightRowAndColumn () {
+    if (!this.column) {
+      throw new Error('Column is undefined.')
     }
+    if (!this.row) {
+      throw new Error('Row is undefined.')
+    }
+    this.column.highlight();
+    this.row.highlight();
+  }
 
     /**
      * Removes highlighting form a previously highlighted row and column.
      */
-    clearRowAndColumnHighlighting() {
-        if (!this.column) {
-            throw new Error('Column is undefined.');
-        }
-        if (!this.row) {
-            throw new Error('Row is undefined.');
-        }
-        this.column.clearHighlighting();
-        this.row.clearHighlighting();
+  clearRowAndColumnHighlighting () {
+    if (!this.column) {
+      throw new Error('Column is undefined.')
     }
+    if (!this.row) {
+      throw new Error('Row is undefined.')
+    }
+    this.column.clearHighlighting();
+    this.row.clearHighlighting();
+  }
 }
 
 /**
  * A cell that specifies a title for a row in an inflection table.
  */
 class RowTitleCell {
-
     /**
      * Initializes a row title cell.
      * @param {string} title - A text that will be shown within the cell.
@@ -6220,56 +6195,56 @@ class RowTitleCell {
      * @param {number} nvGroupQty - A number of narrow view groups. Because each group will be shown separately
      * and will have its own title cells, we need to create a copy of a title cell for each such group.
      */
-    constructor(title, groupingFeature, nvGroupQty) {
-        this.parent = undefined;
-        this.title = title;
-        this.feature = groupingFeature;
-        this.nvGroupQty = nvGroupQty;
+  constructor (title, groupingFeature, nvGroupQty) {
+    this.parent = undefined;
+    this.title = title;
+    this.feature = groupingFeature;
+    this.nvGroupQty = nvGroupQty;
 
-        this.render();
-    }
+    this.render();
+  }
 
     /**
      * Renders an element's HTML representation.
      */
-    render() {
+  render () {
         // Generate HTML representation for a wide view node
-        this.wNode = document.createElement('div');
-        this.wNode.classList.add(classNames.cell);
-        if (this.feature.formsColumn) {
-            this.wNode.classList.add(classNames.header);
-        }
-        if (this.feature.hasFullWidthRowTitle) {
+    this.wNode = document.createElement('div');
+    this.wNode.classList.add(classNames.cell);
+    if (this.feature.formsColumn) {
+      this.wNode.classList.add(classNames.header);
+    }
+    if (this.feature.hasFullWidthRowTitle) {
             // This cell is taking an entire row
-            this.wNode.classList.add(classNames.fullWidth);
-        }
-        if (this.feature.formsColumn && this.feature.groupFeatureList.titleColumnsQuantity > 1) {
-            this.wNode.classList.add(classNames.widthPrefix + this.feature.groupFeatureList.titleColumnsQuantity);
-        }
-        this.wNode.innerHTML = this.title;
+      this.wNode.classList.add(classNames.fullWidth);
+    }
+    if (this.feature.formsColumn && this.feature.groupFeatureList.titleColumnsQuantity > 1) {
+      this.wNode.classList.add(classNames.widthPrefix + this.feature.groupFeatureList.titleColumnsQuantity);
+    }
+    this.wNode.innerHTML = this.title;
 
         // Copy HTML representation to all narrow view nodes (each narrow view group has its own node)
-        this.nNodes = []; // Narrow nodes, one for each group
-        for (let i = 0; i < this.nvGroupQty; i++) {
-            this.nNodes.push(this.wNode.cloneNode(true));
-        }
+    this.nNodes = []; // Narrow nodes, one for each group
+    for (let i = 0; i < this.nvGroupQty; i++) {
+      this.nNodes.push(this.wNode.cloneNode(true));
     }
+  }
 
     /**
      * Returns an HTML element for a wide view
      * @returns {HTMLElement} HTML element for a wide view's cell.
      */
-    get wvNode() {
-        return this.wNode;
-    }
+  get wvNode () {
+    return this.wNode
+  }
 
     /**
      * Returns an array HTML element for narrow view groups
      * @returns {HTMLElement[]} Array of HTML elements for narrow view group's cells.
      */
-    getNvNode(index) {
-        return this.nNodes[index];
-    }
+  getNvNode (index) {
+    return this.nNodes[index]
+  }
 
     /**
      * Generates an empty cell placeholder of a certain width. Useful for situation when empty title cells need to be
@@ -6277,11 +6252,11 @@ class RowTitleCell {
      * @param {number} width - A number of columns placeholder cell will occupy.
      * @returns {HTMLElement} HTML element of a placeholder cell.
      */
-    static placeholder(width = 1) {
-        let placeholder = document.createElement('div');
-        placeholder.classList.add(classNames.cell, classNames.widthPrefix + width);
-        return placeholder;
-    }
+  static placeholder (width = 1) {
+    let placeholder = document.createElement('div');
+    placeholder.classList.add(classNames.cell, classNames.widthPrefix + width);
+    return placeholder
+  }
 
     /**
      * Some table layouts require multiple title cells to be shown for a row. These could be, for example, a title
@@ -6291,33 +6266,33 @@ class RowTitleCell {
      * tot the current title cell.
      * @returns {RowTitleCell[]} An array of title row cells representing a title cell hierarchy list.
      */
-    get hierarchyList() {
-        let parentCells = [];
-        if (this.parent) {
-            parentCells = this.parent.hierarchyList;
-        }
-        return parentCells.concat(this);
+  get hierarchyList () {
+    let parentCells = [];
+    if (this.parent) {
+      parentCells = this.parent.hierarchyList;
     }
+    return parentCells.concat(this)
+  }
 
     /**
      * Highlights this row title cell
      */
-    highlight() {
-        this.wNode.classList.add(classNames.highlight);
-        for (let nNode of this.nNodes) {
-            nNode.classList.add(classNames.highlight);
-        }
+  highlight () {
+    this.wNode.classList.add(classNames.highlight);
+    for (let nNode of this.nNodes) {
+      nNode.classList.add(classNames.highlight);
     }
+  }
 
     /**
      * Removes highlighting from this row title cell
      */
-    clearHighlighting() {
-        this.wNode.classList.remove(classNames.highlight);
-        for (let nNode of this.nNodes) {
-            nNode.classList.remove(classNames.highlight);
-        }
+  clearHighlighting () {
+    this.wNode.classList.remove(classNames.highlight);
+    for (let nNode of this.nNodes) {
+      nNode.classList.remove(classNames.highlight);
     }
+  }
 }
 
 /**
@@ -6330,265 +6305,263 @@ class HeaderCell {
      * @param {GroupFeatureType} groupingFeature - A feature that defines one or several columns this header forms.
      * @param {number} [span=1] - How many columns in a table this header cell forms.
      */
-    constructor(title, groupingFeature, span = 1) {
-        this.feature = groupingFeature;
-        this.title = title;
-        this.span = span;
+  constructor (title, groupingFeature, span = 1) {
+    this.feature = groupingFeature;
+    this.title = title;
+    this.span = span;
 
-        this.parent = undefined;
-        this.children = [];
-        this.columns = [];
+    this.parent = undefined;
+    this.children = [];
+    this.columns = [];
 
-        this.render();
-    }
+    this.render();
+  }
 
     /**
      * Renders an element's HTML representation.
      */
-    render() {
-        let element = document.createElement('div');
-        element.classList.add(classNames.cell, classNames.header, classNames.widthPrefix + this.span);
-        element.innerHTML = this.title;
-        this.wNode = element;
-        this.nNode = element.cloneNode(true);
-    }
+  render () {
+    let element = document.createElement('div');
+    element.classList.add(classNames.cell, classNames.header, classNames.widthPrefix + this.span);
+    element.innerHTML = this.title;
+    this.wNode = element;
+    this.nNode = element.cloneNode(true);
+  }
 
     /**
      * Returns an HTML element for a wide view
      * @returns {HTMLElement} HTML element for a wide view's cell.
      */
-    get wvNode() {
-        return this.wNode;
-    }
+  get wvNode () {
+    return this.wNode
+  }
 
     /**
      * Returns an HTML element for a narrow view
      * @returns {HTMLElement} HTML element for a narrow view's cell.
      */
-    get nvNode() {
-        return this.nNode;
-    }
+  get nvNode () {
+    return this.nNode
+  }
 
     /**
      * Registers a column that's being formed by this header cell. Adds column to itself and to its parent(s).
      * @param {Column} column - A column that is formed by this header cell.
      */
-    addColumn(column) {
-        this.columns = this.columns.concat([column]);
+  addColumn (column) {
+    this.columns = this.columns.concat([column]);
 
-        if (this.parent) {
-            this.parent.addColumn(column);
-        }
+    if (this.parent) {
+      this.parent.addColumn(column);
     }
+  }
 
     /**
      * Temporary changes a width of a header cell. This happens when one or several columns
      * that this header forms are hidden or shown.
      * @param value
      */
-    changeSpan(value) {
-        let currentWidthClass = classNames.widthPrefix + this.span;
-        this.span += value;
-        let newWidthClass = classNames.widthPrefix + this.span;
-        this.wNode.classList.replace(currentWidthClass, newWidthClass);
-        this.nNode.classList.replace(currentWidthClass, newWidthClass);
-    }
+  changeSpan (value) {
+    let currentWidthClass = classNames.widthPrefix + this.span;
+    this.span += value;
+    let newWidthClass = classNames.widthPrefix + this.span;
+    this.wNode.classList.replace(currentWidthClass, newWidthClass);
+    this.nNode.classList.replace(currentWidthClass, newWidthClass);
+  }
 
     /**
      * This function will notify all parents and children of a title column that some columns under this headers cell
      * changed their state (i.e. were hidden or shown). This way parents and children will be able to update their
      * states accordingly.
      */
-    columnStateChange() {
-        let visibleColumns = 0;
-        for (let column of this.columns) {
-            if (!column.hidden) {
-                visibleColumns++;
-            }
-        }
-        if (this.span !== visibleColumns) {
+  columnStateChange () {
+    let visibleColumns = 0;
+    for (let column of this.columns) {
+      if (!column.hidden) {
+        visibleColumns++;
+      }
+    }
+    if (this.span !== visibleColumns) {
             // Number of visible columns has been changed
-            let change = visibleColumns - this.span;
-            this.changeSpan(change);
+      let change = visibleColumns - this.span;
+      this.changeSpan(change);
 
             // Notify parents and children
-            if (this.children.length) {
-                for (let child of this.children) {
-                    child.columnStateChange();
-                }
-            }
-            if (this.parent) {
-                this.parent.columnStateChange();
-            }
+      if (this.children.length) {
+        for (let child of this.children) {
+          child.columnStateChange();
         }
+      }
+      if (this.parent) {
+        this.parent.columnStateChange();
+      }
     }
+  }
 
     /**
      * Highlights a header cell, its parent and children
      */
-    highlight() {
-        if (!this.wNode.classList.contains(classNames.highlight)) {
-            this.wNode.classList.add(classNames.highlight);
-            this.nNode.classList.add(classNames.highlight);
+  highlight () {
+    if (!this.wNode.classList.contains(classNames.highlight)) {
+      this.wNode.classList.add(classNames.highlight);
+      this.nNode.classList.add(classNames.highlight);
 
-            if (this.parent) {
-                this.parent.highlight();
-            }
-        }
+      if (this.parent) {
+        this.parent.highlight();
+      }
     }
+  }
 
     /**
      * Removes highlighting from a header cell, its parent and children
      */
-    clearHighlighting() {
-        if (this.wNode.classList.contains(classNames.highlight)) {
-            this.wNode.classList.remove(classNames.highlight);
-            this.nNode.classList.remove(classNames.highlight);
+  clearHighlighting () {
+    if (this.wNode.classList.contains(classNames.highlight)) {
+      this.wNode.classList.remove(classNames.highlight);
+      this.nNode.classList.remove(classNames.highlight);
 
-            if (this.parent) {
-                this.parent.clearHighlighting();
-            }
-        }
+      if (this.parent) {
+        this.parent.clearHighlighting();
+      }
     }
+  }
 }
 
 /**
  * Represent a column of cells in an inflection table.
  */
 class Column {
-
     /**
      * Initializes column with a provided set of cells.
      * @param {Cell} cells - Cells that are within this column.
      */
-    constructor(cells) {
-        this.cells = cells;
-        if (!cells) {
-            this.cells = [];
-        }
-        this._headerCell = undefined;
-        this.hidden = false;
-        this.empty = this.cells.every(cell => cell.empty);
-        this.suffixMatches = !!this.cells.find(cell => cell.suffixMatches);
-
-        for (let cell of this.cells) {
-            cell.column = this;
-        }
+  constructor (cells) {
+    this.cells = cells;
+    if (!cells) {
+      this.cells = [];
     }
+    this._headerCell = undefined;
+    this.hidden = false;
+    this.empty = this.cells.every(cell => cell.empty);
+    this.suffixMatches = !!this.cells.find(cell => cell.suffixMatches);
+
+    for (let cell of this.cells) {
+      cell.column = this;
+    }
+  }
 
     /**
      * Assigns a header cell to the column.
      * @param {HeaderCell} headerCell - A header cell of this column.
      */
-    set headerCell(headerCell) {
-        this._headerCell = headerCell;
-        headerCell.addColumn(this);
-    }
+  set headerCell (headerCell) {
+    this._headerCell = headerCell;
+    headerCell.addColumn(this);
+  }
 
     /**
      * Returns a number of cells within this column.
      * @returns {Number} A number of cells this column contains.
      */
-    get length() {
-        return this.cells.length;
-    }
+  get length () {
+    return this.cells.length
+  }
 
     /**
      * Hides the column. Notifies a header about a state change.
      */
-    hide() {
-        if (!this.hidden) {
-            this.hidden = true;
+  hide () {
+    if (!this.hidden) {
+      this.hidden = true;
 
-            for (let cell of this.cells) {
-                cell.hide();
-            }
-            if (this._headerCell) {
-                this._headerCell.columnStateChange();
-            }
-        }
+      for (let cell of this.cells) {
+        cell.hide();
+      }
+      if (this._headerCell) {
+        this._headerCell.columnStateChange();
+      }
     }
+  }
 
     /**
      * Shows the column. Notifies a header about a state change.
      */
-    show() {
-        if (this.hidden) {
-            this.hidden = false;
+  show () {
+    if (this.hidden) {
+      this.hidden = false;
 
-            for (let cell of this.cells) {
-                cell.show();
-            }
-            if (this._headerCell) {
-                this._headerCell.columnStateChange();
-            }
-        }
+      for (let cell of this.cells) {
+        cell.show();
+      }
+      if (this._headerCell) {
+        this._headerCell.columnStateChange();
+      }
     }
+  }
 
     /**
      * Highlights a column and its header.
      */
-    highlight() {
-        for (let cell of this.cells) {
-            cell.highlight();
-        }
-        if (this._headerCell) {
-            this._headerCell.highlight();
-        }
+  highlight () {
+    for (let cell of this.cells) {
+      cell.highlight();
     }
+    if (this._headerCell) {
+      this._headerCell.highlight();
+    }
+  }
 
     /**
      * Removes highlighting from a column and its header.
      */
-    clearHighlighting() {
-        for (let cell of this.cells) {
-            cell.clearHighlighting();
-        }
-        if (this._headerCell) {
-            this._headerCell.clearHighlighting();
-        }
+  clearHighlighting () {
+    for (let cell of this.cells) {
+      cell.clearHighlighting();
     }
+    if (this._headerCell) {
+      this._headerCell.clearHighlighting();
+    }
+  }
 }
 
 /**
  * Represents a row of cells
  */
 class Row {
-
     /**
      * Populates row with cells
      * @param {Cell[]} cells - Cells that belong to this row
      */
-    constructor(cells) {
-        this.cells = cells;
-        if (!cells) {
-            this.cells = [];
-        }
-        this.titleCell = undefined;
-
-        for (let cell of this.cells) {
-            cell.row = this;
-        }
+  constructor (cells) {
+    this.cells = cells;
+    if (!cells) {
+      this.cells = [];
     }
+    this.titleCell = undefined;
+
+    for (let cell of this.cells) {
+      cell.row = this;
+    }
+  }
 
     /**
      * Adds a cell to the row.
      * This is a chainable function.
      * @param {Cell} cell - A cell to be added to the row
      */
-    add(cell) {
-        cell.row = this;
-        this.cells.push(cell);
-        return this;
-    }
+  add (cell) {
+    cell.row = this;
+    this.cells.push(cell);
+    return this
+  }
 
     /**
      * Returns a number of cells in a row
      * @returns {Number} A number of cells in a row
      */
-    get length() {
-        return this.cells.length;
-    }
+  get length () {
+    return this.cells.length
+  }
 
     /**
      * Returns a portion of a cells array starting from `from` item and up to, but not including, `upto` element.
@@ -6600,44 +6573,44 @@ class Row {
      * @param {number} from
      * @param {number} upto
      */
-    slice(from, upto) {
-        let slice = new Row();
-        if (from < 0 && from > this.cells.length) {
-            throw new Error ('"from" parameter is out of range.');
-        }
-        if (upto < 0 && upto > this.cells.length) {
-            throw new Error ('"upto" parameter is out of range.');
-        }
-        for (let index = from; index < upto; index++) {
-            slice.cells.push(this.cells[index]);
-        }
-        slice.titleCell = this.titleCell;
-        return slice;
+  slice (from, upto) {
+    let slice = new Row();
+    if (from < 0 && from > this.cells.length) {
+      throw new Error('"from" parameter is out of range.')
     }
+    if (upto < 0 && upto > this.cells.length) {
+      throw new Error('"upto" parameter is out of range.')
+    }
+    for (let index = from; index < upto; index++) {
+      slice.cells.push(this.cells[index]);
+    }
+    slice.titleCell = this.titleCell;
+    return slice
+  }
 
     /**
      * Highlights all cells in a row, and a title cells
      */
-    highlight() {
-        for (let cell of this.cells) {
-            cell.highlight();
-        }
-        if (this.titleCell) {
-            this.titleCell.highlight();
-        }
+  highlight () {
+    for (let cell of this.cells) {
+      cell.highlight();
     }
+    if (this.titleCell) {
+      this.titleCell.highlight();
+    }
+  }
 
     /**
      * Removes highlighting from all cells in a row, and from a title cell
      */
-    clearHighlighting() {
-        for (let cell of this.cells) {
-            cell.clearHighlighting();
-        }
-        if (this.titleCell) {
-            this.titleCell.clearHighlighting();
-        }
+  clearHighlighting () {
+    for (let cell of this.cells) {
+      cell.clearHighlighting();
     }
+    if (this.titleCell) {
+      this.titleCell.clearHighlighting();
+    }
+  }
 }
 
 /**
@@ -6647,7 +6620,6 @@ class Row {
  * that is required for that.
  */
 class GroupFeatureType extends FeatureType {
-
     /**
      * GroupFeatureType extends FeatureType to serve as a grouping feature (i.e. a feature that forms
      * either a column or a row in an inflection table). For that, it adds some additional functionality,
@@ -6660,26 +6632,25 @@ class GroupFeatureType extends FeatureType {
      * a default one stored in FeatureType object (optional).
      * Use this parameter to redefine a deafult sort order for a type.
      */
-    constructor(featureType, titleMessageID, order = featureType.orderedFeatures) {
-        super(featureType.type, GroupFeatureType.featuresToValues(order), featureType.language);
+  constructor (featureType, titleMessageID, order = featureType.orderedFeatures) {
+    super(featureType.type, GroupFeatureType.featuresToValues(order), featureType.language);
 
-        this.groupTitle = titleMessageID;
-        this._groupType = undefined;
+    this.groupTitle = titleMessageID;
+    this._groupType = undefined;
 
-        this.groupFeatureList = undefined;
-
+    this.groupFeatureList = undefined;
 
         // Properties below are required to store information during tree creation
-        this.subgroups = []; // Each value of the feature
-        this.cells = []; // All cells within this group and below
-        this.parent = undefined;
-        this.header = undefined;
+    this.subgroups = []; // Each value of the feature
+    this.cells = []; // All cells within this group and below
+    this.parent = undefined;
+    this.header = undefined;
 
-        this._formsColumn = false;
-        this._formsRow = false;
-        this.hasColumnRowTitle = false; // Whether this feature has a title of a suffix row in the left-side column.
-        this.hasFullWidthRowTitle = false; // Whether this feature has a title of suffix rows that spans the whole table width.
-    }
+    this._formsColumn = false;
+    this._formsRow = false;
+    this.hasColumnRowTitle = false; // Whether this feature has a title of a suffix row in the left-side column.
+    this.hasFullWidthRowTitle = false; // Whether this feature has a title of suffix rows that spans the whole table width.
+  }
 
     /**
      * Converts a list of Feature objects into a list of strings that represent their values. Keeps tha original
@@ -6687,24 +6658,23 @@ class GroupFeatureType extends FeatureType {
      * @param {Feature[] | Feature[][]} features - An array of feature objects.
      * @return {string[] | strings[][]} A matching array of strings with feature values.
      */
-    static featuresToValues(features) {
-        return features.map( (feature) => {
-            if (Array.isArray(feature)) {
-                return feature.map( (feature) => feature.value );
-            }
-            else {
-                return feature.value;
-            }
-        });
-    }
+  static featuresToValues (features) {
+    return features.map((feature) => {
+      if (Array.isArray(feature)) {
+        return feature.map((feature) => feature.value)
+      } else {
+        return feature.value
+      }
+    })
+  }
 
     /**
      * This is a wrapper around orderedFeatures() that allows to set a custom feature order for particular columns.
      * @returns {Feature[] | Feature[][]} A sorted array of feature values.
      */
-    getOrderedFeatures(ancestorFeatures) {
-        return this.getOrderedValues(ancestorFeatures).map((value) => new Feature(value, this.type, this.language));
-    }
+  getOrderedFeatures (ancestorFeatures) {
+    return this.getOrderedValues(ancestorFeatures).map((value) => new Feature(value, this.type, this.language))
+  }
 
     /**
      * This is a wrapper around orderedValues() that allows to set a custom feature order for particular columns.
@@ -6712,60 +6682,60 @@ class GroupFeatureType extends FeatureType {
      * Redefine it to provide a custom grouping and sort order.
      * @returns {string[] | string[][]} A sorted array of feature values.
      */
-    getOrderedValues(ancestorFeatures) {
-        return this._orderIndex;
-    }
+  getOrderedValues (ancestorFeatures) {
+    return this._orderIndex
+  }
 
     /**
      * Whether this feature forms a columns group.
      * @returns {boolean} True if this feature forms a column.
      */
-    get formsColumn() {
-        return this._formsColumn;
-    }
+  get formsColumn () {
+    return this._formsColumn
+  }
 
     /**
      * Sets that this feature would form a column.
      * @param {boolean} value
      */
-    set formsColumn(value) {
-        this._formsColumn = value;
-        this._formsRow = !value; // Can't do both
-    }
+  set formsColumn (value) {
+    this._formsColumn = value;
+    this._formsRow = !value; // Can't do both
+  }
 
     /**
      * Whether this feature forms a row group.
      * @returns {boolean} True if this feature forms a row.
      */
-    get formsRow() {
-        return this._formsRow;
-    }
+  get formsRow () {
+    return this._formsRow
+  }
 
     /**
      * Sets that this feature would form a row.
      * @param {boolean} value
      */
-    set formsRow(value) {
-        this._formsRow = value;
-        this._formsColumn = !value; // Can't do both
-    }
+  set formsRow (value) {
+    this._formsRow = value;
+    this._formsColumn = !value; // Can't do both
+  }
 
     /**
      * How many groups this feature would form.
      * @returns {Number} A number of groupes formed by this feature.
      */
-    get size() {
-        return this.orderedValues.length;
-    }
+  get size () {
+    return this.orderedValues.length
+  }
 
     /**
      * Checks if two grouping features are of the same type.
      * @param {GroupFeatureType} groupingFeature - A grouping feature to compare with the current one.
      * @returns {boolean} True if grouping features are of the same type.
      */
-    isSameType(groupingFeature) {
-        return this.type === groupingFeature.type;
-    }
+  isSameType (groupingFeature) {
+    return this.type === groupingFeature.type
+  }
 
     /**
      * Creates a title cell for a feature from the current group.
@@ -6773,118 +6743,116 @@ class GroupFeatureType extends FeatureType {
      * @param {number} nvGroupQty - A number of narrow view groups.
      * @returns {RowTitleCell} A created RowTitleCell object.
      */
-    createTitleCell(title, nvGroupQty) {
-        return new RowTitleCell(title, this, nvGroupQty);
-    }
+  createTitleCell (title, nvGroupQty) {
+    return new RowTitleCell(title, this, nvGroupQty)
+  }
 }
-
 
 /**
  * Holds a list of all grouping features of a table.
  */
 class GroupFeatureList extends FeatureList {
-
     /**
      * Initializes object with an array of grouping feature objects.
      * @param {GroupFeatureType[]} features - An array of features that form a table.
      * An order of features defines in what order a table tree would be built.
      */
-    constructor(features) {
-        super(features);
-        this._columnFeatures = []; // Features that group cells into columns
-        this._rowFeatures = []; // Features that group cells into rows
+  constructor (features) {
+    super(features);
+    this._columnFeatures = []; // Features that group cells into columns
+    this._rowFeatures = []; // Features that group cells into rows
 
-        this.forEach((feature) => feature.groupFeatureList = this);
-    }
+    this.forEach((feature) => { feature.groupFeatureList = this; });
+  }
 
     /**
      * Return a list of all grouping features that form columns.
      * @returns {GroupFeatureType[]} - An array of grouping features.
      */
-    get columnFeatures() {
-        return this._columnFeatures;
-    }
+  get columnFeatures () {
+    return this._columnFeatures
+  }
 
     /**
      * Defines what features form columns. An order of items specifies an order in which columns be shown.
      * @param {Feature[] | GroupingFeature[]} features - What features form columns and what order
      * these columns would follow.
      */
-    set columns(features) {
-        for (let feature of features) {
-            let matchingFeature = this.ofType(feature.type);
-            if (!matchingFeature) {
-                throw new Error(`Feature of ${feature.type} is not found.`)
-            }
-            matchingFeature.formsColumn = true;
-            this._columnFeatures.push(matchingFeature);
-        }
+  set columns (features) {
+    for (let feature of features) {
+      let matchingFeature = this.ofType(feature.type);
+      if (!matchingFeature) {
+        throw new Error(`Feature of ${feature.type} is not found.`)
+      }
+      matchingFeature.formsColumn = true;
+      this._columnFeatures.push(matchingFeature);
     }
+  }
 
     /**
      * Returns a first column feature item.
      * @returns {GroupFeatureType} A fist column feature.
      */
-    get firstColumnFeature() {
-        if (this._columnFeatures && this._columnFeatures.length) {
-            return this._columnFeatures[0];
-        }
+  get firstColumnFeature () {
+    if (this._columnFeatures && this._columnFeatures.length) {
+      return this._columnFeatures[0]
     }
+  }
 
     /**
      * Returns a last column feature item.
      * @returns {GroupFeatureType} A last column feature.
      */
-    get lastColumnFeature() {
-        if (this._columnFeatures && this._columnFeatures.length) {
-            return this._columnFeatures[this._columnFeatures.length - 1];
-        }
+  get lastColumnFeature () {
+    if (this._columnFeatures && this._columnFeatures.length) {
+      return this._columnFeatures[this._columnFeatures.length - 1]
     }
+  }
 
     /**
      * Return a list of all grouping features that form rows.
      * @returns {GroupFeatureType[]} - An array of grouping rows.
      */
-    get rowFeatures() {
-        return this._rowFeatures;
-    }
+  get rowFeatures () {
+    return this._rowFeatures
+  }
 
     /**
      * Defines what features form rows. An order of items specifies an order in which columns be shown.
      * @param {Feature[] | GroupingFeature[]} features - What features form rows and what order
      * these rows would follow.
      */
-    set rows(features) {
-        for (let feature of features) {
-            let matchingFeature = this.ofType(feature.type);
-            if (!matchingFeature) {
-                throw new Error(`Feature of ${feature.type} is not found.`)
-            }
-            matchingFeature.formsRow = true;
-            this._rowFeatures.push(matchingFeature);
-        }
-        return this;
+  set rows (features) {
+    for (let feature of features) {
+      let matchingFeature = this.ofType(feature.type);
+      if (!matchingFeature) {
+        throw new Error(`Feature of ${feature.type} is not found.`)
+      }
+      matchingFeature.formsRow = true;
+      this._rowFeatures.push(matchingFeature);
     }
+    return this
+  }
 
     /**
      * Returns a first row feature item.
      * @returns {GroupFeatureType} A fist row feature.
      */
-    get firstRowFeature() {
-        if (this._rowFeatures && this._rowFeatures.length) {
-            return this._rowFeatures[0];
-        }
+  get firstRowFeature () {
+    if (this._rowFeatures && this._rowFeatures.length) {
+      return this._rowFeatures[0]
     }
+  }
 
     /**
      * Returns a last row feature item.
      * @returns {GroupFeatureType} A last row feature.
      */
-    get lastRowFeature() {
-        if (this._rowFeatures && this._rowFeatures.length) {
-            return this._rowFeatures[this._rowFeatures.length - 1];
-        }
+  get lastRowFeature () {
+    if (this._rowFeatures && this._rowFeatures.length) {
+      return this._rowFeatures[this._rowFeatures.length - 1]
     }
+  }
 
     /**
      * Defines what are the titles of suffix cell rows within a table body.
@@ -6892,15 +6860,15 @@ class GroupFeatureList extends FeatureList {
      * Full width titles (see below) does not need to be specified here.
      * @param {Feature | GroupingFeature} features - What suffix row titles this table would have.
      */
-    set columnRowTitles(features) {
-        for (let feature of features) {
-            let matchingFeature = this.ofType(feature.type);
-            if (!matchingFeature) {
-                throw new Error(`Feature of ${feature.type} is not found.`)
-            }
-            matchingFeature.hasColumnRowTitle = true;
-        }
+  set columnRowTitles (features) {
+    for (let feature of features) {
+      let matchingFeature = this.ofType(feature.type);
+      if (!matchingFeature) {
+        throw new Error(`Feature of ${feature.type} is not found.`)
+      }
+      matchingFeature.hasColumnRowTitle = true;
     }
+  }
 
     /**
      * In inflection tables, titles of features are usually located in left-side columns. However, some titles that
@@ -6908,63 +6876,61 @@ class GroupFeatureList extends FeatureList {
      * what those features are.
      * @param {Feature | GroupingFeature} features - What feature titles would take a whole row
      */
-    set fullWidthRowTitles(features) {
-        for (let feature of features) {
-            let matchingFeature = this.ofType(feature.type);
-            if (!matchingFeature) {
-                throw new Error(`Feature of ${feature.type} is not found.`)
-            }
-            matchingFeature.hasFullWidthRowTitle = true;
-        }
+  set fullWidthRowTitles (features) {
+    for (let feature of features) {
+      let matchingFeature = this.ofType(feature.type);
+      if (!matchingFeature) {
+        throw new Error(`Feature of ${feature.type} is not found.`)
+      }
+      matchingFeature.hasFullWidthRowTitle = true;
     }
+  }
 
     /**
      * Returns a quantity of grouping features.
      * @returns {number} - A number of grouping features.
      */
-    get length() {
-        return this._features.length;
-    }
+  get length () {
+    return this._features.length
+  }
 
     /**
      * Calculate a number of title columns.
      * @returns {number} A number of title columns.
      */
-    get titleColumnsQuantity() {
-        let quantity = 0;
-        for (let feature of this._features) {
-            if (feature.hasColumnRowTitle) {
-                quantity++;
-            }
-        }
-        return quantity;
+  get titleColumnsQuantity () {
+    let quantity = 0;
+    for (let feature of this._features) {
+      if (feature.hasColumnRowTitle) {
+        quantity++;
+      }
     }
+    return quantity
+  }
 }
 
 /**
  * Stores group data during feature tree construction.
  */
 class NodeGroup {
-
     /**
      * Creates feature group data structures.
      */
-    constructor() {
-        this.subgroups = []; // Each value of the feature
-        this.cells = []; // All cells within this group and below
-        this.parent = undefined;
-        this.header = undefined;
+  constructor () {
+    this.subgroups = []; // Each value of the feature
+    this.cells = []; // All cells within this group and below
+    this.parent = undefined;
+    this.header = undefined;
 
-        this.groupFeatureType = undefined; // Defines a feature type that forms a tree level this node is in.
-        this.ancestorFeatures = undefined; // Defines feature values of this node's parents.
-    }
+    this.groupFeatureType = undefined; // Defines a feature type that forms a tree level this node is in.
+    this.ancestorFeatures = undefined; // Defines feature values of this node's parents.
+  }
 }
 
 /**
  * A representation of a table that is shown on wide screens (desktops).
  */
 class WideView {
-
     /**
      * Initializes a wide view.
      * @param {Column[]} columns - Table columns.
@@ -6972,69 +6938,68 @@ class WideView {
      * @param {Row[]} headers - Table headers.
      * @param {number} titleColumnQty - Number of title columns in a table.
      */
-    constructor(columns, rows, headers, titleColumnQty) {
-        this.columns = columns;
-        this.rows = rows;
-        this.headers = headers;
-        this.titleColumnQty = titleColumnQty;
-        this.nodes = document.createElement('div');
-        this.nodes.classList.add(classNames.inflectionTable, classNames.wideView);
-    }
+  constructor (columns, rows, headers, titleColumnQty) {
+    this.columns = columns;
+    this.rows = rows;
+    this.headers = headers;
+    this.titleColumnQty = titleColumnQty;
+    this.nodes = document.createElement('div');
+    this.nodes.classList.add(classNames.inflectionTable, classNames.wideView);
+  }
 
     /**
      * Calculates a number of visible columns in this view.
      * @returns {number} A number of visible columns.
      */
-    get visibleColumnQty() {
-        let qty = 0;
-        for (let column of this.columns) {
-            if (!column.hidden) {
-                qty++;
-            }
-        }
-        return qty;
+  get visibleColumnQty () {
+    let qty = 0;
+    for (let column of this.columns) {
+      if (!column.hidden) {
+        qty++;
+      }
     }
+    return qty
+  }
 
     /**
      * Renders an HTML representation of a wide table view.
      * @returns {HTMLElement} A rendered HTML Element.
      */
-    render() {
+  render () {
         // Remove any previously inserted nodes
-        this.nodes.innerHTML = '';
+    this.nodes.innerHTML = '';
 
-        for (let row of this.headers) {
-            this.nodes.appendChild(row.titleCell.wvNode);
-            for (let cell of row.cells) {
-                this.nodes.appendChild(cell.wvNode);
-            }
-        }
-
-        for (let row of this.rows) {
-            let titleCells = row.titleCell.hierarchyList;
-            if (titleCells.length < this.titleColumnQty) {
-                this.nodes.appendChild(RowTitleCell.placeholder(this.titleColumnQty - titleCells.length));
-            }
-            for (let titleCell of titleCells) {
-                this.nodes.appendChild(titleCell.wvNode);
-            }
-
-            for (let cell of row.cells) {
-                this.nodes.appendChild(cell.wvNode);
-            }
-        }
-        this.nodes.style.gridTemplateColumns = 'repeat(' + (this.visibleColumnQty + this.titleColumnQty) + ', '
-            + wideView.column.width + wideView.column.unit + ')';
-
-        return this.nodes;
+    for (let row of this.headers) {
+      this.nodes.appendChild(row.titleCell.wvNode);
+      for (let cell of row.cells) {
+        this.nodes.appendChild(cell.wvNode);
+      }
     }
+
+    for (let row of this.rows) {
+      let titleCells = row.titleCell.hierarchyList;
+      if (titleCells.length < this.titleColumnQty) {
+        this.nodes.appendChild(RowTitleCell.placeholder(this.titleColumnQty - titleCells.length));
+      }
+      for (let titleCell of titleCells) {
+        this.nodes.appendChild(titleCell.wvNode);
+      }
+
+      for (let cell of row.cells) {
+        this.nodes.appendChild(cell.wvNode);
+      }
+    }
+    this.nodes.style.gridTemplateColumns = 'repeat(' + (this.visibleColumnQty + this.titleColumnQty) + ', ' +
+            wideView.column.width + wideView.column.unit + ')';
+
+    return this.nodes
+  }
 }
 
 /**
  * A representation of a table that is shown on narrow screens (mobile devices).
  */
 class NarrowView {
-
     /**
      * Initializes a narrow view.
      * @param {number} groupQty - A number of visible groups (sub tables) within a narrow view.
@@ -7043,46 +7008,46 @@ class NarrowView {
      * @param {Row[]} headers - Table headers.
      * @param {number} titleColumnQty - Number of title columns in a table.
      */
-    constructor(groupQty, columns, rows, headers, titleColumnQty) {
-        this.columns = columns;
-        this.rows = rows;
-        this.headers = headers;
-        this.titleColumnQty = titleColumnQty;
-        this.groups = [];
-        this.groupQty = groupQty;
-        this.groupSize = 0;
-        if (groupQty) {
-            this.groupSize = this.columns.length / groupQty;
-        }
-
-        this.nodes = document.createElement('div');
-        this.nodes.classList.add(classNames.narrowViewsContainer);
-
-        for (let [index, headerCell] of this.headers[0].cells.entries()) {
-            this.createGroup(index, headerCell);
-        }
+  constructor (groupQty, columns, rows, headers, titleColumnQty) {
+    this.columns = columns;
+    this.rows = rows;
+    this.headers = headers;
+    this.titleColumnQty = titleColumnQty;
+    this.groups = [];
+    this.groupQty = groupQty;
+    this.groupSize = 0;
+    if (groupQty) {
+      this.groupSize = this.columns.length / groupQty;
     }
+
+    this.nodes = document.createElement('div');
+    this.nodes.classList.add(classNames.narrowViewsContainer);
+
+    for (let [index, headerCell] of this.headers[0].cells.entries()) {
+      this.createGroup(index, headerCell);
+    }
+  }
 
     /**
      * Creates a group within a table.
      * @returns {NarrowViewGroup} A newly created group.
      */
-    createGroup(index, headerCell) {
-        let group = new NarrowViewGroup(index, this.headers, this.rows, this.titleColumnQty);
-        this.nodes.appendChild(group.nodes);
-        this.groups.push(group);
-    }
+  createGroup (index, headerCell) {
+    let group = new NarrowViewGroup(index, this.headers, this.rows, this.titleColumnQty);
+    this.nodes.appendChild(group.nodes);
+    this.groups.push(group);
+  }
 
     /**
      * Generates an HTML representation of a view.
      * @returns {HTMLElement} - HTML representation of a view.
      */
-    render() {
-        for (let group of this.groups) {
-            group.render();
-        }
-        return this.nodes;
+  render () {
+    for (let group of this.groups) {
+      group.render();
     }
+    return this.nodes
+  }
 }
 
 /**
@@ -7103,115 +7068,112 @@ class NarrowViewGroup {
      * @param {Row[]} rows - Table rows.
      * @param {number} titleColumnQty - Number of title columns in a table.
      */
-    constructor(index, headers, rows, titleColumnQty) {
-        this.index = index;
-        this.columns = headers[0].cells[index].columns;
-        this.groupSize = this.columns.length;
-        let columnsStartIndex = this.columns[0].index;
-        let columnsEndIndex = this.columns[this.columns.length - 1].index;
+  constructor (index, headers, rows, titleColumnQty) {
+    this.index = index;
+    this.columns = headers[0].cells[index].columns;
+    this.groupSize = this.columns.length;
+    let columnsStartIndex = this.columns[0].index;
+    let columnsEndIndex = this.columns[this.columns.length - 1].index;
 
-        this.rows = [];
-        for (let row of rows) {
-            this.rows.push(row.slice(columnsStartIndex, columnsEndIndex + 1));
-        }
-        this.headers = [];
+    this.rows = [];
+    for (let row of rows) {
+      this.rows.push(row.slice(columnsStartIndex, columnsEndIndex + 1));
+    }
+    this.headers = [];
         /**
          * Since we group by the first column feature, there will be a single feature in a first header row,
          * its children in the second row, children of its children in a third row and so on.
          */
-        for (let [headerIndex, headerRow] of headers.entries()) {
-            let row = new Row();
-            row.titleCell = headerRow.titleCell;
-            if (headerIndex === 0) {
-                row.cells.push(headerRow.cells[index]);
-            }
-            else {
-                for (let headerCell of this.headers[headerIndex - 1].cells) {
-                    row.cells = row.cells.concat(headerCell.children);
-                }
-            }
-            this.headers.push(row);
+    for (let [headerIndex, headerRow] of headers.entries()) {
+      let row = new Row();
+      row.titleCell = headerRow.titleCell;
+      if (headerIndex === 0) {
+        row.cells.push(headerRow.cells[index]);
+      } else {
+        for (let headerCell of this.headers[headerIndex - 1].cells) {
+          row.cells = row.cells.concat(headerCell.children);
         }
-        this.titleColumnQty = titleColumnQty;
-
-        this.nodes = document.createElement('div');
-        this.nodes.classList.add(classNames.inflectionTable, classNames.narrowView);
+      }
+      this.headers.push(row);
     }
+    this.titleColumnQty = titleColumnQty;
+
+    this.nodes = document.createElement('div');
+    this.nodes.classList.add(classNames.inflectionTable, classNames.narrowView);
+  }
 
     /**
      * Calculates a number of visible columns in this view.
      * @returns {number} A number of visible columns.
      */
-    get visibleColumnQty() {
-        let qty = 0;
-        for (let column of this.columns) {
-            if (!column.hidden) {
-                qty++;
-            }
-        }
-        return qty;
+  get visibleColumnQty () {
+    let qty = 0;
+    for (let column of this.columns) {
+      if (!column.hidden) {
+        qty++;
+      }
     }
+    return qty
+  }
 
     /**
      * Renders an HTML representation of a narrow view group.
      */
-    render() {
-        this.nodes.innerHTML = '';
+  render () {
+    this.nodes.innerHTML = '';
 
-        if (this.visibleColumnQty) {
+    if (this.visibleColumnQty) {
             // This group is visible
-            for (let headerRow of this.headers) {
-                this.nodes.appendChild(headerRow.titleCell.getNvNode(this.index));
-                for (let headerCell of headerRow.cells) {
-                    this.nodes.appendChild(headerCell.nvNode);
-                }
-            }
-
-            for (let row of this.rows) {
-                let titleCells = row.titleCell.hierarchyList;
-                if (titleCells.length < this.titleColumnQty) {
-                    this.nodes.appendChild(RowTitleCell.placeholder(this.titleColumnQty - titleCells.length));
-                }
-                for (let titleCell of titleCells) {
-                    this.nodes.appendChild(titleCell.getNvNode(this.index));
-                }
-
-                for (let cell of row.cells) {
-                    this.nodes.appendChild(cell.nvNode);
-                }
-            }
-            this.nodes.classList.remove(classNames.hidden);
-            this.nodes.style.gridTemplateColumns = 'repeat(' + (this.visibleColumnQty + this.titleColumnQty) + ', '
-                + narrowView.column.width + narrowView.column.unit + ')';
-            this.nodes.style.width = (this.visibleColumnQty + this.titleColumnQty) * narrowView.column.width
-                + narrowView.column.unit;
+      for (let headerRow of this.headers) {
+        this.nodes.appendChild(headerRow.titleCell.getNvNode(this.index));
+        for (let headerCell of headerRow.cells) {
+          this.nodes.appendChild(headerCell.nvNode);
         }
-        else {
+      }
+
+      for (let row of this.rows) {
+        let titleCells = row.titleCell.hierarchyList;
+        if (titleCells.length < this.titleColumnQty) {
+          this.nodes.appendChild(RowTitleCell.placeholder(this.titleColumnQty - titleCells.length));
+        }
+        for (let titleCell of titleCells) {
+          this.nodes.appendChild(titleCell.getNvNode(this.index));
+        }
+
+        for (let cell of row.cells) {
+          this.nodes.appendChild(cell.nvNode);
+        }
+      }
+      this.nodes.classList.remove(classNames.hidden);
+      this.nodes.style.gridTemplateColumns = 'repeat(' + (this.visibleColumnQty + this.titleColumnQty) + ', ' +
+                narrowView.column.width + narrowView.column.unit + ')';
+      this.nodes.style.width = (this.visibleColumnQty + this.titleColumnQty) * narrowView.column.width +
+                narrowView.column.unit;
+    } else {
             // This group is hidden
-            this.nodes.classList.add(classNames.hidden);
-        }
+      this.nodes.classList.add(classNames.hidden);
     }
+  }
 }
 
 /**
  * Represents an inflection table.
  */
 class Table {
-
     /**
      * Initializes an inflection table.
      * @param {GroupFeatureType[]} features - An array of grouping features. An order of elements in this array
      */
-    constructor(features) {
-        this.features = new GroupFeatureList(features);
-        this.emptyColumnsHidden = false;
-        this.cells = []; // Will be populated by groupByFeature()
+  constructor (features) {
+    this.features = new GroupFeatureList(features);
+    this.emptyColumnsHidden = false;
+    this.cells = []; // Will be populated by groupByFeature()
 
         /*
         This is a special filter function that, if defined will do additional filtering of suffixes within a cell.
          */
-        this.suffixCellFilter = undefined;
-    }
+    this.suffixCellFilter = undefined;
+  }
 
     /**
      * Creates a table tree and other data structures (columns, rows, headers).
@@ -7219,60 +7181,60 @@ class Table {
      * @param {Suffix[]} suffixes - An array of suffixes to build table from.
      * @returns {Table} Reference to self for chaining.
      */
-    construct(suffixes) {
-        this.suffixes = suffixes;
-        this.tree = this.groupByFeature(suffixes);
-        this.headers = this.constructHeaders();
-        this.columns = this.constructColumns();
-        this.rows = this.constructRows();
-        this.emptyColumnsHidden = false;
-        return this;
-    }
+  construct (suffixes) {
+    this.suffixes = suffixes;
+    this.tree = this.groupByFeature(suffixes);
+    this.headers = this.constructHeaders();
+    this.columns = this.constructColumns();
+    this.rows = this.constructRows();
+    this.emptyColumnsHidden = false;
+    return this
+  }
 
     /**
      * Builds wide and narrow views of the table.
      * This function is chainabe.
      * @returns {Table} Reference to self for chaining.
      */
-    constructViews() {
-        this.wideView = new WideView(this.columns, this.rows, this.headers, this.titleColumnQty);
-        this.narrowView = new NarrowView(
+  constructViews () {
+    this.wideView = new WideView(this.columns, this.rows, this.headers, this.titleColumnQty);
+    this.narrowView = new NarrowView(
             this.features.firstColumnFeature.size, this.columns, this.rows, this.headers, this.titleColumnQty);
-        return this;
-    }
+    return this
+  }
 
     /**
      * Returns a number of columns with suffix cells in a table.
      * @returns {number} A number of columns with suffix cells in a table.
      */
-    get suffixColumnQty() {
-        if (!this.columns) {
-            throw new Error('Columns are not populated yet.');
-        }
-        return this.columns.length;
+  get suffixColumnQty () {
+    if (!this.columns) {
+      throw new Error('Columns are not populated yet.')
     }
+    return this.columns.length
+  }
 
     /**
      * Returns a number of columns with row titles in a table.
      * @returns {number} A number of columns with row titles.
      */
-    get titleColumnQty() {
-        if (!this.features) {
-            throw new Error('Features are not defined.');
-        }
-        return this.features.titleColumnsQuantity;
+  get titleColumnQty () {
+    if (!this.features) {
+      throw new Error('Features are not defined.')
     }
+    return this.features.titleColumnsQuantity
+  }
 
     /**
      * Returns a number of rows with suffix cells in a table.
      * @returns {number} A number of rows with suffix cells.
      */
-    get suffixRowQty() {
-        if (!this.columns) {
-            throw new Error('Columns are not populated yet.');
-        }
-        return this.columns[0].length;
+  get suffixRowQty () {
+    if (!this.columns) {
+      throw new Error('Columns are not populated yet.')
     }
+    return this.columns[0].length
+  }
 
     /**
      * Returns true if an ending grammatical feature defined by featureType has a value that is listed in a featureValues array.
@@ -7283,21 +7245,21 @@ class Table {
      * @param {Suffix} suffix - an ending we need to filter out.
      * @returns {boolean} True if suffix has a value of a grammatical feature specified.
      */
-    static filter(featureType, featureValues, suffix) {
-        "use strict";
+  static filter (featureType, featureValues, suffix) {
+    'use strict';
 
         // If not an array, convert it to array for uniformity
-        if (!Array.isArray(featureValues)) {
-            featureValues = [featureValues];
-        }
-        for (const value of featureValues) {
-            if (suffix.features[featureType] === value) {
-                return true;
-            }
-        }
+    if (!Array.isArray(featureValues)) {
+      featureValues = [featureValues];
+    }
+    for (const value of featureValues) {
+      if (suffix.features[featureType] === value) {
+        return true
+      }
+    }
 
-        return false;
-    };
+    return false
+  };
 
     /**
      * Groups all suffixes into a tree according to their grammatical features. There are several levels in this tree.
@@ -7311,49 +7273,48 @@ class Table {
      * @param {number} currentLevel - At what level in a tree we are now. Used to stop recursion.
      * @returns {NodeGroup} A top level group of suffixes that contain subgroups all way down to the last group.
      */
-    groupByFeature(suffixes, ancestorFeatures = [], currentLevel = 0) {
-        let group = new NodeGroup();
-        group.groupFeatureType = this.features.items[currentLevel];
-        group.ancestorFeatures = ancestorFeatures.slice();
+  groupByFeature (suffixes, ancestorFeatures = [], currentLevel = 0) {
+    let group = new NodeGroup();
+    group.groupFeatureType = this.features.items[currentLevel];
+    group.ancestorFeatures = ancestorFeatures.slice();
 
         // Iterate over each value of the feature
-        for (const featureValue of group.groupFeatureType.getOrderedFeatures(ancestorFeatures)) {
-            if (ancestorFeatures.length>0 && ancestorFeatures[ancestorFeatures.length-1].type === group.groupFeatureType.type) {
+    for (const featureValue of group.groupFeatureType.getOrderedFeatures(ancestorFeatures)) {
+      if (ancestorFeatures.length > 0 && ancestorFeatures[ancestorFeatures.length - 1].type === group.groupFeatureType.type) {
                 // Remove previously inserted feature of the same type
-                ancestorFeatures.pop();
-            }
-            ancestorFeatures.push(featureValue);
+        ancestorFeatures.pop();
+      }
+      ancestorFeatures.push(featureValue);
 
             // Suffixes that are selected for current combination of feature values
-            let selectedSuffixes = suffixes.filter(Table.filter.bind(this, group.groupFeatureType.type, featureValue.value));
+      let selectedSuffixes = suffixes.filter(Table.filter.bind(this, group.groupFeatureType.type, featureValue.value));
 
-            if (currentLevel < this.features.length - 1) {
+      if (currentLevel < this.features.length - 1) {
                 // Divide to further groups
-                let subGroup = this.groupByFeature(selectedSuffixes, ancestorFeatures, currentLevel + 1);
-                group.subgroups.push(subGroup);
-                group.cells = group.cells.concat(subGroup.cells);
-            }
-            else {
+        let subGroup = this.groupByFeature(selectedSuffixes, ancestorFeatures, currentLevel + 1);
+        group.subgroups.push(subGroup);
+        group.cells = group.cells.concat(subGroup.cells);
+      } else {
                 // This is the last level. This represent a cell with suffixes
                 // Split result has a list of suffixes in a table cell. We need to combine items with same endings.
-                if (selectedSuffixes.length > 0) {
-                    if (this.suffixCellFilter) {
-                        selectedSuffixes = selectedSuffixes.filter(this.suffixCellFilter);
-                    }
+        if (selectedSuffixes.length > 0) {
+          if (this.suffixCellFilter) {
+            selectedSuffixes = selectedSuffixes.filter(this.suffixCellFilter);
+          }
 
-                    selectedSuffixes = Suffix.combine(selectedSuffixes);
-                }
-
-                let cell = new Cell(selectedSuffixes, ancestorFeatures.slice());
-                group.subgroups.push(cell);
-                group.cells.push(cell);
-                this.cells.push(cell);
-                cell.index = this.cells.length - 1;
-            }
+          selectedSuffixes = Suffix.combine(selectedSuffixes);
         }
-        ancestorFeatures.pop();
-        return group;
+
+        let cell = new Cell(selectedSuffixes, ancestorFeatures.slice());
+        group.subgroups.push(cell);
+        group.cells.push(cell);
+        this.cells.push(cell);
+        cell.index = this.cells.length - 1;
+      }
     }
+    ancestorFeatures.pop();
+    return group
+  }
 
     /**
      * Create columns out of a suffixes organized into a tree.
@@ -7363,53 +7324,50 @@ class Table {
      * @param {number} currentLevel - Current recursion level.
      * @returns {Array} An array of columns of suffix cells.
      */
-    constructColumns(tree = this.tree, columns = [], currentLevel = 0) {
-        let currentFeature = this.features.items[currentLevel];
+  constructColumns (tree = this.tree, columns = [], currentLevel = 0) {
+    let currentFeature = this.features.items[currentLevel];
 
-        let groups = [];
-        for (let [index, featureValue] of currentFeature.getOrderedValues(tree.ancestorFeatures).entries()) {
-            let cellGroup = tree.subgroups[index];
+    let groups = [];
+    for (let [index, featureValue] of currentFeature.getOrderedValues(tree.ancestorFeatures).entries()) {
+      let cellGroup = tree.subgroups[index];
 
             // Iterate until it is the last row feature
-            if (!currentFeature.isSameType(this.features.lastRowFeature)) {
-                let currentResult = this.constructColumns(cellGroup, columns, currentLevel + 1);
-                if (currentFeature.formsRow) {
+      if (!currentFeature.isSameType(this.features.lastRowFeature)) {
+        let currentResult = this.constructColumns(cellGroup, columns, currentLevel + 1);
+        if (currentFeature.formsRow) {
                     // TODO: Avoid creating extra cells
 
-
-                    let group = {
-                        titleText: featureValue,
-                        groups: currentResult,
-                        titleCell: currentFeature.createTitleCell(featureValue, this.features.firstColumnFeature.size)
-                    };
-                    group.groups[0].titleCell.parent = group.titleCell;
-                    groups.push(group);
-                }
-                else if (currentFeature.isSameType(this.features.lastColumnFeature)) {
-                    let column = new Column(cellGroup.cells);
-                    column.groups = currentResult;
-                    column.header = featureValue;
-                    column.index = columns.length;
-                    columns.push(column);
-                    column.headerCell = this.headers[this.headers.length-1].cells[columns.length - 1];
-                }
-            }
-            else {
+          let group = {
+            titleText: featureValue,
+            groups: currentResult,
+            titleCell: currentFeature.createTitleCell(featureValue, this.features.firstColumnFeature.size)
+          };
+          group.groups[0].titleCell.parent = group.titleCell;
+          groups.push(group);
+        } else if (currentFeature.isSameType(this.features.lastColumnFeature)) {
+          let column = new Column(cellGroup.cells);
+          column.groups = currentResult;
+          column.header = featureValue;
+          column.index = columns.length;
+          columns.push(column);
+          column.headerCell = this.headers[this.headers.length - 1].cells[columns.length - 1];
+        }
+      } else {
                 // Last level
-                cellGroup.titleCell = currentFeature.createTitleCell(featureValue, this.features.firstColumnFeature.size);
-                let group = {
-                    titleText: featureValue,
-                    cell: cellGroup,
-                    titleCell: cellGroup.titleCell
-                };
-                groups.push(group);
-            }
-        }
-        if (currentFeature.formsRow) {
-            return groups;
-        }
-        return columns;
+        cellGroup.titleCell = currentFeature.createTitleCell(featureValue, this.features.firstColumnFeature.size);
+        let group = {
+          titleText: featureValue,
+          cell: cellGroup,
+          titleCell: cellGroup.titleCell
+        };
+        groups.push(group);
+      }
     }
+    if (currentFeature.formsRow) {
+      return groups
+    }
+    return columns
+  }
 
     /**
      * Creates an array of header cell rows.
@@ -7419,216 +7377,210 @@ class Table {
      * @param {number} currentLevel - Current recursion level.
      * @returns {Array} A two-dimensional array of header cell rows.
      */
-    constructHeaders(tree = this.tree, headers = [], currentLevel = 0) {
-        let currentFeature = this.features.columnFeatures[currentLevel];
+  constructHeaders (tree = this.tree, headers = [], currentLevel = 0) {
+    let currentFeature = this.features.columnFeatures[currentLevel];
 
-        let cells = [];
-        for (let [index, featureValue] of currentFeature.getOrderedValues(tree.ancestorFeatures).entries()) {
-            let cellGroup = tree.subgroups[index];
+    let cells = [];
+    for (let [index, featureValue] of currentFeature.getOrderedValues(tree.ancestorFeatures).entries()) {
+      let cellGroup = tree.subgroups[index];
 
             // Iterate over all column features (features that form columns)
-            if (currentLevel < this.features.columnFeatures.length - 1) {
-                let subCells = this.constructHeaders(cellGroup, headers, currentLevel + 1);
+      if (currentLevel < this.features.columnFeatures.length - 1) {
+        let subCells = this.constructHeaders(cellGroup, headers, currentLevel + 1);
 
-                let columnSpan = 0;
-                for (let cell of subCells) {
-                    columnSpan += cell.span;
-                }
+        let columnSpan = 0;
+        for (let cell of subCells) {
+          columnSpan += cell.span;
+        }
 
-                let headerCell = new HeaderCell(featureValue, currentFeature, columnSpan);
-                headerCell.children = subCells;
-                for (let cell of subCells) {
-                    cell.parent = headerCell;
-                }
+        let headerCell = new HeaderCell(featureValue, currentFeature, columnSpan);
+        headerCell.children = subCells;
+        for (let cell of subCells) {
+          cell.parent = headerCell;
+        }
 
-                if (!headers[currentLevel]) {
-                    headers[currentLevel] = new Row();
-                }
-                headers[currentLevel].titleCell = currentFeature.createTitleCell(
+        if (!headers[currentLevel]) {
+          headers[currentLevel] = new Row();
+        }
+        headers[currentLevel].titleCell = currentFeature.createTitleCell(
                     this.messages.get(currentFeature.groupTitle), this.features.firstColumnFeature.size);
 
-                headers[currentLevel].add(headerCell);
-                cells.push(headerCell);
-            }
-            else {
+        headers[currentLevel].add(headerCell);
+        cells.push(headerCell);
+      } else {
                 // Last level
-                let headerCell = new HeaderCell(featureValue, currentFeature);
+        let headerCell = new HeaderCell(featureValue, currentFeature);
 
-                if (!headers[currentLevel]) {
-                    headers[currentLevel] = new Row();
-                }
+        if (!headers[currentLevel]) {
+          headers[currentLevel] = new Row();
+        }
 
-                headers[currentLevel].add(headerCell);
-                headers[currentLevel].titleCell = currentFeature.createTitleCell(
+        headers[currentLevel].add(headerCell);
+        headers[currentLevel].titleCell = currentFeature.createTitleCell(
                     this.messages.get(currentFeature.groupTitle), this.features.firstColumnFeature.size);
-                cells.push(headerCell);
-            }
-        }
-        if (currentLevel === 0) {
-            return headers;
-        }
-        else {
-            return cells;
-        }
+        cells.push(headerCell);
+      }
     }
+    if (currentLevel === 0) {
+      return headers
+    } else {
+      return cells
+    }
+  }
 
     /**
      * Creates an array of rows by parsing an array of columns.
      * @returns {Row[]} An array of rows.
      */
-    constructRows() {
-        let rows = [];
-        for (let rowIndex = 0; rowIndex < this.suffixRowQty; rowIndex++) {
-            rows[rowIndex] = new Row();
-            rows[rowIndex].titleCell = this.columns[0].cells[rowIndex].titleCell;
-            for (let columnIndex = 0; columnIndex < this.suffixColumnQty; columnIndex++) {
-                rows[rowIndex].add(this.columns[columnIndex].cells[rowIndex]);
-            }
-        }
-        return rows;
+  constructRows () {
+    let rows = [];
+    for (let rowIndex = 0; rowIndex < this.suffixRowQty; rowIndex++) {
+      rows[rowIndex] = new Row();
+      rows[rowIndex].titleCell = this.columns[0].cells[rowIndex].titleCell;
+      for (let columnIndex = 0; columnIndex < this.suffixColumnQty; columnIndex++) {
+        rows[rowIndex].add(this.columns[columnIndex].cells[rowIndex]);
+      }
     }
+    return rows
+  }
 
     /**
      * Adds event listeners to each cell object.
      */
-    addEventListeners() {
-        for (let cell of this.cells) {
-            cell.addEventListener('mouseenter', this.highlightRowAndColumn.bind(this));
-            cell.addEventListener('mouseleave', this.clearRowAndColumnHighlighting.bind(this));
-        }
+  addEventListeners () {
+    for (let cell of this.cells) {
+      cell.addEventListener('mouseenter', this.highlightRowAndColumn.bind(this));
+      cell.addEventListener('mouseleave', this.clearRowAndColumnHighlighting.bind(this));
     }
+  }
 
     /**
      * Highlights a row and a column this cell is in.
      * @param {Event} event - An event that triggers this function.
      */
-    highlightRowAndColumn(event) {
-        let index = event.currentTarget.dataset.index;
-        this.cells[index].highlightRowAndColumn();
-    }
+  highlightRowAndColumn (event) {
+    let index = event.currentTarget.dataset.index;
+    this.cells[index].highlightRowAndColumn();
+  }
 
     /**
      * Removes highlighting from row and a column this cell is in.
      * @param {Event} event - An event that triggers this function.
      */
-    clearRowAndColumnHighlighting(event) {
-        let index = event.currentTarget.dataset.index;
-        this.cells[index].clearRowAndColumnHighlighting();
-    }
+  clearRowAndColumnHighlighting (event) {
+    let index = event.currentTarget.dataset.index;
+    this.cells[index].clearRowAndColumnHighlighting();
+  }
 
     /**
      * Hides empty columns in a table.
      */
-    hideEmptyColumns() {
-        for (let column of this.columns) {
-            if (column.empty) {
-                column.hide();
-            }
-        }
-        this.emptyColumnsHidden = true;
+  hideEmptyColumns () {
+    for (let column of this.columns) {
+      if (column.empty) {
+        column.hide();
+      }
     }
+    this.emptyColumnsHidden = true;
+  }
 
     /**
      * Show all empty columns that were previously hidden.
      */
-    showEmptyColumns() {
-        for (let column of this.columns) {
-            if (column.hidden) {
-                column.show();
-            }
-        }
-        this.emptyColumnsHidden = false;
+  showEmptyColumns () {
+    for (let column of this.columns) {
+      if (column.hidden) {
+        column.show();
+      }
     }
+    this.emptyColumnsHidden = false;
+  }
 
     /**
      * Hide groups that have no suffix matches.
      */
-    hideNoSuffixGroups() {
-        for (let headerCell of this.headers[0].cells) {
-            let matches = !!headerCell.columns.find(column => column.suffixMatches);
-            if (!matches) {
-                for (let column of headerCell.columns) {
-                    column.hide();
-                }
-            }
+  hideNoSuffixGroups () {
+    for (let headerCell of this.headers[0].cells) {
+      let matches = !!headerCell.columns.find(column => column.suffixMatches);
+      if (!matches) {
+        for (let column of headerCell.columns) {
+          column.hide();
         }
-        this.suffixMatchesHidden = true;
+      }
     }
+    this.suffixMatchesHidden = true;
+  }
 
     /**
      * Show groups that have no suffix matches.
      */
-    showNoSuffixGroups() {
-        for (let column of this.columns) {
-            column.show();
-        }
-        if (this.emptyColumnsHidden) {
-            this.hideEmptyColumns();
-        }
-        this.suffixMatchesHidden = false;
+  showNoSuffixGroups () {
+    for (let column of this.columns) {
+      column.show();
     }
+    if (this.emptyColumnsHidden) {
+      this.hideEmptyColumns();
+    }
+    this.suffixMatchesHidden = false;
+  }
 }
 
 /**
  * Represents a list of footnotes.
  */
 class Footnotes {
-
     /**
      * Initialises a Footnotes object.
      * @param {Footnote[]} footnotes - An array of footnote objects.
      */
-    constructor(footnotes$$1) {
-        this.footnotes = footnotes$$1;
+  constructor (footnotes) {
+    this.footnotes = footnotes;
 
-        this.nodes = document.createElement('dl');
-        this.nodes.id = footnotes.id;
-        this.nodes.classList.add(classNames.footnotesContainer);
-        for (let footnote of footnotes$$1) {
-            let index = document.createElement('dt');
-            index.innerHTML = footnote.index;
-            this.nodes.appendChild(index);
-            let text = document.createElement('dd');
-            text.innerHTML = footnote.text;
-            this.nodes.appendChild(text);
-        }
+    this.nodes = document.createElement('dl');
+    this.nodes.id = footnotes$1.id;
+    this.nodes.classList.add(classNames.footnotesContainer);
+    for (let footnote of footnotes) {
+      let index = document.createElement('dt');
+      index.innerHTML = footnote.index;
+      this.nodes.appendChild(index);
+      let text = document.createElement('dd');
+      text.innerHTML = footnote.text;
+      this.nodes.appendChild(text);
     }
+  }
 
     /**
      * Returns an HTML representation of a Footnotes object.
      * @returns {HTMLElement} An HTML representation of a Footnotes object.
      */
-    get html() {
-        return this.nodes;
-    }
+  get html () {
+    return this.nodes
+  }
 }
-
 
 /**
  * Represents a single view.
  */
 class View {
-
     /**
      * Initializes a View object with options. There is at least one view per part of speech,
      * but there could be several views for the same part of speech that show different table representation of a view.
      * @param {Object} viewOptions
      */
-    constructor() {
-
-        //this.options = viewOptions;
-        this.pageHeader = {};
+  constructor () {
+        // this.options = viewOptions;
+    this.pageHeader = {};
 
         // An HTML element where this view is rendered
-        this.container = undefined;
+    this.container = undefined;
 
         // Must be implemented in a descendant
-        this.id = 'baseView';
-        this.name = 'base view';
-        this.title = 'Base View';
-        this.language = undefined;
-        this.partOfSpeech = undefined;
-    }
+    this.id = 'baseView';
+    this.name = 'base view';
+    this.title = 'Base View';
+    this.language = undefined;
+    this.partOfSpeech = undefined;
+  }
 
     /**
      * Converts a WordData, returned from inflection tables library, into an HTML representation of an inflection table
@@ -7637,353 +7589,351 @@ class View {
      * @param {WordData} wordData - A result set from inflection tables library.
      * @param {MessageBundle} messages - A message bundle with message translations.
      */
-    render(container, wordData, messages) {
-        "use strict";
+  render (container, wordData, messages) {
+    'use strict';
 
-        this.messages = messages;
-        this.container = container;
-        this.wordData = wordData;
-        let selection = wordData[this.partOfSpeech];
+    this.messages = messages;
+    this.container = container;
+    this.wordData = wordData;
+    let selection = wordData[this.partOfSpeech];
 
-        this.footnotes = new Footnotes(selection.footnotes);
+    this.footnotes = new Footnotes(selection.footnotes);
 
-        //this.table = new Table(selection.suffixes, this.groupingFeatures, messages);
-        //this.table = new Table();
-        //this.setTableData();
-        this.table.messages = messages;
-        this.table.construct(selection.suffixes).constructViews();
-        this.display();
-    }
+        // this.table = new Table(selection.suffixes, this.groupingFeatures, messages);
+        // this.table = new Table();
+        // this.setTableData();
+    this.table.messages = messages;
+    this.table.construct(selection.suffixes).constructViews();
+    this.display();
+  }
 
     /**
      * Renders a view's HTML representation and inserts it into `container` HTML element.
      */
-    display() {
+  display () {
         // Clear the container
-        this.container.innerHTML = '';
+    this.container.innerHTML = '';
 
-        let word = document.createElement('h2');
-        word.innerHTML = this.wordData.homonym.targetWord;
-        this.container.appendChild(word);
+    let word = document.createElement('h2');
+    word.innerHTML = this.wordData.homonym.targetWord;
+    this.container.appendChild(word);
 
-        let title = document.createElement('h3');
-        title.innerHTML = this.title;
-        this.container.appendChild(title);
+    let title = document.createElement('h3');
+    title.innerHTML = this.title;
+    this.container.appendChild(title);
 
-        this.pageHeader = { nodes: document.createElement('div') };
-        this.pageHeader.nodes.innerHTML = pageHeader.html;
-        this.pageHeader.hideEmptyColumnsBtn = this.pageHeader.nodes.querySelector(pageHeader.hideEmptyColumnsBtnSel);
-        this.pageHeader.showEmptyColumnsBtn = this.pageHeader.nodes.querySelector(pageHeader.showEmptyColumnsBtnSel);
-        this.pageHeader.hideNoSuffixGroupsBtn = this.pageHeader.nodes.querySelector(pageHeader.hideNoSuffixGroupsBtnSel);
-        this.pageHeader.showNoSuffixGroupsBtn = this.pageHeader.nodes.querySelector(pageHeader.showNoSuffixGroupsBtnSel);
-        this.container.appendChild(this.pageHeader.nodes);
-
+    this.pageHeader = { nodes: document.createElement('div') };
+    this.pageHeader.nodes.innerHTML = pageHeader.html;
+    this.pageHeader.hideEmptyColumnsBtn = this.pageHeader.nodes.querySelector(pageHeader.hideEmptyColumnsBtnSel);
+    this.pageHeader.showEmptyColumnsBtn = this.pageHeader.nodes.querySelector(pageHeader.showEmptyColumnsBtnSel);
+    this.pageHeader.hideNoSuffixGroupsBtn = this.pageHeader.nodes.querySelector(pageHeader.hideNoSuffixGroupsBtnSel);
+    this.pageHeader.showNoSuffixGroupsBtn = this.pageHeader.nodes.querySelector(pageHeader.showNoSuffixGroupsBtnSel);
+    this.container.appendChild(this.pageHeader.nodes);
 
         // Insert a wide view
-        this.container.appendChild(this.table.wideView.render());
+    this.container.appendChild(this.table.wideView.render());
         // Insert narrow views
-        this.container.appendChild(this.table.narrowView.render());
+    this.container.appendChild(this.table.narrowView.render());
 
-        this.table.addEventListeners();
+    this.table.addEventListeners();
 
-        this.container.appendChild(this.footnotes.html);
+    this.container.appendChild(this.footnotes.html);
 
-        this.pageHeader.hideEmptyColumnsBtn.addEventListener('click', this.hideEmptyColumns.bind(this));
-        this.pageHeader.showEmptyColumnsBtn.addEventListener('click', this.showEmptyColumns.bind(this));
+    this.pageHeader.hideEmptyColumnsBtn.addEventListener('click', this.hideEmptyColumns.bind(this));
+    this.pageHeader.showEmptyColumnsBtn.addEventListener('click', this.showEmptyColumns.bind(this));
 
-        this.pageHeader.hideNoSuffixGroupsBtn.addEventListener('click', this.hideNoSuffixGroups.bind(this));
-        this.pageHeader.showNoSuffixGroupsBtn.addEventListener('click', this.showNoSuffixGroups.bind(this));
-    }
-
+    this.pageHeader.hideNoSuffixGroupsBtn.addEventListener('click', this.hideNoSuffixGroups.bind(this));
+    this.pageHeader.showNoSuffixGroupsBtn.addEventListener('click', this.showNoSuffixGroups.bind(this));
+  }
 
     /**
      * Hides all empty columns of the view.
      */
-    hideEmptyColumns() {
-        this.table.hideEmptyColumns();
-        this.display();
-        this.pageHeader.hideEmptyColumnsBtn.classList.add(classNames.hidden);
-        this.pageHeader.showEmptyColumnsBtn.classList.remove(classNames.hidden);
-    }
+  hideEmptyColumns () {
+    this.table.hideEmptyColumns();
+    this.display();
+    this.pageHeader.hideEmptyColumnsBtn.classList.add(classNames.hidden);
+    this.pageHeader.showEmptyColumnsBtn.classList.remove(classNames.hidden);
+  }
 
     /**
      * Displays all previously hidden columns.
      */
-    showEmptyColumns() {
-        this.table.showEmptyColumns();
-        this.display();
-        this.pageHeader.showEmptyColumnsBtn.classList.add(classNames.hidden);
-        this.pageHeader.hideEmptyColumnsBtn.classList.remove(classNames.hidden);
-    }
+  showEmptyColumns () {
+    this.table.showEmptyColumns();
+    this.display();
+    this.pageHeader.showEmptyColumnsBtn.classList.add(classNames.hidden);
+    this.pageHeader.hideEmptyColumnsBtn.classList.remove(classNames.hidden);
+  }
 
     /**
      * Hides groups (formed by first column feature) that have no suffix matches.
      */
-    hideNoSuffixGroups() {
-        this.table.hideNoSuffixGroups();
-        this.display();
-        this.pageHeader.hideNoSuffixGroupsBtn.classList.add(classNames.hidden);
-        this.pageHeader.showNoSuffixGroupsBtn.classList.remove(classNames.hidden);
-    }
+  hideNoSuffixGroups () {
+    this.table.hideNoSuffixGroups();
+    this.display();
+    this.pageHeader.hideNoSuffixGroupsBtn.classList.add(classNames.hidden);
+    this.pageHeader.showNoSuffixGroupsBtn.classList.remove(classNames.hidden);
+  }
 
     /**
      * Displays previously hidden groups with no suffix matches.
      */
-    showNoSuffixGroups() {
-        this.table.showNoSuffixGroups();
-        this.display();
-        this.pageHeader.hideNoSuffixGroupsBtn.classList.add(classNames.hidden);
-        this.pageHeader.showNoSuffixGroupsBtn.classList.remove(classNames.hidden);
-    }
+  showNoSuffixGroups () {
+    this.table.showNoSuffixGroups();
+    this.display();
+    this.pageHeader.hideNoSuffixGroupsBtn.classList.add(classNames.hidden);
+    this.pageHeader.showNoSuffixGroupsBtn.classList.remove(classNames.hidden);
+  }
 }
 
 class LatinView extends View {
-    constructor() {
-        super();
-        this.language = languages.latin;
-        this.language_features = languageModel.features;
+  constructor () {
+    super();
+    this.language = languages.latin;
+    this.language_features = languageModel.features;
 
         /*
         Default grammatical features of a view. It child views need to have different feature values, redefine
         those values in child objects.
          */
-        this.features = {
-            numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
-            cases: new GroupFeatureType(this.language_features[Feature.types.grmCase], 'Case'),
-            declensions: new GroupFeatureType(this.language_features[Feature.types.declension], 'Declension'),
-            genders: new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender'),
-            types: new GroupFeatureType(this.language_features[Feature.types.type], 'Type')
-        };
-    }
+    this.features = {
+      numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
+      cases: new GroupFeatureType(this.language_features[Feature.types.grmCase], 'Case'),
+      declensions: new GroupFeatureType(this.language_features[Feature.types.declension], 'Declension'),
+      genders: new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender'),
+      types: new GroupFeatureType(this.language_features[Feature.types.type], 'Type')
+    };
+  }
 
     /*
     Default grammatical features of a view. It child views need to have different feature values, redefine
     those values in child objects.
      */
-    createTable() {
-        this.table = new Table([this.features.declensions, this.features.genders,
-            this.features.types, this.features.numbers, this.features.cases]);
-        let features = this.table.features;
-        features.columns = [this.language_features[Feature.types.declension], this.language_features[Feature.types.gender], this.language_features[Feature.types.type]];
-        features.rows = [this.language_features[Feature.types.number], this.language_features[Feature.types.grmCase]];
-        features.columnRowTitles = [this.language_features[Feature.types.grmCase]];
-        features.fullWidthRowTitles = [this.language_features[Feature.types.number]];
-    }
+  createTable () {
+    this.table = new Table([this.features.declensions, this.features.genders,
+      this.features.types, this.features.numbers, this.features.cases]);
+    let features = this.table.features;
+    features.columns = [this.language_features[Feature.types.declension], this.language_features[Feature.types.gender], this.language_features[Feature.types.type]];
+    features.rows = [this.language_features[Feature.types.number], this.language_features[Feature.types.grmCase]];
+    features.columnRowTitles = [this.language_features[Feature.types.grmCase]];
+    features.fullWidthRowTitles = [this.language_features[Feature.types.number]];
+  }
 }
 
 class NounView extends LatinView {
-    constructor() {
-        super();
-        this.id = 'nounDeclension';
-        this.name = 'noun declension';
-        this.title = 'Noun declension';
-        this.partOfSpeech = this.language_features[Feature.types.part][constants.POFS_NOUN].value;
+  constructor () {
+    super();
+    this.id = 'nounDeclension';
+    this.name = 'noun declension';
+    this.title = 'Noun declension';
+    this.partOfSpeech = this.language_features[Feature.types.part][constants.POFS_NOUN].value;
 
         // Models.Feature that are different from base class values
-        this.features.genders = new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender',
-            [ this.language_features[Feature.types.gender][constants.GEND_MASCULINE],
-              this.language_features[Feature.types.gender][constants.GEND_FEMININE],
-              this.language_features[Feature.types.gender][constants.GEND_NEUTER]
-            ]);
-        this.createTable();
-    }
+    this.features.genders = new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender',
+      [ this.language_features[Feature.types.gender][constants.GEND_MASCULINE],
+        this.language_features[Feature.types.gender][constants.GEND_FEMININE],
+        this.language_features[Feature.types.gender][constants.GEND_NEUTER]
+      ]);
+    this.createTable();
+  }
 }
 
 class AdjectiveView extends LatinView {
-    constructor() {
-        super();
-        this.id = 'adjectiveDeclension';
-        this.name = 'adjective declension';
-        this.title = 'Adjective declension';
-        this.partOfSpeech = this.language_features[Feature.types.part].adjective.value;
+  constructor () {
+    super();
+    this.id = 'adjectiveDeclension';
+    this.name = 'adjective declension';
+    this.title = 'Adjective declension';
+    this.partOfSpeech = this.language_features[Feature.types.part].adjective.value;
 
         // Models.Feature that are different from base class values
-        this.features.declensions = new GroupFeatureType(this.language_features[Feature.types.declension], 'Declension',
-            [ this.language_features[Feature.types.declension][constants.ORD_1ST],
-              this.language_features[Feature.types.declension][constants.ORD_2ND],
-              this.language_features[Feature.types.declension][constants.ORD_3RD]
-            ]);
-        this.createTable();
-    }
+    this.features.declensions = new GroupFeatureType(this.language_features[Feature.types.declension], 'Declension',
+      [ this.language_features[Feature.types.declension][constants.ORD_1ST],
+        this.language_features[Feature.types.declension][constants.ORD_2ND],
+        this.language_features[Feature.types.declension][constants.ORD_3RD]
+      ]);
+    this.createTable();
+  }
 }
 
 class VerbView extends LatinView {
-    constructor() {
-        super();
-        this.partOfSpeech = this.language_features[Feature.types.part][constants.POFS_VERB].value;
+  constructor () {
+    super();
+    this.partOfSpeech = this.language_features[Feature.types.part][constants.POFS_VERB].value;
 
-        this.features = {
-            tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
-            numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
-            persons: new GroupFeatureType(this.language_features[Feature.types.person], 'Person'),
-            voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
-            conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem'),
-            moods: new GroupFeatureType(this.language_features[Feature.types.mood], 'Mood')
-        };
-    }
+    this.features = {
+      tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
+      numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
+      persons: new GroupFeatureType(this.language_features[Feature.types.person], 'Person'),
+      voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
+      conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem'),
+      moods: new GroupFeatureType(this.language_features[Feature.types.mood], 'Mood')
+    };
+  }
 }
 
 class VoiceConjugationMoodView extends VerbView {
-    constructor() {
-        super();
-        this.id = 'verbVoiceConjugationMood';
-        this.name = 'verb voice-conjugation-mood';
-        this.title = 'Voice-Conjugation-Mood';
+  constructor () {
+    super();
+    this.id = 'verbVoiceConjugationMood';
+    this.name = 'verb voice-conjugation-mood';
+    this.title = 'Voice-Conjugation-Mood';
 
-        this.createTable();
-    }
+    this.createTable();
+  }
 
-    createTable() {
-        this.table = new Table([this.features.voices, this.features.conjugations, this.features.moods,
-            this.features.tenses, this.features.numbers, this.features.persons]);
-        let features = this.table.features;
-        features.columns = [
-          this.language_features[Feature.types.voice],
-          this.language_features[Feature.types.conjugation],
-          this.language_features[Feature.types.mood]];
-        features.rows = [
-          this.language_features[Feature.types.tense],
-          this.language_features[Feature.types.number],
-          this.language_features[Feature.types.person]];
-        features.columnRowTitles = [
-          this.language_features[Feature.types.number],
-          this.language_features[Feature.types.person]];
-        features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
-    }
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.conjugations, this.features.moods,
+      this.features.tenses, this.features.numbers, this.features.persons]);
+    let features = this.table.features;
+    features.columns = [
+      this.language_features[Feature.types.voice],
+      this.language_features[Feature.types.conjugation],
+      this.language_features[Feature.types.mood]];
+    features.rows = [
+      this.language_features[Feature.types.tense],
+      this.language_features[Feature.types.number],
+      this.language_features[Feature.types.person]];
+    features.columnRowTitles = [
+      this.language_features[Feature.types.number],
+      this.language_features[Feature.types.person]];
+    features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
+  }
 }
 
 class VoiceMoodConjugationView extends VerbView {
-    constructor() {
-        super();
-        this.id = 'verbVoiceMoodConjugation';
-        this.name = 'verb voice-mood-conjugation';
-        this.title = 'Voice-Mood-Conjugation';
+  constructor () {
+    super();
+    this.id = 'verbVoiceMoodConjugation';
+    this.name = 'verb voice-mood-conjugation';
+    this.title = 'Voice-Mood-Conjugation';
 
-        this.createTable();
-    }
+    this.createTable();
+  }
 
-    createTable() {
-        this.table = new Table([this.features.voices, this.features.moods, this.features.conjugations,
-            this.features.tenses, this.features.numbers, this.features.persons]);
-        let features = this.table.features;
-        features.columns = [
-          this.language_features[Feature.types.voice],
-          this.language_features[Feature.types.mood],
-          this.language_features[Feature.types.conjugation]];
-        features.rows = [
-          this.language_features[Feature.types.tense],
-          this.language_features[Feature.types.number],
-          this.language_features[Feature.types.person]];
-        features.columnRowTitles = [
-          this.language_features[Feature.types.number],
-          this.language_features[Feature.types.person]];
-        features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
-    }
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.moods, this.features.conjugations,
+      this.features.tenses, this.features.numbers, this.features.persons]);
+    let features = this.table.features;
+    features.columns = [
+      this.language_features[Feature.types.voice],
+      this.language_features[Feature.types.mood],
+      this.language_features[Feature.types.conjugation]];
+    features.rows = [
+      this.language_features[Feature.types.tense],
+      this.language_features[Feature.types.number],
+      this.language_features[Feature.types.person]];
+    features.columnRowTitles = [
+      this.language_features[Feature.types.number],
+      this.language_features[Feature.types.person]];
+    features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
+  }
 }
 
 class ConjugationVoiceMoodView extends VerbView {
-    constructor() {
-        super();
-        this.id = 'verbConjugationVoiceMood';
-        this.name = 'verb conjugation-voice-mood';
-        this.title = 'Conjugation-Voice-Mood';
+  constructor () {
+    super();
+    this.id = 'verbConjugationVoiceMood';
+    this.name = 'verb conjugation-voice-mood';
+    this.title = 'Conjugation-Voice-Mood';
 
-        this.createTable();
-    }
+    this.createTable();
+  }
 
-    createTable() {
-        this.table = new Table([this.features.conjugations, this.features.voices, this.features.moods,
-            this.features.tenses, this.features.numbers, this.features.persons]);
-        let features = this.table.features;
-        features.columns = [
-          this.language_features[Feature.types.conjugation],
-          this.language_features[Feature.types.voice], this.language_features[Feature.types.mood]];
-        features.rows = [
-          this.language_features[Feature.types.tense],
-          this.language_features[Feature.types.number],
-          this.language_features[Feature.types.person]];
-        features.columnRowTitles = [
-          this.language_features[Feature.types.number],
-          this.language_features[Feature.types.person]];
-        features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
-    }
+  createTable () {
+    this.table = new Table([this.features.conjugations, this.features.voices, this.features.moods,
+      this.features.tenses, this.features.numbers, this.features.persons]);
+    let features = this.table.features;
+    features.columns = [
+      this.language_features[Feature.types.conjugation],
+      this.language_features[Feature.types.voice], this.language_features[Feature.types.mood]];
+    features.rows = [
+      this.language_features[Feature.types.tense],
+      this.language_features[Feature.types.number],
+      this.language_features[Feature.types.person]];
+    features.columnRowTitles = [
+      this.language_features[Feature.types.number],
+      this.language_features[Feature.types.person]];
+    features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
+  }
 }
 
 class ConjugationMoodVoiceView extends VerbView {
-    constructor() {
-        super();
-        this.id = 'verbConjugationMoodVoice';
-        this.name = 'verb conjugation-mood-voice';
-        this.title = 'Conjugation-Mood-Voice';
+  constructor () {
+    super();
+    this.id = 'verbConjugationMoodVoice';
+    this.name = 'verb conjugation-mood-voice';
+    this.title = 'Conjugation-Mood-Voice';
 
-        this.createTable();
-    }
+    this.createTable();
+  }
 
-    createTable() {
-        this.table = new Table([this.features.conjugations, this.features.moods, this.features.voices,
-            this.features.tenses, this.features.numbers, this.features.persons]);
-        let features = this.table.features;
-        features.columns = [
-          this.language_features[Feature.types.conjugation],
-          this.language_features[Feature.types.mood],
-          this.language_features[Feature.types.voice]];
-        features.rows = [
-          this.language_features[Feature.types.tense],
-          this.language_features[Feature.types.number],
-          this.language_features[Feature.types.person]];
-        features.columnRowTitles = [
-          this.language_features[Feature.types.number],
-          this.language_features[Feature.types.person]];
-        features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
-    }
+  createTable () {
+    this.table = new Table([this.features.conjugations, this.features.moods, this.features.voices,
+      this.features.tenses, this.features.numbers, this.features.persons]);
+    let features = this.table.features;
+    features.columns = [
+      this.language_features[Feature.types.conjugation],
+      this.language_features[Feature.types.mood],
+      this.language_features[Feature.types.voice]];
+    features.rows = [
+      this.language_features[Feature.types.tense],
+      this.language_features[Feature.types.number],
+      this.language_features[Feature.types.person]];
+    features.columnRowTitles = [
+      this.language_features[Feature.types.number],
+      this.language_features[Feature.types.person]];
+    features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
+  }
 }
 
 class MoodVoiceConjugationView extends VerbView {
-    constructor() {
-        super();
-        this.id = 'verbMoodVoiceConjugation';
-        this.name = 'verb mood-voice-conjugation';
-        this.title = 'Mood-Voice-Conjugation';
+  constructor () {
+    super();
+    this.id = 'verbMoodVoiceConjugation';
+    this.name = 'verb mood-voice-conjugation';
+    this.title = 'Mood-Voice-Conjugation';
 
-        this.createTable();
-    }
+    this.createTable();
+  }
 
-    createTable() {
-        this.table = new Table([this.features.moods, this.features.voices, this.features.conjugations,
-            this.features.tenses, this.features.numbers, this.features.persons]);
-        let features = this.table.features;
-        features.columns = [this.language_features[Feature.types.mood], this.language_features[Feature.types.voice], this.language_features[Feature.types.conjugation]];
-        features.rows = [this.language_features[Feature.types.tense], this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
-        features.columnRowTitles = [this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
-        features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
-    }
+  createTable () {
+    this.table = new Table([this.features.moods, this.features.voices, this.features.conjugations,
+      this.features.tenses, this.features.numbers, this.features.persons]);
+    let features = this.table.features;
+    features.columns = [this.language_features[Feature.types.mood], this.language_features[Feature.types.voice], this.language_features[Feature.types.conjugation]];
+    features.rows = [this.language_features[Feature.types.tense], this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
+    features.columnRowTitles = [this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
+    features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
+  }
 }
 
 class MoodConjugationVoiceView extends VerbView {
-    constructor() {
-        super();
-        this.id = 'verbMoodConjugationVoice';
-        this.name = 'verb mood-conjugation-voice';
-        this.title = 'Mood-Conjugation-Voice';
+  constructor () {
+    super();
+    this.id = 'verbMoodConjugationVoice';
+    this.name = 'verb mood-conjugation-voice';
+    this.title = 'Mood-Conjugation-Voice';
 
-        this.createTable();
-    }
+    this.createTable();
+  }
 
-    createTable() {
-        this.table = new Table([this.features.moods, this.features.conjugations, this.features.voices,
-            this.features.tenses, this.features.numbers, this.features.persons]);
-        let features = this.table.features;
-        features.columns = [this.language_features[Feature.types.mood], this.language_features[Feature.types.conjugation], this.language_features[Feature.types.voice]];
-        features.rows = [this.language_features[Feature.types.tense], this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
-        features.columnRowTitles = [this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
-        features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
-    }
+  createTable () {
+    this.table = new Table([this.features.moods, this.features.conjugations, this.features.voices,
+      this.features.tenses, this.features.numbers, this.features.persons]);
+    let features = this.table.features;
+    features.columns = [this.language_features[Feature.types.mood], this.language_features[Feature.types.conjugation], this.language_features[Feature.types.voice]];
+    features.rows = [this.language_features[Feature.types.tense], this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
+    features.columnRowTitles = [this.language_features[Feature.types.number], this.language_features[Feature.types.person]];
+    features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
+  }
 }
 
 var viewsLatin = [new NounView(), new AdjectiveView(),
     // Verbs
-    new VoiceConjugationMoodView(), new VoiceMoodConjugationView(), new ConjugationVoiceMoodView(),
-    new ConjugationMoodVoiceView(), new MoodVoiceConjugationView(), new MoodConjugationVoiceView()];
+  new VoiceConjugationMoodView(), new VoiceMoodConjugationView(), new ConjugationVoiceMoodView(),
+  new ConjugationMoodVoiceView(), new MoodVoiceConjugationView(), new MoodConjugationVoiceView()];
 
 var nounSuffixesCSV$1 = "Ending,Number,Case,Declension,Gender,Type,Primary,Footnote\nα,dual,accusative,1st,feminine,regular,primary,\nά,dual,accusative,1st,feminine,regular,,\nᾶ,dual,accusative,1st,feminine,regular,,2\nαιν,dual,dative,1st,feminine,regular,primary,\nαῖν,dual,dative,1st,feminine,regular,,\nαιιν,dual,dative,1st,feminine,irregular,,\nαιν,dual,genitive,1st,feminine,regular,primary,\nαῖν,dual,genitive,1st,feminine,regular,,\nαιιν,dual,genitive,1st,feminine,irregular,,\nα,dual,nominative,1st,feminine,regular,primary,\nά,dual,nominative,1st,feminine,regular,,\nᾶ,dual,nominative,1st,feminine,regular,,2\nα,dual,vocative,1st,feminine,regular,primary,\nά,dual,vocative,1st,feminine,regular,,\nᾶ,dual,vocative,1st,feminine,regular,,2\nα,dual,accusative,1st,masculine,regular,primary,\nά,dual,accusative,1st,masculine,regular,,\nᾶ,dual,accusative,1st,masculine,regular,,2\nαιν,dual,dative,1st,masculine,regular,primary,\nαῖν,dual,dative,1st,masculine,regular,,\nαιιν,dual,dative,1st,masculine,irregular,,\nαιν,dual,genitive,1st,masculine,regular,primary,\nαῖν,dual,genitive,1st,masculine,regular,,\nαιιν,dual,genitive,1st,masculine,irregular,,\nα,dual,nominative,1st,masculine,regular,primary,\nά,dual,nominative,1st,masculine,regular,,\nᾶ,dual,nominative,1st,masculine,regular,,2\nα,dual,vocative,1st,masculine,regular,primary,\nά,dual,vocative,1st,masculine,regular,,\nᾶ,dual,vocative,1st,masculine,regular,,2\nας,plural,accusative,1st,feminine,regular,primary,\nάς,plural,accusative,1st,feminine,regular,,\nᾶς,plural,accusative,1st,feminine,regular,,2\nανς,plural,accusative,1st,feminine,irregular,,\nαις,plural,accusative,1st,feminine,irregular,,\nαις,plural,dative,1st,feminine,regular,primary,\nαῖς,plural,dative,1st,feminine,regular,,\nῃσι,plural,dative,1st,feminine,irregular,,44\nῃσιν,plural,dative,1st,feminine,irregular,,4 44\nῃς,plural,dative,1st,feminine,irregular,,44\nαισι,plural,dative,1st,feminine,irregular,,44\nαισιν,plural,dative,1st,feminine,irregular,,4 44\nῶν,plural,genitive,1st,feminine,regular,primary,\nάων,plural,genitive,1st,feminine,irregular,,\nέων,plural,genitive,1st,feminine,irregular,,\nήων,plural,genitive,1st,feminine,irregular,,\nᾶν,plural,genitive,1st,feminine,irregular,,\nαι,plural,nominative,1st,feminine,regular,primary,\nαί,plural,nominative,1st,feminine,regular,,\nαῖ,plural,nominative,1st,feminine,regular,,2\nαι,plural,vocative,1st,feminine,regular,primary,\nαί,plural,vocative,1st,feminine,regular,,\nαῖ,plural,vocative,1st,feminine,regular,,2\nας,plural,accusative,1st,masculine,regular,primary,\nάς,plural,accusative,1st,masculine,regular,,\nᾶς,plural,accusative,1st,masculine,regular,,3\nανς,plural,accusative,1st,masculine,irregular,,\nαις,plural,accusative,1st,masculine,irregular,,\nαις,plural,dative,1st,masculine,regular,primary,\nαῖς,plural,dative,1st,masculine,regular,,\nῃσι,plural,dative,1st,masculine,irregular,,44\nῃσιν,plural,dative,1st,masculine,irregular,,4 44\nῃς,plural,dative,1st,masculine,irregular,,44\nαισι,plural,dative,1st,masculine,irregular,,44\nαισιν,plural,dative,1st,masculine,irregular,,4 44\nῶν,plural,genitive,1st,masculine,regular,primary,\nάων,plural,genitive,1st,masculine,irregular,,\nέων,plural,genitive,1st,masculine,irregular,,\nήων,plural,genitive,1st,masculine,irregular,,\nᾶν,plural,genitive,1st,masculine,irregular,,\nαι,plural,nominative,1st,masculine,regular,primary,\nαί,plural,nominative,1st,masculine,regular,,\nαῖ,plural,nominative,1st,masculine,regular,,3\nαι,plural,vocative,1st,masculine,regular,primary,\nαί,plural,vocative,1st,masculine,regular,,\nαῖ,plural,vocative,1st,masculine,regular,,3\nαν,singular,accusative,1st,feminine,regular,primary,\nην,singular,accusative,1st,feminine,regular,primary,\nήν,singular,accusative,1st,feminine,regular,,\nᾶν,singular,accusative,1st,feminine,regular,,2\nῆν,singular,accusative,1st,feminine,regular,,2\nάν,singular,accusative,1st,feminine,irregular,,63\nᾳ,singular,dative,1st,feminine,regular,primary,\nῃ,singular,dative,1st,feminine,regular,primary,\nῇ,singular,dative,1st,feminine,regular,,2\nᾷ,singular,dative,1st,feminine,regular,,2\nηφι,singular,dative,1st,feminine,irregular,,45\nηφιν,singular,dative,1st,feminine,irregular,,4 45\nῆφι,singular,dative,1st,feminine,irregular,,45\nῆφιv,singular,dative,1st,feminine,irregular,,4 45\nας,singular,genitive,1st,feminine,regular,primary,\nης,singular,genitive,1st,feminine,regular,primary,\nῆs,singular,genitive,1st,feminine,regular,,\nᾶs,singular,genitive,1st,feminine,regular,,2\nηφι,singular,genitive,1st,feminine,irregular,,45\nηφιν,singular,genitive,1st,feminine,irregular,,4 45\nῆφι,singular,genitive,1st,feminine,irregular,,45\nῆφιv,singular,genitive,1st,feminine,irregular,,4 45\nα,singular,nominative,1st,feminine,regular,primary,\nη,singular,nominative,1st,feminine,regular,primary,1\nή,singular,nominative,1st,feminine,regular,,\nᾶ,singular,nominative,1st,feminine,regular,,2\nῆ,singular,nominative,1st,feminine,regular,,2\nά,singular,nominative,1st,feminine,irregular,,63\nα,singular,vocative,1st,feminine,regular,primary,\nη,singular,vocative,1st,feminine,regular,primary,\nή,singular,vocative,1st,feminine,regular,,\nᾶ,singular,vocative,1st,feminine,regular,,2\nῆ,singular,vocative,1st,feminine,regular,,2\nά,singular,vocative,1st,feminine,irregular,,63\nαν,singular,accusative,1st,masculine,regular,primary,\nην,singular,accusative,1st,masculine,regular,primary,3\nήν,singular,accusative,1st,masculine,regular,,\nᾶν,singular,accusative,1st,masculine,regular,,3\nῆν,singular,accusative,1st,masculine,regular,,3\nεα,singular,accusative,1st,masculine,irregular,,\nᾳ,singular,dative,1st,masculine,regular,primary,\nῃ,singular,dative,1st,masculine,regular,primary,\nῇ,singular,dative,1st,masculine,regular,,\nᾷ,singular,dative,1st,masculine,regular,,3\nῆ,singular,dative,1st,masculine,regular,,3\nηφι,singular,dative,1st,masculine,irregular,,45\nηφιν,singular,dative,1st,masculine,irregular,,4 45\nῆφι,singular,dative,1st,masculine,irregular,,45\nῆφιv,singular,dative,1st,masculine,irregular,,4 45\nου,singular,genitive,1st,masculine,regular,primary,\nοῦ,singular,genitive,1st,masculine,regular,,\nαο,singular,genitive,1st,masculine,irregular,,\nεω,singular,genitive,1st,masculine,irregular,,\nηφι,singular,genitive,1st,masculine,irregular,,45\nηφιν,singular,genitive,1st,masculine,irregular,,4 45\nῆφι,singular,genitive,1st,masculine,irregular,,45\nῆφιv,singular,genitive,1st,masculine,irregular,,4 45\nω,singular,genitive,1st,masculine,irregular,,\nα,singular,genitive,1st,masculine,irregular,,\nας,singular,nominative,1st,masculine,regular,primary,\nης,singular,nominative,1st,masculine,regular,primary,\nής,singular,nominative,1st,masculine,regular,,\nᾶs,singular,nominative,1st,masculine,regular,,3\nῆs,singular,nominative,1st,masculine,regular,,3\nα,singular,vocative,1st,masculine,regular,primary,\nη,singular,vocative,1st,masculine,regular,primary,\nά,singular,vocative,1st,masculine,regular,,\nᾶ,singular,vocative,1st,masculine,regular,,3\nῆ,singular,vocative,1st,masculine,regular,,3\nω,dual,accusative,2nd,masculine feminine,regular,primary,\nώ,dual,accusative,2nd,masculine feminine,regular,,5\nοιν,dual,dative,2nd,masculine feminine,regular,primary,\nοῖν,dual,dative,2nd,masculine feminine,regular,,5\nοιιν,dual,dative,2nd,masculine feminine,irregular,,\nῴν,dual,dative,2nd,masculine feminine,irregular,,7\nοιν,dual,genitive,2nd,masculine feminine,regular,primary,\nοῖν,dual,genitive,2nd,masculine feminine,regular,,5\nοιιν,dual,genitive,2nd,masculine feminine,irregular,,\nῴν,dual,genitive,2nd,masculine feminine,irregular,,7\nω,dual,nominative,2nd,masculine feminine,regular,primary,60\nώ,dual,nominative,2nd,masculine feminine,regular,,60\nω,dual,vocative,2nd,masculine feminine,regular,primary,\nώ,dual,vocative,2nd,masculine feminine,regular,,5\nω,dual,accusative,2nd,neuter,regular,primary,\nώ,dual,accusative,2nd,neuter,regular,,6\nοιν,dual,dative,2nd,neuter,regular,primary,\nοῖν,dual,dative,2nd,neuter,regular,,6\nοιιν,dual,dative,2nd,neuter,irregular,,\nοιν,dual,genitive,2nd,neuter,regular,primary,\nοῖν,dual,genitive,2nd,neuter,regular,,6\nοιιν,dual,genitive,2nd,neuter,irregular,,\nω,dual,nominative,2nd,neuter,regular,primary,\nώ,dual,nominative,2nd,neuter,regular,,6\nω,dual,vocative,2nd,neuter,regular,primary,\nώ,dual,vocative,2nd,neuter,regular,,6\nους,plural,accusative,2nd,masculine feminine,regular,primary,\nούς,plural,accusative,2nd,masculine feminine,regular,,41\nοῦς,plural,accusative,2nd,masculine feminine,regular,,5\nονς,plural,accusative,2nd,masculine feminine,irregular,,\nος,plural,accusative,2nd,masculine feminine,irregular,,\nως,plural,accusative,2nd,masculine feminine,irregular,,\nοις,plural,accusative,2nd,masculine feminine,irregular,,\nώς,plural,accusative,2nd,masculine feminine,irregular,,7\nοις,plural,dative,2nd,masculine feminine,regular,primary,\nοῖς,plural,dative,2nd,masculine feminine,regular,,5\nοισι,plural,dative,2nd,masculine feminine,irregular,,\nοισιν,plural,dative,2nd,masculine feminine,irregular,,4\nῴς,plural,dative,2nd,masculine feminine,irregular,,7\nόφι,plural,dative,2nd,masculine feminine,irregular,,45\nόφιv,plural,dative,2nd,masculine feminine,irregular,,4 45\nων,plural,genitive,2nd,masculine feminine,regular,primary,\nῶν,plural,genitive,2nd,masculine feminine,regular,,5\nών,plural,genitive,2nd,masculine feminine,irregular,,7\nόφι,plural,genitive,2nd,masculine feminine,irregular,,45\nόφιv,plural,genitive,2nd,masculine feminine,irregular,,4 45\nοι,plural,nominative,2nd,masculine feminine,regular,primary,\nοί,plural,nominative,2nd,masculine feminine,regular,,41\nοῖ,plural,nominative,2nd,masculine feminine,regular,,5\nῴ,plural,nominative,2nd,masculine feminine,irregular,,7\nοι,plural,vocative,2nd,masculine feminine,regular,primary,\nοί,plural,vocative,2nd,masculine feminine,regular,,41\nοῖ,plural,vocative,2nd,masculine feminine,regular,,5\nα,plural,accusative,2nd,neuter,regular,primary,\nᾶ,plural,accusative,2nd,neuter,regular,,6\nοις,plural,dative,2nd,neuter,regular,primary,\nοῖς,plural,dative,2nd,neuter,regular,,6\nοισι,plural,dative,2nd,neuter,irregular,,\nοισιν,plural,dative,2nd,neuter,irregular,,4\nόφι,plural,dative,2nd,neuter,irregular,,45\nόφιv,plural,dative,2nd,neuter,irregular,,4 45\nων,plural,genitive,2nd,neuter,regular,primary,\nῶν,plural,genitive,2nd,neuter,regular,,6\nόφι,plural,genitive,2nd,neuter,irregular,,45\nόφιv,plural,genitive,2nd,neuter,irregular,,4 45\nα,plural,nominative,2nd,neuter,regular,primary,\nᾶ,plural,nominative,2nd,neuter,regular,,6\nα,plural,vocative,2nd,neuter,regular,primary,\nᾶ,plural,vocative,2nd,neuter,regular,,6\nον,singular,accusative,2nd,masculine feminine,regular,primary,\nόν,singular,accusative,2nd,masculine feminine,regular,primary,41\nουν,singular,accusative,2nd,masculine feminine,regular,,5\nοῦν,singular,accusative,2nd,masculine feminine,regular,,5\nω,singular,accusative,2nd,masculine feminine,irregular,,7 5\nωv,singular,accusative,2nd,masculine feminine,irregular,,7 59\nώ,singular,accusative,2nd,masculine feminine,irregular,,7 42 59\nών,singular,accusative,2nd,masculine feminine,irregular,,7 59\nῳ,singular,dative,2nd,masculine feminine,regular,primary,\nῷ,singular,dative,2nd,masculine feminine,regular,,5\nῴ,singular,dative,2nd,masculine feminine,irregular,,7\nόφι,singular,dative,2nd,masculine feminine,irregular,,45\nόφιv,singular,dative,2nd,masculine feminine,irregular,,4 45\nου,singular,genitive,2nd,masculine feminine,regular,primary,\nοῦ,singular,genitive,2nd,masculine feminine,regular,,5\nοιο,singular,genitive,2nd,masculine feminine,irregular,,\nοο,singular,genitive,2nd,masculine feminine,irregular,,\nω,singular,genitive,2nd,masculine feminine,irregular,,\nώ,singular,genitive,2nd,masculine feminine,irregular,,7\nόφι,singular,genitive,2nd,masculine feminine,irregular,,45\nόφιv,singular,genitive,2nd,masculine feminine,irregular,,4 45\nος,singular,nominative,2nd,masculine feminine,regular,primary,\nους,singular,nominative,2nd,masculine feminine,regular,,5\noῦς,singular,nominative,2nd,masculine feminine,regular,,5\nός,singular,nominative,2nd,masculine feminine,regular,,\nώς,singular,nominative,2nd,masculine feminine,irregular,,7 42\nως,singular,nominative,2nd,masculine feminine,irregular,,\nε,singular,vocative,2nd,masculine feminine,regular,primary,\nέ,singular,vocative,2nd,masculine feminine,regular,,\nοu,singular,vocative,2nd,masculine feminine,regular,,5\nοῦ,singular,vocative,2nd,masculine feminine,regular,,42\nός,singular,vocative,2nd,masculine feminine,irregular,,57\nον,singular,accusative,2nd,neuter,regular,primary,\nοῦν,singular,accusative,2nd,neuter,regular,,6\nῳ,singular,dative,2nd,neuter,regular,primary,\nῷ,singular,dative,2nd,neuter,regular,,6\nόφι,singular,dative,2nd,neuter,irregular,,45\nόφιv,singular,dative,2nd,neuter,irregular,,4 45\nου,singular,genitive,2nd,neuter,regular,primary,\nοῦ,singular,genitive,2nd,neuter,regular,,6\nοο,singular,genitive,2nd,neuter,irregular,,\nοιο,singular,genitive,2nd,neuter,irregular,,\nω,singular,genitive,2nd,neuter,irregular,,\nόφι,singular,genitive,2nd,neuter,irregular,,45\nόφιv,singular,genitive,2nd,neuter,irregular,,4 45\nον,singular,nominative,2nd,neuter,regular,primary,\nοῦν,singular,nominative,2nd,neuter,regular,,6\nον,singular,vocative,2nd,neuter,regular,primary,\nοῦν,singular,vocative,2nd,neuter,regular,,6\nε,dual,accusative,3rd,masculine feminine,regular,primary,\nει,dual,accusative,3rd,masculine feminine,regular,,\nῆ,dual,accusative,3rd,masculine feminine,regular,,18\nω,dual,accusative,3rd,masculine feminine,irregular,,32\nῖ,dual,accusative,3rd,masculine feminine,irregular,,33\nεε,dual,accusative,3rd,masculine feminine,irregular,,16 55 61\nοιν,dual,dative,3rd,masculine feminine,regular,primary,\nοῖν,dual,dative,3rd,masculine feminine,regular,,\nοιιν,dual,dative,3rd,masculine feminine,irregular,,54\nσι,dual,dative,3rd,masculine feminine,irregular,,33 37\nεσσι,dual,dative,3rd,masculine feminine,irregular,,33\nεσι,dual,dative,3rd,masculine feminine,irregular,,33\nέοιν,dual,dative,3rd,masculine feminine,irregular,,16 61\nῳν,dual,dative,3rd,masculine feminine,irregular,,49\nοιν,dual,genitive,3rd,masculine feminine,regular,primary,\nοῖν,dual,genitive,3rd,masculine feminine,regular,,\nοιιν,dual,genitive,3rd,masculine feminine,irregular,,54\nέοιν,dual,genitive,3rd,masculine feminine,irregular,,16 61\nῳν,dual,genitive,3rd,masculine feminine,irregular,,49\nε,dual,nominative,3rd,masculine feminine,regular,primary,\nει,dual,nominative,3rd,masculine feminine,regular,,\nῆ,dual,nominative,3rd,masculine feminine,regular,,18\nω,dual,nominative,3rd,masculine feminine,irregular,,32\nῖ,dual,nominative,3rd,masculine feminine,irregular,,33\nεε,dual,nominative,3rd,masculine feminine,irregular,,16 55 61\nε,dual,vocative,3rd,masculine feminine,regular,primary,\nει,dual,vocative,3rd,masculine feminine,regular,,\nῆ,dual,vocative,3rd,masculine feminine,regular,,18\nω,dual,vocative,3rd,masculine feminine,irregular,,32\nῖ,dual,vocative,3rd,masculine feminine,irregular,,33\nεε,dual,vocative,3rd,masculine feminine,irregular,,16 55 61\nε,dual,accusative,3rd,neuter,regular,primary,\nει,dual,accusative,3rd,neuter,regular,,\nα,dual,accusative,3rd,neuter,regular,,\nεε,dual,accusative,3rd,neuter,irregular,,16 61\nαε,dual,accusative,3rd,neuter,irregular,,16 61\nοιν,dual,dative,3rd,neuter,regular,primary,\nῷν,dual,dative,3rd,neuter,regular,,\nοις,dual,dative,3rd,neuter,irregular,,33 38\nοισι,dual,dative,3rd,neuter,irregular,,33 38\nοισι(ν),dual,dative,3rd,neuter,irregular,,4 33 38\nοιιν,dual,dative,3rd,neuter,irregular,,\nέοιν,dual,dative,3rd,neuter,irregular,,16 61\nάοιν,dual,dative,3rd,neuter,irregular,,16 61\nοιν,dual,genitive,3rd,neuter,regular,primary,\nῷν,dual,genitive,3rd,neuter,regular,,\nων,dual,genitive,3rd,neuter,irregular,,33 38\nοιιν,dual,genitive,3rd,neuter,irregular,,\nέοιν,dual,genitive,3rd,neuter,irregular,,16 61\nάοιν,dual,genitive,3rd,neuter,irregular,,16 61\nε,dual,nominative,3rd,neuter,regular,primary,\nει,dual,nominative,3rd,neuter,regular,,\nα,dual,nominative,3rd,neuter,regular,,\nεε,dual,nominative,3rd,neuter,irregular,,16 61\nαε,dual,nominative,3rd,neuter,irregular,,16 61\nε,dual,vocative,3rd,neuter,regular,primary,\nει,dual,vocative,3rd,neuter,regular,,\nα,dual,vocative,3rd,neuter,regular,,\nεε,dual,vocative,3rd,neuter,irregular,,16 61\nαε,dual,vocative,3rd,neuter,irregular,,16 61\nας,plural,accusative,3rd,masculine feminine,regular,primary,\nεις,plural,accusative,3rd,masculine feminine,regular,,17 41\nες,plural,accusative,3rd,masculine feminine,regular,,\nς,plural,accusative,3rd,masculine feminine,regular,,\nῦς,plural,accusative,3rd,masculine feminine,regular,,17 18 48\nως,plural,accusative,3rd,masculine feminine,regular,,30\nῆς,plural,accusative,3rd,masculine feminine,irregular,,56\nέας,plural,accusative,3rd,masculine feminine,irregular,,\nέος,plural,accusative,3rd,masculine feminine,irregular,,\nῆος,plural,accusative,3rd,masculine feminine,irregular,,\nῆες,plural,accusative,3rd,masculine feminine,irregular,,\nῆας,plural,accusative,3rd,masculine feminine,irregular,,\nους,plural,accusative,3rd,masculine feminine,irregular,,32\nούς,plural,accusative,3rd,masculine feminine,irregular,,32\nεῖς,plural,accusative,3rd,masculine feminine,irregular,,31 41\nεες,plural,accusative,3rd,masculine feminine,irregular,,55 61\nις,plural,accusative,3rd,masculine feminine,irregular,,\nινς,plural,accusative,3rd,masculine feminine,irregular,,\nῶς,plural,accusative,3rd,masculine feminine,irregular,,48\nσι,plural,dative,3rd,masculine feminine,regular,primary,\nσιν,plural,dative,3rd,masculine feminine,regular,primary,4\nσί,plural,dative,3rd,masculine feminine,regular,,41\nσίν,plural,dative,3rd,masculine feminine,regular,,4 41\nεσι,plural,dative,3rd,masculine feminine,regular,,41\nεσιν,plural,dative,3rd,masculine feminine,regular,,4 41\nέσι,plural,dative,3rd,masculine feminine,regular,,\nέσιν,plural,dative,3rd,masculine feminine,regular,,4\nψι,plural,dative,3rd,masculine feminine,regular,,\nψιν,plural,dative,3rd,masculine feminine,regular,,4\nψί,plural,dative,3rd,masculine feminine,regular,,\nψίν,plural,dative,3rd,masculine feminine,regular,,4\nξι,plural,dative,3rd,masculine feminine,regular,,\nξιν,plural,dative,3rd,masculine feminine,regular,,4\nξί,plural,dative,3rd,masculine feminine,regular,,\nξίν,plural,dative,3rd,masculine feminine,regular,,4\nφι,plural,dative,3rd,masculine feminine,irregular,,45\nφιν,plural,dative,3rd,masculine feminine,irregular,,4 45\nηφι,plural,dative,3rd,masculine feminine,irregular,,45\nηφιv,plural,dative,3rd,masculine feminine,irregular,,4 45\nῆφι,plural,dative,3rd,masculine feminine,irregular,,45\nῆφιν,plural,dative,3rd,masculine feminine,irregular,,4 45\nόφι,plural,dative,3rd,masculine feminine,irregular,,45\nόφιν,plural,dative,3rd,masculine feminine,irregular,,4 45\nαις,plural,dative,3rd,masculine feminine,irregular,,33 41\nοῖσι,plural,dative,3rd,masculine feminine,irregular,,33\nοῖσιv,plural,dative,3rd,masculine feminine,irregular,,4 33\nεσσι,plural,dative,3rd,masculine feminine,irregular,,16 61\nεσσιv,plural,dative,3rd,masculine feminine,irregular,,4 16 61\nυσσι,plural,dative,3rd,masculine feminine,irregular,,54\nυσσιv,plural,dative,3rd,masculine feminine,irregular,,4 54\nσσί,plural,dative,3rd,masculine feminine,irregular,,54\nσσίv,plural,dative,3rd,masculine feminine,irregular,,4 54\nων,plural,genitive,3rd,masculine feminine,regular,primary,\nῶν,plural,genitive,3rd,masculine feminine,regular,,\n-,plural,genitive,3rd,masculine feminine,irregular,,41\nφι,plural,genitive,3rd,masculine feminine,irregular,,45\nφιν,plural,genitive,3rd,masculine feminine,irregular,,4 45\nηφι,plural,genitive,3rd,masculine feminine,irregular,,45\nηφιv,plural,genitive,3rd,masculine feminine,irregular,,4 45\nῆφι,plural,genitive,3rd,masculine feminine,irregular,,45\nῆφιν,plural,genitive,3rd,masculine feminine,irregular,,4 45\nόφι,plural,genitive,3rd,masculine feminine,irregular,,45\nόφιν,plural,genitive,3rd,masculine feminine,irregular,,4 45\nέων,plural,genitive,3rd,masculine feminine,irregular,,16 61\nες,plural,nominative,3rd,masculine feminine,regular,primary,\nως,plural,nominative,3rd,masculine feminine,regular,,30\nεις,plural,nominative,3rd,masculine feminine,regular,,17\nεῖς,plural,nominative,3rd,masculine feminine,regular,,18\nοί,plural,nominative,3rd,masculine feminine,irregular,,32\nαί,plural,nominative,3rd,masculine feminine,irregular,,33\nῆς,plural,nominative,3rd,masculine feminine,irregular,,18\nῄς,plural,nominative,3rd,masculine feminine,irregular,,31 41\nεες,plural,nominative,3rd,masculine feminine,irregular,,16 55 61\nοι,plural,nominative,3rd,masculine feminine,irregular,,33\nες,plural,vocative,3rd,masculine feminine,regular,primary,\nεις,plural,vocative,3rd,masculine feminine,regular,,17\nεῖς,plural,vocative,3rd,masculine feminine,regular,,18\nῆς,plural,vocative,3rd,masculine feminine,regular,,18\nως,plural,vocative,3rd,masculine feminine,regular,,30\nεες,plural,vocative,3rd,masculine feminine,irregular,,16 55 61\nα,plural,accusative,3rd,neuter,regular,primary,\nη,plural,accusative,3rd,neuter,regular,,\nς,plural,accusative,3rd,neuter,regular,,\nά,plural,accusative,3rd,neuter,irregular,,33\nαα,plural,accusative,3rd,neuter,irregular,,16 61\nεα,plural,accusative,3rd,neuter,irregular,,16 61\nσι,plural,dative,3rd,neuter,regular,primary,\nσιν,plural,dative,3rd,neuter,regular,primary,4\nσί,plural,dative,3rd,neuter,regular,,\nσίv,plural,dative,3rd,neuter,regular,,4\nασι,plural,dative,3rd,neuter,regular,,\nασιν,plural,dative,3rd,neuter,regular,,4\nεσι,plural,dative,3rd,neuter,regular,,\nεσιν,plural,dative,3rd,neuter,regular,,4\nέσι,plural,dative,3rd,neuter,regular,,\nέσιv,plural,dative,3rd,neuter,regular,,4\nεσσι,plural,dative,3rd,neuter,irregular,,54\nεσσιν,plural,dative,3rd,neuter,irregular,,4 54\nσσί,plural,dative,3rd,neuter,irregular,,54\nσσίv,plural,dative,3rd,neuter,irregular,,4 54\nασσι,plural,dative,3rd,neuter,irregular,,54\nασσιν,plural,dative,3rd,neuter,irregular,,4 54\nφι,plural,dative,3rd,neuter,irregular,,45\nφιν,plural,dative,3rd,neuter,irregular,,4 45\nηφι,plural,dative,3rd,neuter,irregular,,45\nηφιv,plural,dative,3rd,neuter,irregular,,4 45\nῆφι,plural,dative,3rd,neuter,irregular,,45\nῆφιν,plural,dative,3rd,neuter,irregular,,4 45\nόφι,plural,dative,3rd,neuter,irregular,,45\nόφιν,plural,dative,3rd,neuter,irregular,,4 45\nων,plural,genitive,3rd,neuter,regular,primary,\nῶν,plural,genitive,3rd,neuter,regular,primary,\nφι,plural,genitive,3rd,neuter,irregular,,\nφιν,plural,genitive,3rd,neuter,irregular,,4 45\nηφι,plural,genitive,3rd,neuter,irregular,,45\nηφιv,plural,genitive,3rd,neuter,irregular,,4 45\nῆφι,plural,genitive,3rd,neuter,irregular,,45\nῆφιν,plural,genitive,3rd,neuter,irregular,,4 45\nόφι,plural,genitive,3rd,neuter,irregular,,45\nόφιν,plural,genitive,3rd,neuter,irregular,,4 45\nέων,plural,genitive,3rd,neuter,irregular,,16 61\nάων,plural,genitive,3rd,neuter,irregular,,16 61\nα,plural,nominative,3rd,neuter,regular,primary,\nη,plural,nominative,3rd,neuter,regular,,\nες,plural,nominative,3rd,neuter,regular,,\nά,plural,nominative,3rd,neuter,irregular,,33\nεα,plural,nominative,3rd,neuter,irregular,,16 61\nαα,plural,nominative,3rd,neuter,irregular,,16 61\nα,plural,vocative,3rd,neuter,regular,primary,\nη,plural,vocative,3rd,neuter,regular,,\nες,plural,vocative,3rd,neuter,regular,,\nαα,plural,vocative,3rd,neuter,irregular,,16 61\nεα,plural,vocative,3rd,neuter,irregular,,16 61\nα,singular,accusative,3rd,masculine feminine,regular,primary,\nη,singular,accusative,3rd,masculine feminine,regular,,16\nν,singular,accusative,3rd,masculine feminine,regular,,\nιν,singular,accusative,3rd,masculine feminine,regular,,41\nῦν,singular,accusative,3rd,masculine feminine,regular,,18\nῶ,singular,accusative,3rd,masculine feminine,regular,,23\nυν,singular,accusative,3rd,masculine feminine,regular,,\nῦν,singular,accusative,3rd,masculine feminine,regular,,17\nύν,singular,accusative,3rd,masculine feminine,regular,,17\nέα,singular,accusative,3rd,masculine feminine,regular,,20\nην,singular,accusative,3rd,masculine feminine,regular,,24\nώ,singular,accusative,3rd,masculine feminine,regular,,19 41\nω,singular,accusative,3rd,masculine feminine,regular,,23\nεῖν,singular,accusative,3rd,masculine feminine,irregular,,31 41\nων,singular,accusative,3rd,masculine feminine,irregular,,33 41 49\nαν,singular,accusative,3rd,masculine feminine,irregular,,33 41\nον,singular,accusative,3rd,masculine feminine,irregular,,39\nῖς,singular,accusative,3rd,masculine feminine,irregular,,33\nεα,singular,accusative,3rd,masculine feminine,irregular,,61\nι,singular,dative,3rd,masculine feminine,regular,primary,\nί,singular,dative,3rd,masculine feminine,regular,,\nϊ,singular,dative,3rd,masculine feminine,regular,,17\nΐ,singular,dative,3rd,masculine feminine,regular,,40\nει,singular,dative,3rd,masculine feminine,regular,,16 17\nεῖ,singular,dative,3rd,masculine feminine,regular,,18\nαι,singular,dative,3rd,masculine feminine,regular,,\noῖ,singular,dative,3rd,masculine feminine,regular,,28 41\nῖ,singular,dative,3rd,masculine feminine,irregular,,33 46\nῆι,singular,dative,3rd,masculine feminine,irregular,,18\nᾳ,singular,dative,3rd,masculine feminine,irregular,,25\nῳ,singular,dative,3rd,masculine feminine,irregular,,33 34\nῷ,singular,dative,3rd,masculine feminine,irregular,,33\nιί,singular,dative,3rd,masculine feminine,irregular,,62\nυί,singular,dative,3rd,masculine feminine,irregular,,62\nέϊ,singular,dative,3rd,masculine feminine,irregular,,18 61\nος,singular,genitive,3rd,masculine feminine,regular,primary,\nός,singular,genitive,3rd,masculine feminine,regular,,\nους,singular,genitive,3rd,masculine feminine,regular,,16\nοῦς,singular,genitive,3rd,masculine feminine,regular,,19 46\nως,singular,genitive,3rd,masculine feminine,regular,,17 18\nώς,singular,genitive,3rd,masculine feminine,regular,,17 18 41\nῶς,singular,genitive,3rd,masculine feminine,regular,,47\nεως,singular,genitive,3rd,masculine feminine,regular,,17\nέως,singular,genitive,3rd,masculine feminine,regular,,\nεώς,singular,genitive,3rd,masculine feminine,regular,,\nέους,singular,genitive,3rd,masculine feminine,regular,,20\nω,singular,genitive,3rd,masculine feminine,irregular,,\nεος,singular,genitive,3rd,masculine feminine,irregular,,61\nΰς,singular,genitive,3rd,masculine feminine,irregular,,41 48\nῦς,singular,genitive,3rd,masculine feminine,irregular,,48\nνος,singular,genitive,3rd,masculine feminine,irregular,,22\nοῦ,singular,genitive,3rd,masculine feminine,irregular,,33\nηος,singular,genitive,3rd,masculine feminine,irregular,,55\nιός,singular,genitive,3rd,masculine feminine,irregular,,62\nuός,singular,genitive,3rd,masculine feminine,irregular,,62\nς,singular,nominative,3rd,masculine feminine,regular,primary,\n-,singular,nominative,3rd,masculine feminine,regular,primary,\nηρ,singular,nominative,3rd,masculine feminine,regular,,41\nις,singular,nominative,3rd,masculine feminine,regular,,\nϊς,singular,nominative,3rd,masculine feminine,regular,,\nώ,singular,nominative,3rd,masculine feminine,regular,,41\nψ,singular,nominative,3rd,masculine feminine,regular,,\nξ,singular,nominative,3rd,masculine feminine,regular,,\nρ,singular,nominative,3rd,masculine feminine,regular,,\nήρ,singular,nominative,3rd,masculine feminine,regular,,\nήν,singular,nominative,3rd,masculine feminine,regular,,50\nν,singular,nominative,3rd,masculine feminine,regular,,\nωρ,singular,nominative,3rd,masculine feminine,regular,,\nων,singular,nominative,3rd,masculine feminine,regular,,\nών,singular,nominative,3rd,masculine feminine,regular,,\nης,singular,nominative,3rd,masculine feminine,regular,,\nῆς,singular,nominative,3rd,masculine feminine,regular,,\nυς,singular,nominative,3rd,masculine feminine,regular,,\nῦς,singular,nominative,3rd,masculine feminine,regular,,\nεῦς,singular,nominative,3rd,masculine feminine,regular,,\nύς,singular,nominative,3rd,masculine feminine,regular,,\nής,singular,nominative,3rd,masculine feminine,regular,,33\nας,singular,nominative,3rd,masculine feminine,irregular,,\nῴ,singular,nominative,3rd,masculine feminine,irregular,,29 41\nώς,singular,nominative,3rd,masculine feminine,irregular,,27 41\nϋς,singular,nominative,3rd,masculine feminine,irregular,,41\nῄς,singular,nominative,3rd,masculine feminine,irregular,,31 41\nῖς,singular,nominative,3rd,masculine feminine,irregular,,\nεῖς,singular,nominative,3rd,masculine feminine,irregular,,31 41\nῶς,singular,nominative,3rd,masculine feminine,irregular,,48\nος,singular,nominative,3rd,masculine feminine,irregular,,33\n-,singular,vocative,3rd,masculine feminine,regular,primary,52\nς,singular,vocative,3rd,masculine feminine,regular,,30\nι,singular,vocative,3rd,masculine feminine,regular,,41\nῦ,singular,vocative,3rd,masculine feminine,regular,,15 17 18\nοῖ,singular,vocative,3rd,masculine feminine,regular,,19 41\nψ,singular,vocative,3rd,masculine feminine,regular,,\nξ,singular,vocative,3rd,masculine feminine,regular,,\nν,singular,vocative,3rd,masculine feminine,regular,,\nρ,singular,vocative,3rd,masculine feminine,regular,,\nων,singular,vocative,3rd,masculine feminine,regular,,50\nών,singular,vocative,3rd,masculine feminine,regular,,\nήν,singular,vocative,3rd,masculine feminine,regular,,\nερ,singular,vocative,3rd,masculine feminine,regular,,\nες,singular,vocative,3rd,masculine feminine,regular,,\nί,singular,vocative,3rd,masculine feminine,regular,,\nως,singular,vocative,3rd,masculine feminine,regular,,\nἶ,singular,vocative,3rd,masculine feminine,regular,,\nούς,singular,vocative,3rd,masculine feminine,regular,,51\nύ,singular,vocative,3rd,masculine feminine,regular,,15\nυ,singular,vocative,3rd,masculine feminine,regular,,51\nεις,singular,vocative,3rd,masculine feminine,regular,,20\nαν,singular,vocative,3rd,masculine feminine,regular,,\nώς,singular,vocative,3rd,masculine feminine,irregular,,27 41 46\nον,singular,vocative,3rd,masculine feminine,irregular,,\nυς,singular,vocative,3rd,masculine feminine,irregular,,33\nα,singular,accusative,3rd,neuter,regular,primary,15\n-,singular,accusative,3rd,neuter,regular,,33\nος,singular,accusative,3rd,neuter,regular,,\nας,singular,accusative,3rd,neuter,regular,,\nαρ,singular,accusative,3rd,neuter,regular,,21\nυ,singular,accusative,3rd,neuter,regular,,\nι,singular,dative,3rd,neuter,regular,primary,\nει,singular,dative,3rd,neuter,regular,,16\nαι,singular,dative,3rd,neuter,regular,,16 21\nϊ,singular,dative,3rd,neuter,irregular,,17\nᾳ,singular,dative,3rd,neuter,irregular,,25 33\nυϊ,singular,dative,3rd,neuter,irregular,,17\nαϊ,singular,dative,3rd,neuter,irregular,,21 61\nος,singular,genitive,3rd,neuter,regular,primary,\nους,singular,genitive,3rd,neuter,regular,,16\nως,singular,genitive,3rd,neuter,regular,,16\nεως,singular,genitive,3rd,neuter,regular,,17\nυς,singular,genitive,3rd,neuter,irregular,,26\nου,singular,genitive,3rd,neuter,irregular,,33\nαος,singular,genitive,3rd,neuter,irregular,,21 61\nα,singular,nominative,3rd,neuter,regular,primary,\n-,singular,nominative,3rd,neuter,regular,,33\nος,singular,nominative,3rd,neuter,regular,,\nαρ,singular,nominative,3rd,neuter,regular,,\nας,singular,nominative,3rd,neuter,regular,,16 21\nυ,singular,nominative,3rd,neuter,regular,,\nον,singular,nominative,3rd,neuter,irregular,,33\nα,singular,vocative,3rd,neuter,regular,primary,15\n-,singular,vocative,3rd,neuter,regular,,\nος,singular,vocative,3rd,neuter,regular,,\nας,singular,vocative,3rd,neuter,regular,,\nαρ,singular,vocative,3rd,neuter,regular,,21\nυ,singular,vocative,3rd,neuter,regular,,";
 
@@ -7992,10 +7942,10 @@ var nounFootnotesCSV$1 = "Index,Text\n1,See  for Rules of variance within regula
 /*
  * Latin language data module
  */
-/*import adjectiveSuffixesCSV from './data/adjective/suffixes.csv';
+/* import adjectiveSuffixesCSV from './data/adjective/suffixes.csv';
 import adjectiveFootnotesCSV from './data/adjective/footnotes.csv';
 import verbSuffixesCSV from './data/verb/suffixes.csv';
-import verbFootnotesCSV from './data/verb/footnotes.csv';*/
+import verbFootnotesCSV from './data/verb/footnotes.csv'; */
 // A language of this module
 const language$1 = languages.greek;
 // Create a language data set that will keep all language-related information
@@ -8007,35 +7957,36 @@ let dataSet$1 = new LanguageDataset(language$1);
  analyzer's language modules as well.
  */
 const importerName$1 = 'csv';
-const parts = new FeatureType(Feature.types.part, ['noun', 'adjective', 'verb'],{});
-const numbers = new FeatureType(Feature.types.number, ['singular', 'dual', 'plural'],{});
+const parts = new FeatureType(Feature.types.part, ['noun', 'adjective', 'verb'], language$1);
+const numbers = new FeatureType(Feature.types.number, ['singular', 'dual', 'plural'], language$1);
 numbers.addImporter(importerName$1)
     .map('singular', numbers.singular)
     .map('dual', numbers.dual)
     .map('plural', numbers.plural);
-const cases = new FeatureType(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'vocative'],{});
+const cases = new FeatureType(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'vocative'], language$1);
 cases.addImporter(importerName$1)
     .map('nominative', cases.nominative)
     .map('genitive', cases.genitive)
     .map('dative', cases.dative)
     .map('accusative', cases.accusative)
     .map('vocative', cases.vocative);
-const declensions = new FeatureType(Feature.types.declension, ['first', 'second', 'third'],{});
+const declensions = new FeatureType(Feature.types.declension, ['first', 'second', 'third'], language$1);
 declensions.addImporter(importerName$1)
     .map('1st', declensions.first)
     .map('2nd', declensions.second)
     .map('3rd', declensions.third);
-const genders = new FeatureType(Feature.types.gender, ['masculine', 'feminine', 'neuter'],{});
+const genders = new FeatureType(Feature.types.gender, ['masculine', 'feminine', 'neuter'], language$1);
 genders.addImporter(importerName$1)
     .map('masculine', genders.masculine)
     .map('feminine', genders.feminine)
     .map('neuter', genders.neuter)
     .map('masculine feminine', [genders.masculine, genders.feminine]);
-const types$1 = new FeatureType(Feature.types.type, ['regular', 'irregular'],{});
+const types$1 = new FeatureType(Feature.types.type, ['regular', 'irregular'], language$1);
 types$1.addImporter(importerName$1)
     .map('regular', types$1.regular)
     .map('irregular', types$1.irregular);
-/*const conjugations = new Models.FeatureType(Lib.types.conjugation, ['first', 'second', 'third', 'fourth']);
+/*
+const conjugations = new Models.FeatureType(Lib.types.conjugation, ['first', 'second', 'third', 'fourth']);
 conjugations.addImporter(importerName)
     .map('1st', conjugations.first)
     .map('2nd', conjugations.second)
@@ -8049,7 +8000,7 @@ tenses.addImporter(importerName)
     .map('perfect', tenses.perfect)
     .map('pluperfect', tenses.pluperfect)
     .map('future_perfect', tenses['future perfect']);
-const voices = new Models.FeatureType(Lib.types.voice, ['passive', 'active']);
+const voices = new Models.FeatureType(Lib.types.voice, ['passive', 'active'],language);
 voices.addImporter(importerName)
     .map('passive', voices.passive)
     .map('active', voices.active);
@@ -8061,8 +8012,8 @@ const persons = new Models.FeatureType(Lib.types.person, ['first', 'second', 'th
 persons.addImporter(importerName)
     .map('1st', persons.first)
     .map('2nd', persons.second)
-    .map('3rd', persons.third);*/
-const footnotes$2 = new FeatureType(Feature.types.footnote, [],{});
+    .map('3rd', persons.third); */
+const footnotes$2 = new FeatureType(Feature.types.footnote, [], {});
 
 // endregion Definition of grammatical features
 
@@ -8092,7 +8043,6 @@ dataSet$1.addSuffixes = function (partOfSpeech, data) {
     }
     if (dataItem[7]) {
       // There can be multiple footnote indexes separated by spaces
-      let language = this.language;
       let indexes = dataItem[7].split(' ').map(function (index) {
         return footnotes$2.get(index)
       });
@@ -8120,13 +8070,15 @@ dataSet$1.addVerbSuffixes = function (partOfSpeech, data) {
       suffix = null;
     }
 
-    let features = [partOfSpeech,
+    let features = [partOfSpeech
+      /*
       conjugations.importer.csv.get(data[i][1]),
       voices.importer.csv.get(data[i][2]),
       moods.importer.csv.get(data[i][3]),
       tenses.importer.csv.get(data[i][4]),
       numbers.importer.csv.get(data[i][5]),
-      persons.importer.csv.get(data[i][6])];
+      persons.importer.csv.get(data[i][6]) */
+    ];
 
     let grammarType = data[i][7];
     // Type information can be empty if no ending is provided
@@ -8136,7 +8088,6 @@ dataSet$1.addVerbSuffixes = function (partOfSpeech, data) {
     // Footnotes
     if (data[i][8]) {
       // There can be multiple footnote indexes separated by spaces
-      let language = this.language;
       let indexes = data[i][8].split(' ').map(function (index) {
         return footnotes$2.get(index)
       });
@@ -8162,18 +8113,18 @@ dataSet$1.loadData = function () {
   this.addFootnotes(partOfSpeech, footnotes.data);
 
   // Adjectives
-  /*partOfSpeech = parts.adjective;
+  /* partOfSpeech = parts.adjective;
   suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
   this.addSuffixes(partOfSpeech, suffixes.data);
   footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
-  this.addFootnotes(partOfSpeech, footnotes.data);*/
+  this.addFootnotes(partOfSpeech, footnotes.data); */
 
   // Verbs
-  /*partOfSpeech = parts.verb;
+  /* partOfSpeech = parts.verb;
   suffixes = papaparse.parse(verbSuffixesCSV, {});
   this.addVerbSuffixes(partOfSpeech, suffixes.data);
   footnotes = papaparse.parse(verbFootnotesCSV, {});
-  this.addFootnotes(partOfSpeech, footnotes.data);*/
+  this.addFootnotes(partOfSpeech, footnotes.data); */
 };
 
 /**
@@ -8183,14 +8134,14 @@ dataSet$1.loadData = function () {
  * @returns {Suffix | null} If a match is found, returns a Suffix object modified with some
  * additional information about a match. If no matches found, returns null.
  */
-dataSet$1.matcher = function(inflections, suffix) {
-    "use strict";
+dataSet$1.matcher = function (inflections, suffix) {
+  'use strict';
     // All of those features must match between an inflection and an ending
-    let obligatoryMatches = [Feature.types.part];
+  let obligatoryMatches = [Feature.types.part];
 
     // Any of those features must match between an inflection and an ending
-    let optionalMatches = [Feature.types.grmCase, Feature.types.declension, Feature.types.gender, Feature.types.number];
-    let bestMatchData = null; // Information about the best match we would be able to find
+  let optionalMatches = [Feature.types.grmCase, Feature.types.declension, Feature.types.gender, Feature.types.number];
+  let bestMatchData = null; // Information about the best match we would be able to find
 
   /*
    There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
@@ -8205,9 +8156,9 @@ dataSet$1.matcher = function(inflections, suffix) {
     }
 
     // Check obligatory matches
-    for (let feature of  obligatoryMatches) {
+    for (let feature of obligatoryMatches) {
       let featureMatch = suffix.featureMatch(feature, inflection[feature]);
-      //matchFound = matchFound && featureMatch;
+      // matchFound = matchFound && featureMatch;
 
       if (!featureMatch) {
         // If an obligatory match is not found, there is no reason to check other items
@@ -8268,8 +8219,7 @@ dataSet$1.bestMatch = function (matchA, matchB) {
   if (matchA.suffixMatch !== matchB.suffixMatch) {
     if (matchA.suffixMatch > matchB.suffixMatch) {
       return matchA
-    }
-    else {
+    } else {
       return matchB
     }
   }
@@ -8278,8 +8228,7 @@ dataSet$1.bestMatch = function (matchA, matchB) {
   if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
     // Arbitrarily return matchA if matches are the same
     return matchA
-  }
-  else {
+  } else {
     return matchB
   }
 };
@@ -8376,124 +8325,123 @@ var viewsGreek = [new NounView$1(), new NounViewSimplified()];
  * directory under /presenter/views/view-name
  */
 class Presenter {
-    constructor(viewContainer, viewSelectorContainer, localeSelectorContainer, wordData, locale = 'en-US') {
-
-        this.viewContainer = viewContainer;
-        this.viewSelectorContainer = viewSelectorContainer;
-        this.localeSelectorContainer = localeSelectorContainer;
-        this.wordData = wordData;
+  constructor (viewContainer, viewSelectorContainer, localeSelectorContainer, wordData, locale = 'en-US') {
+    this.viewContainer = viewContainer;
+    this.viewSelectorContainer = viewSelectorContainer;
+    this.localeSelectorContainer = localeSelectorContainer;
+    this.wordData = wordData;
 
         // All views registered by the Presenter
-        this.views = [];
-        this.viewIndex = {};
+    this.views = [];
+    this.viewIndex = {};
 
-        for (let view of viewsLatin) {
-            this.addView(view);
-        }
-        for (let view of viewsGreek) {
-            this.addView(view);
-        }
+    for (let view of viewsLatin) {
+      this.addView(view);
+    }
+    for (let view of viewsGreek) {
+      this.addView(view);
+    }
 
         // Views available for parts of speech that are present in a Result Set
-        this.availableViews = this.getViews(this.wordData);
+    this.availableViews = this.getViews(this.wordData);
 
-        this.defaultView = this.availableViews[0];
-        this.activeView = undefined;
+    this.defaultView = this.availableViews[0];
+    this.activeView = undefined;
 
-        this.locale = locale; // This is a default locale
-        this.l10n = new L10n(messages);
+    this.locale = locale; // This is a default locale
+    this.l10n = new L10n(messages);
 
-        return this;
-    }
+    return this
+  }
 
-    addView(view) {
-       //let view =  new View.View(viewOptions);
-       this.views.push(view);
-       this.viewIndex[view.id] = view;
-    }
+  addView (view) {
+       // let view =  new View.View(viewOptions);
+    this.views.push(view);
+    this.viewIndex[view.id] = view;
+  }
 
-    setLocale(locale) {
-        this.locale = locale;
-        this.activeView.render(this.viewContainer, this.wordData, this.l10n.messages(this.locale));
-    }
+  setLocale (locale) {
+    this.locale = locale;
+    this.activeView.render(this.viewContainer, this.wordData, this.l10n.messages(this.locale));
+  }
 
-    render() {
+  render () {
         // Show a default view
-        if (this.defaultView) {
-            this.defaultView.render(this.viewContainer, this.wordData, this.l10n.messages(this.locale));
-            this.activeView = this.defaultView;
+    if (this.defaultView) {
+      this.defaultView.render(this.viewContainer, this.wordData, this.l10n.messages(this.locale));
+      this.activeView = this.defaultView;
 
-            this.appendViewSelector(this.viewSelectorContainer);
-            //this.appendLocaleSelector(this.localeSelectorContainer);
-        }
-        return this;
+      this.appendViewSelector(this.viewSelectorContainer);
+            // this.appendLocaleSelector(this.localeSelectorContainer);
     }
+    return this
+  }
 
-    appendViewSelector(targetContainer) {
-        targetContainer.innerHTML = '';
-        if (this.availableViews.length > 1) {
-            let id = 'view-selector-list';
-            let viewLabel = document.createElement('label');
-            viewLabel.setAttribute('for', id);
-            viewLabel.innerHTML = "View:&nbsp;";
-            let viewList = document.createElement('select');
-            viewList.classList.add('alpheios-ui-form-control');
-            for (const view of this.availableViews) {
-                let option = document.createElement("option");
-                option.value = view.id;
-                option.text = view.name;
-                viewList.appendChild(option);
-            }
-            viewList.addEventListener('change', this.viewSelectorEventListener.bind(this));
-            targetContainer.appendChild(viewLabel);
-            targetContainer.appendChild(viewList);
-        }
-        return this;
+  appendViewSelector (targetContainer) {
+    targetContainer.innerHTML = '';
+    if (this.availableViews.length > 1) {
+      let id = 'view-selector-list';
+      let viewLabel = document.createElement('label');
+      viewLabel.setAttribute('for', id);
+      viewLabel.innerHTML = 'View:&nbsp;';
+      let viewList = document.createElement('select');
+      viewList.classList.add('alpheios-ui-form-control');
+      for (const view of this.availableViews) {
+        let option = document.createElement('option');
+        option.value = view.id;
+        option.text = view.name;
+        viewList.appendChild(option);
+      }
+      viewList.addEventListener('change', this.viewSelectorEventListener.bind(this));
+      targetContainer.appendChild(viewLabel);
+      targetContainer.appendChild(viewList);
     }
+    return this
+  }
 
-    viewSelectorEventListener(event) {
-        let viewID = event.target.value;
-        let view = this.viewIndex[viewID];
-        view.render(this.viewContainer, this.wordData, this.l10n.messages(this.locale));
-        this.activeView = view;
+  viewSelectorEventListener (event) {
+    let viewID = event.target.value;
+    let view = this.viewIndex[viewID];
+    view.render(this.viewContainer, this.wordData, this.l10n.messages(this.locale));
+    this.activeView = view;
+  }
+
+  appendLocaleSelector (targetContainer) {
+    let id = 'locale-selector-list';
+    targetContainer.innerHTML = ''; // Erase whatever was there
+    let localeLabel = document.createElement('label');
+    localeLabel.setAttribute('for', id);
+    localeLabel.innerHTML = 'Locale:&nbsp;';
+    let localeList = document.createElement('select');
+    localeList.classList.add('alpheios-ui-form-control');
+    localeList.id = id;
+    for (let locale of this.l10n.locales) {
+      let option = document.createElement('option');
+      option.value = locale;
+      option.text = locale;
+      localeList.appendChild(option);
     }
+    localeList.addEventListener('change', this.localeSelectorEventListener.bind(this));
+    targetContainer.appendChild(localeLabel);
+    targetContainer.appendChild(localeList);
+    return this
+  }
 
-    appendLocaleSelector(targetContainer) {
-        let id = 'locale-selector-list';
-        targetContainer.innerHTML = ''; // Erase whatever was there
-        let localeLabel = document.createElement('label');
-        localeLabel.setAttribute('for', id);
-        localeLabel.innerHTML = "Locale:&nbsp;";
-        let localeList = document.createElement('select');
-        localeList.classList.add('alpheios-ui-form-control');
-        localeList.id = id;
-        for (let locale of this.l10n.locales) {
-            let option = document.createElement("option");
-            option.value = locale;
-            option.text = locale;
-            localeList.appendChild(option);
-        }
-        localeList.addEventListener('change', this.localeSelectorEventListener.bind(this));
-        targetContainer.appendChild(localeLabel);
-        targetContainer.appendChild(localeList);
-        return this;
-    }
+  localeSelectorEventListener () {
+    let locale = window.event.target.value;
+    this.setLocale(locale);
+  }
 
-    localeSelectorEventListener() {
-        let locale = event.target.value;
-        this.setLocale(locale);
-    }
-
-    getViews(wordData) {
+  getViews (wordData) {
         // First view in a returned array will be a default one
-        let views = [];
-        for (let view of this.views) {
-            if (wordData.language === view.language && wordData[Feature.types.part].includes(view.partOfSpeech)) {
-                views.push(view);
-            }
-        }
-        return views;
+    let views = [];
+    for (let view of this.views) {
+      if (wordData.language === view.language && wordData[Feature.types.part].includes(view.partOfSpeech)) {
+        views.push(view);
+      }
     }
+    return views
+  }
 }
 
 export { dataSet as LatinDataSet, dataSet$1 as GreekDataSet, languages, LanguageDataset, LanguageData, Suffix, Footnote, MatchData, ExtendedLanguageData, ExtendedGreekData, WordData, loadData, Presenter };
