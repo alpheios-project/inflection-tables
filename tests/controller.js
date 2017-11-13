@@ -1,7 +1,6 @@
 'use strict'
 // Import shared language data
 import * as Lib from '../lib/lib'
-import * as Latin from '../lib/lang/latin/latin'
 import * as Models from 'alpheios-data-models'
 import * as L10n from '../l10n/l10n'
 import * as Styles from '../presenter/styles/styles'

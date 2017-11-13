@@ -1,3 +1,4 @@
+/* eslint-env jest */
 const t = require('../../../tests/test-bundle')
 
 describe('Cell', () => {
@@ -666,7 +667,7 @@ describe('GroupFeatureList', () => {
     featureTwo.hasColumnRowTitle = true
 
     featureThree = new t.View.GroupingFeature(latin.features[t.Feature.types.number], 'Number')
-    featureThree.formsRow
+    featureThree.formsRow = true
     featureThree.hasFullWidthRowTitle = true
 
     featureList = [featureOne, featureTwo, featureThree]
@@ -859,21 +860,21 @@ describe('NarrowView', () => {
 })
 
 describe('NarrowViewGroup', () => {
-  let index, visibleColumn, hiddenColumn, columns, rows, headers, titleColumnQty, groupQty, narrowViewGroup
+  // let index, columns, headers, rows, visibleColumn, hiddenColumn, titleColumnQty, groupQty, narrowViewGroup
 
   beforeAll(() => {
-    visibleColumn = new t.View.Column()
-    hiddenColumn = new t.View.Column()
-    hiddenColumn.hidden = true
-    columns = [visibleColumn, hiddenColumn]
-    rows = [new t.View.Row(), new t.View.Row()]
-    headers = [new t.View.Row(), new t.View.Row(), new t.View.Row()]
-    index = 0
-    titleColumnQty = 1
-    groupQty = 1
+    // visibleColumn = new t.View.Column()
+    // hiddenColumn = new t.View.Column()
+    // hiddenColumn.hidden = true
+    // columns = [visibleColumn, hiddenColumn]
+    // rows = [new t.View.Row(), new t.View.Row()]
+    // headers = [new t.View.Row(), new t.View.Row(), new t.View.Row()]
+    // index = 0
+    // titleColumnQty = 1
+    // groupQty = 1
     // narrowViewGroup = new t.View.NarrowViewGroup(index, headers, rows, titleColumnQty);
 
-    let a = 1
+    // let a = 1
   })
 
   /* test('Constructor should initialize object properties.', () => {
@@ -928,7 +929,7 @@ describe('NarrowViewGroup', () => {
   }); */
 
   afterAll(() => {
-    narrowViewGroup = undefined
+    // narrowViewGroup = undefined
   })
 })
 
@@ -951,7 +952,7 @@ describe('Table', () => {
     featureTwo.hasColumnRowTitle = true
 
     featureThree = new t.View.GroupingFeature(latin.features[t.Feature.types.number], 'Number')
-    featureThree.formsRow
+    featureThree.formsRow = true
     featureThree.hasFullWidthRowTitle = true
 
     features = [featureOne, featureTwo, featureThree]
@@ -1157,7 +1158,7 @@ describe('Footnotes', () => {
 
 describe('View', () => {
   let partOfSpeech, featureOne, featureTwo, featureThree, features, messages, messageBundle,
-    footnotes, footnotesList, viewOptions, resultSet, view, word, title, container, latin
+    footnotesList, resultSet, view, word, title, latin
 
   beforeAll(() => {
     partOfSpeech = 'noun'
@@ -1173,7 +1174,7 @@ describe('View', () => {
     featureTwo.hasColumnRowTitle = true
 
     featureThree = new t.View.GroupingFeature(latin.features[t.Feature.types.number], 'Number')
-    featureThree.formsRow
+    featureThree.formsRow = true
     featureThree.hasFullWidthRowTitle = true
 
     features = [featureOne, featureTwo, featureThree]
@@ -1193,7 +1194,7 @@ describe('View', () => {
     messageBundle = new t.L10n.MessageBundle('en-US', messages)
 
     footnotesList = [new t.Footnote(1, 'FootnoteOne'), new t.Footnote(2, 'FootnoteTwo')]
-    footnotes = new t.View.Footnotes(footnotesList)
+    // footnotes = new t.View.Footnotes(footnotesList)
 
     resultSet = new t.ResultSet()
     resultSet.homonym = {targetWord: word}
@@ -1202,7 +1203,7 @@ describe('View', () => {
       footnotes: footnotesList
     }
 
-    container = document.createElement('div')
+    // container = document.createElement('div')
 
     view = new t.View.View()
     view.title = title
