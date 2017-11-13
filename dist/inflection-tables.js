@@ -7707,8 +7707,8 @@ class LatinView extends View {
   }
 
     /*
-    Default grammatical features of a view. It child views need to have different feature values, redefine
-    those values in child objects.
+    Creates and initializes an inflection table. Redefine this method in child objects in order to create
+    an inflection table differently
      */
   createTable () {
     this.table = new Table([this.features.declensions, this.features.genders,
