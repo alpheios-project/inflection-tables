@@ -5869,10 +5869,10 @@ dataSet.loadData = function () {
 };
 
 /**
- * decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
- * @param {inflection[]} inflections - an array of inflection objects to be matched against a suffix.
- * @param {suffix} suffix - a suffix to be matched with inflections.
- * @returns {suffix | null} if a match is found, returns a suffix object modified with some
+ * Decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
+ * @param {Inflection[]} inflections - an array of inflection objects to be matched against a suffix.
+ * @param {Suffix} suffix - a suffix to be matched with inflections.
+ * @returns {Suffix | null} if a match is found, returns a suffix object modified with some
  * additional information about a match. if no matches found, returns null.
  */
 dataSet.matcher = function (inflections, suffix) {
@@ -5881,13 +5881,13 @@ dataSet.matcher = function (inflections, suffix) {
   let obligatoryMatches = [types.part];
 
     // Any of those features must match between an inflection and an ending
-  let optionalMatches = [types.grmcase, types.declension, types.gender, types.number];
+  let optionalMatches = [types.grmCase, types.declension, types.gender, types.number];
   let bestMatchData = null; // information about the best match we would be able to find
 
     /*
      There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
-     but there could be multiple partial matches. so we should try to find the best match possible and return it.
-     a fullfeature match is when one of inflections has all grammatical features fully matching those of a suffix
+     But there could be multiple partial matches. So we should try to find the best match possible and return it.
+     a fullFeature match is when one of inflections has all grammatical features fully matching those of a suffix
      */
   for (let inflection of inflections) {
     let matchData = new MatchData(); // Create a match profile
