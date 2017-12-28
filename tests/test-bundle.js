@@ -1687,7 +1687,7 @@ class Inflection {
                 this.language + '" of an Inflection object.')
       }
 
-      this[type].push(element.value);
+      this[type].push(element);
     }
   }
 }
@@ -1784,17 +1784,28 @@ class Homonym {
   }
 
     /**
-     * Returns language of a homonym.
+     * Returns a language code of a homonym (ISO 639-3).
      * Homonym does not have a language property, only lemmas and inflections do. We assume that all lemmas
      * and inflections within the same homonym will have the same language, and we can determine a language
      * by using language property of the first lemma. We chan change this logic in the future if we'll need to.
      * @returns {string} A language code, as defined in the `languages` object.
      */
   get language () {
-    if (this.lexemes && this.lexemes[0] && this.lexemes[0].lemma && this.lexemes[0].lemma.language) {
-      return this.lexemes[0].lemma.language
+    return LanguageModelFactory.getLanguageCodeFromId(this.languageID)
+  }
+
+  /**
+   * Returns a language ID of a homonym.
+   * Homonym does not have a languageID property, only lemmas and inflections do. We assume that all lemmas
+   * and inflections within the same homonym will have the same language, and we can determine a language
+   * by using languageID property of the first lemma. We chan change this logic in the future if we'll need to.
+   * @returns {Symbol} A language ID, as defined in the `LANG_` constants.
+   */
+  get languageID () {
+    if (this.lexemes && this.lexemes[0] && this.lexemes[0].lemma && this.lexemes[0].lemma.languageID) {
+      return this.lexemes[0].lemma.languageID
     } else {
-      throw new Error('Homonym has not been initialized properly. Unable to obtain language information.')
+      throw new Error('Homonym has not been initialized properly. Unable to obtain language ID information.')
     }
   }
 }
@@ -4058,15 +4069,15 @@ class Suffix {
   /**
    * Checks if suffix has a feature that is a match to the one provided.
    * @param {string} featureType - Sets a type of a feature we need to match with the ones stored inside the suffix
-   * @param {string[]} featureValues - A list of feature values we need to match with the ones stored inside the suffix
-   * @returns {string | undefined} - If provided feature is a match, returns a first feature that matched.
+   * @param {Feature[]} features - A list of features we need to match with the ones stored inside the suffix
+   * @returns {string | undefined} - If provided feature is a match, returns a value of a first feature that matched.
    * If no match found, return undefined.
    */
-  featureMatch (featureType, featureValues) {
+  featureMatch (featureType, features) {
     if (this.features.hasOwnProperty(featureType)) {
-      for (let value of featureValues) {
-        if (value === this.features[featureType]) {
-          return value
+      for (let feature of features) {
+        if (feature.value === this.features[featureType]) {
+          return feature.value
         }
       }
     }
@@ -4393,8 +4404,15 @@ class LanguageDataset {
         // Group inflections by a part of speech
         let partOfSpeech = inflection[Feature.types.part];
         if (!partOfSpeech) {
-          throw new Error('Part of speech data is missing in an inflection.')
+          throw new Error('Part of speech data is missing in an inflection')
         }
+        if (!Array.isArray(partOfSpeech)) {
+          throw new Error('Part of speech data should be in an array format')
+        }
+        if (partOfSpeech.length === 0 && partOfSpeech.length > 1) {
+          throw new Error('Part of speech data should be an array with exactly one element')
+        }
+        partOfSpeech = partOfSpeech[0].value;
 
         if (!inflections.hasOwnProperty(partOfSpeech)) {
           inflections[partOfSpeech] = [];
