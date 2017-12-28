@@ -146,15 +146,15 @@ class Suffix {
   /**
    * Checks if suffix has a feature that is a match to the one provided.
    * @param {string} featureType - Sets a type of a feature we need to match with the ones stored inside the suffix
-   * @param {string[]} featureValues - A list of feature values we need to match with the ones stored inside the suffix
-   * @returns {string | undefined} - If provided feature is a match, returns a first feature that matched.
+   * @param {Feature[]} features - A list of features we need to match with the ones stored inside the suffix
+   * @returns {string | undefined} - If provided feature is a match, returns a value of a first feature that matched.
    * If no match found, return undefined.
    */
-  featureMatch (featureType, featureValues) {
+  featureMatch (featureType, features) {
     if (this.features.hasOwnProperty(featureType)) {
-      for (let value of featureValues) {
-        if (value === this.features[featureType]) {
-          return value
+      for (let feature of features) {
+        if (feature.value === this.features[featureType]) {
+          return feature.value
         }
       }
     }
@@ -548,8 +548,15 @@ class LanguageDataset {
         // Group inflections by a part of speech
         let partOfSpeech = inflection[Feature.types.part];
         if (!partOfSpeech) {
-          throw new Error('Part of speech data is missing in an inflection.')
+          throw new Error('Part of speech data is missing in an inflection')
         }
+        if (!Array.isArray(partOfSpeech)) {
+          throw new Error('Part of speech data should be in an array format')
+        }
+        if (partOfSpeech.length === 0 && partOfSpeech.length > 1) {
+          throw new Error('Part of speech data should be an array with exactly one element')
+        }
+        partOfSpeech = partOfSpeech[0].value;
 
         if (!inflections.hasOwnProperty(partOfSpeech)) {
           inflections[partOfSpeech] = [];
