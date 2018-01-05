@@ -1100,6 +1100,377 @@ class LatinLanguageModel extends LanguageModel {
 }
 
 /**
+ * @class  LatinLanguageModel is the lass for Latin specific behavior
+ */
+class GreekLanguageModel extends LanguageModel {
+   /**
+   * @constructor
+   */
+  constructor () {
+    super();
+    this.sourceLanguage = GreekLanguageModel.sourceLanguage;
+    this.contextForward = 0;
+    this.contextBackward = 0;
+    this.direction = LANG_DIR_LTR;
+    this.baseUnit = LANG_UNIT_WORD;
+    this.languageCodes = GreekLanguageModel.codes;
+    this.features = this._initializeFeatures();
+  }
+
+  _initializeFeatures () {
+    let features = super._initializeFeatures();
+    let code = this.toCode();
+    features[Feature.types.number] = new FeatureType(Feature.types.number, [NUM_SINGULAR, NUM_PLURAL, NUM_DUAL], code);
+    features[Feature.types.grmCase] = new FeatureType(Feature.types.grmCase,
+      [ CASE_NOMINATIVE,
+        CASE_GENITIVE,
+        CASE_DATIVE,
+        CASE_ACCUSATIVE,
+        CASE_VOCATIVE
+      ], code);
+    features[Feature.types.declension] = new FeatureType(Feature.types.declension,
+      [ ORD_1ST, ORD_2ND, ORD_3RD ], code);
+    features[Feature.types.tense] = new FeatureType(Feature.types.tense,
+      [ TENSE_PRESENT,
+        TENSE_IMPERFECT,
+        TENSE_FUTURE,
+        TENSE_PERFECT,
+        TENSE_PLUPERFECT,
+        TENSE_FUTURE_PERFECT,
+        TENSE_AORIST
+      ], code);
+    features[Feature.types.voice] = new FeatureType(Feature.types.voice,
+      [ VOICE_PASSIVE,
+        VOICE_ACTIVE,
+        VOICE_MEDIOPASSIVE,
+        VOICE_MIDDLE
+      ], code);
+    features[Feature.types.mood] = new FeatureType(Feature.types.mood,
+      [ MOOD_INDICATIVE,
+        MOOD_SUBJUNCTIVE,
+        MOOD_OPTATIVE,
+        MOOD_IMPERATIVE
+      ], code);
+    // TODO full list of greek dialects
+    features[Feature.types.dialect] = new FeatureType(Feature.types.dialect, ['attic', 'epic', 'doric'], code);
+    return features
+  }
+
+  static get sourceLanguage () {
+    return LANG_GREEK
+  }
+
+  static get codes () {
+    return [STR_LANG_CODE_GRC]
+  }
+
+  /**
+   * Checks wither a language has a particular language code in its list of codes
+   * @param {String} languageCode - A language code to check
+   * @return {boolean} Wither this language code exists in a language code list
+   */
+  static hasCode (languageCode) {
+    return LanguageModel.hasCodeInList(languageCode, GreekLanguageModel.codes)
+  }
+
+  // For compatibility with existing code, can be replaced with a static version
+  toCode () {
+    return GreekLanguageModel.toCode()
+  }
+
+  static toCode () {
+    return STR_LANG_CODE_GRC
+  }
+
+  /**
+   * Check to see if this language tool can produce an inflection table display
+   * for the current node
+   */
+  canInflect (node) {
+    return true
+  }
+
+  /**
+   * Return a normalized version of a word which can be used to compare the word for equality
+   * @param {String} word the source word
+   * @returns the normalized form of the word (default version just returns the same word,
+   *          override in language-specific subclass)
+   * @type String
+   */
+  normalizeWord (word) {
+    // we normalize greek to NFC - Normalization Form Canonical Composition
+    return word.normalize('NFC')
+  }
+
+  /**
+   * @override LanguageModel#alternateWordEncodings
+   */
+  alternateWordEncodings (word, preceding = null, following = null, encoding = null) {
+    // the original alpheios code used the following normalizations
+    // 1. When looking up a lemma
+    //    stripped vowel length
+    //    stripped caps
+    //    then if failed, tried again with out these
+    // 2. when adding to a word list
+    //    precombined unicode (vowel length/diacritics preserved)
+    // 2. When looking up a verb in the verb paradigm tables
+    //    it set e_normalize to false, otherwise it was true...
+    // make sure it's normalized to NFC and in lower case
+    let normalized = this.normalizeWord(word).toLocaleLowerCase();
+    let strippedVowelLength = normalized.replace(
+      /[\u{1FB0}\u{1FB1}]/ug, '\u{03B1}').replace(
+      /[\u{1FB8}\u{1FB9}]/ug, '\u{0391}').replace(
+      /[\u{1FD0}\u{1FD1}]/ug, '\u{03B9}').replace(
+      /[\u{1FD8}\u{1FD9}]/ug, '\u{0399}').replace(
+      /[\u{1FE0}\u{1FE1}]/ug, '\u{03C5}').replace(
+      /[\u{1FE8}\u{1FE9}]/ug, '\u{03A5}').replace(
+      /[\u{00AF}\u{0304}\u{0306}]/ug, '');
+    let strippedDiaeresis = normalized.replace(
+      /\u{0390}/ug, '\u{03AF}').replace(
+      /\u{03AA}/ug, '\u{0399}').replace(
+      /\u{03AB}/ug, '\u{03A5}').replace(
+      /\u{03B0}/ug, '\u{03CD}').replace(
+      /\u{03CA}/ug, '\u{03B9}').replace(
+      /\u{03CB}/ug, '\u{03C5}').replace(
+      /\u{1FD2}/ug, '\u{1F76}').replace(
+      /\u{1FD3}/ug, '\u{1F77}').replace(
+      /\u{1FD7}/ug, '\u{1FD6}').replace(
+      /\u{1FE2}/ug, '\u{1F7A}').replace(
+      /\u{1FE3}/ug, '\u{1F7B}').replace(
+      /\u{1FE7}/ug, '\u{1FE6}').replace(
+      /\u{1FC1}/ug, '\u{1FC0}').replace(
+      /\u{1FED}/ug, '\u{1FEF}').replace(
+      /\u{1FEE}/ug, '\u{1FFD}').replace(
+      /[\u{00A8}\u{0308}]/ug, '');
+    if (encoding === 'strippedDiaeresis') {
+      return [strippedDiaeresis]
+    } else {
+      return [strippedVowelLength]
+    }
+  }
+
+  /**
+   * Get a list of valid puncutation for this language
+   * @returns {String} a string containing valid puncutation symbols
+   */
+  getPunctuation () {
+    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+  }
+}
+
+/**
+ * @class  LatinLanguageModel is the lass for Latin specific behavior
+ */
+class ArabicLanguageModel extends LanguageModel {
+   /**
+   * @constructor
+   */
+  constructor () {
+    super();
+    this.sourceLanguage = ArabicLanguageModel.sourceLanguage;
+    this.contextForward = 0;
+    this.contextBackward = 0;
+    this.direction = LANG_DIR_RTL;
+    this.baseUnit = LANG_UNIT_WORD;
+    this.languageCodes = ArabicLanguageModel.codes;
+    this._initializeFeatures();
+  }
+
+  _initializeFeatures () {
+    this.features = super._initializeFeatures();
+  }
+
+  static get sourceLanguage () {
+    return LANG_ARABIC
+  }
+
+  static get codes () {
+    return [STR_LANG_CODE_ARA, STR_LANG_CODE_AR]
+  }
+
+  // For compatibility with existing code, can be replaced with a static version
+  toCode () {
+    return ArabicLanguageModel.toCode()
+  }
+
+  static toCode () {
+    return STR_LANG_CODE_ARA
+  }
+
+  /**
+   * Checks wither a language has a particular language code in its list of codes
+   * @param {String} languageCode - A language code to check
+   * @return {boolean} Wither this language code exists in a language code list
+   */
+  static hasCode (languageCode) {
+    return LanguageModel.hasCodeInList(languageCode, ArabicLanguageModel.codes)
+  }
+
+  /**
+   * Check to see if this language tool can produce an inflection table display
+   * for the current node
+   */
+  canInflect (node) {
+    return false
+  }
+
+  /**
+   * @override LanguageModel#alternateWordEncodings
+   */
+  alternateWordEncodings (word, preceding = null, following = null, encoding = null) {
+    // tanwin (& tatweel) - drop FATHATAN, DAMMATAN, KASRATAN, TATWEEL
+    let tanwin = word.replace(/[\u{064B}\u{064C}\u{064D}\u{0640}]/ug, '');
+    // hamzas - replace ALEF WITH MADDA ABOVE, ALEF WITH HAMZA ABOVE/BELOW with ALEF
+    let hamza = tanwin.replace(/[\u{0622}\u{0623}\u{0625}]/ug, '\u{0627}');
+    // harakat - drop FATHA, DAMMA, KASRA, SUPERSCRIPT ALEF, ALEF WASLA
+    let harakat = hamza.replace(/[\u{064E}\u{064F}\u{0650}\u{0670}\u{0671}]/ug, '');
+    // shadda
+    let shadda = harakat.replace(/\u{0651}/ug, '');
+    // sukun
+    let sukun = shadda.replace(/\u{0652}/ug, '');
+    // alef
+    let alef = sukun.replace(/\u{0627}/ug, '');
+    let alternates = new Map([
+      ['tanwin', tanwin],
+      ['hamza', hamza],
+      ['harakat', harakat],
+      ['shadda', shadda],
+      ['sukun', sukun],
+      ['alef', alef]
+    ]);
+    if (encoding !== null && alternates.has(encoding)) {
+      return [alternates.get(encoding)]
+    } else {
+      return Array.from(alternates.values())
+    }
+  }
+
+  /**
+   * Get a list of valid puncutation for this language
+   * @returns {String} a string containing valid puncutation symbols
+   */
+  getPunctuation () {
+    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+  }
+}
+
+/**
+ * @class  PersianLanguageModel is the lass for Persian specific behavior
+ */
+class PersianLanguageModel extends LanguageModel {
+   /**
+   * @constructor
+   */
+  constructor () {
+    super();
+    this.sourceLanguage = PersianLanguageModel.sourceLanguage;
+    this.contextForward = 0;
+    this.contextBackward = 0;
+    this.direction = LANG_DIR_RTL;
+    this.baseUnit = LANG_UNIT_WORD;
+    this.languageCodes = PersianLanguageModel.codes;
+    this._initializeFeatures();
+  }
+
+  _initializeFeatures () {
+    this.features = super._initializeFeatures();
+  }
+
+  static get sourceLanguage () {
+    return LANG_PERSIAN
+  }
+
+  static get codes () {
+    return [STR_LANG_CODE_PER, STR_LANG_CODE_FAS, STR_LANG_CODE_FA, STR_LANG_CODE_FA_IR]
+  }
+
+  // For compatibility with existing code, can be replaced with a static version
+  toCode () {
+    return PersianLanguageModel.toCode()
+  }
+
+  static toCode () {
+    return STR_LANG_CODE_PER
+  }
+
+  /**
+   * Checks wither a language has a particular language code in its list of codes
+   * @param {String} languageCode - A language code to check
+   * @return {boolean} Wither this language code exists in a language code list
+   */
+  static hasCode (languageCode) {
+    return LanguageModel.hasCodeInList(languageCode, PersianLanguageModel.codes)
+  }
+
+  /**
+   * Check to see if this language tool can produce an inflection table display
+   * for the current node
+   */
+  canInflect (node) {
+    return false
+  }
+
+  /**
+   * Get a list of valid puncutation for this language
+   * @returns {String} a string containing valid puncutation symbols
+   */
+  getPunctuation () {
+    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+  }
+}
+
+const MODELS = new Map([
+  [ STR_LANG_CODE_LA, LatinLanguageModel ],
+  [ STR_LANG_CODE_LAT, LatinLanguageModel ],
+  [ STR_LANG_CODE_GRC, GreekLanguageModel ],
+  [ STR_LANG_CODE_ARA, ArabicLanguageModel ],
+  [ STR_LANG_CODE_AR, ArabicLanguageModel ],
+  [ STR_LANG_CODE_PER, PersianLanguageModel ]
+]);
+
+class LanguageModelFactory {
+  static supportsLanguage (code) {
+    return MODELS.has(code)
+  }
+
+  static getLanguageForCode (code = null) {
+    let Model = MODELS.get(code);
+    if (Model) {
+      return new Model()
+    }
+    // for now return a default Model
+    // TODO may want to throw an error
+    return new LanguageModel()
+  }
+
+  /**
+   * Converts an ISO 639-3 language code to a language ID
+   * @param {String} languageCode - An ISO 639-3 language code
+   * @return {Symbol | undefined} A language ID or undefined if language ID is not found
+   */
+  static getLanguageIdFromCode (languageCode) {
+    for (const languageModel of MODELS.values()) {
+      if (languageModel.hasCode(languageCode)) {
+        return languageModel.sourceLanguage
+      }
+    }
+  }
+
+  /**
+   * Converts a language ID to an default ISO 639-3 language code for that language
+   * @param {Symbol} languageID - A language ID
+   * @return {String | undefined} An ISO 639-3 language code or undefined if language code is not found
+   */
+  static getLanguageCodeFromId (languageID) {
+    for (const languageModel of MODELS.values()) {
+      if (languageModel.sourceLanguage === languageID) {
+        return languageModel.toCode()
+      }
+    }
+  }
+}
+
+/**
  * Detailed information about a match type.
  */
 class MatchData {
@@ -1431,9 +1802,9 @@ class Footnote {
  * A return value for inflection queries
  */
 class InflectionData {
-  constructor (language) {
+  constructor (languageID) {
     // this.homonym = homonym
-    this.language = language;
+    this.languageID = languageID;
     this[Feature.types.part] = []; // What parts of speech are represented by this object.
   }
 
@@ -1467,91 +1838,20 @@ class InflectionData {
 }
 
 /**
- * Stores one or several language datasets, one for each language
- */
-class LanguageData {
-  /**
-   * Combines several language datasets for different languages. Allows to abstract away language data.
-   * This function is chainable.
-   * @param {LanguageDataset[]} languageData - Language datasets of different languages.
-   * @return {LanguageData} Self instance for chaining.
-   */
-  constructor (languageData) {
-    this.supportedLanguages = [];
-
-    if (languageData) {
-      for (let dataset of languageData) {
-        this[dataset.language] = dataset;
-        this.supportedLanguages.push(dataset.language);
-      }
-    }
-    return this
-  }
-
-  /**
-   * Loads data for all data sets.
-   * This function is chainable.
-   * @return {LanguageData} Self instance for chaining.
-   */
-  loadData () {
-    for (let language of this.supportedLanguages) {
-      try {
-        this[language].loadData();
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    return this
-  }
-
-  /**
-   * Finds matching suffixes for a homonym.
-   * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
-   * @return {InflectionData} A return value of an inflection query.
-   */
-  getSuffixes (homonym) {
-    let language = homonym.language;
-    if (this.supportedLanguages.includes(language)) {
-      return this[homonym.language].getSuffixes(homonym)
-    } else {
-      // throw new Error(`"${language}" language data is missing. Unable to get suffix data.`)
-      return new InflectionData(homonym)
-    }
-  }
-}
-
-const languages = {
-  type: 'language',
-  latin: 'lat',
-  greek: 'grc',
-  isAllowed (language) {
-    if (language === this.type) {
-      return false
-    } else {
-      return Object.values(this).includes(language)
-    }
-  }
-};
-
-/**
  * Stores inflection language data
  */
 class LanguageDataset {
   /**
    * Initializes a LanguageDataset.
-   * @param {string} language - A language of a data set, from an allowed languages list (see 'languages' object).
+   * @param {string} languageID - A language ID of a data set.
    */
-  constructor (language) {
-    if (!language) {
+  constructor (languageID) {
+    if (!languageID) {
       // Language is not supported
-      throw new Error('Language data cannot be empty.')
+      throw new Error('Language ID cannot be empty.')
     }
 
-    if (!languages.isAllowed(language)) {
-      // Language is not supported
-      throw new Error('Language "' + language + '" is not supported.')
-    }
-    this.language = language;
+    this.languageID = languageID;
     this.suffixes = []; // An array of suffixes.
     this.footnotes = []; // Footnotes
   };
@@ -1636,7 +1936,7 @@ class LanguageDataset {
 
   getSuffixes (homonym) {
     // Add support for languages
-    let result = new InflectionData(homonym.language);
+    let result = new InflectionData(homonym.languageID);
     let inflections = {};
 
     // Find partial matches first, and then full among them
@@ -3314,12 +3614,13 @@ var papaparse = createCommonjsModule(function (module, exports) {
 /*
  * Latin language data module
  */
+// import languages from '../../../lib/languages'
 let languageModel = new LatinLanguageModel();
 let types = Feature.types;
 // A language of this module
-const language = languages.latin;
+// const languageID = languages.latin
 // Create a language data set that will keep all language-related information
-let dataSet = new LanguageDataset(language);
+let dataSet = new LanguageDataset(constants.LANG_LATIN);
 
 // region Definition of grammatical features
 /*
@@ -3339,7 +3640,7 @@ languageModel.features[types.gender].addImporter(importerName)
   ]);
 languageModel.features[types.tense].addImporter(importerName)
     .map('future_perfect', languageModel.features[types.tense][constants.TENSE_FUTURE_PERFECT]);
-const footnotes = new FeatureType(types.footnote, [], language);
+const footnotes = new FeatureType(types.footnote, [], LanguageModelFactory.getLanguageCodeFromId(dataSet.languageID));
 
 // endregion Definition of grammatical features
 
@@ -3577,14 +3878,15 @@ var nounFootnotesCSV$1 = "Index,Text\r\n1,See  for Rules of variance within regu
 /*
  * Latin language data module
  */
+// import languages from '../../../lib/languages'
 /* import adjectiveSuffixesCSV from './data/adjective/suffixes.csv';
 import adjectiveFootnotesCSV from './data/adjective/footnotes.csv';
 import verbSuffixesCSV from './data/verb/suffixes.csv';
 import verbFootnotesCSV from './data/verb/footnotes.csv'; */
 // A language of this module
-const language$1 = languages.greek;
+// const language = languages.greek
 // Create a language data set that will keep all language-related information
-let dataSet$1 = new LanguageDataset(language$1);
+let dataSet$1 = new LanguageDataset(constants.LANG_GREEK);
 
 // region Definition of grammatical features
 /*
@@ -3592,31 +3894,37 @@ let dataSet$1 = new LanguageDataset(language$1);
  analyzer's language modules as well.
  */
 const importerName$1 = 'csv';
-const parts = new FeatureType(Feature.types.part, ['noun', 'adjective', 'verb'], language$1);
-const numbers = new FeatureType(Feature.types.number, ['singular', 'dual', 'plural'], language$1);
+const parts = new FeatureType(Feature.types.part, ['noun', 'adjective', 'verb'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
+const numbers = new FeatureType(Feature.types.number, ['singular', 'dual', 'plural'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 numbers.addImporter(importerName$1)
     .map('singular', numbers.singular)
     .map('dual', numbers.dual)
     .map('plural', numbers.plural);
-const cases = new FeatureType(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'vocative'], language$1);
+const cases = new FeatureType(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'vocative'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 cases.addImporter(importerName$1)
     .map('nominative', cases.nominative)
     .map('genitive', cases.genitive)
     .map('dative', cases.dative)
     .map('accusative', cases.accusative)
     .map('vocative', cases.vocative);
-const declensions = new FeatureType(Feature.types.declension, ['first', 'second', 'third'], language$1);
+const declensions = new FeatureType(Feature.types.declension, ['first', 'second', 'third'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 declensions.addImporter(importerName$1)
     .map('1st', declensions.first)
     .map('2nd', declensions.second)
     .map('3rd', declensions.third);
-const genders = new FeatureType(Feature.types.gender, ['masculine', 'feminine', 'neuter'], language$1);
+const genders = new FeatureType(Feature.types.gender, ['masculine', 'feminine', 'neuter'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 genders.addImporter(importerName$1)
     .map('masculine', genders.masculine)
     .map('feminine', genders.feminine)
     .map('neuter', genders.neuter)
     .map('masculine feminine', [genders.masculine, genders.feminine]);
-const types$1 = new FeatureType(Feature.types.type, ['regular', 'irregular'], language$1);
+const types$1 = new FeatureType(Feature.types.type, ['regular', 'irregular'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 types$1.addImporter(importerName$1)
     .map('regular', types$1.regular)
     .map('irregular', types$1.irregular);
@@ -3686,7 +3994,7 @@ dataSet$1.addSuffixes = function (partOfSpeech, data) {
     let extendedGreekData = new ExtendedGreekData();
     extendedGreekData.primary = primary;
     let extendedLangData = {
-      [languages.greek]: extendedGreekData
+      [constants.LANG_GREEK]: extendedGreekData
     };
     this.addSuffix(suffixValue, features, extendedLangData);
   }
@@ -3867,6 +4175,49 @@ dataSet$1.bestMatch = function (matchA, matchB) {
     return matchB
   }
 };
+
+/**
+ * Stores one or several language datasets, one for each language
+ */
+class LanguageDataList {
+  /**
+   * Combines several language datasets for different languages. Allows to abstract away language data.
+   * This function is chainable.
+   * @param {LanguageDataset[]} languageData - Language datasets of different languages.
+   */
+  constructor (languageData = [dataSet, dataSet$1]) {
+    this.sets = new Map(languageData.map(item => [item.languageID, item]));
+  }
+
+  /**
+   * Loads data for all data sets.
+   * This function is chainable.
+   * @return {LanguageDataList} Self instance for chaining.
+   */
+  loadData () {
+    try {
+      for (let dataset of this.sets.values()) {
+        dataset.loadData();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    return this
+  }
+
+  /**
+   * Finds matching suffixes for a homonym.
+   * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
+   * @return {InflectionData} A return value of an inflection query.
+   */
+  getSuffixes (homonym) {
+    if (this.sets.has(homonym.languageID)) {
+      return this.sets.get(homonym.languageID).getSuffixes(homonym)
+    } else {
+      return new InflectionData(homonym) // Return an empty inflection data set
+    }
+  }
+}
 
 let messages$1 = {
   Number: 'Number',
@@ -5969,18 +6320,6 @@ let footnotes$2 = {
   id: 'inlection-table-footer'
 };
 
-let pageHeader = {
-  html: `
-        <button id="hide-empty-columns" class="switch-btn">Hide empty columns</button><button id="show-empty-columns" class="switch-btn hidden">Show empty columns</button>
-        <button id="hide-no-suffix-groups" class="switch-btn">Hide top-level groups with no suffix matches</button><button id="show-no-suffix-groups" class="switch-btn hidden">Show top-level groups with no suffix matches</button><br>
-        <p>Hover over the suffix to see its grammar features</p>
-        `,
-  hideEmptyColumnsBtnSel: '#hide-empty-columns',
-  showEmptyColumnsBtnSel: '#show-empty-columns',
-  hideNoSuffixGroupsBtnSel: '#hide-no-suffix-groups',
-  showNoSuffixGroupsBtnSel: '#show-no-suffix-groups'
-};
-
 /**
  * Represents a list of footnotes.
  */
@@ -6036,66 +6375,36 @@ class View {
     this.title = 'Base View';
     this.language = undefined;
     this.partOfSpeech = undefined;
+    this.table = {};
   }
 
   /**
-   * Converts a WordData, returned from inflection tables library, into an HTML representation of an inflection table
-   * and inserts that HTML into a `container` HTML element. `messages` provides a translation for view's texts.
-   * @param {HTMLElement} container - An HTML element where this view will be inserted.
-   * @param {InflectionData} wordData - A result set from inflection tables library.
+   * Converts an InflectionData, returned from an inflection tables library, into an HTML representation of an inflection table.
+   * `messages` provides a translation for view's texts.
+   * @param {InflectionData} inflectionData - A result set from inflection tables library.
    * @param {MessageBundle} messages - A message bundle with message translations.
    */
-  render (container, wordData, messages) {
-    'use strict';
-
-    this.messages = messages;
-    this.container = container;
-    this.inflectionData = wordData;
-    let selection = wordData[this.partOfSpeech];
+  render (inflectionData, messages) {
+    let selection = inflectionData[this.partOfSpeech];
 
     this.footnotes = new Footnotes(selection.footnotes);
 
-    // this.table = new Table(selection.suffixes, this.groupingFeatures, messages);
-    // this.table = new Table();
-    // this.setTableData();
+    // Table is created during view construction
     this.table.messages = messages;
     this.table.construct(selection.suffixes).constructViews();
-    this.display();
+    return this
   }
 
-  /**
-   * Renders a view's HTML representation and inserts it into `container` HTML element.
-   */
-  display () {
-    // Clear the container
-    this.container.innerHTML = '';
+  get wideViewNodes () {
+    return this.table.wideView.render()
+  }
 
-    let title = document.createElement('h3');
-    title.innerHTML = this.title;
-    this.container.appendChild(title);
+  get narrowViewNodes () {
+    return this.table.narrowView.render()
+  }
 
-    this.pageHeader = {nodes: document.createElement('div')};
-    this.pageHeader.nodes.innerHTML = pageHeader.html;
-    this.pageHeader.hideEmptyColumnsBtn = this.pageHeader.nodes.querySelector(pageHeader.hideEmptyColumnsBtnSel);
-    this.pageHeader.showEmptyColumnsBtn = this.pageHeader.nodes.querySelector(pageHeader.showEmptyColumnsBtnSel);
-    this.pageHeader.hideNoSuffixGroupsBtn = this.pageHeader.nodes.querySelector(pageHeader.hideNoSuffixGroupsBtnSel);
-    this.pageHeader.showNoSuffixGroupsBtn = this.pageHeader.nodes.querySelector(pageHeader.showNoSuffixGroupsBtnSel);
-    this.container.appendChild(this.pageHeader.nodes);
-
-    // Insert a wide view
-    this.container.appendChild(this.table.wideView.render());
-    // Insert narrow views
-    this.container.appendChild(this.table.narrowView.render());
-
-    this.table.addEventListeners();
-
-    this.container.appendChild(this.footnotes.html);
-
-    this.pageHeader.hideEmptyColumnsBtn.addEventListener('click', this.hideEmptyColumns.bind(this));
-    this.pageHeader.showEmptyColumnsBtn.addEventListener('click', this.showEmptyColumns.bind(this));
-
-    this.pageHeader.hideNoSuffixGroupsBtn.addEventListener('click', this.hideNoSuffixGroups.bind(this));
-    this.pageHeader.showNoSuffixGroupsBtn.addEventListener('click', this.showNoSuffixGroups.bind(this));
+  get footnotesNodes () {
+    return this.footnotes.html
   }
 
   /**
@@ -6103,9 +6412,7 @@ class View {
    */
   hideEmptyColumns () {
     this.table.hideEmptyColumns();
-    this.display();
-    this.pageHeader.hideEmptyColumnsBtn.classList.add(classNames.hidden);
-    this.pageHeader.showEmptyColumnsBtn.classList.remove(classNames.hidden);
+    return this
   }
 
   /**
@@ -6113,9 +6420,7 @@ class View {
    */
   showEmptyColumns () {
     this.table.showEmptyColumns();
-    this.display();
-    this.pageHeader.showEmptyColumnsBtn.classList.add(classNames.hidden);
-    this.pageHeader.hideEmptyColumnsBtn.classList.remove(classNames.hidden);
+    return this
   }
 
   /**
@@ -6123,9 +6428,7 @@ class View {
    */
   hideNoSuffixGroups () {
     this.table.hideNoSuffixGroups();
-    this.display();
-    this.pageHeader.hideNoSuffixGroupsBtn.classList.add(classNames.hidden);
-    this.pageHeader.showNoSuffixGroupsBtn.classList.remove(classNames.hidden);
+    return this
   }
 
   /**
@@ -6133,9 +6436,7 @@ class View {
    */
   showNoSuffixGroups () {
     this.table.showNoSuffixGroups();
-    this.display();
-    this.pageHeader.hideNoSuffixGroupsBtn.classList.add(classNames.hidden);
-    this.pageHeader.showNoSuffixGroupsBtn.classList.remove(classNames.hidden);
+    return this
   }
 }
 
@@ -7646,8 +7947,9 @@ class Table {
 class LatinView extends View {
   constructor () {
     super();
-    this.language = languages.latin;
-    this.language_features = languageModel.features;
+    this.languageID = constants.LANG_LATIN;
+    this.languageModel = new LatinLanguageModel(); // TODO: Do we really need to create it every time?
+    this.language_features = this.languageModel.features;
 
         /*
         Default grammatical features of a view. It child views need to have different feature values, redefine
@@ -7886,10 +8188,23 @@ class MoodConjugationVoiceView extends VerbView {
   }
 }
 
-var viewsLatin = [new NounView(), new AdjectiveView(),
+var LatinViews = [new NounView(), new AdjectiveView(),
     // Verbs
   new VoiceConjugationMoodView(), new VoiceMoodConjugationView(), new ConjugationVoiceMoodView(),
   new ConjugationMoodVoiceView(), new MoodVoiceConjugationView(), new MoodConjugationVoiceView()];
+
+const languages = {
+  type: 'language',
+  latin: 'lat',
+  greek: 'grc',
+  isAllowed (language) {
+    if (language === this.type) {
+      return false
+    } else {
+      return Object.values(this).includes(language)
+    }
+  }
+};
 
 class GreekView extends View {
   constructor () {
@@ -7976,131 +8291,23 @@ class NounViewSimplified extends NounView$1 {
   }
 }
 
-var viewsGreek = [new NounView$1(), new NounViewSimplified()];
+var GreekViews = [new NounView$1(), new NounViewSimplified()];
 
-/**
- * This module is responsible for displaying different views of an inflection table. Each view is located in a separate
- * directory under /presenter/views/view-name
- */
-class Presenter {
-  constructor (viewContainer, viewSelectorContainer, localeSelectorContainer, inflectionData, locale = 'en-US') {
-    this.viewContainer = viewContainer;
-    this.viewSelectorContainer = viewSelectorContainer;
-    this.localeSelectorContainer = localeSelectorContainer;
-    this.inflectionData = inflectionData;
+class ViewSet {
+  constructor () {
+    this.views = new Map();
+    this.views.set(constants.LANG_LATIN, LatinViews);
+    this.views.set(constants.LANG_GREEK, GreekViews);
+  }
 
-        // All views registered by the Presenter
-    this.views = [];
-    this.viewIndex = {};
-
-    for (let view of viewsLatin) {
-      this.addView(view);
+  getViews (inflectionData) {
+    if (this.views.has(inflectionData.languageID)) {
+      return this.views.get(inflectionData.languageID)
+        .filter(view => inflectionData[Feature.types.part].includes(view.partOfSpeech))
     }
-    for (let view of viewsGreek) {
-      this.addView(view);
-    }
-
-        // Views available for parts of speech that are present in a Result Set
-    this.availableViews = this.getViews(this.inflectionData);
-
-    this.defaultView = this.availableViews[0];
-    this.activeView = undefined;
-
-    this.locale = locale; // This is a default locale
-    this.l10n = new L10n(messages);
-
-    return this
-  }
-
-  addView (view) {
-       // let view =  new View.View(viewOptions);
-    this.views.push(view);
-    this.viewIndex[view.id] = view;
-  }
-
-  setLocale (locale) {
-    this.locale = locale;
-    this.activeView.render(this.viewContainer, this.inflectionData, this.l10n.messages(this.locale));
-  }
-
-  render () {
-        // Show a default view
-    if (this.defaultView) {
-      this.defaultView.render(this.viewContainer, this.inflectionData, this.l10n.messages(this.locale));
-      this.activeView = this.defaultView;
-
-      this.appendViewSelector(this.viewSelectorContainer);
-            // this.appendLocaleSelector(this.localeSelectorContainer);
-    }
-    return this
-  }
-
-  appendViewSelector (targetContainer) {
-    targetContainer.innerHTML = '';
-    if (this.availableViews.length > 1) {
-      let id = 'view-selector-list';
-      let viewLabel = document.createElement('label');
-      viewLabel.setAttribute('for', id);
-      viewLabel.innerHTML = 'View:&nbsp;';
-      let viewList = document.createElement('select');
-      viewList.classList.add('alpheios-ui-form-control');
-      for (const view of this.availableViews) {
-        let option = document.createElement('option');
-        option.value = view.id;
-        option.text = view.name;
-        viewList.appendChild(option);
-      }
-      viewList.addEventListener('change', this.viewSelectorEventListener.bind(this));
-      targetContainer.appendChild(viewLabel);
-      targetContainer.appendChild(viewList);
-    }
-    return this
-  }
-
-  viewSelectorEventListener (event) {
-    let viewID = event.target.value;
-    let view = this.viewIndex[viewID];
-    view.render(this.viewContainer, this.inflectionData, this.l10n.messages(this.locale));
-    this.activeView = view;
-  }
-
-  appendLocaleSelector (targetContainer) {
-    let id = 'locale-selector-list';
-    targetContainer.innerHTML = ''; // Erase whatever was there
-    let localeLabel = document.createElement('label');
-    localeLabel.setAttribute('for', id);
-    localeLabel.innerHTML = 'Locale:&nbsp;';
-    let localeList = document.createElement('select');
-    localeList.classList.add('alpheios-ui-form-control');
-    localeList.id = id;
-    for (let locale of this.l10n.locales) {
-      let option = document.createElement('option');
-      option.value = locale;
-      option.text = locale;
-      localeList.appendChild(option);
-    }
-    localeList.addEventListener('change', this.localeSelectorEventListener.bind(this));
-    targetContainer.appendChild(localeLabel);
-    targetContainer.appendChild(localeList);
-    return this
-  }
-
-  localeSelectorEventListener () {
-    let locale = window.event.target.value;
-    this.setLocale(locale);
-  }
-
-  getViews (wordData) {
-        // First view in a returned array will be a default one
-    let views = [];
-    for (let view of this.views) {
-      if (wordData.language === view.language && wordData[Feature.types.part].includes(view.partOfSpeech)) {
-        views.push(view);
-      }
-    }
-    return views
+    return []
   }
 }
 
-export { InflectionData, LanguageData, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, Presenter };
+export { InflectionData, LanguageDataList, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, L10n, messages as L10nMessages, LatinViews, GreekViews, ViewSet };
 //# sourceMappingURL=inflection-tables.standalone.js.map

@@ -2,7 +2,7 @@
 import * as Lib from '../../dist/inflection-tables.js'
 import AlpheiosTuftsAdapter from '../../node_modules/alpheios-tufts-adapter/dist/alpheios-tufts-adapter.js'
 
-let langData = new Lib.LanguageData([Lib.LatinDataSet, Lib.GreekDataSet]).loadData()
+let langData = new Lib.LanguageDataList([Lib.LatinDataSet, Lib.GreekDataSet]).loadData()
 
 let testCases = [
   {word: 'cupidinibus', value: 'latin_noun_cupidinibus', type: 'noun', language: 'latin'},

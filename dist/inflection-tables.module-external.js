@@ -1,4 +1,4 @@
-import { Constants, Feature, FeatureList, FeatureType, LatinLanguageModel } from 'alpheios-data-models';
+import { Constants, Feature, FeatureList, FeatureType, LanguageModelFactory, LatinLanguageModel } from 'alpheios-data-models';
 
 /**
  * Detailed information about a match type.
@@ -332,9 +332,9 @@ class Footnote {
  * A return value for inflection queries
  */
 class InflectionData {
-  constructor (language) {
+  constructor (languageID) {
     // this.homonym = homonym
-    this.language = language;
+    this.languageID = languageID;
     this[Feature.types.part] = []; // What parts of speech are represented by this object.
   }
 
@@ -368,91 +368,20 @@ class InflectionData {
 }
 
 /**
- * Stores one or several language datasets, one for each language
- */
-class LanguageData {
-  /**
-   * Combines several language datasets for different languages. Allows to abstract away language data.
-   * This function is chainable.
-   * @param {LanguageDataset[]} languageData - Language datasets of different languages.
-   * @return {LanguageData} Self instance for chaining.
-   */
-  constructor (languageData) {
-    this.supportedLanguages = [];
-
-    if (languageData) {
-      for (let dataset of languageData) {
-        this[dataset.language] = dataset;
-        this.supportedLanguages.push(dataset.language);
-      }
-    }
-    return this
-  }
-
-  /**
-   * Loads data for all data sets.
-   * This function is chainable.
-   * @return {LanguageData} Self instance for chaining.
-   */
-  loadData () {
-    for (let language of this.supportedLanguages) {
-      try {
-        this[language].loadData();
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    return this
-  }
-
-  /**
-   * Finds matching suffixes for a homonym.
-   * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
-   * @return {InflectionData} A return value of an inflection query.
-   */
-  getSuffixes (homonym) {
-    let language = homonym.language;
-    if (this.supportedLanguages.includes(language)) {
-      return this[homonym.language].getSuffixes(homonym)
-    } else {
-      // throw new Error(`"${language}" language data is missing. Unable to get suffix data.`)
-      return new InflectionData(homonym)
-    }
-  }
-}
-
-const languages = {
-  type: 'language',
-  latin: 'lat',
-  greek: 'grc',
-  isAllowed (language) {
-    if (language === this.type) {
-      return false
-    } else {
-      return Object.values(this).includes(language)
-    }
-  }
-};
-
-/**
  * Stores inflection language data
  */
 class LanguageDataset {
   /**
    * Initializes a LanguageDataset.
-   * @param {string} language - A language of a data set, from an allowed languages list (see 'languages' object).
+   * @param {string} languageID - A language ID of a data set.
    */
-  constructor (language) {
-    if (!language) {
+  constructor (languageID) {
+    if (!languageID) {
       // Language is not supported
-      throw new Error('Language data cannot be empty.')
+      throw new Error('Language ID cannot be empty.')
     }
 
-    if (!languages.isAllowed(language)) {
-      // Language is not supported
-      throw new Error('Language "' + language + '" is not supported.')
-    }
-    this.language = language;
+    this.languageID = languageID;
     this.suffixes = []; // An array of suffixes.
     this.footnotes = []; // Footnotes
   };
@@ -537,7 +466,7 @@ class LanguageDataset {
 
   getSuffixes (homonym) {
     // Add support for languages
-    let result = new InflectionData(homonym.language);
+    let result = new InflectionData(homonym.languageID);
     let inflections = {};
 
     // Find partial matches first, and then full among them
@@ -2215,12 +2144,13 @@ var papaparse = createCommonjsModule(function (module, exports) {
 /*
  * Latin language data module
  */
+// import languages from '../../../lib/languages'
 let languageModel = new LatinLanguageModel();
 let types = Feature.types;
 // A language of this module
-const language = languages.latin;
+// const languageID = languages.latin
 // Create a language data set that will keep all language-related information
-let dataSet = new LanguageDataset(language);
+let dataSet = new LanguageDataset(Constants.LANG_LATIN);
 
 // region Definition of grammatical features
 /*
@@ -2240,7 +2170,7 @@ languageModel.features[types.gender].addImporter(importerName)
   ]);
 languageModel.features[types.tense].addImporter(importerName)
     .map('future_perfect', languageModel.features[types.tense][Constants.TENSE_FUTURE_PERFECT]);
-const footnotes = new FeatureType(types.footnote, [], language);
+const footnotes = new FeatureType(types.footnote, [], LanguageModelFactory.getLanguageCodeFromId(dataSet.languageID));
 
 // endregion Definition of grammatical features
 
@@ -2478,14 +2408,15 @@ var nounFootnotesCSV$1 = "Index,Text\r\n1,See  for Rules of variance within regu
 /*
  * Latin language data module
  */
+// import languages from '../../../lib/languages'
 /* import adjectiveSuffixesCSV from './data/adjective/suffixes.csv';
 import adjectiveFootnotesCSV from './data/adjective/footnotes.csv';
 import verbSuffixesCSV from './data/verb/suffixes.csv';
 import verbFootnotesCSV from './data/verb/footnotes.csv'; */
 // A language of this module
-const language$1 = languages.greek;
+// const language = languages.greek
 // Create a language data set that will keep all language-related information
-let dataSet$1 = new LanguageDataset(language$1);
+let dataSet$1 = new LanguageDataset(Constants.LANG_GREEK);
 
 // region Definition of grammatical features
 /*
@@ -2493,31 +2424,37 @@ let dataSet$1 = new LanguageDataset(language$1);
  analyzer's language modules as well.
  */
 const importerName$1 = 'csv';
-const parts = new FeatureType(Feature.types.part, ['noun', 'adjective', 'verb'], language$1);
-const numbers = new FeatureType(Feature.types.number, ['singular', 'dual', 'plural'], language$1);
+const parts = new FeatureType(Feature.types.part, ['noun', 'adjective', 'verb'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
+const numbers = new FeatureType(Feature.types.number, ['singular', 'dual', 'plural'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 numbers.addImporter(importerName$1)
     .map('singular', numbers.singular)
     .map('dual', numbers.dual)
     .map('plural', numbers.plural);
-const cases = new FeatureType(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'vocative'], language$1);
+const cases = new FeatureType(Feature.types.grmCase, ['nominative', 'genitive', 'dative', 'accusative', 'vocative'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 cases.addImporter(importerName$1)
     .map('nominative', cases.nominative)
     .map('genitive', cases.genitive)
     .map('dative', cases.dative)
     .map('accusative', cases.accusative)
     .map('vocative', cases.vocative);
-const declensions = new FeatureType(Feature.types.declension, ['first', 'second', 'third'], language$1);
+const declensions = new FeatureType(Feature.types.declension, ['first', 'second', 'third'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 declensions.addImporter(importerName$1)
     .map('1st', declensions.first)
     .map('2nd', declensions.second)
     .map('3rd', declensions.third);
-const genders = new FeatureType(Feature.types.gender, ['masculine', 'feminine', 'neuter'], language$1);
+const genders = new FeatureType(Feature.types.gender, ['masculine', 'feminine', 'neuter'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 genders.addImporter(importerName$1)
     .map('masculine', genders.masculine)
     .map('feminine', genders.feminine)
     .map('neuter', genders.neuter)
     .map('masculine feminine', [genders.masculine, genders.feminine]);
-const types$1 = new FeatureType(Feature.types.type, ['regular', 'irregular'], language$1);
+const types$1 = new FeatureType(Feature.types.type, ['regular', 'irregular'],
+  LanguageModelFactory.getLanguageCodeFromId(dataSet$1.languageID));
 types$1.addImporter(importerName$1)
     .map('regular', types$1.regular)
     .map('irregular', types$1.irregular);
@@ -2587,7 +2524,7 @@ dataSet$1.addSuffixes = function (partOfSpeech, data) {
     let extendedGreekData = new ExtendedGreekData();
     extendedGreekData.primary = primary;
     let extendedLangData = {
-      [languages.greek]: extendedGreekData
+      [Constants.LANG_GREEK]: extendedGreekData
     };
     this.addSuffix(suffixValue, features, extendedLangData);
   }
@@ -2768,6 +2705,49 @@ dataSet$1.bestMatch = function (matchA, matchB) {
     return matchB
   }
 };
+
+/**
+ * Stores one or several language datasets, one for each language
+ */
+class LanguageDataList {
+  /**
+   * Combines several language datasets for different languages. Allows to abstract away language data.
+   * This function is chainable.
+   * @param {LanguageDataset[]} languageData - Language datasets of different languages.
+   */
+  constructor (languageData = [dataSet, dataSet$1]) {
+    this.sets = new Map(languageData.map(item => [item.languageID, item]));
+  }
+
+  /**
+   * Loads data for all data sets.
+   * This function is chainable.
+   * @return {LanguageDataList} Self instance for chaining.
+   */
+  loadData () {
+    try {
+      for (let dataset of this.sets.values()) {
+        dataset.loadData();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    return this
+  }
+
+  /**
+   * Finds matching suffixes for a homonym.
+   * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
+   * @return {InflectionData} A return value of an inflection query.
+   */
+  getSuffixes (homonym) {
+    if (this.sets.has(homonym.languageID)) {
+      return this.sets.get(homonym.languageID).getSuffixes(homonym)
+    } else {
+      return new InflectionData(homonym) // Return an empty inflection data set
+    }
+  }
+}
 
 let messages$1 = {
   Number: 'Number',
@@ -4870,18 +4850,6 @@ let footnotes$2 = {
   id: 'inlection-table-footer'
 };
 
-let pageHeader = {
-  html: `
-        <button id="hide-empty-columns" class="switch-btn">Hide empty columns</button><button id="show-empty-columns" class="switch-btn hidden">Show empty columns</button>
-        <button id="hide-no-suffix-groups" class="switch-btn">Hide top-level groups with no suffix matches</button><button id="show-no-suffix-groups" class="switch-btn hidden">Show top-level groups with no suffix matches</button><br>
-        <p>Hover over the suffix to see its grammar features</p>
-        `,
-  hideEmptyColumnsBtnSel: '#hide-empty-columns',
-  showEmptyColumnsBtnSel: '#show-empty-columns',
-  hideNoSuffixGroupsBtnSel: '#hide-no-suffix-groups',
-  showNoSuffixGroupsBtnSel: '#show-no-suffix-groups'
-};
-
 /**
  * Represents a list of footnotes.
  */
@@ -4937,66 +4905,36 @@ class View {
     this.title = 'Base View';
     this.language = undefined;
     this.partOfSpeech = undefined;
+    this.table = {};
   }
 
   /**
-   * Converts a WordData, returned from inflection tables library, into an HTML representation of an inflection table
-   * and inserts that HTML into a `container` HTML element. `messages` provides a translation for view's texts.
-   * @param {HTMLElement} container - An HTML element where this view will be inserted.
-   * @param {InflectionData} wordData - A result set from inflection tables library.
+   * Converts an InflectionData, returned from an inflection tables library, into an HTML representation of an inflection table.
+   * `messages` provides a translation for view's texts.
+   * @param {InflectionData} inflectionData - A result set from inflection tables library.
    * @param {MessageBundle} messages - A message bundle with message translations.
    */
-  render (container, wordData, messages) {
-    'use strict';
-
-    this.messages = messages;
-    this.container = container;
-    this.inflectionData = wordData;
-    let selection = wordData[this.partOfSpeech];
+  render (inflectionData, messages) {
+    let selection = inflectionData[this.partOfSpeech];
 
     this.footnotes = new Footnotes(selection.footnotes);
 
-    // this.table = new Table(selection.suffixes, this.groupingFeatures, messages);
-    // this.table = new Table();
-    // this.setTableData();
+    // Table is created during view construction
     this.table.messages = messages;
     this.table.construct(selection.suffixes).constructViews();
-    this.display();
+    return this
   }
 
-  /**
-   * Renders a view's HTML representation and inserts it into `container` HTML element.
-   */
-  display () {
-    // Clear the container
-    this.container.innerHTML = '';
+  get wideViewNodes () {
+    return this.table.wideView.render()
+  }
 
-    let title = document.createElement('h3');
-    title.innerHTML = this.title;
-    this.container.appendChild(title);
+  get narrowViewNodes () {
+    return this.table.narrowView.render()
+  }
 
-    this.pageHeader = {nodes: document.createElement('div')};
-    this.pageHeader.nodes.innerHTML = pageHeader.html;
-    this.pageHeader.hideEmptyColumnsBtn = this.pageHeader.nodes.querySelector(pageHeader.hideEmptyColumnsBtnSel);
-    this.pageHeader.showEmptyColumnsBtn = this.pageHeader.nodes.querySelector(pageHeader.showEmptyColumnsBtnSel);
-    this.pageHeader.hideNoSuffixGroupsBtn = this.pageHeader.nodes.querySelector(pageHeader.hideNoSuffixGroupsBtnSel);
-    this.pageHeader.showNoSuffixGroupsBtn = this.pageHeader.nodes.querySelector(pageHeader.showNoSuffixGroupsBtnSel);
-    this.container.appendChild(this.pageHeader.nodes);
-
-    // Insert a wide view
-    this.container.appendChild(this.table.wideView.render());
-    // Insert narrow views
-    this.container.appendChild(this.table.narrowView.render());
-
-    this.table.addEventListeners();
-
-    this.container.appendChild(this.footnotes.html);
-
-    this.pageHeader.hideEmptyColumnsBtn.addEventListener('click', this.hideEmptyColumns.bind(this));
-    this.pageHeader.showEmptyColumnsBtn.addEventListener('click', this.showEmptyColumns.bind(this));
-
-    this.pageHeader.hideNoSuffixGroupsBtn.addEventListener('click', this.hideNoSuffixGroups.bind(this));
-    this.pageHeader.showNoSuffixGroupsBtn.addEventListener('click', this.showNoSuffixGroups.bind(this));
+  get footnotesNodes () {
+    return this.footnotes.html
   }
 
   /**
@@ -5004,9 +4942,7 @@ class View {
    */
   hideEmptyColumns () {
     this.table.hideEmptyColumns();
-    this.display();
-    this.pageHeader.hideEmptyColumnsBtn.classList.add(classNames.hidden);
-    this.pageHeader.showEmptyColumnsBtn.classList.remove(classNames.hidden);
+    return this
   }
 
   /**
@@ -5014,9 +4950,7 @@ class View {
    */
   showEmptyColumns () {
     this.table.showEmptyColumns();
-    this.display();
-    this.pageHeader.showEmptyColumnsBtn.classList.add(classNames.hidden);
-    this.pageHeader.hideEmptyColumnsBtn.classList.remove(classNames.hidden);
+    return this
   }
 
   /**
@@ -5024,9 +4958,7 @@ class View {
    */
   hideNoSuffixGroups () {
     this.table.hideNoSuffixGroups();
-    this.display();
-    this.pageHeader.hideNoSuffixGroupsBtn.classList.add(classNames.hidden);
-    this.pageHeader.showNoSuffixGroupsBtn.classList.remove(classNames.hidden);
+    return this
   }
 
   /**
@@ -5034,9 +4966,7 @@ class View {
    */
   showNoSuffixGroups () {
     this.table.showNoSuffixGroups();
-    this.display();
-    this.pageHeader.hideNoSuffixGroupsBtn.classList.add(classNames.hidden);
-    this.pageHeader.showNoSuffixGroupsBtn.classList.remove(classNames.hidden);
+    return this
   }
 }
 
@@ -6547,8 +6477,9 @@ class Table {
 class LatinView extends View {
   constructor () {
     super();
-    this.language = languages.latin;
-    this.language_features = languageModel.features;
+    this.languageID = Constants.LANG_LATIN;
+    this.languageModel = new LatinLanguageModel(); // TODO: Do we really need to create it every time?
+    this.language_features = this.languageModel.features;
 
         /*
         Default grammatical features of a view. It child views need to have different feature values, redefine
@@ -6787,10 +6718,23 @@ class MoodConjugationVoiceView extends VerbView {
   }
 }
 
-var viewsLatin = [new NounView(), new AdjectiveView(),
+var LatinViews = [new NounView(), new AdjectiveView(),
     // Verbs
   new VoiceConjugationMoodView(), new VoiceMoodConjugationView(), new ConjugationVoiceMoodView(),
   new ConjugationMoodVoiceView(), new MoodVoiceConjugationView(), new MoodConjugationVoiceView()];
+
+const languages = {
+  type: 'language',
+  latin: 'lat',
+  greek: 'grc',
+  isAllowed (language) {
+    if (language === this.type) {
+      return false
+    } else {
+      return Object.values(this).includes(language)
+    }
+  }
+};
 
 class GreekView extends View {
   constructor () {
@@ -6877,130 +6821,22 @@ class NounViewSimplified extends NounView$1 {
   }
 }
 
-var viewsGreek = [new NounView$1(), new NounViewSimplified()];
+var GreekViews = [new NounView$1(), new NounViewSimplified()];
 
-/**
- * This module is responsible for displaying different views of an inflection table. Each view is located in a separate
- * directory under /presenter/views/view-name
- */
-class Presenter {
-  constructor (viewContainer, viewSelectorContainer, localeSelectorContainer, inflectionData, locale = 'en-US') {
-    this.viewContainer = viewContainer;
-    this.viewSelectorContainer = viewSelectorContainer;
-    this.localeSelectorContainer = localeSelectorContainer;
-    this.inflectionData = inflectionData;
+class ViewSet {
+  constructor () {
+    this.views = new Map();
+    this.views.set(Constants.LANG_LATIN, LatinViews);
+    this.views.set(Constants.LANG_GREEK, GreekViews);
+  }
 
-        // All views registered by the Presenter
-    this.views = [];
-    this.viewIndex = {};
-
-    for (let view of viewsLatin) {
-      this.addView(view);
+  getViews (inflectionData) {
+    if (this.views.has(inflectionData.languageID)) {
+      return this.views.get(inflectionData.languageID)
+        .filter(view => inflectionData[Feature.types.part].includes(view.partOfSpeech))
     }
-    for (let view of viewsGreek) {
-      this.addView(view);
-    }
-
-        // Views available for parts of speech that are present in a Result Set
-    this.availableViews = this.getViews(this.inflectionData);
-
-    this.defaultView = this.availableViews[0];
-    this.activeView = undefined;
-
-    this.locale = locale; // This is a default locale
-    this.l10n = new L10n(messages);
-
-    return this
-  }
-
-  addView (view) {
-       // let view =  new View.View(viewOptions);
-    this.views.push(view);
-    this.viewIndex[view.id] = view;
-  }
-
-  setLocale (locale) {
-    this.locale = locale;
-    this.activeView.render(this.viewContainer, this.inflectionData, this.l10n.messages(this.locale));
-  }
-
-  render () {
-        // Show a default view
-    if (this.defaultView) {
-      this.defaultView.render(this.viewContainer, this.inflectionData, this.l10n.messages(this.locale));
-      this.activeView = this.defaultView;
-
-      this.appendViewSelector(this.viewSelectorContainer);
-            // this.appendLocaleSelector(this.localeSelectorContainer);
-    }
-    return this
-  }
-
-  appendViewSelector (targetContainer) {
-    targetContainer.innerHTML = '';
-    if (this.availableViews.length > 1) {
-      let id = 'view-selector-list';
-      let viewLabel = document.createElement('label');
-      viewLabel.setAttribute('for', id);
-      viewLabel.innerHTML = 'View:&nbsp;';
-      let viewList = document.createElement('select');
-      viewList.classList.add('alpheios-ui-form-control');
-      for (const view of this.availableViews) {
-        let option = document.createElement('option');
-        option.value = view.id;
-        option.text = view.name;
-        viewList.appendChild(option);
-      }
-      viewList.addEventListener('change', this.viewSelectorEventListener.bind(this));
-      targetContainer.appendChild(viewLabel);
-      targetContainer.appendChild(viewList);
-    }
-    return this
-  }
-
-  viewSelectorEventListener (event) {
-    let viewID = event.target.value;
-    let view = this.viewIndex[viewID];
-    view.render(this.viewContainer, this.inflectionData, this.l10n.messages(this.locale));
-    this.activeView = view;
-  }
-
-  appendLocaleSelector (targetContainer) {
-    let id = 'locale-selector-list';
-    targetContainer.innerHTML = ''; // Erase whatever was there
-    let localeLabel = document.createElement('label');
-    localeLabel.setAttribute('for', id);
-    localeLabel.innerHTML = 'Locale:&nbsp;';
-    let localeList = document.createElement('select');
-    localeList.classList.add('alpheios-ui-form-control');
-    localeList.id = id;
-    for (let locale of this.l10n.locales) {
-      let option = document.createElement('option');
-      option.value = locale;
-      option.text = locale;
-      localeList.appendChild(option);
-    }
-    localeList.addEventListener('change', this.localeSelectorEventListener.bind(this));
-    targetContainer.appendChild(localeLabel);
-    targetContainer.appendChild(localeList);
-    return this
-  }
-
-  localeSelectorEventListener () {
-    let locale = window.event.target.value;
-    this.setLocale(locale);
-  }
-
-  getViews (wordData) {
-        // First view in a returned array will be a default one
-    let views = [];
-    for (let view of this.views) {
-      if (wordData.language === view.language && wordData[Feature.types.part].includes(view.partOfSpeech)) {
-        views.push(view);
-      }
-    }
-    return views
+    return []
   }
 }
 
-export { InflectionData, LanguageData, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, Presenter };
+export { InflectionData, LanguageDataList, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, L10n, messages as L10nMessages, LatinViews, GreekViews, ViewSet };
