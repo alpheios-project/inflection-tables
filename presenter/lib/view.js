@@ -38,7 +38,7 @@ export default class View {
 
     // Table is created during view construction
     this.table.messages = messages
-    this.table.construct(selection.suffixes).constructViews()
+    this.table.construct(selection.suffixes).constructViews().addEventListeners()
     return this
   }
 

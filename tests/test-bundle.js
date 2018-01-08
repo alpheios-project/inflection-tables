@@ -8099,6 +8099,7 @@ class Table {
    * Adds event listeners to each cell object.
    */
   addEventListeners () {
+    console.log('add event listeners called');
     for (let cell of this.cells) {
       cell.addEventListener('mouseenter', this.highlightRowAndColumn.bind(this));
       cell.addEventListener('mouseleave', this.clearRowAndColumnHighlighting.bind(this));
@@ -8247,7 +8248,7 @@ class View {
 
     // Table is created during view construction
     this.table.messages = messages;
-    this.table.construct(selection.suffixes).constructViews();
+    this.table.construct(selection.suffixes).constructViews().addEventListeners();
     return this
   }
 
