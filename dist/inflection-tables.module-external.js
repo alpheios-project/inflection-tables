@@ -512,11 +512,12 @@ class LanguageDataset {
     // Find partial matches first, and then full among them
 
     // TODO: do we ever need lemmas?
-    for (let lexema of homonym.lexemes) {
-      for (let inflection of lexema.inflections) {
+    for (let lexeme of homonym.lexemes) {
+      for (let inflection of lexeme.inflections) {
         // add the lemma to the inflection
         inflection[Feature.types.word] =
-          [new Feature(lexema.lemma.word, Feature.types.word, lexema.lemma.language)];
+          [new Feature(lexeme.lemma.word, Feature.types.word, lexeme.lemma.language)];
+
         // Group inflections by a part of speech
         let partOfSpeech = inflection[Feature.types.part];
         if (!partOfSpeech) {
@@ -544,7 +545,9 @@ class LanguageDataset {
 
         result[Feature.types.part].push(partOfSpeech);
         result[partOfSpeech] = {};
+        // If it is an irregular verb, there will be form matches
         let items = this.forms.reduce(this['reducer'].bind(this, inflectionsGroup, LanguageDataset.FORM), []);
+        // Otherwise, check for suffix matches
         if (items.length === 0) {
           items = this.suffixes.reduce(this['reducer'].bind(this, inflectionsGroup, LanguageDataset.SUFFIX), []);
         }
@@ -2423,7 +2426,7 @@ dataSet.loadData = function () {
  * Decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
  * @param {Inflection[]} inflections - an array of inflection objects to be matched against a suffix.
  * @param {string} type - LanguageDataset.SUFFIX or LanguageDataset.FORM
- * @param {Suffix} suffix - a suffix to be matched with inflections.
+ * @param {Suffix} item - a suffix to be matched with inflections.
  * @returns {Suffix | null} if a match is found, returns a suffix object modified with some
  * additional information about a match. if no matches found, returns null.
  */
@@ -2763,11 +2766,12 @@ dataSet$1.loadData = function () {
 /**
  * Decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
  * @param {Inflection[]} inflections - An array of Inflection objects to be matched against a suffix.
- * @param {Suffix} suffix - A suffix to be matched with inflections.
+ * @param {string} type - LanguageDataset.SUFFIX or LanguageDataset.FORM
+ * @param {Suffix} item - A suffix to be matched with inflections.
  * @returns {Suffix | null} If a match is found, returns a Suffix object modified with some
  * additional information about a match. If no matches found, returns null.
  */
-dataSet$1.matcher = function (inflections, suffix) {
+dataSet$1.matcher = function (inflections, type, item) {
   'use strict';
     // All of those features must match between an inflection and an ending
   let obligatoryMatches = [Feature.types.part];
@@ -2784,13 +2788,13 @@ dataSet$1.matcher = function (inflections, suffix) {
   for (let inflection of inflections) {
     let matchData = new MatchData(); // Create a match profile
 
-    if (inflection.suffix === suffix.value) {
+    if (inflection.suffix === item.value) {
       matchData.suffixMatch = true;
     }
 
     // Check obligatory matches
     for (let feature of obligatoryMatches) {
-      let featureMatch = suffix.featureMatch(feature, inflection[feature]);
+      let featureMatch = item.featureMatch(feature, inflection[feature]);
       // matchFound = matchFound && featureMatch;
 
       if (!featureMatch) {
@@ -2808,7 +2812,7 @@ dataSet$1.matcher = function (inflections, suffix) {
 
     // Check optional matches now
     for (let feature of optionalMatches) {
-      let matchedValue = suffix.featureMatch(feature, inflection[feature]);
+      let matchedValue = item.featureMatch(feature, inflection[feature]);
       if (matchedValue) {
         matchData.matchedFeatures.push(feature);
       }
@@ -2819,15 +2823,15 @@ dataSet$1.matcher = function (inflections, suffix) {
       matchData.fullMatch = true;
 
       // There can be only one full match, no need to search any further
-      suffix.match = matchData;
-      return suffix
+      item.match = matchData;
+      return item
     }
     bestMatchData = this.bestMatch(bestMatchData, matchData);
   }
   if (bestMatchData) {
     // There is some match found
-    suffix.match = bestMatchData;
-    return suffix
+    item.match = bestMatchData;
+    return item
   }
   return null
 };
@@ -6957,12 +6961,16 @@ class ViewSet {
     this.views.set(Constants.LANG_GREEK, GreekViews);
   }
 
-  getViews (inflectionData) {
-    if (this.views.has(inflectionData.languageID)) {
-      return this.views.get(inflectionData.languageID)
-        .filter(view => inflectionData[Feature.types.part].includes(view.partOfSpeech))
+  getViews (data) {
+    if (data instanceof InflectionData) {
+      if (this.views.has(data.languageID)) {
+        return this.views.get(data.languageID)
+          .filter(view => data[Feature.types.part].includes(view.partOfSpeech))
+      }
+      return []
+    } else {
+      throw new Error(`No inflection data provided`)
     }
-    return []
   }
 }
 
