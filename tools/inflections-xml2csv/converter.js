@@ -88,8 +88,18 @@ const config = {
           'use strict'
 
           let results = []
+          let dataSetNum = 1
           for (const classGroup of json['infl-data'][0]['pronoun-data-set']) {
             let className = classGroup['_attr']['class']['_value']
+
+            // If there are any headwords
+            let headwords = ''
+            if (classGroup['hdwd-set']) {
+              for (const hdwd of classGroup['hdwd-set'][0]['hdwd']) {
+                if (headwords) headwords += ';'
+                headwords += hdwd['_text']
+              }
+            }
             for (const formGroup of classGroup['infl-form-set']) {
               let person = formGroup['_attr']['pers'] ? formGroup['_attr']['pers']['_value'] : ''
               let number = formGroup['_attr']['num'] ? formGroup['_attr']['num']['_value'] : ''
@@ -100,37 +110,37 @@ const config = {
                 // There is an `infl-form` node
                 for (const form of formGroup['infl-form']) {
                   let type = form['_attr']['type']['_value']
-                  let alt = form['_attr'].hasOwnProperty('alt')
-                    ? config.latin.pronoun.footnotes.normalizeIndex(form['_attr']['alt']['_value'])
-                    : ''
                   let footnote = form['_attr'].hasOwnProperty('footnote')
                     ? config.latin.pronoun.footnotes.normalizeIndex(form['_attr']['footnote']['_value'])
                     : ''
                   results.push({
+                    'Form Set': dataSetNum,
+                    'Headwords': headwords,
                     'Class': className,
                     'Person': person,
                     'Number': number,
                     'Case': grmCase,
                     'Type': type,
                     'Form': form['_text'],
-                    'Alt': alt,
                     'Footnote': footnote
                   })
                 }
               } else {
                 // There is no `infl-form` node
                 results.push({
+                  'Form Set': dataSetNum,
+                  'Headwords': headwords,
                   'Class': className,
                   'Person': person,
                   'Number': number,
                   'Case': grmCase,
                   'Type': '',
                   'Form': '',
-                  'Alt': '',
                   'Footnote': ''
                 })
               }
             }
+            dataSetNum++
           }
           return csvParser.unparse(results)
         }
