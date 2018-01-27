@@ -18,7 +18,7 @@ export default class View {
     this.id = 'baseView'
     this.name = 'base view'
     this.title = 'Base View'
-    this.language = undefined
+    this.languageCode = undefined
     this.partOfSpeech = undefined
     this.table = {}
   }
@@ -30,6 +30,7 @@ export default class View {
    * @param {MessageBundle} messages - A message bundle with message translations.
    */
   render (inflectionData, messages) {
+    console.log(`Rendering a view`)
     let selection = inflectionData[this.partOfSpeech]
 
     this.footnotes = new Map()

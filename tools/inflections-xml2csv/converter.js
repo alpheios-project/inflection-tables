@@ -479,6 +479,130 @@ const config = {
           return csvParser.unparse(result)
         }
       }
+    },
+
+    pronoun: {
+      inputFiles: [
+        { name: 'alph-infl-pronoun-dem.xml', class: 'demonstrative' },
+        { name: 'alph-infl-pronoun-genrel.xml', class: 'general relative' },
+        { name: 'alph-infl-pronoun-indef.xml', class: 'indefinite' },
+        { name: 'alph-infl-pronoun-inten.xml', class: 'intensive' },
+        { name: 'alph-infl-pronoun-inter.xml', class: 'interrogative' },
+        { name: 'alph-infl-pronoun-pers.xml', class: 'personal' },
+        // Eliminate possessive pronouns for now because of complexities with person
+        /* { name: 'alph-infl-pronoun-pos.xml', class: 'possessive' },
+        { name: 'alph-infl-pronoun-pos1.xml', class: 'possessive' },
+        { name: 'alph-infl-pronoun-pos2.xml', class: 'possessive' },
+        { name: 'alph-infl-pronoun-pos3.xml', class: 'possessive' }, */
+        { name: 'alph-infl-pronoun-recip.xml', class: 'reciprocal' },
+        { name: 'alph-infl-pronoun-refl.xml', class: 'reflexive' },
+        { name: 'alph-infl-pronoun-rel.xml', class: 'relative' }
+      ],
+      outputSubDir: 'pronoun/',
+      forms: {
+        outputFN: 'forms.csv',
+        get outputPath () {
+          return path.join(__dirname, config.greek.outputBaseDir, config.greek.pronoun.outputSubDir, this.outputFN)
+        },
+        getFromFiles (files, inputBaseDir) {
+          let forms = []
+          let footnotes = []
+          let footnoteBase = 0
+          for (const file of files) {
+            let data = readFile(path.join(__dirname, inputBaseDir, file.name))
+            const json = xmlToJSON.parseString(data)
+            data = json['infl-data'][0]['infl-endings'][0]['infl-ending-set']
+            let grmClass = file.class
+
+            for (const group of data) {
+              let person = group['_attr'].hasOwnProperty('pers') ? group['_attr']['pers']['_value'].replace(' and ', ',').replace(', ', ',') : ''
+              let headword = group['_attr'].hasOwnProperty('hdwd') ? group['_attr']['hdwd']['_value'] : ''
+              // Probably don't need that
+              // let objectNumber = group['_attr'].hasOwnProperty('objnum') ? group['_attr']['objnum']['_value'] : ''
+              let number = group['_attr']['num']['_value']
+              let grmCase = group['_attr']['case']['_value']
+              let gender = group['_attr'].hasOwnProperty('gend') ? group['_attr']['gend']['_value'] : ''
+
+              // Iterate over endings
+              for (const formData of group['infl-ending']) {
+                let type = formData['_attr']['type']['_value']
+                let primary = ''
+                let typeArray = type.split(' ')
+                if (typeArray.length > 2) {
+                  throw new Error('Type value is expected to contain up to two word.')
+                } else if (typeArray.length > 1) {
+                  // Array probably contain two values, one of which is 'primary'
+                  let primaryIndex = typeArray.indexOf('primary')
+                  if (primaryIndex > -1) {
+                    primary = 'primary'
+                    typeArray.splice(primaryIndex, 1)
+                    type = typeArray[0]
+                  } else {
+                    throw new Error('Type value is expected to contain up to two words, ' +
+                      'one of them should be "primary".')
+                  }
+                }
+
+                let dialects = formData['_attr'].hasOwnProperty('dialects') ? formData['_attr']['dialects']['_value'] : ''
+
+                let footnote = ''
+                if (formData['_attr'].hasOwnProperty('footnote')) {
+                  // There can be multiple footnotes separated by spaces
+                  let footnotes = formData['_attr']['footnote']['_value'].match(/\d+/g)
+                  if (footnotes) {
+                    footnotes = footnotes.map(value => footnoteBase + parseInt(value, 10))
+                    footnote = footnotes.join(',')
+                  }
+                }
+
+                let form = {
+                  'Form': formData['_text'],
+                  'Headword': headword,
+                  'Class': grmClass,
+                  'Person': person,
+                  'Number': number,
+                  'Case': grmCase,
+                  'Gender': gender,
+                  'Type': type,
+                  'Primary': primary,
+                  'Dialects': dialects,
+                  'Footnote': footnote
+                }
+                forms.push(form)
+              }
+            }
+
+            // Footnotes
+            if (json['infl-data'][0].hasOwnProperty('footnotes')) {
+              const footnoteItems = json['infl-data'][0].footnotes[0].footnote
+
+              for (const footnoteItem of footnoteItems) {
+                let text = footnoteItem['_text'].replace(/\s+/g, ' ') // Replace multiple whitespace characters with a single space
+                let index = this.normalizeIndex(footnoteItem['_attr'].id['_value'])
+                footnotes.push({
+                  'Index': footnoteBase + parseInt(index, 10),
+                  'Text': text
+                })
+              }
+            }
+            footnoteBase = footnotes.length
+          }
+          return {
+            forms: csvParser.unparse(forms),
+            footnotes: csvParser.unparse(footnotes)
+          }
+        },
+        normalizeIndex (index) {
+          // There can be multiple footnotes separated by spaces
+          return index.replace(/[^\d\s]/g, '')
+        }
+      },
+      footnotes: {
+        outputFN: 'footnotes.csv',
+        get outputPath () {
+          return path.join(__dirname, config.greek.outputBaseDir, config.greek.pronoun.outputSubDir, this.outputFN)
+        }
+      }
     }
   }
 }
@@ -576,12 +700,22 @@ try {
   if (langName === LANG_GREEK || langName === LANG_ALL) {
     let lCfg = config[LANG_GREEK]
     let posCfg
+
+    // Nouns
     if (posName === POS_NOUN || posName === POS_ALL) {
       posCfg = lCfg[POS_NOUN]
       data = readFile(path.join(__dirname, lCfg.inputBaseDir, posCfg.inputFN))
       json = xmlToJSON.parseString(data)
       writeData(posCfg.suffixes.get(json), posCfg.suffixes.outputPath)
       writeData(posCfg.footnotes.get(json), posCfg.footnotes.outputPath)
+    }
+
+    // Pronouns
+    if (posName === POS_PRONOUN || posName === POS_ALL) {
+      posCfg = lCfg[POS_PRONOUN]
+      const {forms, footnotes} = posCfg.forms.getFromFiles(posCfg.inputFiles, lCfg.inputBaseDir)
+      writeData(forms, posCfg.forms.outputPath)
+      writeData(footnotes, posCfg.footnotes.outputPath)
     }
   }
   // endregion Greek
