@@ -7103,6 +7103,17 @@ dataSet$1.addPronounForms = function (partOfSpeech, data) {
     dialect: 9,
     footnote: 10
   };
+
+  console.log('Add pronoun forms');
+  // Custom importers
+  // TODO: decide on the best way to keep mulitple values and re-enable later
+  /* languageModel.features[fTypes.gender].addImporter(impName)
+    .map('masculine feminine neuter', [
+      languageModel.features[fTypes.gender][Constants.GEND_MASCULINE],
+      languageModel.features[fTypes.gender][Constants.GEND_FEMININE],
+      languageModel.features[fTypes.gender][Constants.GEND_NEUTER]
+    ]) */
+
   // First row are headers
   for (let i = 1; i < data.length; i++) {
     let item = data[i];
@@ -7142,46 +7153,6 @@ dataSet$1.addPronounForms = function (partOfSpeech, data) {
       [constants.STR_LANG_CODE_GRC]: extendedGreekData
     };
     this.addItem(form, LanguageDataset.FORM, features, extendedLangData);
-  }
-};
-
-// For verbs
-dataSet$1.addVerbSuffixes = function (partOfSpeech, data) {
-  // Some suffix values will mean a lack of suffix, they will be mapped to a null
-  let noSuffixValue = '-';
-
-  // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let suffix = data[i][0];
-    // Handle special suffix values
-    if (suffix === noSuffixValue) {
-      suffix = null;
-    }
-
-    let features = [partOfSpeech
-      /*
-      conjugations.importer.csv.get(data[i][1]),
-      voices.importer.csv.get(data[i][2]),
-      moods.importer.csv.get(data[i][3]),
-      tenses.importer.csv.get(data[i][4]),
-      numbers.importer.csv.get(data[i][5]),
-      persons.importer.csv.get(data[i][6]) */
-    ];
-
-    let grammarType = data[i][7];
-    // Type information can be empty if no ending is provided
-    if (grammarType) {
-      features.push(fTypes.importer.csv.get(grammarType));
-    }
-    // Footnotes
-    if (data[i][8]) {
-      // There can be multiple footnote indexes separated by spaces
-      let indexes = data[i][8].split(' ').map(function (index) {
-        return footnotes$2.get(index)
-      });
-      features.push(...indexes);
-    }
-    this.addItem(suffix, LanguageDataset.SUFFIX, features);
   }
 };
 
@@ -7286,11 +7257,17 @@ dataSet$1.matcher = function (inflections, type, item) {
 
 dataSet$1.pronounMatcher = function (inflections, type, item) {
   // All of those features must match between an inflection and an ending
-  let obligatoryMatches = [fTypes.part, fTypes.word];
+  // let obligatoryMatches = [fTypes.part, fTypes.word]
 
   // Any of those features must match between an inflection and an ending
-  let optionalMatches = [Feature.types.grmCase, Feature.types.declension, Feature.types.gender, Feature.types.number];
+  let optionalMatches = [Feature.types.grmCase, Feature.types.gender, Feature.types.number];
   let bestMatchData = null; // Information about the best match we would be able to find
+
+  console.log('pronoun matcher');
+
+  /* A full match is when a word form matches the stem
+
+   */
 
   /*
    There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
@@ -7299,37 +7276,26 @@ dataSet$1.pronounMatcher = function (inflections, type, item) {
    */
   for (let inflection of inflections) {
     let matchData = new MatchData(); // Create a match profile
+    let fullMatch = this.forms.find(form => form.value === inflection.stem);
+    let matchedClass = fullMatch.features[Feature.types.grmClass];
+    console.log(matchedClass);
 
     // A suffix match is when an item matches a stem
     if (inflection.stem === item.value) {
       console.log('This is a form match');
       matchData.formMatch = true;
+      matchData.fullMatch = true;
     }
 
-    // Check obligatory matches
-    for (let feature of obligatoryMatches) {
-      let featureMatch = false;
-      if (feature === fTypes.word) {
-        if (inflection.hasOwnProperty(fTypes.word)) {
-          let headwords = inflection[fTypes.word].map(item => item.value);
-          if (headwords.includes(item.features[fTypes.word])) {
-            featureMatch = true;
-          }
-        }
-      } else {
-        featureMatch = item.featureMatch(feature, inflection[feature]);
-      }
+    /*
+    Because pronoun tables are grouped by classes, an item is a match if item is within the same class
+    as an inflection form. To figure that out, we need
 
-      if (!featureMatch) {
-        // If an obligatory match is not found, there is no reason to check other items
-        break
-      }
-      // Inflection's value of this feature is matching the one of the suffix
-      matchData.matchedFeatures.push(feature);
-    }
-
-    if (matchData.matchedFeatures.length < obligatoryMatches.length) {
-      // Not all obligatory matches are found, this is not a match
+     */
+    /*
+    An item is a match if its class matches the class of an inflection. Otherwise, the item should not be selected
+     */
+    if (item.features[Feature.types.grmClass] !== matchedClass) {
       break
     }
 
@@ -7341,14 +7307,14 @@ dataSet$1.pronounMatcher = function (inflections, type, item) {
       }
     }
 
-    if (matchData.suffixMatch && (matchData.matchedFeatures.length === obligatoryMatches.length + optionalMatches.length)) {
+    /* if (matchData.suffixMatch && (matchData.matchedFeatures.length === obligatoryMatches.length + optionalMatches.length)) {
       // This is a full match
-      matchData.fullMatch = true;
+      matchData.fullMatch = true
 
       // There can be only one full match, no need to search any further
-      item.match = matchData;
+      item.match = matchData
       return item
-    }
+    } */
     bestMatchData = this.bestMatch(bestMatchData, matchData);
   }
   if (bestMatchData) {
@@ -7719,13 +7685,13 @@ class RowTitleCell {
 class HeaderCell {
   /**
    * Initializes a header cell.
-   * @param {string} title - A title text that will be shown in the header cell.
+   * @param {string} featureValue - A title text that will be shown in the header cell.
    * @param {GroupFeatureType} groupingFeature - A feature that defines one or several columns this header forms.
    * @param {number} [span=1] - How many columns in a table this header cell forms.
    */
-  constructor (title, groupingFeature, span = 1) {
+  constructor (featureValue, groupingFeature, span = 1) {
     this.feature = groupingFeature;
-    this.title = title;
+    this.title = groupingFeature.getTitle(featureValue);
     this.span = span;
 
     this.parent = undefined;
@@ -8102,6 +8068,48 @@ class GroupFeatureType extends FeatureType {
    */
   getOrderedValues (ancestorFeatures) {
     return this._orderIndex
+  }
+
+  /**
+   * Returns a column or row title for a value of a feature provided.
+   * Redefine it if you want to display custom titles instead of feature values.
+   * @param {Feature} featureValue - A feature object containing a feature value
+   * @return {string} - A row or column title for a table
+   */
+  getTitle (featureValue) {
+    if (this.hasOwnProperty(featureValue)) {
+      if (Array.isArray(this[featureValue])) {
+        return this[featureValue].map((feature) => feature.value).join('/')
+      } else {
+        return this[featureValue].value
+      }
+    } else {
+      return 'not available'
+    }
+  }
+
+  /**
+   * Returns true if an ending grammatical feature defined by featureType has a value that is listed in a featureValues array.
+   * This function is used with Array.prototype.filter().
+   * If you want to provide a custom grouping for any particular feature type, redefine this function
+   * to implement a custom grouping logic.
+   * @param {string | string[]} featureValues - a list of possible values of a type specified by featureType that
+   * this ending should have.
+   * @param {Suffix} suffix - an ending we need to filter out.
+   * @returns {boolean} True if suffix has a value of a grammatical feature specified.
+   */
+  filter (featureValues, suffix) {
+    // If not an array, convert it to array for uniformity
+    if (!Array.isArray(featureValues)) {
+      featureValues = [featureValues];
+    }
+    for (const value of featureValues) {
+      if (suffix.features[this.type] === value) {
+        return true
+      }
+    }
+
+    return false
   }
 
   /**
@@ -8656,31 +8664,6 @@ class Table {
   }
 
   /**
-   * Returns true if an ending grammatical feature defined by featureType has a value that is listed in a featureValues array.
-   * This function is for use with Array.prototype.filter().
-   * @param {string} featureType - a grammatical feature type we need to filter on.
-   * @param {string | string[]} featureValues - a list of possible values of a type specified by featureType that
-   * this ending should have.
-   * @param {Suffix} suffix - an ending we need to filter out.
-   * @returns {boolean} True if suffix has a value of a grammatical feature specified.
-   */
-  static filter (featureType, featureValues, suffix) {
-    'use strict';
-
-    // If not an array, convert it to array for uniformity
-    if (!Array.isArray(featureValues)) {
-      featureValues = [featureValues];
-    }
-    for (const value of featureValues) {
-      if (suffix.features[featureType] === value) {
-        return true
-      }
-    }
-
-    return false
-  };
-
-  /**
    * Groups all suffixes into a tree according to their grammatical features. There are several levels in this tree.
    * Each level corresponds to a one grouping feature. The order of items in GroupingFeatures List object
    * defines an order of those levels.
@@ -8706,7 +8689,7 @@ class Table {
       ancestorFeatures.push(featureValue);
 
       // Suffixes that are selected for current combination of feature values
-      let selectedSuffixes = suffixes.filter(Table.filter.bind(this, group.groupFeatureType.type, featureValue.value));
+      let selectedSuffixes = suffixes.filter(group.groupFeatureType.filter.bind(group.groupFeatureType, featureValue.value));
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups

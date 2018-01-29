@@ -1,10 +1,7 @@
-import { Constants, GreekLanguageModel, Feature } from 'alpheios-data-models'
-// import languages from '../../lib/languages'
+import { Constants, GreekLanguageModel, Feature, FeatureType } from 'alpheios-data-models'
 import View from '../lib/view'
 import GroupFeatureType from '../lib/group-feature-type'
 import Table from '../lib/table'
-// import { types } from '../../lib/lang/greek/greek'
-// import * as Models from '../../../data-models'
 
 let languageModel = new GreekLanguageModel()
 let featureTypes = Feature.types
@@ -125,19 +122,107 @@ class PronounView extends GreekView {
     this.title = 'Pronoun declension'
     this.partOfSpeech = Constants.POFS_PRONOUN
 
+    console.log(`Pronoun view constructor`)
+    const GEND_MASCULINE_FEMININE_NEUTER = 'masculine feminine neuter'
+    let numbers = new FeatureType(
+      Feature.types.number,
+      [Constants.NUM_SINGULAR, Constants.NUM_DUAL, Constants.NUM_PLURAL], // Use a custom sort order
+      this.languageCode
+    )
+    let genders = new FeatureType(
+      Feature.types.gender,
+      [ Constants.GEND_MASCULINE, Constants.GEND_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER ],
+      this.languageCode
+    )
+
+    let lemmas = new FeatureType(
+      Feature.types.word,
+      [],
+      this.languageCode
+    )
+
+    // Lemma values must be generated
+
     this.features = {
-      numbers: new GroupFeatureType(langFeatures[featureTypes.number], 'Number'),
+      numbers: new GroupFeatureType(numbers, 'Number'),
       cases: new GroupFeatureType(langFeatures[featureTypes.grmCase], 'Case'),
-      genders: new GroupFeatureType(langFeatures[featureTypes.gender], 'Gender')
+      genders: new GroupFeatureType(genders, 'Gender'),
+      lemmas: new GroupFeatureType(lemmas, 'Lemma')
     }
 
-    // Features should go as: column features first, row features last
-    this.table = new Table([this.features.genders, this.features.numbers, this.features.cases])
+    this.features.genders.getTitle = function getTitle (featureValue) {
+      if (featureValue === Constants.GEND_MASCULINE) { return 'm.' }
+      if (featureValue === Constants.GEND_FEMININE) { return 'f.' }
+      if (featureValue === Constants.GEND_NEUTER) { return 'n.' }
+      if (featureValue === GEND_MASCULINE_FEMININE_NEUTER) { return 'm./f./n.' }
+      return featureValue
+    }
+
+    this.features.genders.filter = function filter (featureValues, suffix) {
+      console.log('A custom group feature type filter', featureValues)
+      // If not an array, convert it to array for uniformity
+      if (!Array.isArray(featureValues)) {
+        featureValues = [featureValues]
+      }
+      for (const value of featureValues) {
+        if (suffix.features[this.type] === value) {
+          return true
+        }
+      }
+
+      return false
+    }
+
+    this.render = function render (inflectionData, messages) {
+      console.log(`Custom render`)
+      // TODO: Update view with function to replace lemma values dynamically to avoid repetitious code below
+      let numbers = new FeatureType(
+        Feature.types.number,
+        [Constants.NUM_SINGULAR, Constants.NUM_DUAL, Constants.NUM_PLURAL], // Use a custom sort order
+        this.languageCode
+      )
+      let genders = new FeatureType(
+        Feature.types.gender,
+        [ Constants.GEND_MASCULINE, Constants.GEND_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER ],
+        this.languageCode
+      )
+      let lemmas = new FeatureType(
+        Feature.types.word,
+        ['οὗτος', 'ἐκεῖνος', 'ὅδε'],
+        this.languageCode
+      )
+      this.features.lemmas = new GroupFeatureType(lemmas, 'Lemma')
+      this.table = new Table([this.features.lemmas, this.features.genders, this.features.numbers, this.features.cases])
+      let features = this.table.features
+      features.columns = [lemmas, genders]
+      features.rows = [numbers, langFeatures[featureTypes.grmCase]]
+      features.columnRowTitles = [langFeatures[featureTypes.grmCase]]
+      features.fullWidthRowTitles = [numbers]
+
+      // Start of original render code
+      let selection = inflectionData[this.partOfSpeech]
+
+      this.footnotes = new Map()
+      if (selection.footnotes && Array.isArray(selection.footnotes)) {
+        for (const footnote of selection.footnotes) {
+          this.footnotes.set(footnote.index, footnote)
+        }
+      }
+
+      // Table is created during view construction
+      this.table.messages = messages
+      this.table.construct(selection.suffixes).constructViews().addEventListeners()
+      return this
+    }
+
+    // Features should go as: column features first, row features last. This specifies the order of grouping
+    // in which a table tree will be built.
+    this.table = new Table([this.features.lemmas, this.features.genders, this.features.numbers, this.features.cases])
     let features = this.table.features
-    features.columns = [langFeatures[featureTypes.gender]]
-    features.rows = [langFeatures[featureTypes.number], langFeatures[featureTypes.grmCase]]
+    features.columns = [lemmas, genders]
+    features.rows = [numbers, langFeatures[featureTypes.grmCase]]
     features.columnRowTitles = [langFeatures[featureTypes.grmCase]]
-    features.fullWidthRowTitles = [langFeatures[featureTypes.number]]
+    features.fullWidthRowTitles = [numbers]
   }
 }
 
