@@ -20,7 +20,7 @@ export default class View {
     this.title = 'Base View'
     this.languageCode = undefined
     this.partOfSpeech = undefined
-    this.forms = []
+    this.forms = new Set()
     this.table = {}
   }
 
@@ -53,7 +53,6 @@ export default class View {
 
     // Table is created during view construction
     this.table.messages = messages
-    this.forms = new Set()
     for (let lexeme of inflectionData.homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
         if (inflection['part of speech'].filter((f) => f.hasValue(this.partOfSpeech)).length > 0) {
