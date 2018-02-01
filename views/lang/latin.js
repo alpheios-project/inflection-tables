@@ -2,6 +2,30 @@ import * as Models from 'alpheios-data-models'
 import View from '../lib/view'
 import GroupFeatureType from '../lib/group-feature-type'
 import Table from '../lib/table'
+import { Constants } from '../../../data-models'
+
+ /**
+ * Define declension group titles
+ * @param {String} featureValue - A value of a declension
+ * @return {string} - A title of a declension group, in HTML format
+ */
+let getDeclensionTitle = function getDeclensionTitle (featureValue) {
+  if (featureValue === Constants.ORD_1ST) { return `First` }
+  if (featureValue === Constants.ORD_2ND) { return `Second` }
+  if (featureValue === Constants.ORD_3RD) { return `Third` }
+  if (featureValue === Constants.ORD_4TH) { return `Fourth` }
+  if (featureValue === Constants.ORD_5TH) { return `Fifth` }
+
+  if (this.hasOwnProperty(featureValue)) {
+    if (Array.isArray(this[featureValue])) {
+      return this[featureValue].map((feature) => feature.value).join('/')
+    } else {
+      return this[featureValue].value
+    }
+  } else {
+    return 'not available'
+  }
+}
 
 class LatinView extends View {
   constructor () {
@@ -9,6 +33,12 @@ class LatinView extends View {
     this.languageID = Models.Constants.LANG_LATIN
     this.languageModel = new Models.LatinLanguageModel() // TODO: Do we really need to create it every time?
     this.language_features = this.languageModel.features
+    // limit regular verb moods
+    this.language_features[Models.Feature.types.mood] =
+      new Models.FeatureType(Models.Feature.types.mood,
+        [ Models.Constants.MOOD_INDICATIVE,
+          Models.Constants.MOOD_SUBJUNCTIVE
+        ], this.languageModel.toCode())
 
         /*
         Default grammatical features of a view. It child views need to have different feature values, redefine
@@ -21,6 +51,7 @@ class LatinView extends View {
       genders: new GroupFeatureType(this.language_features[Models.Feature.types.gender], 'Gender'),
       types: new GroupFeatureType(this.language_features[Models.Feature.types.type], 'Type')
     }
+    this.features.declensions.getTitle = getDeclensionTitle
   }
 
     /*
@@ -70,7 +101,72 @@ class AdjectiveView extends LatinView {
         this.language_features[Models.Feature.types.declension][Models.Constants.ORD_2ND],
         this.language_features[Models.Feature.types.declension][Models.Constants.ORD_3RD]
       ])
+    this.features.declensions.getTitle = getDeclensionTitle
+
     this.createTable()
+  }
+}
+
+class VerbParticipleView extends LatinView {
+  constructor () {
+    super()
+    this.partOfSpeech = this.language_features[Models.Feature.types.part][Models.Constants.POFS_VERB_PARTICIPLE].value
+    this.id = 'verbParticiple'
+    this.name = 'participle'
+    this.title = 'Participle'
+    this.language_features[Models.Feature.types.tense] = new Models.FeatureType(Models.Feature.types.tense,
+      [Models.Constants.TENSE_PRESENT, Models.Constants.TENSE_PERFECT, Models.Constants.TENSE_FUTURE], this.languageModel.toCode())
+    this.features = {
+      tenses: new GroupFeatureType(this.language_features[Models.Feature.types.tense], 'Tenses'),
+      voices: new GroupFeatureType(this.language_features[Models.Feature.types.voice], 'Voice'),
+      conjugations: new GroupFeatureType(this.language_features[Models.Feature.types.conjugation], 'Conjugation Stem')
+    }
+    this.createTable()
+  }
+
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.conjugations,
+      this.features.tenses])
+    let features = this.table.features
+    features.columns = [
+      this.language_features[Models.Feature.types.voice],
+      this.language_features[Models.Feature.types.conjugation]]
+    features.rows = [this.language_features[Models.Feature.types.tense]]
+    features.columnRowTitles = [this.language_features[Models.Feature.types.tense]]
+    features.fullWidthRowTitles = []
+  }
+}
+
+class SupineView extends LatinView {
+  constructor () {
+    super()
+    this.partOfSpeech = this.language_features[Models.Feature.types.part][Models.Constants.POFS_SUPINE].value
+    this.id = 'verbSupine'
+    this.name = 'supine'
+    this.title = 'Supine'
+    this.features.moods = new GroupFeatureType(
+      new Models.FeatureType(Models.Feature.types.mood, [Models.Constants.MOOD_SUPINE], this.languageModel.toCode()),
+      'Mood')
+    this.language_features[Models.Feature.types.grmCase] = new Models.FeatureType(Models.Feature.types.grmCase,
+      [Models.Constants.CASE_ACCUSATIVE, Models.Constants.CASE_ABLATIVE], this.languageModel.toCode())
+    this.features = {
+      cases: new GroupFeatureType(this.language_features[Models.Feature.types.grmCase], 'Case'),
+      voices: new GroupFeatureType(this.language_features[Models.Feature.types.voice], 'Voice'),
+      conjugations: new GroupFeatureType(this.language_features[Models.Feature.types.conjugation], 'Conjugation Stem')
+    }
+    this.createTable()
+  }
+
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.conjugations,
+      this.features.cases])
+    let features = this.table.features
+    features.columns = [
+      this.language_features[Models.Feature.types.voice],
+      this.language_features[Models.Feature.types.conjugation]]
+    features.rows = [this.language_features[Models.Feature.types.grmCase]]
+    features.columnRowTitles = [this.language_features[Models.Feature.types.grmCase]]
+    features.fullWidthRowTitles = []
   }
 }
 
@@ -87,6 +183,41 @@ class VerbView extends LatinView {
       conjugations: new GroupFeatureType(this.language_features[Models.Feature.types.conjugation], 'Conjugation Stem'),
       moods: new GroupFeatureType(this.language_features[Models.Feature.types.mood], 'Mood')
     }
+
+    /**
+     * Define conjugation group titles
+     * @param {String} featureValue - A value of a conjugation feature
+     * @return {string} - A title of a conjugation group, in HTML format
+     */
+    this.features.conjugations.getTitle = function getTitle (featureValue) {
+      if (featureValue === Constants.ORD_1ST) { return `First<br><span class="infl-cell__conj-stem">ā</span>` }
+      if (featureValue === Constants.ORD_2ND) { return `Second<br><span class="infl-cell__conj-stem">ē</span>` }
+      if (featureValue === Constants.ORD_3RD) { return `Third<br><span class="infl-cell__conj-stem">e</span>` }
+      if (featureValue === Constants.ORD_4TH) { return `Fourth<br><span class="infl-cell__conj-stem">i</span>` }
+
+      if (this.hasOwnProperty(featureValue)) {
+        if (Array.isArray(this[featureValue])) {
+          return this[featureValue].map((feature) => feature.value).join('/')
+        } else {
+          return this[featureValue].value
+        }
+      } else {
+        return 'not available'
+      }
+    }
+  }
+}
+
+class VerbMoodView extends VerbView {
+  constructor () {
+    super()
+    this.features = {
+      tenses: new GroupFeatureType(this.language_features[Models.Feature.types.tense], 'Tenses'),
+      numbers: new GroupFeatureType(this.language_features[Models.Feature.types.number], 'Number'),
+      persons: new GroupFeatureType(this.language_features[Models.Feature.types.person], 'Person'),
+      voices: new GroupFeatureType(this.language_features[Models.Feature.types.voice], 'Voice'),
+      conjugations: new GroupFeatureType(this.language_features[Models.Feature.types.conjugation], 'Conjugation Stem')
+    }
   }
 }
 
@@ -94,8 +225,8 @@ class VoiceConjugationMoodView extends VerbView {
   constructor () {
     super()
     this.id = 'verbVoiceConjugationMood'
-    this.name = 'verb voice-conjugation-mood'
-    this.title = 'Voice-Conjugation-Mood'
+    this.name = 'voice-conjugation-mood'
+    this.title = 'Verb Conjugation'
 
     this.createTable()
   }
@@ -123,8 +254,8 @@ class VoiceMoodConjugationView extends VerbView {
   constructor () {
     super()
     this.id = 'verbVoiceMoodConjugation'
-    this.name = 'verb voice-mood-conjugation'
-    this.title = 'Voice-Mood-Conjugation'
+    this.name = 'voice-mood-conjugation'
+    this.title = 'Verb Conjugation'
 
     this.createTable()
   }
@@ -152,8 +283,8 @@ class ConjugationVoiceMoodView extends VerbView {
   constructor () {
     super()
     this.id = 'verbConjugationVoiceMood'
-    this.name = 'verb conjugation-voice-mood'
-    this.title = 'Conjugation-Voice-Mood'
+    this.name = 'conjugation-voice-mood'
+    this.title = 'Verb Conjugation'
 
     this.createTable()
   }
@@ -180,8 +311,8 @@ class ConjugationMoodVoiceView extends VerbView {
   constructor () {
     super()
     this.id = 'verbConjugationMoodVoice'
-    this.name = 'verb conjugation-mood-voice'
-    this.title = 'Conjugation-Mood-Voice'
+    this.name = 'conjugation-mood-voice'
+    this.title = 'Verb Conjugation'
 
     this.createTable()
   }
@@ -209,8 +340,8 @@ class MoodVoiceConjugationView extends VerbView {
   constructor () {
     super()
     this.id = 'verbMoodVoiceConjugation'
-    this.name = 'verb mood-voice-conjugation'
-    this.title = 'Mood-Voice-Conjugation'
+    this.name = 'mood-voice-conjugation'
+    this.title = 'Verb Conjugation'
 
     this.createTable()
   }
@@ -230,8 +361,8 @@ class MoodConjugationVoiceView extends VerbView {
   constructor () {
     super()
     this.id = 'verbMoodConjugationVoice'
-    this.name = 'verb mood-conjugation-voice'
-    this.title = 'Mood-Conjugation-Voice'
+    this.name = 'mood-conjugation-voice'
+    this.title = 'Verb Conjugation'
 
     this.createTable()
   }
@@ -247,7 +378,102 @@ class MoodConjugationVoiceView extends VerbView {
   }
 }
 
+class ImperativeView extends VerbMoodView {
+  constructor () {
+    super()
+    this.id = 'verbImperative'
+    this.name = 'imperative'
+    this.title = 'Imperative'
+    this.features.moods = new GroupFeatureType(
+      new Models.FeatureType(Models.Feature.types.mood, [Models.Constants.MOOD_IMPERATIVE], this.languageModel.toCode()),
+      'Mood')
+    this.language_features[Models.Feature.types.person] = new Models.FeatureType(Models.Feature.types.person, [Models.Constants.ORD_2ND, Models.Constants.ORD_3RD], this.languageModel.toCode())
+    this.features.persons = new GroupFeatureType(this.language_features[Models.Feature.types.person], 'Person')
+    this.language_features[Models.Feature.types.tense] = new Models.FeatureType(Models.Feature.types.tense,
+      [Models.Constants.TENSE_PRESENT, Models.Constants.TENSE_FUTURE], this.languageModel.toCode())
+    this.features.tenses = new GroupFeatureType(this.language_features[Models.Feature.types.tense], 'Tense')
+    this.createTable()
+    this.table.suffixCellFilter = ImperativeView.suffixCellFilter
+  }
+
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.conjugations,
+      this.features.tenses, this.features.numbers, this.features.persons])
+    let features = this.table.features
+    features.columns = [
+      this.language_features[Models.Feature.types.voice],
+      this.language_features[Models.Feature.types.conjugation]]
+    features.rows = [this.language_features[Models.Feature.types.tense], this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]]
+    features.columnRowTitles = [this.language_features[Models.Feature.types.number], this.language_features[Models.Feature.types.person]]
+    features.fullWidthRowTitles = [this.language_features[Models.Feature.types.tense]]
+  }
+
+  enabledForLexemes (lexemes) {
+      // default is true
+    for (let lexeme of lexemes) {
+      for (let inflection of lexeme.inflections) {
+        if (inflection[Models.Feature.types.mood] &&
+          inflection[Models.Feature.types.mood].filter((f) => f.value.includes(Models.Constants.MOOD_IMPERATIVE)).length > 0) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  static suffixCellFilter (suffix) {
+    return suffix.features[Models.Feature.types.mood].includes(Models.Constants.MOOD_IMPERATIVE)
+  }
+}
+
+class InfinitiveView extends VerbMoodView {
+  constructor () {
+    super()
+    this.id = 'verbInfinitive'
+    this.name = 'infinitive'
+    this.title = 'Infinitive'
+    this.features.moods = new GroupFeatureType(
+      new Models.FeatureType(Models.Feature.types.mood, [Models.Constants.MOOD_INFINITIVE], this.languageModel.toCode()),
+      'Mood')
+    this.language_features[Models.Feature.types.tense] = new Models.FeatureType(Models.Feature.types.tense,
+      [Models.Constants.TENSE_PRESENT, Models.Constants.TENSE_PERFECT, Models.Constants.TENSE_FUTURE], this.languageModel.toCode())
+    this.features.tenses = new GroupFeatureType(this.language_features[Models.Feature.types.tense], 'Tense')
+    this.createTable()
+    this.table.suffixCellFilter = InfinitiveView.suffixCellFilter
+  }
+
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.conjugations,
+      this.features.tenses])
+    let features = this.table.features
+    features.columns = [
+      this.language_features[Models.Feature.types.voice],
+      this.language_features[Models.Feature.types.conjugation]]
+    features.rows = [this.language_features[Models.Feature.types.tense]]
+    features.columnRowTitles = [this.language_features[Models.Feature.types.tense]]
+    features.fullWidthRowTitles = []
+  }
+
+  enabledForLexemes (lexemes) {
+      // default is true
+    for (let lexeme of lexemes) {
+      for (let inflection of lexeme.inflections) {
+        if (inflection[Models.Feature.types.mood] &&
+          inflection[Models.Feature.types.mood].filter((f) => f.value.includes(Models.Constants.MOOD_INFINITIVE)).length > 0) {
+          return true
+        }
+      }
+    }
+    return false
+  }
+
+  static suffixCellFilter (suffix) {
+    return suffix.features[Models.Feature.types.mood].includes(Models.Constants.MOOD_INFINITIVE)
+  }
+}
+
 export default [new NounView(), new AdjectiveView(),
     // Verbs
   new VoiceConjugationMoodView(), new VoiceMoodConjugationView(), new ConjugationVoiceMoodView(),
-  new ConjugationMoodVoiceView(), new MoodVoiceConjugationView(), new MoodConjugationVoiceView()]
+  new ConjugationMoodVoiceView(), new MoodVoiceConjugationView(), new MoodConjugationVoiceView(),
+  new ImperativeView(), new SupineView(), new VerbParticipleView(), new InfinitiveView()]

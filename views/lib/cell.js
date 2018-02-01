@@ -35,7 +35,7 @@ export default class Cell {
     element.classList.add(Styles.classNames.cell)
     for (let [index, suffix] of this.suffixes.entries()) {
       // Render each suffix
-      let suffixElement = document.createElement('a')
+      let suffixElement = document.createElement('span')
       suffixElement.classList.add(Styles.classNames.suffix)
       if (suffix.match && suffix.match.suffixMatch) {
         suffixElement.classList.add(Styles.classNames.suffixMatch)
@@ -53,7 +53,7 @@ export default class Cell {
         element.appendChild(footnoteElement)
       }
       if (index < this.suffixes.length - 1) {
-        element.appendChild(document.createTextNode(',\u00A0')) // 00A0 is a non-breaking space
+        element.appendChild(document.createTextNode(', ')) // 00A0 is a non-breaking space
       }
     }
     this.wNode = element
