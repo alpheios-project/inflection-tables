@@ -7350,7 +7350,7 @@ class Cell {
 
       if (suffix.footnote && suffix.footnote.length) {
         let footnoteElement = document.createElement('a');
-        footnoteElement.innerHTML = '[' + suffix.footnote + ']';
+        footnoteElement.innerHTML = suffix.footnote;
         footnoteElement.dataset.footnote = suffix.footnote;
         element.appendChild(footnoteElement);
       }
