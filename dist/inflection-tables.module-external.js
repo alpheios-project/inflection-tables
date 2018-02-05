@@ -2842,6 +2842,7 @@ dataSet$1.matcher = function (inflections, type, item) {
   } else {
     obligatoryMatches = [fTypes.word];
   }
+  console.log('Greek matcher');
 
     // Any of those features must match between an inflection and an ending
   optionalMatches = [Feature.types.grmCase, Feature.types.declension, Feature.types.gender, Feature.types.number];
