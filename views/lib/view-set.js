@@ -1,38 +1,69 @@
-import LatinViews from '../lang/latin.js'
-import GreekViews from '../lang/greek.js'
-import * as Models from 'alpheios-data-models'
+import {Constants} from 'alpheios-data-models'
+// Latin views
+import LatinNounView from '../lang/latin/latin-noun-view.js'
+import LatinAdjectiveView from '../lang/latin/latin-adjective-view.js'
+import LatinVoiceConjugationMoodView from '../lang/latin/latin-voice-conjugation-mood-view.js'
+import LatinVoiceMoodConjugationView from '../lang/latin/latin-voice-mood-conjugation-view.js'
+import LatinConjugationVoiceMoodView from '../lang/latin/latin-conjugation-voice-mood-view.js'
+import LatinConjugationMoodVoiceView from '../lang/latin/latin-conjugation-mood-voice-view.js'
+import LatinMoodVoiceConjugationView from '../lang/latin/latin-mood-voice-conjugation-view.js'
+import LatinMoodConjugationVoiceView from '../lang/latin/latin-mood-conjugation-voice-view.js'
+import LatinImperativeView from '../lang/latin/latin-imperative-view.js'
+import LatinSupineView from '../lang/latin/latin-supine-view.js'
+import LatinVerbParticipleView from '../lang/latin/latin-verb-participle-view.js'
+import LatinInfinitiveView from '../lang/latin/latin-infinitive-view.js'
 
+// Greek views
+import GreekNounView from '../lang/greek/greek-noun-view.js'
+import GreekNounSimplifiedView from '../lang/greek/greek-noun-simplified-view.js'
+import GreekPronounView from '../lang/greek/greek-pronoun-view.js'
+
+/**
+ * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
+ * mast be created for each new inflection data piece.
+ */
 export default class ViewSet {
-  constructor (inflectionData = undefined) {
-    this.views = new Map()
-    this.views.set(Models.Constants.LANG_LATIN, LatinViews)
-    this.views.set(Models.Constants.LANG_GREEK, GreekViews)
+  constructor (inflectionData, messages) {
+    this.views = new Map([
+      [Constants.LANG_LATIN, [LatinNounView, LatinAdjectiveView,
+        LatinVoiceConjugationMoodView, LatinVoiceMoodConjugationView, LatinConjugationVoiceMoodView,
+        LatinConjugationMoodVoiceView, LatinMoodVoiceConjugationView, LatinMoodConjugationVoiceView,
+        LatinImperativeView, LatinSupineView, LatinVerbParticipleView, LatinInfinitiveView]],
+      [Constants.LANG_GREEK, [GreekNounView, GreekNounSimplifiedView, GreekPronounView]]
+    ])
     this.inflectionData = inflectionData
+    this.languageID = this.inflectionData.languageID
+    this.messages = messages
     this.matchingViews = []
 
-    if (this.views.has(inflectionData.languageID)) {
-      this.matchingViews = this.views.get(inflectionData.languageID)
-        .filter(view =>
-          inflectionData[Models.Feature.types.part].includes(view.partOfSpeech) &&
-          view.enabledForLexemes(inflectionData.homonym.lexemes))
+    if (this.views.has(this.languageID)) {
+      for (let ViewConstructor of this.views.get(this.languageID)) {
+        if (ViewConstructor.matchFilter(this.inflectionData)) {
+          this.matchingViews.push(new ViewConstructor(this.inflectionData, this.messages))
+        }
+      }
     }
 
     this.partsOfSpeech = []
-    this.partOfSpeechViews = {}
     for (const view of this.matchingViews) {
       if (!this.partsOfSpeech.includes(view.partOfSpeech)) {
         this.partsOfSpeech.push(view.partOfSpeech)
-        this.partOfSpeechViews[view.partOfSpeech] = []
       }
-      this.partOfSpeechViews[view.partOfSpeech].push(view)
     }
   }
 
   getViews (partOfSpeech = undefined) {
-    if (this.partsOfSpeech.includes(partOfSpeech)) {
-      return this.partOfSpeechViews[partOfSpeech]
+    if (partOfSpeech) {
+      return this.matchingViews.filter(view => view.partOfSpeech === partOfSpeech)
     } else {
-      return []
+      return this.matchingViews
+    }
+  }
+
+  updateMessages (messages) {
+    this.messages = messages
+    for (let view of this.matchingViews) {
+      view.updateMessages(messages)
     }
   }
 }

@@ -342,13 +342,65 @@ class Footnote {
 }
 
 /**
- * A return value for inflection queries
+ * A return value for inflection queries. Stores suffixes and/or forms and suffixes they use.
+ * Suffixes/forms and footnotes are grouped by part of speech within a [Models.Feature.types.part] property object.
  */
 class InflectionData {
   constructor (homonym) {
     this.homonym = homonym;
+    /** Defines a language ID of this inflection data. */
     this.languageID = homonym.languageID;
     this[Feature.types.part] = []; // What parts of speech are represented by this object.
+  }
+
+  /**
+   * Returns a list of parts of speech that have any inflection data for them.
+   * @return {String[]} Names of parts of speech, as strings, in an array.
+   */
+  get partsOfSpeech () {
+    if (this.hasOwnProperty(Feature.types.part)) {
+      return this[Feature.types.part]
+    } else {
+      return []
+    }
+  }
+
+  getSuffixes (partOfSpeech) {
+    if (this.hasOwnProperty(partOfSpeech) && this[partOfSpeech].hasOwnProperty('suffixes')) {
+      return this[partOfSpeech].suffixes
+    } else {
+      return []
+    }
+  }
+
+  getFootnotesMap (partOfSpeech) {
+    let footnotes = new Map();
+    if (this.hasOwnProperty(partOfSpeech) && this[partOfSpeech].hasOwnProperty('footnotes')) {
+      for (const footnote of this[partOfSpeech].footnotes) {
+        footnotes.set(footnote.index, footnote);
+      }
+    }
+    return footnotes
+  }
+
+  /**
+   * Retrieves all variants of feature values for a given part of speech.
+   * @param partOfSpeech
+   * @param featureName
+   */
+  getFeatureValues (partOfSpeech, featureName) {
+    let values = [];
+    if (this.hasOwnProperty(partOfSpeech)) {
+      for (const item of this[partOfSpeech].suffixes) {
+        if (item.hasOwnProperty('features') && item.features.hasOwnProperty(featureName)) {
+          let value = item.features[featureName];
+          if (!values.includes(value)) {
+            values.push(value);
+          }
+        }
+      }
+    }
+    return values
   }
 
   static readObject (jsonObject) {
@@ -2808,6 +2860,10 @@ dataSet$1.addSuffixes = function (partOfSpeech, data) {
 };
 
 // For pronouns
+dataSet$1.pronounGroupingLemmas = new Map([
+  ['demonstrative', ['ὅδε', 'οὗτος', 'ἐκεῖνος']]
+]);
+
 dataSet$1.addPronounForms = function (partOfSpeech, data) {
   // An order of columns in a data CSV file
   const n = {
@@ -2901,6 +2957,11 @@ dataSet$1.loadData = function () {
 
 dataSet$1.getInflectionProperties = function (partOfSpeech) {
   return new GreekInflectionProperties(partOfSpeech)
+};
+
+dataSet$1.getPronounGroupingLemmas = function (grammarClass) {
+  let values = this.pronounGroupingLemmas.has(grammarClass) ? this.pronounGroupingLemmas.get(grammarClass) : [];
+  return new FeatureType(Feature.types.word, values, this.languageID)
 };
 
 /**
@@ -5174,10 +5235,13 @@ class View {
   /**
    * Initializes a View object with options. There is at least one view per part of speech,
    * but there could be several views for the same part of speech that show different table representation of a view.
-   * @param {Object} viewOptions
+   * @param {InflectionData} inflectionData - An inflection data object.
+   * @param {MessageBundle} messages - A message bundle with message translations.
    */
-  constructor () {
-    // this.options = viewOptions;
+  constructor (inflectionData, messages) {
+    this.languageID = View.languageID;
+    this.inflectionData = inflectionData;
+    this.messages = messages;
     this.pageHeader = {};
 
     // An HTML element where this view is rendered
@@ -5187,10 +5251,39 @@ class View {
     this.id = 'baseView';
     this.name = 'base view';
     this.title = 'Base View';
-    this.languageCode = undefined;
     this.partOfSpeech = undefined;
     this.forms = new Set();
     this.table = {};
+  }
+
+  /**
+   * Defines a language ID of a view. Should be redefined in child classes.
+   * @return {symbol}
+   */
+  static get languageID () {
+    return Symbol('Undefined language')
+  }
+
+  /**
+   * Defines a part of speech of a view. Should be redefined in child classes.
+   * @return {string}
+   */
+  static get partOfSpeech () {
+    return 'Undefined part of speech'
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(View.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(View.partOfSpeech) && View.enabledForLexemes(inflectionData.homonym.lexemes)
+    }
   }
 
   /**
@@ -5198,20 +5291,22 @@ class View {
    * @param {Lexeme[]} lexemes
    * @return {boolean} true if the view should be shown false if not
    */
-  enabledForLexemes (lexemes) {
+  static enabledForLexemes (lexemes) {
     // default returns true
     return true
+  }
+
+  updateMessages (messages) {
+    this.messages = messages;
+    return this
   }
 
   /**
    * Converts an InflectionData, returned from an inflection tables library, into an HTML representation of an inflection table.
    * `messages` provides a translation for view's texts.
-   * @param {InflectionData} inflectionData - A result set from inflection tables library.
-   * @param {MessageBundle} messages - A message bundle with message translations.
    */
-  render (inflectionData, messages) {
-    console.log(`Rendering a view`);
-    let selection = inflectionData[this.partOfSpeech];
+  render () {
+    let selection = this.inflectionData[this.partOfSpeech];
 
     this.footnotes = new Map();
     if (selection.footnotes && Array.isArray(selection.footnotes)) {
@@ -5221,8 +5316,8 @@ class View {
     }
 
     // Table is created during view construction
-    this.table.messages = messages;
-    for (let lexeme of inflectionData.homonym.lexemes) {
+    this.table.messages = this.messages;
+    for (let lexeme of this.inflectionData.homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
         if (inflection['part of speech'].filter((f) => f.hasValue(this.partOfSpeech)).length > 0) {
           let form = inflection.prefix ? `${inflection.prefix} - ` : '';
@@ -6852,460 +6947,9 @@ class Table {
   }
 }
 
-/* eslint-disable no-unused-vars */
-const LANG_UNIT_WORD = Symbol('word');
-const LANG_UNIT_CHAR = Symbol('char');
-const LANG_DIR_LTR = Symbol('ltr');
-const LANG_DIR_RTL = Symbol('rtl');
-const LANG_LATIN = Symbol('latin');
-const LANG_GREEK = Symbol('greek');
-const LANG_ARABIC = Symbol('arabic');
-const LANG_PERSIAN = Symbol('persian');
-const STR_LANG_CODE_LAT = 'lat';
-const STR_LANG_CODE_LA = 'la';
-const STR_LANG_CODE_GRC = 'grc';
-const STR_LANG_CODE_ARA = 'ara';
-const STR_LANG_CODE_AR = 'ar';
-const STR_LANG_CODE_FAS = 'fas';
-const STR_LANG_CODE_PER = 'per';
-const STR_LANG_CODE_FA_IR = 'fa-IR';
-const STR_LANG_CODE_FA = 'fa';
-// parts of speech
-const POFS_ADJECTIVE = 'adjective';
-const POFS_ADVERB = 'adverb';
-const POFS_ADVERBIAL = 'adverbial';
-const POFS_ARTICLE = 'article';
-const POFS_CONJUNCTION = 'conjunction';
-const POFS_EXCLAMATION = 'exclamation';
-const POFS_INTERJECTION = 'interjection';
-const POFS_NOUN = 'noun';
-const POFS_NUMERAL = 'numeral';
-const POFS_PARTICLE = 'particle';
-const POFS_PREFIX = 'prefix';
-const POFS_PREPOSITION = 'preposition';
-const POFS_PRONOUN = 'pronoun';
-const POFS_SUFFIX = 'suffix';
-const POFS_SUPINE = 'supine';
-const POFS_VERB = 'verb';
-const POFS_VERB_PARTICIPLE = 'verb participle';
-// gender
-const GEND_MASCULINE = 'masculine';
-const GEND_FEMININE = 'feminine';
-const GEND_NEUTER = 'neuter';
-const GEND_COMMON = 'common';
-const GEND_ANIMATE = 'animate';
-const GEND_INANIMATE = 'inanimate';
-// Polish gender types
-const GEND_PERSONAL_MASCULINE = 'personal masculine';
-const GEND_ANIMATE_MASCULINE = 'animate masculine';
-const GEND_INANIMATE_MASCULINE = 'inanimate masculine';
-// comparative
-const COMP_POSITIVE = 'positive';
-const COMP_COMPARITIVE = 'comparative';
-const COMP_SUPERLATIVE = 'superlative';
-// case
-const CASE_ABESSIVE = 'abessive';
-const CASE_ABLATIVE = 'ablative';
-const CASE_ABSOLUTIVE = 'absolutive';
-const CASE_ACCUSATIVE = 'accusative';
-const CASE_ADDIRECTIVE = 'addirective';
-const CASE_ADELATIVE = 'adelative';
-const CASE_ADESSIVE = 'adessive';
-const CASE_ADVERBIAL = 'adverbial';
-const CASE_ALLATIVE = 'allative';
-const CASE_ANTESSIVE = 'antessive';
-const CASE_APUDESSIVE = 'apudessive';
-const CASE_AVERSIVE = 'aversive';
-const CASE_BENEFACTIVE = 'benefactive';
-const CASE_CARITIVE = 'caritive';
-const CASE_CAUSAL = 'causal';
-const CASE_CAUSAL_FINAL = 'causal-final';
-const CASE_COMITATIVE = 'comitative';
-const CASE_DATIVE = 'dative';
-const CASE_DELATIVE = 'delative';
-const CASE_DIRECT = 'direct';
-const CASE_DISTRIBUTIVE = 'distributive';
-const CASE_DISTRIBUTIVE_TEMPORAL = 'distributive-temporal';
-const CASE_ELATIVE = 'elative';
-const CASE_ERGATIVE = 'ergative';
-const CASE_ESSIVE = 'essive';
-const CASE_ESSIVE_FORMAL = 'essive-formal';
-const CASE_ESSIVE_MODAL = 'essive-modal';
-const CASE_EQUATIVE = 'equative';
-const CASE_EVITATIVE = 'evitative';
-const CASE_EXESSIVE = 'exessive';
-const CASE_FINAL = 'final';
-const CASE_FORMAL = 'formal';
-const CASE_GENITIVE = 'genitive';
-const CASE_ILLATIVE = 'illative';
-const CASE_INELATIVE = 'inelative';
-const CASE_INESSIVE = 'inessive';
-const CASE_INSTRUCTIVE = 'instructive';
-const CASE_INSTRUMENTAL = 'instrumental';
-const CASE_INSTRUMENTAL_COMITATIVE = 'instrumental-comitative';
-const CASE_INTRANSITIVE = 'intransitive';
-const CASE_LATIVE = 'lative';
-const CASE_LOCATIVE = 'locative';
-const CASE_MODAL = 'modal';
-const CASE_MULTIPLICATIVE = 'multiplicative';
-const CASE_NOMINATIVE = 'nominative';
-const CASE_PARTITIVE = 'partitive';
-const CASE_PEGATIVE = 'pegative';
-const CASE_PERLATIVE = 'perlative';
-const CASE_POSSESSIVE = 'possessive';
-const CASE_POSTELATIVE = 'postelative';
-const CASE_POSTDIRECTIVE = 'postdirective';
-const CASE_POSTESSIVE = 'postessive';
-const CASE_POSTPOSITIONAL = 'postpositional';
-const CASE_PREPOSITIONAL = 'prepositional';
-const CASE_PRIVATIVE = 'privative';
-const CASE_PROLATIVE = 'prolative';
-const CASE_PROSECUTIVE = 'prosecutive';
-const CASE_PROXIMATIVE = 'proximative';
-const CASE_SEPARATIVE = 'separative';
-const CASE_SOCIATIVE = 'sociative';
-const CASE_SUBDIRECTIVE = 'subdirective';
-const CASE_SUBESSIVE = 'subessive';
-const CASE_SUBELATIVE = 'subelative';
-const CASE_SUBLATIVE = 'sublative';
-const CASE_SUPERDIRECTIVE = 'superdirective';
-const CASE_SUPERESSIVE = 'superessive';
-const CASE_SUPERLATIVE = 'superlative';
-const CASE_SUPPRESSIVE = 'suppressive';
-const CASE_TEMPORAL = 'temporal';
-const CASE_TERMINATIVE = 'terminative';
-const CASE_TRANSLATIVE = 'translative';
-const CASE_VIALIS = 'vialis';
-const CASE_VOCATIVE = 'vocative';
-const MOOD_ADMIRATIVE = 'admirative';
-const MOOD_COHORTATIVE = 'cohortative';
-const MOOD_CONDITIONAL = 'conditional';
-const MOOD_DECLARATIVE = 'declarative';
-const MOOD_DUBITATIVE = 'dubitative';
-const MOOD_ENERGETIC = 'energetic';
-const MOOD_EVENTIVE = 'eventive';
-const MOOD_GENERIC = 'generic';
-const MOOD_GERUNDIVE = 'gerundive';
-const MOOD_HYPOTHETICAL = 'hypothetical';
-const MOOD_IMPERATIVE = 'imperative';
-const MOOD_INDICATIVE = 'indicative';
-const MOOD_INFERENTIAL = 'inferential';
-const MOOD_INFINITIVE = 'infinitive';
-const MOOD_INTERROGATIVE = 'interrogative';
-const MOOD_JUSSIVE = 'jussive';
-const MOOD_NEGATIVE = 'negative';
-const MOOD_OPTATIVE = 'optative';
-const MOOD_PARTICIPLE = 'participle';
-const MOOD_PRESUMPTIVE = 'presumptive';
-const MOOD_RENARRATIVE = 'renarrative';
-const MOOD_SUBJUNCTIVE = 'subjunctive';
-const MOOD_SUPINE = 'supine';
-const NUM_SINGULAR = 'singular';
-const NUM_PLURAL = 'plural';
-const NUM_DUAL = 'dual';
-const NUM_TRIAL = 'trial';
-const NUM_PAUCAL = 'paucal';
-const NUM_SINGULATIVE = 'singulative';
-const NUM_COLLECTIVE = 'collective';
-const NUM_DISTRIBUTIVE_PLURAL = 'distributive plural';
-const NRL_CARDINAL = 'cardinal';
-const NRL_ORDINAL = 'ordinal';
-const NRL_DISTRIBUTIVE = 'distributive';
-const NURL_NUMERAL_ADVERB = 'numeral adverb';
-const ORD_1ST = '1st';
-const ORD_2ND = '2nd';
-const ORD_3RD = '3rd';
-const ORD_4TH = '4th';
-const ORD_5TH = '5th';
-const ORD_6TH = '6th';
-const ORD_7TH = '7th';
-const ORD_8TH = '8th';
-const ORD_9TH = '9th';
-const TENSE_AORIST = 'aorist';
-const TENSE_FUTURE = 'future';
-const TENSE_FUTURE_PERFECT = 'future perfect';
-const TENSE_IMPERFECT = 'imperfect';
-const TENSE_PAST_ABSOLUTE = 'past absolute';
-const TENSE_PERFECT = 'perfect';
-const TENSE_PLUPERFECT = 'pluperfect';
-const TENSE_PRESENT = 'present';
-const VKIND_TO_BE = 'to be';
-const VKIND_COMPOUNDS_OF_TO_BE = 'compounds of to be';
-const VKIND_TAKING_ABLATIVE = 'taking ablative';
-const VKIND_TAKING_DATIVE = 'taking dative';
-const VKIND_TAKING_GENITIVE = 'taking genitive';
-const VKIND_TRANSITIVE = 'transitive';
-const VKIND_INTRANSITIVE = 'intransitive';
-const VKIND_IMPERSONAL = 'impersonal';
-const VKIND_DEPONENT = 'deponent';
-const VKIND_SEMIDEPONENT = 'semideponent';
-const VKIND_PERFECT_DEFINITE = 'perfect definite';
-const VOICE_ACTIVE = 'active';
-const VOICE_PASSIVE = 'passive';
-const VOICE_MEDIOPASSIVE = 'mediopassive';
-const VOICE_IMPERSONAL_PASSIVE = 'impersonal passive';
-const VOICE_MIDDLE = 'middle';
-const VOICE_ANTIPASSIVE = 'antipassive';
-const VOICE_REFLEXIVE = 'reflexive';
-const VOICE_RECIPROCAL = 'reciprocal';
-const VOICE_CAUSATIVE = 'causative';
-const VOICE_ADJUTATIVE = 'adjutative';
-const VOICE_APPLICATIVE = 'applicative';
-const VOICE_CIRCUMSTANTIAL = 'circumstantial';
-const VOICE_DEPONENT = 'deponent';
-const TYPE_IRREGULAR = 'irregular';
-const TYPE_REGULAR = 'regular';
-// Classes
-const CLASS_PERSONAL = 'personal';
-const CLASS_REFLEXIVE = 'reflexive';
-const CLASS_POSSESSIVE = 'possessive';
-const CLASS_DEMONSTRATIVE = 'demonstrative';
-const CLASS_RELATIVE = 'relative';
-const CLASS_INTERROGATIVE = 'interrogative';
-const CLASS_GENERAL_RELATIVE = 'general relative';
-const CLASS_INDEFINITE = 'indefinite';
-const CLASS_INTENSIVE = 'intensive';
-const CLASS_RECIPROCAL = 'reciprocal';
-/* eslit-enable no-unused-vars */
-
-
-var constants = Object.freeze({
-	LANG_UNIT_WORD: LANG_UNIT_WORD,
-	LANG_UNIT_CHAR: LANG_UNIT_CHAR,
-	LANG_DIR_LTR: LANG_DIR_LTR,
-	LANG_DIR_RTL: LANG_DIR_RTL,
-	LANG_LATIN: LANG_LATIN,
-	LANG_GREEK: LANG_GREEK,
-	LANG_ARABIC: LANG_ARABIC,
-	LANG_PERSIAN: LANG_PERSIAN,
-	STR_LANG_CODE_LAT: STR_LANG_CODE_LAT,
-	STR_LANG_CODE_LA: STR_LANG_CODE_LA,
-	STR_LANG_CODE_GRC: STR_LANG_CODE_GRC,
-	STR_LANG_CODE_ARA: STR_LANG_CODE_ARA,
-	STR_LANG_CODE_AR: STR_LANG_CODE_AR,
-	STR_LANG_CODE_FAS: STR_LANG_CODE_FAS,
-	STR_LANG_CODE_PER: STR_LANG_CODE_PER,
-	STR_LANG_CODE_FA_IR: STR_LANG_CODE_FA_IR,
-	STR_LANG_CODE_FA: STR_LANG_CODE_FA,
-	POFS_ADJECTIVE: POFS_ADJECTIVE,
-	POFS_ADVERB: POFS_ADVERB,
-	POFS_ADVERBIAL: POFS_ADVERBIAL,
-	POFS_ARTICLE: POFS_ARTICLE,
-	POFS_CONJUNCTION: POFS_CONJUNCTION,
-	POFS_EXCLAMATION: POFS_EXCLAMATION,
-	POFS_INTERJECTION: POFS_INTERJECTION,
-	POFS_NOUN: POFS_NOUN,
-	POFS_NUMERAL: POFS_NUMERAL,
-	POFS_PARTICLE: POFS_PARTICLE,
-	POFS_PREFIX: POFS_PREFIX,
-	POFS_PREPOSITION: POFS_PREPOSITION,
-	POFS_PRONOUN: POFS_PRONOUN,
-	POFS_SUFFIX: POFS_SUFFIX,
-	POFS_SUPINE: POFS_SUPINE,
-	POFS_VERB: POFS_VERB,
-	POFS_VERB_PARTICIPLE: POFS_VERB_PARTICIPLE,
-	GEND_MASCULINE: GEND_MASCULINE,
-	GEND_FEMININE: GEND_FEMININE,
-	GEND_NEUTER: GEND_NEUTER,
-	GEND_COMMON: GEND_COMMON,
-	GEND_ANIMATE: GEND_ANIMATE,
-	GEND_INANIMATE: GEND_INANIMATE,
-	GEND_PERSONAL_MASCULINE: GEND_PERSONAL_MASCULINE,
-	GEND_ANIMATE_MASCULINE: GEND_ANIMATE_MASCULINE,
-	GEND_INANIMATE_MASCULINE: GEND_INANIMATE_MASCULINE,
-	COMP_POSITIVE: COMP_POSITIVE,
-	COMP_COMPARITIVE: COMP_COMPARITIVE,
-	COMP_SUPERLATIVE: COMP_SUPERLATIVE,
-	CASE_ABESSIVE: CASE_ABESSIVE,
-	CASE_ABLATIVE: CASE_ABLATIVE,
-	CASE_ABSOLUTIVE: CASE_ABSOLUTIVE,
-	CASE_ACCUSATIVE: CASE_ACCUSATIVE,
-	CASE_ADDIRECTIVE: CASE_ADDIRECTIVE,
-	CASE_ADELATIVE: CASE_ADELATIVE,
-	CASE_ADESSIVE: CASE_ADESSIVE,
-	CASE_ADVERBIAL: CASE_ADVERBIAL,
-	CASE_ALLATIVE: CASE_ALLATIVE,
-	CASE_ANTESSIVE: CASE_ANTESSIVE,
-	CASE_APUDESSIVE: CASE_APUDESSIVE,
-	CASE_AVERSIVE: CASE_AVERSIVE,
-	CASE_BENEFACTIVE: CASE_BENEFACTIVE,
-	CASE_CARITIVE: CASE_CARITIVE,
-	CASE_CAUSAL: CASE_CAUSAL,
-	CASE_CAUSAL_FINAL: CASE_CAUSAL_FINAL,
-	CASE_COMITATIVE: CASE_COMITATIVE,
-	CASE_DATIVE: CASE_DATIVE,
-	CASE_DELATIVE: CASE_DELATIVE,
-	CASE_DIRECT: CASE_DIRECT,
-	CASE_DISTRIBUTIVE: CASE_DISTRIBUTIVE,
-	CASE_DISTRIBUTIVE_TEMPORAL: CASE_DISTRIBUTIVE_TEMPORAL,
-	CASE_ELATIVE: CASE_ELATIVE,
-	CASE_ERGATIVE: CASE_ERGATIVE,
-	CASE_ESSIVE: CASE_ESSIVE,
-	CASE_ESSIVE_FORMAL: CASE_ESSIVE_FORMAL,
-	CASE_ESSIVE_MODAL: CASE_ESSIVE_MODAL,
-	CASE_EQUATIVE: CASE_EQUATIVE,
-	CASE_EVITATIVE: CASE_EVITATIVE,
-	CASE_EXESSIVE: CASE_EXESSIVE,
-	CASE_FINAL: CASE_FINAL,
-	CASE_FORMAL: CASE_FORMAL,
-	CASE_GENITIVE: CASE_GENITIVE,
-	CASE_ILLATIVE: CASE_ILLATIVE,
-	CASE_INELATIVE: CASE_INELATIVE,
-	CASE_INESSIVE: CASE_INESSIVE,
-	CASE_INSTRUCTIVE: CASE_INSTRUCTIVE,
-	CASE_INSTRUMENTAL: CASE_INSTRUMENTAL,
-	CASE_INSTRUMENTAL_COMITATIVE: CASE_INSTRUMENTAL_COMITATIVE,
-	CASE_INTRANSITIVE: CASE_INTRANSITIVE,
-	CASE_LATIVE: CASE_LATIVE,
-	CASE_LOCATIVE: CASE_LOCATIVE,
-	CASE_MODAL: CASE_MODAL,
-	CASE_MULTIPLICATIVE: CASE_MULTIPLICATIVE,
-	CASE_NOMINATIVE: CASE_NOMINATIVE,
-	CASE_PARTITIVE: CASE_PARTITIVE,
-	CASE_PEGATIVE: CASE_PEGATIVE,
-	CASE_PERLATIVE: CASE_PERLATIVE,
-	CASE_POSSESSIVE: CASE_POSSESSIVE,
-	CASE_POSTELATIVE: CASE_POSTELATIVE,
-	CASE_POSTDIRECTIVE: CASE_POSTDIRECTIVE,
-	CASE_POSTESSIVE: CASE_POSTESSIVE,
-	CASE_POSTPOSITIONAL: CASE_POSTPOSITIONAL,
-	CASE_PREPOSITIONAL: CASE_PREPOSITIONAL,
-	CASE_PRIVATIVE: CASE_PRIVATIVE,
-	CASE_PROLATIVE: CASE_PROLATIVE,
-	CASE_PROSECUTIVE: CASE_PROSECUTIVE,
-	CASE_PROXIMATIVE: CASE_PROXIMATIVE,
-	CASE_SEPARATIVE: CASE_SEPARATIVE,
-	CASE_SOCIATIVE: CASE_SOCIATIVE,
-	CASE_SUBDIRECTIVE: CASE_SUBDIRECTIVE,
-	CASE_SUBESSIVE: CASE_SUBESSIVE,
-	CASE_SUBELATIVE: CASE_SUBELATIVE,
-	CASE_SUBLATIVE: CASE_SUBLATIVE,
-	CASE_SUPERDIRECTIVE: CASE_SUPERDIRECTIVE,
-	CASE_SUPERESSIVE: CASE_SUPERESSIVE,
-	CASE_SUPERLATIVE: CASE_SUPERLATIVE,
-	CASE_SUPPRESSIVE: CASE_SUPPRESSIVE,
-	CASE_TEMPORAL: CASE_TEMPORAL,
-	CASE_TERMINATIVE: CASE_TERMINATIVE,
-	CASE_TRANSLATIVE: CASE_TRANSLATIVE,
-	CASE_VIALIS: CASE_VIALIS,
-	CASE_VOCATIVE: CASE_VOCATIVE,
-	MOOD_ADMIRATIVE: MOOD_ADMIRATIVE,
-	MOOD_COHORTATIVE: MOOD_COHORTATIVE,
-	MOOD_CONDITIONAL: MOOD_CONDITIONAL,
-	MOOD_DECLARATIVE: MOOD_DECLARATIVE,
-	MOOD_DUBITATIVE: MOOD_DUBITATIVE,
-	MOOD_ENERGETIC: MOOD_ENERGETIC,
-	MOOD_EVENTIVE: MOOD_EVENTIVE,
-	MOOD_GENERIC: MOOD_GENERIC,
-	MOOD_GERUNDIVE: MOOD_GERUNDIVE,
-	MOOD_HYPOTHETICAL: MOOD_HYPOTHETICAL,
-	MOOD_IMPERATIVE: MOOD_IMPERATIVE,
-	MOOD_INDICATIVE: MOOD_INDICATIVE,
-	MOOD_INFERENTIAL: MOOD_INFERENTIAL,
-	MOOD_INFINITIVE: MOOD_INFINITIVE,
-	MOOD_INTERROGATIVE: MOOD_INTERROGATIVE,
-	MOOD_JUSSIVE: MOOD_JUSSIVE,
-	MOOD_NEGATIVE: MOOD_NEGATIVE,
-	MOOD_OPTATIVE: MOOD_OPTATIVE,
-	MOOD_PARTICIPLE: MOOD_PARTICIPLE,
-	MOOD_PRESUMPTIVE: MOOD_PRESUMPTIVE,
-	MOOD_RENARRATIVE: MOOD_RENARRATIVE,
-	MOOD_SUBJUNCTIVE: MOOD_SUBJUNCTIVE,
-	MOOD_SUPINE: MOOD_SUPINE,
-	NUM_SINGULAR: NUM_SINGULAR,
-	NUM_PLURAL: NUM_PLURAL,
-	NUM_DUAL: NUM_DUAL,
-	NUM_TRIAL: NUM_TRIAL,
-	NUM_PAUCAL: NUM_PAUCAL,
-	NUM_SINGULATIVE: NUM_SINGULATIVE,
-	NUM_COLLECTIVE: NUM_COLLECTIVE,
-	NUM_DISTRIBUTIVE_PLURAL: NUM_DISTRIBUTIVE_PLURAL,
-	NRL_CARDINAL: NRL_CARDINAL,
-	NRL_ORDINAL: NRL_ORDINAL,
-	NRL_DISTRIBUTIVE: NRL_DISTRIBUTIVE,
-	NURL_NUMERAL_ADVERB: NURL_NUMERAL_ADVERB,
-	ORD_1ST: ORD_1ST,
-	ORD_2ND: ORD_2ND,
-	ORD_3RD: ORD_3RD,
-	ORD_4TH: ORD_4TH,
-	ORD_5TH: ORD_5TH,
-	ORD_6TH: ORD_6TH,
-	ORD_7TH: ORD_7TH,
-	ORD_8TH: ORD_8TH,
-	ORD_9TH: ORD_9TH,
-	TENSE_AORIST: TENSE_AORIST,
-	TENSE_FUTURE: TENSE_FUTURE,
-	TENSE_FUTURE_PERFECT: TENSE_FUTURE_PERFECT,
-	TENSE_IMPERFECT: TENSE_IMPERFECT,
-	TENSE_PAST_ABSOLUTE: TENSE_PAST_ABSOLUTE,
-	TENSE_PERFECT: TENSE_PERFECT,
-	TENSE_PLUPERFECT: TENSE_PLUPERFECT,
-	TENSE_PRESENT: TENSE_PRESENT,
-	VKIND_TO_BE: VKIND_TO_BE,
-	VKIND_COMPOUNDS_OF_TO_BE: VKIND_COMPOUNDS_OF_TO_BE,
-	VKIND_TAKING_ABLATIVE: VKIND_TAKING_ABLATIVE,
-	VKIND_TAKING_DATIVE: VKIND_TAKING_DATIVE,
-	VKIND_TAKING_GENITIVE: VKIND_TAKING_GENITIVE,
-	VKIND_TRANSITIVE: VKIND_TRANSITIVE,
-	VKIND_INTRANSITIVE: VKIND_INTRANSITIVE,
-	VKIND_IMPERSONAL: VKIND_IMPERSONAL,
-	VKIND_DEPONENT: VKIND_DEPONENT,
-	VKIND_SEMIDEPONENT: VKIND_SEMIDEPONENT,
-	VKIND_PERFECT_DEFINITE: VKIND_PERFECT_DEFINITE,
-	VOICE_ACTIVE: VOICE_ACTIVE,
-	VOICE_PASSIVE: VOICE_PASSIVE,
-	VOICE_MEDIOPASSIVE: VOICE_MEDIOPASSIVE,
-	VOICE_IMPERSONAL_PASSIVE: VOICE_IMPERSONAL_PASSIVE,
-	VOICE_MIDDLE: VOICE_MIDDLE,
-	VOICE_ANTIPASSIVE: VOICE_ANTIPASSIVE,
-	VOICE_REFLEXIVE: VOICE_REFLEXIVE,
-	VOICE_RECIPROCAL: VOICE_RECIPROCAL,
-	VOICE_CAUSATIVE: VOICE_CAUSATIVE,
-	VOICE_ADJUTATIVE: VOICE_ADJUTATIVE,
-	VOICE_APPLICATIVE: VOICE_APPLICATIVE,
-	VOICE_CIRCUMSTANTIAL: VOICE_CIRCUMSTANTIAL,
-	VOICE_DEPONENT: VOICE_DEPONENT,
-	TYPE_IRREGULAR: TYPE_IRREGULAR,
-	TYPE_REGULAR: TYPE_REGULAR,
-	CLASS_PERSONAL: CLASS_PERSONAL,
-	CLASS_REFLEXIVE: CLASS_REFLEXIVE,
-	CLASS_POSSESSIVE: CLASS_POSSESSIVE,
-	CLASS_DEMONSTRATIVE: CLASS_DEMONSTRATIVE,
-	CLASS_RELATIVE: CLASS_RELATIVE,
-	CLASS_INTERROGATIVE: CLASS_INTERROGATIVE,
-	CLASS_GENERAL_RELATIVE: CLASS_GENERAL_RELATIVE,
-	CLASS_INDEFINITE: CLASS_INDEFINITE,
-	CLASS_INTENSIVE: CLASS_INTENSIVE,
-	CLASS_RECIPROCAL: CLASS_RECIPROCAL
-});
-
-/**
- * Define declension group titles
- * @param {String} featureValue - A value of a declension
- * @return {string} - A title of a declension group, in HTML format
- */
-let getDeclensionTitle = function getDeclensionTitle (featureValue) {
-  if (featureValue === constants.ORD_1ST) { return `First` }
-  if (featureValue === constants.ORD_2ND) { return `Second` }
-  if (featureValue === constants.ORD_3RD) { return `Third` }
-  if (featureValue === constants.ORD_4TH) { return `Fourth` }
-  if (featureValue === constants.ORD_5TH) { return `Fifth` }
-
-  if (this.hasOwnProperty(featureValue)) {
-    if (Array.isArray(this[featureValue])) {
-      return this[featureValue].map((feature) => feature.value).join('/')
-    } else {
-      return this[featureValue].value
-    }
-  } else {
-    return 'not available'
-  }
-};
-
 class LatinView extends View {
-  constructor () {
-    super();
-    this.languageID = Constants.LANG_LATIN;
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.languageModel = new LatinLanguageModel(); // TODO: Do we really need to create it every time?
     this.language_features = this.languageModel.features;
     // limit regular verb moods
@@ -7326,7 +6970,15 @@ class LatinView extends View {
       genders: new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender'),
       types: new GroupFeatureType(this.language_features[Feature.types.type], 'Type')
     };
-    this.features.declensions.getTitle = getDeclensionTitle;
+    this.features.declensions.getTitle = LatinView.getDeclensionTitle;
+  }
+
+  /**
+   * Defines a language ID of a view. Should be redefined in child classes.
+   * @return {symbol}
+   */
+  static get languageID () {
+    return Constants.LANG_LATIN
   }
 
     /*
@@ -7342,17 +6994,40 @@ class LatinView extends View {
     features.columnRowTitles = [this.language_features[Feature.types.grmCase]];
     features.fullWidthRowTitles = [this.language_features[Feature.types.number]];
   }
+
+  /**
+   * Define declension group titles
+   * @param {String} featureValue - A value of a declension
+   * @return {string} - A title of a declension group, in HTML format
+   */
+  static getDeclensionTitle (featureValue) {
+    if (featureValue === Constants.ORD_1ST) { return `First` }
+    if (featureValue === Constants.ORD_2ND) { return `Second` }
+    if (featureValue === Constants.ORD_3RD) { return `Third` }
+    if (featureValue === Constants.ORD_4TH) { return `Fourth` }
+    if (featureValue === Constants.ORD_5TH) { return `Fifth` }
+
+    if (this.hasOwnProperty(featureValue)) {
+      if (Array.isArray(this[featureValue])) {
+        return this[featureValue].map((feature) => feature.value).join('/')
+      } else {
+        return this[featureValue].value
+      }
+    } else {
+      return 'not available'
+    }
+  }
 }
 
-class NounView extends LatinView {
-  constructor () {
-    super();
+class LatinNounView extends LatinView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'nounDeclension';
     this.name = 'noun declension';
     this.title = 'Noun declension';
     this.partOfSpeech = this.language_features[Feature.types.part][Constants.POFS_NOUN].value;
 
-        // Models.Feature that are different from base class values
+    // Feature that are different from base class values
     this.features.genders = new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender',
       [ this.language_features[Feature.types.gender][Constants.GEND_MASCULINE],
         this.language_features[Feature.types.gender][Constants.GEND_FEMININE],
@@ -7360,94 +7035,67 @@ class NounView extends LatinView {
       ]);
     this.createTable();
   }
+
+  static get partOfSpeech () {
+    return Constants.POFS_NOUN
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinNounView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinNounView.partOfSpeech)
+    }
+  }
 }
 
-class AdjectiveView extends LatinView {
-  constructor () {
-    super();
+class LatinAdjectiveView extends LatinView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'adjectiveDeclension';
     this.name = 'adjective declension';
     this.title = 'Adjective declension';
     this.partOfSpeech = this.language_features[Feature.types.part].adjective.value;
 
-        // Models.Feature that are different from base class values
+    // Feature that are different from base class values
     this.features.declensions = new GroupFeatureType(this.language_features[Feature.types.declension], 'Declension',
       [ this.language_features[Feature.types.declension][Constants.ORD_1ST],
         this.language_features[Feature.types.declension][Constants.ORD_2ND],
         this.language_features[Feature.types.declension][Constants.ORD_3RD]
       ]);
-    this.features.declensions.getTitle = getDeclensionTitle;
+    this.features.declensions.getTitle = LatinView.getDeclensionTitle;
 
     this.createTable();
   }
-}
 
-class VerbParticipleView extends LatinView {
-  constructor () {
-    super();
-    this.partOfSpeech = this.language_features[Feature.types.part][Constants.POFS_VERB_PARTICIPLE].value;
-    this.id = 'verbParticiple';
-    this.name = 'participle';
-    this.title = 'Participle';
-    this.language_features[Feature.types.tense] = new FeatureType(Feature.types.tense,
-      [Constants.TENSE_PRESENT, Constants.TENSE_PERFECT, Constants.TENSE_FUTURE], this.languageModel.toCode());
-    this.features = {
-      tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
-      voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
-      conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem')
-    };
-    this.createTable();
+  static get partOfSpeech () {
+    return Constants.POFS_ADJECTIVE
   }
 
-  createTable () {
-    this.table = new Table([this.features.voices, this.features.conjugations,
-      this.features.tenses]);
-    let features = this.table.features;
-    features.columns = [
-      this.language_features[Feature.types.voice],
-      this.language_features[Feature.types.conjugation]];
-    features.rows = [this.language_features[Feature.types.tense]];
-    features.columnRowTitles = [this.language_features[Feature.types.tense]];
-    features.fullWidthRowTitles = [];
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinAdjectiveView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinAdjectiveView.partOfSpeech)
+    }
   }
 }
 
-class SupineView extends LatinView {
-  constructor () {
-    super();
-    this.partOfSpeech = this.language_features[Feature.types.part][Constants.POFS_SUPINE].value;
-    this.id = 'verbSupine';
-    this.name = 'supine';
-    this.title = 'Supine';
-    this.features.moods = new GroupFeatureType(
-      new FeatureType(Feature.types.mood, [Constants.MOOD_SUPINE], this.languageModel.toCode()),
-      'Mood');
-    this.language_features[Feature.types.grmCase] = new FeatureType(Feature.types.grmCase,
-      [Constants.CASE_ACCUSATIVE, Constants.CASE_ABLATIVE], this.languageModel.toCode());
-    this.features = {
-      cases: new GroupFeatureType(this.language_features[Feature.types.grmCase], 'Case'),
-      voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
-      conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem')
-    };
-    this.createTable();
-  }
-
-  createTable () {
-    this.table = new Table([this.features.voices, this.features.conjugations,
-      this.features.cases]);
-    let features = this.table.features;
-    features.columns = [
-      this.language_features[Feature.types.voice],
-      this.language_features[Feature.types.conjugation]];
-    features.rows = [this.language_features[Feature.types.grmCase]];
-    features.columnRowTitles = [this.language_features[Feature.types.grmCase]];
-    features.fullWidthRowTitles = [];
-  }
-}
-
-class VerbView extends LatinView {
-  constructor () {
-    super();
+class LatinVerbView extends LatinView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.partOfSpeech = this.language_features[Feature.types.part][Constants.POFS_VERB].value;
 
     this.features = {
@@ -7465,10 +7113,10 @@ class VerbView extends LatinView {
      * @return {string} - A title of a conjugation group, in HTML format
      */
     this.features.conjugations.getTitle = function getTitle (featureValue) {
-      if (featureValue === constants.ORD_1ST) { return `First<br><span class="infl-cell__conj-stem">ā</span>` }
-      if (featureValue === constants.ORD_2ND) { return `Second<br><span class="infl-cell__conj-stem">ē</span>` }
-      if (featureValue === constants.ORD_3RD) { return `Third<br><span class="infl-cell__conj-stem">e</span>` }
-      if (featureValue === constants.ORD_4TH) { return `Fourth<br><span class="infl-cell__conj-stem">i</span>` }
+      if (featureValue === Constants.ORD_1ST) { return `First<br><span class="infl-cell__conj-stem">ā</span>` }
+      if (featureValue === Constants.ORD_2ND) { return `Second<br><span class="infl-cell__conj-stem">ē</span>` }
+      if (featureValue === Constants.ORD_3RD) { return `Third<br><span class="infl-cell__conj-stem">e</span>` }
+      if (featureValue === Constants.ORD_4TH) { return `Fourth<br><span class="infl-cell__conj-stem">i</span>` }
 
       if (this.hasOwnProperty(featureValue)) {
         if (Array.isArray(this[featureValue])) {
@@ -7481,29 +7129,48 @@ class VerbView extends LatinView {
       }
     };
   }
-}
 
-class VerbMoodView extends VerbView {
-  constructor () {
-    super();
-    this.features = {
-      tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
-      numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
-      persons: new GroupFeatureType(this.language_features[Feature.types.person], 'Person'),
-      voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
-      conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem')
-    };
+  static get partOfSpeech () {
+    return Constants.POFS_VERB
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinVerbView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinVerbView.partOfSpeech)
+    }
   }
 }
 
-class VoiceConjugationMoodView extends VerbView {
-  constructor () {
-    super();
+class LatinVoiceConjugationMoodView extends LatinVerbView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'verbVoiceConjugationMood';
     this.name = 'voice-conjugation-mood';
     this.title = 'Verb Conjugation';
 
     this.createTable();
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinVoiceConjugationMoodView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinVoiceConjugationMoodView.partOfSpeech)
+    }
   }
 
   createTable () {
@@ -7525,14 +7192,28 @@ class VoiceConjugationMoodView extends VerbView {
   }
 }
 
-class VoiceMoodConjugationView extends VerbView {
-  constructor () {
-    super();
+class LatinVoiceMoodConjugationView extends LatinVerbView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'verbVoiceMoodConjugation';
     this.name = 'voice-mood-conjugation';
     this.title = 'Verb Conjugation';
 
     this.createTable();
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinVoiceMoodConjugationView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinVoiceMoodConjugationView.partOfSpeech)
+    }
   }
 
   createTable () {
@@ -7554,14 +7235,28 @@ class VoiceMoodConjugationView extends VerbView {
   }
 }
 
-class ConjugationVoiceMoodView extends VerbView {
-  constructor () {
-    super();
+class LatinConjugationVoiceMoodView extends LatinVerbView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'verbConjugationVoiceMood';
     this.name = 'conjugation-voice-mood';
     this.title = 'Verb Conjugation';
 
     this.createTable();
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinConjugationVoiceMoodView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinConjugationVoiceMoodView.partOfSpeech)
+    }
   }
 
   createTable () {
@@ -7582,14 +7277,28 @@ class ConjugationVoiceMoodView extends VerbView {
   }
 }
 
-class ConjugationMoodVoiceView extends VerbView {
-  constructor () {
-    super();
+class LatinConjugationMoodVoiceView extends LatinVerbView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'verbConjugationMoodVoice';
     this.name = 'conjugation-mood-voice';
     this.title = 'Verb Conjugation';
 
     this.createTable();
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinConjugationMoodVoiceView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinConjugationMoodVoiceView.partOfSpeech)
+    }
   }
 
   createTable () {
@@ -7611,14 +7320,28 @@ class ConjugationMoodVoiceView extends VerbView {
   }
 }
 
-class MoodVoiceConjugationView extends VerbView {
-  constructor () {
-    super();
+class LatinMoodVoiceConjugationView extends LatinVerbView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'verbMoodVoiceConjugation';
     this.name = 'mood-voice-conjugation';
     this.title = 'Verb Conjugation';
 
     this.createTable();
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinMoodVoiceConjugationView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinMoodVoiceConjugationView.partOfSpeech)
+    }
   }
 
   createTable () {
@@ -7632,14 +7355,28 @@ class MoodVoiceConjugationView extends VerbView {
   }
 }
 
-class MoodConjugationVoiceView extends VerbView {
-  constructor () {
-    super();
+class LatinMoodConjugationVoiceView extends LatinVerbView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'verbMoodConjugationVoice';
     this.name = 'mood-conjugation-voice';
     this.title = 'Verb Conjugation';
 
     this.createTable();
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinMoodConjugationVoiceView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinMoodConjugationVoiceView.partOfSpeech)
+    }
   }
 
   createTable () {
@@ -7653,9 +7390,36 @@ class MoodConjugationVoiceView extends VerbView {
   }
 }
 
-class ImperativeView extends VerbMoodView {
-  constructor () {
-    super();
+class LatinVerbMoodView extends LatinVerbView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
+    this.features = {
+      tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
+      numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
+      persons: new GroupFeatureType(this.language_features[Feature.types.person], 'Person'),
+      voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
+      conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem')
+    };
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinVerbMoodView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinVerbMoodView.partOfSpeech)
+    }
+  }
+}
+
+class LatinImperativeView extends LatinVerbMoodView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'verbImperative';
     this.name = 'imperative';
     this.title = 'Imperative';
@@ -7668,7 +7432,7 @@ class ImperativeView extends VerbMoodView {
       [Constants.TENSE_PRESENT, Constants.TENSE_FUTURE], this.languageModel.toCode());
     this.features.tenses = new GroupFeatureType(this.language_features[Feature.types.tense], 'Tense');
     this.createTable();
-    this.table.suffixCellFilter = ImperativeView.suffixCellFilter;
+    this.table.suffixCellFilter = LatinImperativeView.suffixCellFilter;
   }
 
   createTable () {
@@ -7683,8 +7447,23 @@ class ImperativeView extends VerbMoodView {
     features.fullWidthRowTitles = [this.language_features[Feature.types.tense]];
   }
 
-  enabledForLexemes (lexemes) {
-      // default is true
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinImperativeView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinImperativeView.partOfSpeech) &&
+        LatinImperativeView.enabledForLexemes(inflectionData.homonym.lexemes)
+    }
+  }
+
+  static enabledForLexemes (lexemes) {
+    // default is true
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
         if (inflection[Feature.types.mood] &&
@@ -7701,9 +7480,108 @@ class ImperativeView extends VerbMoodView {
   }
 }
 
-class InfinitiveView extends VerbMoodView {
-  constructor () {
-    super();
+class LatinSupineView extends LatinView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
+    this.partOfSpeech = this.language_features[Feature.types.part][Constants.POFS_SUPINE].value;
+    this.id = 'verbSupine';
+    this.name = 'supine';
+    this.title = 'Supine';
+    this.features.moods = new GroupFeatureType(
+      new FeatureType(Feature.types.mood, [Constants.MOOD_SUPINE], this.languageModel.toCode()),
+      'Mood');
+    this.language_features[Feature.types.grmCase] = new FeatureType(Feature.types.grmCase,
+      [Constants.CASE_ACCUSATIVE, Constants.CASE_ABLATIVE], this.languageModel.toCode());
+    this.features = {
+      cases: new GroupFeatureType(this.language_features[Feature.types.grmCase], 'Case'),
+      voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
+      conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem')
+    };
+    this.createTable();
+  }
+
+  static get partOfSpeech () {
+    return Constants.POFS_SUPINE
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinSupineView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinSupineView.partOfSpeech)
+    }
+  }
+
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.conjugations,
+      this.features.cases]);
+    let features = this.table.features;
+    features.columns = [
+      this.language_features[Feature.types.voice],
+      this.language_features[Feature.types.conjugation]];
+    features.rows = [this.language_features[Feature.types.grmCase]];
+    features.columnRowTitles = [this.language_features[Feature.types.grmCase]];
+    features.fullWidthRowTitles = [];
+  }
+}
+
+class LatinVerbParticipleView extends LatinView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
+    this.partOfSpeech = this.language_features[Feature.types.part][Constants.POFS_VERB_PARTICIPLE].value;
+    this.id = 'verbParticiple';
+    this.name = 'participle';
+    this.title = 'Participle';
+    this.language_features[Feature.types.tense] = new FeatureType(Feature.types.tense,
+      [Constants.TENSE_PRESENT, Constants.TENSE_PERFECT, Constants.TENSE_FUTURE], this.languageModel.toCode());
+    this.features = {
+      tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
+      voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
+      conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem')
+    };
+    this.createTable();
+  }
+
+  static get partOfSpeech () {
+    return Constants.POFS_VERB_PARTICIPLE
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinVerbParticipleView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinVerbParticipleView.partOfSpeech)
+    }
+  }
+
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.conjugations,
+      this.features.tenses]);
+    let features = this.table.features;
+    features.columns = [
+      this.language_features[Feature.types.voice],
+      this.language_features[Feature.types.conjugation]];
+    features.rows = [this.language_features[Feature.types.tense]];
+    features.columnRowTitles = [this.language_features[Feature.types.tense]];
+    features.fullWidthRowTitles = [];
+  }
+}
+
+class LatinInfinitiveView extends LatinVerbMoodView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'verbInfinitive';
     this.name = 'infinitive';
     this.title = 'Infinitive';
@@ -7714,7 +7592,7 @@ class InfinitiveView extends VerbMoodView {
       [Constants.TENSE_PRESENT, Constants.TENSE_PERFECT, Constants.TENSE_FUTURE], this.languageModel.toCode());
     this.features.tenses = new GroupFeatureType(this.language_features[Feature.types.tense], 'Tense');
     this.createTable();
-    this.table.suffixCellFilter = InfinitiveView.suffixCellFilter;
+    this.table.suffixCellFilter = LatinInfinitiveView.suffixCellFilter;
   }
 
   createTable () {
@@ -7729,8 +7607,23 @@ class InfinitiveView extends VerbMoodView {
     features.fullWidthRowTitles = [];
   }
 
-  enabledForLexemes (lexemes) {
-      // default is true
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(LatinInfinitiveView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinInfinitiveView.partOfSpeech) &&
+        LatinInfinitiveView.enabledForLexemes(inflectionData.homonym.lexemes)
+    }
+  }
+
+  static enabledForLexemes (lexemes) {
+    // default is true
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
         if (inflection[Feature.types.mood] &&
@@ -7747,42 +7640,27 @@ class InfinitiveView extends VerbMoodView {
   }
 }
 
-var LatinViews = [new NounView(), new AdjectiveView(),
-    // Verbs
-  new VoiceConjugationMoodView(), new VoiceMoodConjugationView(), new ConjugationVoiceMoodView(),
-  new ConjugationMoodVoiceView(), new MoodVoiceConjugationView(), new MoodConjugationVoiceView(),
-  new ImperativeView(), new SupineView(), new VerbParticipleView(), new InfinitiveView()];
-
-let languageModel$2 = new GreekLanguageModel();
-let featureTypes = Feature.types;
-let langFeatures = languageModel$2.features;
-
 class GreekView extends View {
-  constructor () {
-    super();
-    this.languageCode = Constants.STR_LANG_CODE_GRC;
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
+    this.languageID = GreekView.languageID;
+    this.dataset = dataSet$1;
 
     /*
     Default grammatical features of a View. It child views need to have different feature values, redefine
     those values in child objects.
      */
     this.features = {
-      numbers: new GroupFeatureType(langFeatures[featureTypes.number], 'Number'),
-      cases: new GroupFeatureType(langFeatures[featureTypes.grmCase], 'Case'),
-      declensions: new GroupFeatureType(langFeatures[featureTypes.declension], 'Declension'),
-      genders: new GroupFeatureType(langFeatures[featureTypes.gender], 'Gender'),
-      types: new GroupFeatureType(langFeatures[featureTypes.type], 'Type')
+      numbers: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.number), 'Number'),
+      cases: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.grmCase), 'Case'),
+      declensions: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.declension), 'Declension'),
+      genders: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.gender), 'Gender'),
+      types: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.type), 'Type')
     };
   }
 
-  get language () {
-    console.warn(`Please use languageCode instead`);
-    return this.languageCode
-  }
-
-  set language (value) {
-    console.warn(`Please use languageCode instead`);
-    this.languageCode = value;
+  static get languageID () {
+    return Constants.LANG_GREEK
   }
 
   /**
@@ -7793,28 +7671,39 @@ class GreekView extends View {
     this.table = new Table([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases]);
     let features = this.table.features;
-    features.columns = [langFeatures[featureTypes.declension], langFeatures[featureTypes.gender], langFeatures[featureTypes.type]];
-    features.rows = [langFeatures[featureTypes.number], langFeatures[featureTypes.grmCase]];
-    features.columnRowTitles = [langFeatures[featureTypes.grmCase]];
-    features.fullWidthRowTitles = [langFeatures[featureTypes.number]];
+    features.columns = [
+      GreekLanguageModel.getFeatureType(Feature.types.declension),
+      GreekLanguageModel.getFeatureType(Feature.types.gender),
+      GreekLanguageModel.getFeatureType(Feature.types.type)
+    ];
+    features.rows = [
+      GreekLanguageModel.getFeatureType(Feature.types.number),
+      GreekLanguageModel.getFeatureType(Feature.types.grmCase)
+    ];
+    features.columnRowTitles = [
+      GreekLanguageModel.getFeatureType(Feature.types.grmCase)
+    ];
+    features.fullWidthRowTitles = [
+      GreekLanguageModel.getFeatureType(Feature.types.number)
+    ];
   }
 }
 
-class NounView$1 extends GreekView {
-  constructor () {
-    super();
+class GreekNounView extends GreekView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'nounDeclension';
     this.name = 'noun declension';
     this.title = 'Noun declension';
     this.partOfSpeech = Constants.POFS_NOUN;
-    let genderMasculine = langFeatures[featureTypes.gender][Constants.GEND_MASCULINE].value;
-    let genderFeminine = langFeatures[featureTypes.gender][Constants.GEND_FEMININE].value;
-    let genderNeuter = langFeatures[featureTypes.gender][Constants.GEND_NEUTER].value;
+    let genderMasculine = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_MASCULINE].value;
+    let genderFeminine = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_FEMININE].value;
+    let genderNeuter = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_NEUTER].value;
 
     this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
       if (ancestorFeatures) {
-        if (ancestorFeatures[0].value === langFeatures[featureTypes.declension][Constants.ORD_2ND].value ||
-          ancestorFeatures[0].value === langFeatures[featureTypes.declension][Constants.ORD_3RD].value) {
+        if (ancestorFeatures[0].value === GreekLanguageModel.getFeatureType(Feature.types.declension)[Constants.ORD_2ND].value ||
+          ancestorFeatures[0].value === GreekLanguageModel.getFeatureType(Feature.types.declension)[Constants.ORD_3RD].value) {
           return [[genderMasculine, genderFeminine], genderNeuter]
         }
       }
@@ -7823,25 +7712,43 @@ class NounView$1 extends GreekView {
 
     this.createTable();
   }
+
+  static get partOfSpeech () {
+    return Constants.POFS_NOUN
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(GreekNounView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(GreekNounView.partOfSpeech)
+    }
+  }
 }
 
-class NounViewSimplified extends NounView$1 {
-  constructor () {
-    super();
+class GreekNounSimplifiedView extends GreekNounView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'nounDeclensionSimplified';
     this.name = 'noun declension simplified';
     this.title = 'Noun declension (simplified)';
     this.partOfSpeech = Constants.POFS_NOUN;
-    let genderMasculine = langFeatures[featureTypes.gender][Constants.GEND_MASCULINE].value;
-    let genderFeminine = langFeatures[featureTypes.gender][Constants.GEND_FEMININE].value;
-    let genderNeuter = langFeatures[featureTypes.gender][Constants.GEND_NEUTER].value;
+    let genderMasculine = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_MASCULINE].value;
+    let genderFeminine = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_FEMININE].value;
+    let genderNeuter = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_NEUTER].value;
 
     this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
       if (ancestorFeatures) {
-        if (ancestorFeatures[0].value === langFeatures[featureTypes.declension][Constants.ORD_2ND].value) {
+        if (ancestorFeatures[0].value === GreekLanguageModel.getFeatureType(Feature.types.declension)[Constants.ORD_2ND].value) {
           return [[genderMasculine, genderFeminine], genderNeuter]
         }
-        if (ancestorFeatures[0].value === langFeatures[featureTypes.declension][Constants.ORD_3RD].value) {
+        if (ancestorFeatures[0].value === GreekLanguageModel.getFeatureType(Feature.types.declension)[Constants.ORD_3RD].value) {
           return [[genderMasculine, genderFeminine, genderNeuter]]
         }
       }
@@ -7850,7 +7757,25 @@ class NounViewSimplified extends NounView$1 {
 
     this.createTable();
 
-    this.table.suffixCellFilter = NounViewSimplified.suffixCellFilter;
+    this.table.suffixCellFilter = GreekNounSimplifiedView.suffixCellFilter;
+  }
+
+  static get partOfSpeech () {
+    return Constants.POFS_NOUN
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(GreekNounSimplifiedView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(GreekNounSimplifiedView.partOfSpeech)
+    }
   }
 
   static suffixCellFilter (suffix) {
@@ -7863,53 +7788,54 @@ class NounViewSimplified extends NounView$1 {
   }
 }
 
-// TODO: Change a case sort order
-class PronounView extends GreekView {
-  constructor () {
-    super();
+class GreekPronounView extends GreekView {
+  constructor (inflectionData, messages) {
+    super(inflectionData, messages);
     this.id = 'pronounDeclension';
     this.name = 'pronoun declension';
     this.title = 'Pronoun declension';
     this.partOfSpeech = Constants.POFS_PRONOUN;
+    this.featureTypes = {};
 
-    console.log(`Pronoun view constructor`);
+    const GEND_MASCULINE_FEMININE = 'masculine feminine';
     const GEND_MASCULINE_FEMININE_NEUTER = 'masculine feminine neuter';
-    let numbers = new FeatureType(
+    this.featureTypes.numbers = new FeatureType(
       Feature.types.number,
-      [Constants.NUM_SINGULAR, Constants.NUM_DUAL, Constants.NUM_PLURAL], // Use a custom sort order
-      this.languageCode
+      [Constants.NUM_SINGULAR, Constants.NUM_DUAL, Constants.NUM_PLURAL],
+      this.languageID
     );
-    let genders = new FeatureType(
+    // TODO: remove a duplicate definition in `render`
+    this.featureTypes.genders = new FeatureType(
       Feature.types.gender,
-      [ Constants.GEND_MASCULINE, Constants.GEND_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER ],
-      this.languageCode
+      [Constants.GEND_MASCULINE, Constants.GEND_FEMININE, GEND_MASCULINE_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
+      this.languageID
     );
 
-    let lemmas = new FeatureType(
+    // This is just a placeholder. Lemma values will be generated dynamically
+    this.featureTypes.lemmas = new FeatureType(
       Feature.types.word,
       [],
-      this.languageCode
+      this.languageID
     );
 
-    // Lemma values must be generated
-
     this.features = {
-      numbers: new GroupFeatureType(numbers, 'Number'),
-      cases: new GroupFeatureType(langFeatures[featureTypes.grmCase], 'Case'),
-      genders: new GroupFeatureType(genders, 'Gender'),
-      lemmas: new GroupFeatureType(lemmas, 'Lemma')
+      numbers: new GroupFeatureType(this.featureTypes.numbers, 'Number'),
+      cases: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.grmCase), 'Case'),
+      genders: new GroupFeatureType(this.featureTypes.genders, 'Gender'),
+      persons: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.grmCase), 'Case'),
+      lemmas: new GroupFeatureType(this.featureTypes.lemmas, 'Lemma')
     };
 
     this.features.genders.getTitle = function getTitle (featureValue) {
       if (featureValue === Constants.GEND_MASCULINE) { return 'm.' }
       if (featureValue === Constants.GEND_FEMININE) { return 'f.' }
       if (featureValue === Constants.GEND_NEUTER) { return 'n.' }
+      if (featureValue === GEND_MASCULINE_FEMININE) { return 'm./f.' }
       if (featureValue === GEND_MASCULINE_FEMININE_NEUTER) { return 'm./f./n.' }
       return featureValue
     };
 
     this.features.genders.filter = function filter (featureValues, suffix) {
-      console.log('A custom group feature type filter', featureValues);
       // If not an array, convert it to array for uniformity
       if (!Array.isArray(featureValues)) {
         featureValues = [featureValues];
@@ -7923,94 +7849,133 @@ class PronounView extends GreekView {
       return false
     };
 
-    this.render = function render (inflectionData, messages) {
-      console.log(`Custom render`);
-      // TODO: Update view with function to replace lemma values dynamically to avoid repetitious code below
-      let numbers = new FeatureType(
-        Feature.types.number,
-        [Constants.NUM_SINGULAR, Constants.NUM_DUAL, Constants.NUM_PLURAL], // Use a custom sort order
-        this.languageCode
-      );
-      let genders = new FeatureType(
-        Feature.types.gender,
-        [ Constants.GEND_MASCULINE, Constants.GEND_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER ],
-        this.languageCode
-      );
-      let lemmas = new FeatureType(
-        Feature.types.word,
-        ['οὗτος', 'ἐκεῖνος', 'ὅδε'],
-        this.languageCode
-      );
-      this.features.lemmas = new GroupFeatureType(lemmas, 'Lemma');
-      this.table = new Table([this.features.lemmas, this.features.genders, this.features.numbers, this.features.cases]);
-      let features = this.table.features;
-      features.columns = [lemmas, genders];
-      features.rows = [numbers, langFeatures[featureTypes.grmCase]];
-      features.columnRowTitles = [langFeatures[featureTypes.grmCase]];
-      features.fullWidthRowTitles = [numbers];
-
-      // Start of original render code
-      let selection = inflectionData[this.partOfSpeech];
-
-      this.footnotes = new Map();
-      if (selection.footnotes && Array.isArray(selection.footnotes)) {
-        for (const footnote of selection.footnotes) {
-          this.footnotes.set(footnote.index, footnote);
-        }
-      }
-
-      // Table is created during view construction
-      this.table.messages = messages;
-      this.table.construct(selection.suffixes).constructViews().addEventListeners();
-      return this
-    };
-
     // Features should go as: column features first, row features last. This specifies the order of grouping
     // in which a table tree will be built.
     this.table = new Table([this.features.lemmas, this.features.genders, this.features.numbers, this.features.cases]);
     let features = this.table.features;
-    features.columns = [lemmas, genders];
-    features.rows = [numbers, langFeatures[featureTypes.grmCase]];
-    features.columnRowTitles = [langFeatures[featureTypes.grmCase]];
-    features.fullWidthRowTitles = [numbers];
+    features.columns = [this.featureTypes.lemmas, this.featureTypes.genders];
+    features.rows = [this.featureTypes.numbers, GreekLanguageModel.getFeatureType(Feature.types.grmCase)];
+    features.columnRowTitles = [GreekLanguageModel.getFeatureType(Feature.types.grmCase)];
+    features.fullWidthRowTitles = [this.featureTypes.numbers];
+  }
+
+  static get partOfSpeech () {
+    return Constants.POFS_PRONOUN
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(GreekPronounView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(GreekPronounView.partOfSpeech)
+    }
+  }
+
+  render () {
+    let grammarClass = this.inflectionData.getFeatureValues(this.partOfSpeech, Feature.types.grmClass);
+    if (grammarClass.length === 1) {
+      grammarClass = grammarClass[0];
+    } else {
+      console.warn(`Cannot determine grammar class of a Greek pronoun inflection data: 
+        there is no grammar class in inflection data or there is more than one grammar class`);
+    }
+
+    let features;
+    /*
+     Grouping order is different for different pronoun classes.
+     Grouped by lemma and gender are: demonstrative pronouns.
+     Grouped by person and gender are: reflexive pronouns.
+     Grouped by gender: general relative, indefinite, intensive, interrogative, reciprocal, and relative pronouns.
+     Grouped by person are: personal pronouns.
+     Possessive pronouns: no table?
+    */
+    if (grammarClass === Constants.CLASS_DEMONSTRATIVE) {
+      let lemmas = this.dataset.getPronounGroupingLemmas(grammarClass);
+      this.features.lemmas = new GroupFeatureType(lemmas, 'Lemma');
+      this.table = new Table([this.features.lemmas, this.features.genders, this.features.numbers, this.features.cases]);
+      features = this.table.features;
+      features.columns = [lemmas, this.featureTypes.genders];
+    } else if (grammarClass === Constants.CLASS_REFLEXIVE) {
+      this.table = new Table([this.features.genders, this.features.numbers, this.features.cases]);
+      features = this.table.features;
+      features.columns = [this.featureTypes.genders];
+    } else if (grammarClass === Constants.CLASS_PERSONAL) {
+      this.table = new Table([this.features.genders, this.features.numbers, this.features.cases]);
+      features = this.table.features;
+      features.columns = [this.featureTypes.genders];
+    } else {
+      this.table = new Table([this.features.genders, this.features.numbers, this.features.cases]);
+      features = this.table.features;
+      features.columns = [this.featureTypes.genders];
+    }
+    features.rows = [this.featureTypes.numbers, GreekLanguageModel.getFeatureType(Feature.types.grmCase)];
+    features.columnRowTitles = [GreekLanguageModel.getFeatureType(Feature.types.grmCase)];
+    features.fullWidthRowTitles = [this.featureTypes.numbers];
+
+    // A rendering code
+    this.footnotes = this.inflectionData.getFootnotesMap(this.partOfSpeech);
+    this.table.messages = this.messages;
+    this.table.construct(this.inflectionData.getSuffixes(this.partOfSpeech)).constructViews().addEventListeners();
+    return this
   }
 }
 
-var GreekViews = [new NounView$1(), new NounViewSimplified(), new PronounView()];
-
+// Latin views
+// Greek views
+/**
+ * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
+ * mast be created for each new inflection data piece.
+ */
 class ViewSet {
-  constructor (inflectionData = undefined) {
-    this.views = new Map();
-    this.views.set(Constants.LANG_LATIN, LatinViews);
-    this.views.set(Constants.LANG_GREEK, GreekViews);
+  constructor (inflectionData, messages) {
+    this.views = new Map([
+      [Constants.LANG_LATIN, [LatinNounView, LatinAdjectiveView,
+        LatinVoiceConjugationMoodView, LatinVoiceMoodConjugationView, LatinConjugationVoiceMoodView,
+        LatinConjugationMoodVoiceView, LatinMoodVoiceConjugationView, LatinMoodConjugationVoiceView,
+        LatinImperativeView, LatinSupineView, LatinVerbParticipleView, LatinInfinitiveView]],
+      [Constants.LANG_GREEK, [GreekNounView, GreekNounSimplifiedView, GreekPronounView]]
+    ]);
     this.inflectionData = inflectionData;
+    this.languageID = this.inflectionData.languageID;
+    this.messages = messages;
     this.matchingViews = [];
 
-    if (this.views.has(inflectionData.languageID)) {
-      this.matchingViews = this.views.get(inflectionData.languageID)
-        .filter(view =>
-          inflectionData[Feature.types.part].includes(view.partOfSpeech) &&
-          view.enabledForLexemes(inflectionData.homonym.lexemes));
+    if (this.views.has(this.languageID)) {
+      for (let ViewConstructor of this.views.get(this.languageID)) {
+        if (ViewConstructor.matchFilter(this.inflectionData)) {
+          this.matchingViews.push(new ViewConstructor(this.inflectionData, this.messages));
+        }
+      }
     }
 
     this.partsOfSpeech = [];
-    this.partOfSpeechViews = {};
     for (const view of this.matchingViews) {
       if (!this.partsOfSpeech.includes(view.partOfSpeech)) {
         this.partsOfSpeech.push(view.partOfSpeech);
-        this.partOfSpeechViews[view.partOfSpeech] = [];
       }
-      this.partOfSpeechViews[view.partOfSpeech].push(view);
     }
   }
 
   getViews (partOfSpeech = undefined) {
-    if (this.partsOfSpeech.includes(partOfSpeech)) {
-      return this.partOfSpeechViews[partOfSpeech]
+    if (partOfSpeech) {
+      return this.matchingViews.filter(view => view.partOfSpeech === partOfSpeech)
     } else {
-      return []
+      return this.matchingViews
+    }
+  }
+
+  updateMessages (messages) {
+    this.messages = messages;
+    for (let view of this.matchingViews) {
+      view.updateMessages(messages);
     }
   }
 }
 
-export { InflectionData, LanguageDataList, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, L10n, messages as L10nMessages, LatinViews, GreekViews, ViewSet };
+export { InflectionData, LanguageDataList, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, L10n, messages as L10nMessages, ViewSet };

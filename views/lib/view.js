@@ -1,3 +1,5 @@
+import {LanguageModelFactory} from 'alpheios-data-models'
+
 /**
  * Represents a single view.
  */
@@ -5,10 +7,13 @@ export default class View {
   /**
    * Initializes a View object with options. There is at least one view per part of speech,
    * but there could be several views for the same part of speech that show different table representation of a view.
-   * @param {Object} viewOptions
+   * @param {InflectionData} inflectionData - An inflection data object.
+   * @param {MessageBundle} messages - A message bundle with message translations.
    */
-  constructor () {
-    // this.options = viewOptions;
+  constructor (inflectionData, messages) {
+    this.languageID = View.languageID
+    this.inflectionData = inflectionData
+    this.messages = messages
     this.pageHeader = {}
 
     // An HTML element where this view is rendered
@@ -18,10 +23,39 @@ export default class View {
     this.id = 'baseView'
     this.name = 'base view'
     this.title = 'Base View'
-    this.languageCode = undefined
     this.partOfSpeech = undefined
     this.forms = new Set()
     this.table = {}
+  }
+
+  /**
+   * Defines a language ID of a view. Should be redefined in child classes.
+   * @return {symbol}
+   */
+  static get languageID () {
+    return Symbol('Undefined language')
+  }
+
+  /**
+   * Defines a part of speech of a view. Should be redefined in child classes.
+   * @return {string}
+   */
+  static get partOfSpeech () {
+    return 'Undefined part of speech'
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(View.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(View.partOfSpeech) && View.enabledForLexemes(inflectionData.homonym.lexemes)
+    }
   }
 
   /**
@@ -29,20 +63,22 @@ export default class View {
    * @param {Lexeme[]} lexemes
    * @return {boolean} true if the view should be shown false if not
    */
-  enabledForLexemes (lexemes) {
+  static enabledForLexemes (lexemes) {
     // default returns true
     return true
+  }
+
+  updateMessages (messages) {
+    this.messages = messages
+    return this
   }
 
   /**
    * Converts an InflectionData, returned from an inflection tables library, into an HTML representation of an inflection table.
    * `messages` provides a translation for view's texts.
-   * @param {InflectionData} inflectionData - A result set from inflection tables library.
-   * @param {MessageBundle} messages - A message bundle with message translations.
    */
-  render (inflectionData, messages) {
-    console.log(`Rendering a view`)
-    let selection = inflectionData[this.partOfSpeech]
+  render () {
+    let selection = this.inflectionData[this.partOfSpeech]
 
     this.footnotes = new Map()
     if (selection.footnotes && Array.isArray(selection.footnotes)) {
@@ -52,8 +88,8 @@ export default class View {
     }
 
     // Table is created during view construction
-    this.table.messages = messages
-    for (let lexeme of inflectionData.homonym.lexemes) {
+    this.table.messages = this.messages
+    for (let lexeme of this.inflectionData.homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
         if (inflection['part of speech'].filter((f) => f.hasValue(this.partOfSpeech)).length > 0) {
           let form = inflection.prefix ? `${inflection.prefix} - ` : ''
