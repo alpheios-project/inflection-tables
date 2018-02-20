@@ -16,7 +16,9 @@ import LatinInfinitiveView from '../lang/latin/latin-infinitive-view.js'
 // Greek views
 import GreekNounView from '../lang/greek/greek-noun-view.js'
 import GreekNounSimplifiedView from '../lang/greek/greek-noun-simplified-view.js'
-import GreekPronounView from '../lang/greek/greek-pronoun-view.js'
+import GreekGenderPronounView from '../lang/greek/greek-gender-pronoun-view.js'
+import GreekLemmaGenderPronounView from '../lang/greek/greek-lemma-gender-pronoun-view.js'
+import GreekPersonGenderPronounView from '../lang/greek/greek-person-gender-pronoun-view.js'
 
 /**
  * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
@@ -25,11 +27,33 @@ import GreekPronounView from '../lang/greek/greek-pronoun-view.js'
 export default class ViewSet {
   constructor (inflectionData, messages) {
     this.views = new Map([
-      [Constants.LANG_LATIN, [LatinNounView, LatinAdjectiveView,
-        LatinVoiceConjugationMoodView, LatinVoiceMoodConjugationView, LatinConjugationVoiceMoodView,
-        LatinConjugationMoodVoiceView, LatinMoodVoiceConjugationView, LatinMoodConjugationVoiceView,
-        LatinImperativeView, LatinSupineView, LatinVerbParticipleView, LatinInfinitiveView]],
-      [Constants.LANG_GREEK, [GreekNounView, GreekNounSimplifiedView, GreekPronounView]]
+      [
+        Constants.LANG_LATIN,
+        [
+          LatinNounView,
+          LatinAdjectiveView,
+          LatinVoiceConjugationMoodView,
+          LatinVoiceMoodConjugationView,
+          LatinConjugationVoiceMoodView,
+          LatinConjugationMoodVoiceView,
+          LatinMoodVoiceConjugationView,
+          LatinMoodConjugationVoiceView,
+          LatinImperativeView,
+          LatinSupineView,
+          LatinVerbParticipleView,
+          LatinInfinitiveView
+        ]
+      ],
+      [
+        Constants.LANG_GREEK,
+        [
+          GreekNounView,
+          GreekNounSimplifiedView,
+          GreekGenderPronounView,
+          GreekPersonGenderPronounView,
+          GreekLemmaGenderPronounView
+        ]
+      ]
     ])
     this.inflectionData = inflectionData
     this.languageID = this.inflectionData.languageID

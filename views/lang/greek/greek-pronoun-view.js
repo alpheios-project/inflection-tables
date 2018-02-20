@@ -1,15 +1,20 @@
-import { Constants, GreekLanguageModel, Feature, FeatureType, LanguageModelFactory } from 'alpheios-data-models'
+import { Constants, GreekLanguageModel, Feature, FeatureType } from 'alpheios-data-models'
+import View from '../../lib/view.js'
 import GreekView from './greek-view.js'
 import GroupFeatureType from '../../lib/group-feature-type.js'
-import Table from '../../lib/table.js'
 
+/**
+ * This is a base class for all pronoun views. This class should not be used to create tables. Its purpose
+ * is to define common features and properties for all pronoun classes.
+ */
 export default class GreekPronounView extends GreekView {
   constructor (inflectionData, messages) {
     super(inflectionData, messages)
-    this.id = 'pronounDeclension'
-    this.name = 'pronoun declension'
-    this.title = 'Pronoun declension'
-    this.partOfSpeech = Constants.POFS_PRONOUN
+    let grammarClass = GreekPronounView.getClassFromInflection(this.inflectionData)
+    this.id = `${grammarClass}${View.toTitleCase(GreekPronounView.partOfSpeech)}Declension`
+    this.name = `${grammarClass} ${GreekPronounView.partOfSpeech} declension`
+    this.title = View.toTitleCase(`${grammarClass} ${GreekPronounView.partOfSpeech} Declension`)
+    this.partOfSpeech = GreekPronounView.partOfSpeech
     this.featureTypes = {}
 
     const GEND_MASCULINE_FEMININE = 'masculine feminine'
@@ -19,7 +24,7 @@ export default class GreekPronounView extends GreekView {
       [Constants.NUM_SINGULAR, Constants.NUM_DUAL, Constants.NUM_PLURAL],
       this.languageID
     )
-    // TODO: remove a duplicate definition in `render`
+
     this.featureTypes.genders = new FeatureType(
       Feature.types.gender,
       [Constants.GEND_MASCULINE, Constants.GEND_FEMININE, GEND_MASCULINE_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
@@ -37,8 +42,7 @@ export default class GreekPronounView extends GreekView {
       numbers: new GroupFeatureType(this.featureTypes.numbers, 'Number'),
       cases: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.grmCase), 'Case'),
       genders: new GroupFeatureType(this.featureTypes.genders, 'Gender'),
-      persons: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.grmCase), 'Case'),
-      lemmas: new GroupFeatureType(this.featureTypes.lemmas, 'Lemma')
+      persons: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.grmCase), 'Case')
     }
 
     this.features.genders.getTitle = function getTitle (featureValue) {
@@ -63,15 +67,6 @@ export default class GreekPronounView extends GreekView {
 
       return false
     }
-
-    // Features should go as: column features first, row features last. This specifies the order of grouping
-    // in which a table tree will be built.
-    this.table = new Table([this.features.lemmas, this.features.genders, this.features.numbers, this.features.cases])
-    let features = this.table.features
-    features.columns = [this.featureTypes.lemmas, this.featureTypes.genders]
-    features.rows = [this.featureTypes.numbers, GreekLanguageModel.getFeatureType(Feature.types.grmCase)]
-    features.columnRowTitles = [GreekLanguageModel.getFeatureType(Feature.types.grmCase)]
-    features.fullWidthRowTitles = [this.featureTypes.numbers]
   }
 
   static get partOfSpeech () {
@@ -79,64 +74,20 @@ export default class GreekPronounView extends GreekView {
   }
 
   /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
+   * Retrieves a value of a class feature from inflectionData. Inflection data should have the same class value
+   * among all its data items.
+   * @param {InflectionData} inflectionData
+   * @return {string} A grammar class name
    */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(GreekPronounView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(GreekPronounView.partOfSpeech)
-    }
-  }
-
-  render () {
-    let grammarClass = this.inflectionData.getFeatureValues(this.partOfSpeech, Feature.types.grmClass)
+  static getClassFromInflection (inflectionData) {
+    let grammarClass = inflectionData.getFeatureValues(GreekPronounView.partOfSpeech, Feature.types.grmClass)
     if (grammarClass.length === 1) {
       grammarClass = grammarClass[0]
     } else {
-      console.warn(`Cannot determine grammar class of a Greek pronoun inflection data: 
+      console.warn(`Cannot determine a grammar class of a Greek pronoun "${inflectionData.targetWord}": 
         there is no grammar class in inflection data or there is more than one grammar class`)
+      grammarClass = ''
     }
-
-    let features
-    /*
-     Grouping order is different for different pronoun classes.
-     Grouped by lemma and gender are: demonstrative pronouns.
-     Grouped by person and gender are: reflexive pronouns.
-     Grouped by gender: general relative, indefinite, intensive, interrogative, reciprocal, and relative pronouns.
-     Grouped by person are: personal pronouns.
-     Possessive pronouns: no table?
-    */
-    if (grammarClass === Constants.CLASS_DEMONSTRATIVE) {
-      let lemmas = this.dataset.getPronounGroupingLemmas(grammarClass)
-      this.features.lemmas = new GroupFeatureType(lemmas, 'Lemma')
-      this.table = new Table([this.features.lemmas, this.features.genders, this.features.numbers, this.features.cases])
-      features = this.table.features
-      features.columns = [lemmas, this.featureTypes.genders]
-    } else if (grammarClass === Constants.CLASS_REFLEXIVE) {
-      this.table = new Table([this.features.genders, this.features.numbers, this.features.cases])
-      features = this.table.features
-      features.columns = [this.featureTypes.genders]
-    } else if (grammarClass === Constants.CLASS_PERSONAL) {
-      this.table = new Table([this.features.genders, this.features.numbers, this.features.cases])
-      features = this.table.features
-      features.columns = [this.featureTypes.genders]
-    } else {
-      this.table = new Table([this.features.genders, this.features.numbers, this.features.cases])
-      features = this.table.features
-      features.columns = [this.featureTypes.genders]
-    }
-    features.rows = [this.featureTypes.numbers, GreekLanguageModel.getFeatureType(Feature.types.grmCase)]
-    features.columnRowTitles = [GreekLanguageModel.getFeatureType(Feature.types.grmCase)]
-    features.fullWidthRowTitles = [this.featureTypes.numbers]
-
-    // A rendering code
-    this.footnotes = this.inflectionData.getFootnotesMap(this.partOfSpeech)
-    this.table.messages = this.messages
-    this.table.construct(this.inflectionData.getSuffixes(this.partOfSpeech)).constructViews().addEventListeners()
-    return this
+    return grammarClass
   }
 }

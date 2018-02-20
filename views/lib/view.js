@@ -78,16 +78,8 @@ export default class View {
    * `messages` provides a translation for view's texts.
    */
   render () {
-    let selection = this.inflectionData[this.partOfSpeech]
-
-    this.footnotes = new Map()
-    if (selection.footnotes && Array.isArray(selection.footnotes)) {
-      for (const footnote of selection.footnotes) {
-        this.footnotes.set(footnote.index, footnote)
-      }
-    }
-
-    // Table is created during view construction
+    this.footnotes = this.inflectionData.getFootnotesMap(this.partOfSpeech)
+    // Table is already created during a view construction
     this.table.messages = this.messages
     for (let lexeme of this.inflectionData.homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
@@ -99,7 +91,7 @@ export default class View {
         }
       }
     }
-    this.table.construct(selection.suffixes).constructViews().addEventListeners()
+    this.table.construct(this.inflectionData.getSuffixes(this.partOfSpeech)).constructViews().addEventListeners()
     return this
   }
 
@@ -143,5 +135,28 @@ export default class View {
   showNoSuffixGroups () {
     this.table.showNoSuffixGroups()
     return this
+  }
+
+  /**
+   * A utility function to convert a string to a Sentence case.
+   * @param {string} string - A source string.
+   * @return {string} A string capitalized to a Sentence case.
+   */
+  static toSentenceCase (string) {
+    string = string.toLowerCase()
+    return string[0].toUpperCase() + string.substr(1)
+  }
+
+  /**
+   * A utility function to convert a string to a Title Case.
+   * @param {string} string - A source string.
+   * @return {string} A string capitalized to a Title Case.
+   */
+  static toTitleCase (string) {
+    return string
+      .toLowerCase()
+      .split(' ')
+      .map(word => word[0].toUpperCase() + word.substr(1))
+      .join(' ')
   }
 }

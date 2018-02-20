@@ -4599,12 +4599,16 @@ class Morpheme {
   /**
    * Checks if suffix has a feature that is a match to the one provided.
    * @param {string} featureType - Sets a type of a feature we need to match with the ones stored inside the suffix
-   * @param {Feature[]} features - A list of features we need to match with the ones stored inside the suffix
+   * @param {Feature | Feature[]} features - One or several features we need to match with the ones stored
+   * inside the suffix object
    * @returns {string | undefined} - If provided feature is a match, returns a value of a first feature that matched.
    * If no match found, return undefined.
    */
   featureMatch (featureType, features) {
-    if (features && this.features.hasOwnProperty(featureType)) {
+    if (!featureType) { throw new Error(`No feature type information is provided for feature matching`) }
+    if (!features) { throw new Error(`No features information is provided for feature matching`) }
+    if (!Array.isArray(features)) { features = [features]; } // Convert a single feature to an array
+    if (this.features.hasOwnProperty(featureType)) {
       for (let feature of features) {
         if (feature.value === this.features[featureType]) {
           return feature.value
@@ -4813,6 +4817,12 @@ class InflectionData {
     this[Feature.types.part] = []; // What parts of speech are represented by this object.
   }
 
+  get targetWord () {
+    if (this.homonym && this.homonym.targetWord) {
+      return this.homonym.targetWord
+    }
+  }
+
   /**
    * Returns a list of parts of speech that have any inflection data for them.
    * @return {String[]} Names of parts of speech, as strings, in an array.
@@ -4919,7 +4929,7 @@ class InflectionProperties {
 class LanguageDataset {
   /**
    * Initializes a LanguageDataset.
-   * @param {string} languageID - A language ID of a data set.
+   * @param {symbol} languageID - A language ID of a data set.
    */
   constructor (languageID) {
     if (!languageID) {
@@ -4928,6 +4938,7 @@ class LanguageDataset {
     }
 
     this.languageID = languageID;
+    this.model = LanguageModelFactory.getLanguageModel(languageID);
     this.suffixes = []; // An array of suffixes.
     this.forms = []; // An array of suffixes.
     this.footnotes = []; // Footnotes
@@ -5037,6 +5048,9 @@ class LanguageDataset {
     // TODO: do we ever need lemmas?
     for (let lexeme of homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
+        // Set grammar rules for an inflection
+        inflection.setGrammar();
+
         // add the lemma to the inflection
         inflection[Feature.types.word] =
           [new Feature(lexeme.lemma.word, Feature.types.word, lexeme.lemma.language)];
@@ -5077,6 +5091,7 @@ class LanguageDataset {
 
           // Let's assume that it might be full form based
           inflectionProperties.fullFormBased = true;
+          console.log(this.forms);
           items = this.forms.reduce(this['reducer'].bind(this, inflectionsGroup, inflectionProperties), []);
           if (items.length === 0) {
             // It is not full form based
@@ -7089,14 +7104,14 @@ dataSet.matcher = function (inflections, inflectionProperties, item) {
     }
 
     if (inflectionProperties.suffixBased) {
-      if (languageModel.normalizeWord(inflection.suffix) === languageModel.normalizeWord(item.value)) {
+      if (this.model.normalizeWord(inflection.suffix) === this.model.normalizeWord(item.value)) {
         matchData.suffixMatch = true;
       }
     } else {
       let form = inflection.prefix ? inflection.prefix : '';
       form = form + inflection.stem;
       form = inflection.suffix ? form + inflection.suffix : form;
-      if (languageModel.normalizeWord(form) === languageModel.normalizeWord(item.value)) {
+      if (this.model.normalizeWord(form) === this.model.normalizeWord(item.value)) {
         matchData.suffixMatch = true;
       }
     }
@@ -7330,7 +7345,6 @@ dataSet$1.addPronounForms = function (partOfSpeech, data) {
     footnote: 10
   };
 
-  console.log('Add pronoun forms');
   // Custom importers
   // TODO: decide on the best way to keep mulitple values and re-enable later
   /* languageModel.features[fTypes.gender].addImporter(impName)
@@ -7425,12 +7439,11 @@ dataSet$1.getPronounGroupingLemmas = function (grammarClass) {
  */
 dataSet$1.matcher = function (inflections, inflectionProperties, item) {
   'use strict';
-    // All of those features must match between an inflection and an ending
+  // All of those features must match between an inflection and an ending
   let optionalMatches;
   // I'm not sure if we ever want to restrict what we consider optional matches
   // so this is just a placeholder for now
   let matchOptional = true;
-  console.log('Greek matcher');
 
     // Any of those features must match between an inflection and an ending
   optionalMatches = [Feature.types.grmCase, Feature.types.declension, Feature.types.gender, Feature.types.number];
@@ -7449,19 +7462,8 @@ dataSet$1.matcher = function (inflections, inflectionProperties, item) {
       optionalMatches = [];
     }
 
-    let form = '';
-    if (inflectionProperties.suffixBased) {
-      if (languageModel$1.normalizeWord(inflection.suffix) === languageModel$1.normalizeWord(item.value)) {
-        matchData.suffixMatch = true;
-      }
-    } else {
-      form = inflection.prefix ? inflection.prefix : '';
-      form = form + inflection.stem;
-      form = inflection.suffix ? form + inflection.suffix : form;
-      if (languageModel$1.normalizeWord(form) === languageModel$1.normalizeWord(item.value)) {
-        matchData.suffixMatch = true;
-      }
-    }
+    let form = inflection.form;
+    matchData.suffixMatch = inflection.compareWithWord(item.value);
 
     /*
     A `class` grammatical feature is an obligatory match for Greek pronouns. Class, however, is not present in
@@ -7474,13 +7476,22 @@ dataSet$1.matcher = function (inflections, inflectionProperties, item) {
     let grmClass;
     if (item.features[Feature.types.part] === constants.POFS_PRONOUN) {
       // Get a class this inflection belongs to
-      grmClass = this.getGrammarClass(form);
+      grmClass = this.model.getPronounClasses(this.forms, form);
+      if (grmClass.length === 0) {
+        console.warn(`Cannot determine a grammar class for a ${form} pronoun.`);
+      } else if (grmClass.length > 1) {
+        console.warn(`Several grammar classes found for a ${form} pronoun:`, grmClass);
+      } else {
+        // There is only one value found
+        grmClass = grmClass[0];
+      }
     }
 
     // Check for obligatory matches
     for (let feature of inflectionProperties.obligatoryMatches) {
       let featureMatch = false;
       if (feature === Feature.types.grmClass) {
+        // TODO: Last argument must be a feature, not just a value
         featureMatch = item.featureMatch(feature, grmClass);
       } else {
         featureMatch = item.featureMatch(feature, inflection[feature]);
@@ -7525,14 +7536,6 @@ dataSet$1.matcher = function (inflections, inflectionProperties, item) {
     return item
   }
   return null
-};
-
-dataSet$1.getGrammarClass = function (word) {
-  let matchingForm = this.forms.find(form => form.value && form.value === word);
-  let classValue = (matchingForm && matchingForm.features[Feature.types.grmClass])
-    ? matchingForm.features[Feature.types.grmClass]
-    : '';
-  return [languageModel$1.features[Feature.types.grmClass].get(classValue)]
 };
 
 /**
@@ -9232,16 +9235,8 @@ class View {
    * `messages` provides a translation for view's texts.
    */
   render () {
-    let selection = this.inflectionData[this.partOfSpeech];
-
-    this.footnotes = new Map();
-    if (selection.footnotes && Array.isArray(selection.footnotes)) {
-      for (const footnote of selection.footnotes) {
-        this.footnotes.set(footnote.index, footnote);
-      }
-    }
-
-    // Table is created during view construction
+    this.footnotes = this.inflectionData.getFootnotesMap(this.partOfSpeech);
+    // Table is already created during a view construction
     this.table.messages = this.messages;
     for (let lexeme of this.inflectionData.homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
@@ -9253,7 +9248,7 @@ class View {
         }
       }
     }
-    this.table.construct(selection.suffixes).constructViews().addEventListeners();
+    this.table.construct(this.inflectionData.getSuffixes(this.partOfSpeech)).constructViews().addEventListeners();
     return this
   }
 
@@ -9297,6 +9292,29 @@ class View {
   showNoSuffixGroups () {
     this.table.showNoSuffixGroups();
     return this
+  }
+
+  /**
+   * A utility function to convert a string to a Sentence case.
+   * @param {string} string - A source string.
+   * @return {string} A string capitalized to a Sentence case.
+   */
+  static toSentenceCase (string) {
+    string = string.toLowerCase();
+    return string[0].toUpperCase() + string.substr(1)
+  }
+
+  /**
+   * A utility function to convert a string to a Title Case.
+   * @param {string} string - A source string.
+   * @return {string} A string capitalized to a Title Case.
+   */
+  static toTitleCase (string) {
+    return string
+      .toLowerCase()
+      .split(' ')
+      .map(word => word[0].toUpperCase() + word.substr(1))
+      .join(' ')
   }
 }
 
