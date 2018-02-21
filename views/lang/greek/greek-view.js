@@ -1,5 +1,5 @@
 import { Constants, GreekLanguageModel, Feature } from 'alpheios-data-models'
-import GreekDataset from '../../../lib/lang/greek/greek.js'
+import GreekDataset from '../../../lib/lang/greek/greek-language-dataset.js'
 import Table from '../../lib/table.js'
 import View from '../../lib/view.js'
 import GroupFeatureType from '../../lib/group-feature-type.js'
@@ -8,7 +8,7 @@ export default class GreekView extends View {
   constructor (inflectionData, messages) {
     super(inflectionData, messages)
     this.languageID = GreekView.languageID
-    this.dataset = GreekDataset
+    this.dataset = new GreekDataset().loadData()
 
     /*
     Default grammatical features of a View. It child views need to have different feature values, redefine

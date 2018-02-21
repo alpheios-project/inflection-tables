@@ -774,7 +774,7 @@ class InflectionGroup {
  * @class  LanguageModel is the base class for language-specific behavior
  */
 class LanguageModel {
-   /**
+  /**
    */
   constructor () {
     this.sourceLanguage = null;
@@ -785,11 +785,131 @@ class LanguageModel {
     this.codes = [];
   }
 
+  static get featureValues () {
+    /*
+    This could be a static variable, but then it will create a circular reference:
+    Feature -> LanguageModelFactory -> LanguageModel -> Feature
+     */
+    return new Map([
+      [
+        Feature.types.part,
+        [
+          POFS_ADVERB,
+          POFS_ADVERBIAL,
+          POFS_ADJECTIVE,
+          POFS_ARTICLE,
+          POFS_CONJUNCTION,
+          POFS_EXCLAMATION,
+          POFS_INTERJECTION,
+          POFS_NOUN,
+          POFS_NUMERAL,
+          POFS_PARTICLE,
+          POFS_PREFIX,
+          POFS_PREPOSITION,
+          POFS_PRONOUN,
+          POFS_SUFFIX,
+          POFS_SUPINE,
+          POFS_VERB,
+          POFS_VERB_PARTICIPLE
+        ]
+      ],
+      [
+        Feature.types.gender,
+        [
+          GEND_MASCULINE,
+          GEND_FEMININE,
+          GEND_NEUTER
+        ]
+      ],
+      [
+        Feature.types.type,
+        [
+          TYPE_REGULAR,
+          TYPE_IRREGULAR
+        ]
+      ],
+      [
+        Feature.types.person,
+        [
+          ORD_1ST,
+          ORD_2ND,
+          ORD_3RD
+        ]
+      ],
+      [
+        Feature.types.age,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.area,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.source,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.frequency,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.geo,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.pronunciation,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.kind,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.comparison,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.morph,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.stemtype,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ],
+      [
+        Feature.types.derivtype,
+        [
+          FeatureType.UNRESTRICTED_VALUE
+        ]
+      ]
+    ])
+  }
+
   _initializeFeatures () {
     let features = {};
     let code = this.toCode();
     features[Feature.types.part] = new FeatureType(Feature.types.part,
-      [ POFS_ADVERB,
+      [POFS_ADVERB,
         POFS_ADVERBIAL,
         POFS_ADJECTIVE,
         POFS_ARTICLE,
@@ -805,9 +925,9 @@ class LanguageModel {
         POFS_SUFFIX,
         POFS_SUPINE,
         POFS_VERB,
-        POFS_VERB_PARTICIPLE ], code);
+        POFS_VERB_PARTICIPLE], code);
     features[Feature.types.gender] = new FeatureType(Feature.types.gender,
-      [ GEND_MASCULINE, GEND_FEMININE, GEND_NEUTER ], code);
+      [GEND_MASCULINE, GEND_FEMININE, GEND_NEUTER], code);
     features[Feature.types.type] = new FeatureType(Feature.types.type,
       [TYPE_REGULAR, TYPE_IRREGULAR], code);
     features[Feature.types.person] = new FeatureType(Feature.types.person,
@@ -822,8 +942,6 @@ class LanguageModel {
     features[Feature.types.frequency] = new FeatureType(Feature.types.frequency,
       [FeatureType.UNRESTRICTED_VALUE], code);
     features[Feature.types.geo] = new FeatureType(Feature.types.geo,
-      [FeatureType.UNRESTRICTED_VALUE], code);
-    features[Feature.types.source] = new FeatureType(Feature.types.source,
       [FeatureType.UNRESTRICTED_VALUE], code);
     features[Feature.types.pronunciation] = new FeatureType(Feature.types.pronunciation,
       [FeatureType.UNRESTRICTED_VALUE], code);
@@ -873,7 +991,7 @@ class LanguageModel {
    *          override in language-specific subclass)
    * @type String
    */
-  normalizeWord (word) {
+  static normalizeWord (word) {
     return word
   }
 
@@ -894,7 +1012,7 @@ class LanguageModel {
    * @returns {String} a string containing valid puncutation symbols
    */
   getPunctuation () {
-    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+    return '.,;:!?\'"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r'
   }
 
   toString () {
@@ -976,11 +1094,12 @@ class LanguageModel {
     for (let infl of inflections) {
       let groupingKey = new InflectionGroupingKey(infl,
         [Feature.types.part, Feature.types.dialect, Feature.types.comparison],
-        { prefix: infl.prefix,
+        {
+          prefix: infl.prefix,
           suffix: infl.suffix,
           stem: infl.stem
         }
-        );
+      );
       let groupingKeyStr = groupingKey.toString();
       if (grouped.has(groupingKeyStr)) {
         grouped.get(groupingKeyStr).append(infl);
@@ -1190,7 +1309,7 @@ class LatinLanguageModel extends LanguageModel {
    * @returns the normalized form of the word (Latin replaces accents and special chars)
    * @type String
    */
-  normalizeWord (word) {
+  static normalizeWord (word) {
     if (word) {
       word = word.replace(/[\u00c0\u00c1\u00c2\u00c3\u00c4\u0100\u0102]/g, 'A');
       word = word.replace(/[\u00c8\u00c9\u00ca\u00cb\u0112\u0114]/g, 'E');
@@ -1232,7 +1351,7 @@ class LatinLanguageModel extends LanguageModel {
  * @class  LatinLanguageModel is the lass for Latin specific behavior
  */
 class GreekLanguageModel extends LanguageModel {
-   /**
+  /**
    * @constructor
    */
   constructor () {
@@ -1246,11 +1365,113 @@ class GreekLanguageModel extends LanguageModel {
     this.features = this._initializeFeatures();
   }
 
+  static get languageID () {
+    return LANG_GREEK
+  }
+
+  static get featureValues () {
+    /*
+    This could be a static variable, but then it will create a circular reference:
+    Feature -> LanguageModelFactory -> LanguageModel -> Feature
+     */
+    return new Map([
+      ...LanguageModel.featureValues,
+      [
+        Feature.types.grmClass,
+        [
+          CLASS_DEMONSTRATIVE,
+          CLASS_GENERAL_RELATIVE,
+          CLASS_INDEFINITE,
+          CLASS_INTENSIVE,
+          CLASS_INTERROGATIVE,
+          CLASS_PERSONAL,
+          CLASS_POSSESSIVE,
+          CLASS_RECIPROCAL,
+          CLASS_REFLEXIVE,
+          CLASS_RELATIVE
+        ]
+      ],
+      [
+        Feature.types.number,
+        [
+          NUM_SINGULAR,
+          NUM_PLURAL,
+          NUM_DUAL
+        ]
+      ],
+      [
+        Feature.types.grmCase,
+        [
+          CASE_NOMINATIVE,
+          CASE_GENITIVE,
+          CASE_DATIVE,
+          CASE_ACCUSATIVE,
+          CASE_VOCATIVE
+        ]
+      ],
+      [
+        Feature.types.declension,
+        [
+          ORD_1ST,
+          ORD_2ND,
+          ORD_3RD
+        ]
+      ],
+      [
+        Feature.types.tense,
+        [
+          TENSE_PRESENT,
+          TENSE_IMPERFECT,
+          TENSE_FUTURE,
+          TENSE_PERFECT,
+          TENSE_PLUPERFECT,
+          TENSE_FUTURE_PERFECT,
+          TENSE_AORIST
+        ]
+      ],
+      [
+        Feature.types.voice,
+        [
+          VOICE_PASSIVE,
+          VOICE_ACTIVE,
+          VOICE_MEDIOPASSIVE,
+          VOICE_MIDDLE
+        ]
+      ],
+      [
+        Feature.types.mood,
+        [
+          MOOD_INDICATIVE,
+          MOOD_SUBJUNCTIVE,
+          MOOD_OPTATIVE,
+          MOOD_IMPERATIVE
+        ]
+      ],
+      [
+        Feature.types.dialect,
+        [
+          'attic',
+          'epic',
+          'doric'
+        ]
+      ]
+    ])
+  }
+
+  static getFeatureType (name) {
+    let featureValues = GreekLanguageModel.featureValues;
+    if (featureValues.has(name)) {
+      return new FeatureType(name, featureValues.get(name), GreekLanguageModel.sourceLanguage)
+    } else {
+      throw new Error(`Feature "${name}" is not defined`)
+    }
+  }
+
   _initializeFeatures () {
     let features = super._initializeFeatures();
     let code = this.toCode();
     features[Feature.types.grmClass] = new FeatureType(Feature.types.grmClass,
-      [ CLASS_DEMONSTRATIVE,
+      [CLASS_DEMONSTRATIVE,
         CLASS_GENERAL_RELATIVE,
         CLASS_INDEFINITE,
         CLASS_INTENSIVE,
@@ -1264,16 +1485,16 @@ class GreekLanguageModel extends LanguageModel {
       code);
     features[Feature.types.number] = new FeatureType(Feature.types.number, [NUM_SINGULAR, NUM_PLURAL, NUM_DUAL], code);
     features[Feature.types.grmCase] = new FeatureType(Feature.types.grmCase,
-      [ CASE_NOMINATIVE,
+      [CASE_NOMINATIVE,
         CASE_GENITIVE,
         CASE_DATIVE,
         CASE_ACCUSATIVE,
         CASE_VOCATIVE
       ], code);
     features[Feature.types.declension] = new FeatureType(Feature.types.declension,
-      [ ORD_1ST, ORD_2ND, ORD_3RD ], code);
+      [ORD_1ST, ORD_2ND, ORD_3RD], code);
     features[Feature.types.tense] = new FeatureType(Feature.types.tense,
-      [ TENSE_PRESENT,
+      [TENSE_PRESENT,
         TENSE_IMPERFECT,
         TENSE_FUTURE,
         TENSE_PERFECT,
@@ -1282,13 +1503,13 @@ class GreekLanguageModel extends LanguageModel {
         TENSE_AORIST
       ], code);
     features[Feature.types.voice] = new FeatureType(Feature.types.voice,
-      [ VOICE_PASSIVE,
+      [VOICE_PASSIVE,
         VOICE_ACTIVE,
         VOICE_MEDIOPASSIVE,
         VOICE_MIDDLE
       ], code);
     features[Feature.types.mood] = new FeatureType(Feature.types.mood,
-      [ MOOD_INDICATIVE,
+      [MOOD_INDICATIVE,
         MOOD_SUBJUNCTIVE,
         MOOD_OPTATIVE,
         MOOD_IMPERATIVE
@@ -1334,6 +1555,7 @@ class GreekLanguageModel extends LanguageModel {
   canInflect (node) {
     return false
   }
+
   /**
    * @override LanguageModel#grammarFeatures
    */
@@ -1344,12 +1566,12 @@ class GreekLanguageModel extends LanguageModel {
 
   /**
    * Return a normalized version of a word which can be used to compare the word for equality
-   * @param {String} word the source word
-   * @returns the normalized form of the word (default version just returns the same word,
+   * @param {string} word the source word
+   * @returns {string} the normalized form of the word (default version just returns the same word,
    *          override in language-specific subclass)
-   * @type String
+   * @type string
    */
-  normalizeWord (word) {
+  static normalizeWord (word) {
     // we normalize greek to NFC - Normalization Form Canonical Composition
     if (word) {
       return word.normalize('NFC')
@@ -1372,7 +1594,7 @@ class GreekLanguageModel extends LanguageModel {
     // 2. When looking up a verb in the verb paradigm tables
     //    it set e_normalize to false, otherwise it was true...
     // make sure it's normalized to NFC and in lower case
-    let normalized = this.normalizeWord(word).toLocaleLowerCase();
+    let normalized = GreekLanguageModel.normalizeWord(word).toLocaleLowerCase();
     let strippedVowelLength = normalized.replace(
       /[\u{1FB0}\u{1FB1}]/ug, '\u{03B1}').replace(
       /[\u{1FB8}\u{1FB9}]/ug, '\u{0391}').replace(
@@ -1410,7 +1632,71 @@ class GreekLanguageModel extends LanguageModel {
    * @returns {String} a string containing valid puncutation symbols
    */
   getPunctuation () {
-    return ".,;:!?'\"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r"
+    return '.,;:!?\'"(){}\\[\\]<>/\\\u00A0\u2010\u2011\u2012\u2013\u2014\u2015\u2018\u2019\u201C\u201D\u0387\u00B7\n\r'
+  }
+
+  static getInflectionGrammar (inflection) {
+    let grammar = {
+      fullFormBased: false,
+      suffixBased: false,
+      pronounClassRequired: false
+    };
+    if (inflection.hasOwnProperty(Feature.types.part) &&
+      Array.isArray(inflection[Feature.types.part]) &&
+      inflection[Feature.types.part].length === 1) {
+      let partOfSpeech = inflection[Feature.types.part][0];
+      // TODO: this should be language specific
+      if (partOfSpeech.value === POFS_PRONOUN) {
+        grammar.fullFormBased = true;
+      } else {
+        grammar.suffixBased = true;
+      }
+    } else {
+      console.warn(`Unable to set grammar: part of speech data is missing or is incorrect`, inflection[Feature.types.part]);
+    }
+
+    grammar.pronounClassRequired =
+      LanguageModelFactory.compareLanguages(GreekLanguageModel.languageID, inflection.languageID) &&
+      inflection.hasOwnProperty(Feature.types.part) &&
+      Array.isArray(inflection[Feature.types.part]) &&
+      inflection[Feature.types.part].length >= 1 &&
+      inflection[Feature.types.part][0].value === POFS_PRONOUN;
+
+    return grammar
+  }
+
+  /**
+   * Determine a class of a given word (a pronoun).
+   * Finds grammar class(es) in a pronoun source data that match(es) a provided pronoun.
+   * @param {Form[]} forms - An array of known forms of pronouns.
+   * @param {string} word - A word we need to find a matching class for.
+   * @param {boolean} normalize - Whether normalized forms of words shall be used for comparison.
+   * @return {Feature[]} Matching classes found in an array of Feature objects. If no matching classes found,
+   * returns an empty array.
+   */
+  static getPronounClasses (forms, word, normalize = true) {
+    let classes = [];
+    let matchingValues = new Set(); // Will eliminate duplicated values
+    let matchingForms = forms.filter(
+      form => {
+        let match = false;
+        if (form.value) {
+          match = normalize
+            ? GreekLanguageModel.normalizeWord(form.value) === GreekLanguageModel.normalizeWord(word)
+            : form.value === word;
+        }
+        return match
+      }
+    );
+    for (const matchingForm of matchingForms) {
+      if (matchingForm.features.hasOwnProperty(Feature.types.grmClass)) {
+        matchingValues.add(matchingForm.features[Feature.types.grmClass]);
+      }
+    }
+    for (const matchingValue of matchingValues) {
+      classes.push(new Feature(matchingValue, Feature.types.grmClass, GreekLanguageModel.languageID));
+    }
+    return classes
   }
 }
 
@@ -1587,12 +1873,27 @@ const MODELS = new Map([
 class LanguageModelFactory {
   /**
    * Checks whether a language is supported
-   * @param {String | Symbol} language - Language as a language ID (Symbol) or a language code (String)
+   * @param {string | symbol} language - Language as a language ID (symbol) or a language code (string)
    * @return {boolean} True if language is supported, false otherwise
    */
   static supportsLanguage (language) {
     language = (typeof language === 'symbol') ? LanguageModelFactory.getLanguageCodeFromId(language) : language;
     return MODELS.has(language)
+  }
+
+  /**
+   * Returns a constructor of language model for a specific language ID.
+   * @param {symbol} languageID - A language ID of a desired language model.
+   * @return {LanguageModel} A language model for a given language ID.
+   */
+  static getLanguageModel (languageID) {
+    let languageCode = LanguageModelFactory.getLanguageCodeFromId(languageID);
+    if (MODELS.has(languageCode)) {
+      return MODELS.get(languageCode)
+    } else {
+      // A default value
+      return LanguageModel
+    }
   }
 
   static getLanguageForCode (code = null) {
@@ -1607,8 +1908,8 @@ class LanguageModelFactory {
 
   /**
    * Converts an ISO 639-3 language code to a language ID
-   * @param {String} languageCode - An ISO 639-3 language code
-   * @return {Symbol | undefined} A language ID or undefined if language ID is not found
+   * @param {string} languageCode - An ISO 639-3 language code
+   * @return {symbol | undefined} A language ID or undefined if language ID is not found
    */
   static getLanguageIdFromCode (languageCode) {
     for (const languageModel of MODELS.values()) {
@@ -1620,8 +1921,8 @@ class LanguageModelFactory {
 
   /**
    * Converts a language ID to an default ISO 639-3 language code for that language
-   * @param {Symbol} languageID - A language ID
-   * @return {String | undefined} An ISO 639-3 language code or undefined if language code is not found
+   * @param {symbol} languageID - A language ID
+   * @return {string | undefined} An ISO 639-3 language code or undefined if language code is not found
    */
   static getLanguageCodeFromId (languageID) {
     for (const languageModel of MODELS.values()) {
@@ -1633,10 +1934,10 @@ class LanguageModelFactory {
 
   /**
    * Takes either a language ID or a language code and returns an object with both an ID and a code.
-   * @param {String | Symbol} language - Either a language ID (a Symbol) or a language code (a String).
-   * @return {Object} An object with the following properties:
-   *    {Symbol} languageID
-   *    {String} languageCode
+   * @param {string | symbol} language - Either a language ID (a Symbol) or a language code (a String).
+   * @return {object} An object with the following properties:
+   *    {symbol} languageID
+   *    {string} languageCode
    */
   static getLanguageAttrs (language) {
     if (typeof language === 'symbol') {
@@ -1658,8 +1959,8 @@ class LanguageModelFactory {
    * Compares two languages in either a language ID or a language code format. For this, does conversion of
    * language IDs to language code. Because fo this, it will work even for language IDs defined in
    * different modules
-   * @param {String | Symbol} languageA - Either a language ID (a Symbol) or a language code (a String).
-   * @param {String | Symbol} languageB - Either a language ID (a Symbol) or a language code (a String).
+   * @param {string | symbol} languageA - Either a language ID (a symbol) or a language code (a string).
+   * @param {string | symbol} languageB - Either a language ID (a symbol) or a language code (a string).
    * @return {boolean} True if languages are the same, false otherwise.
    */
   static compareLanguages (languageA, languageB) {
@@ -1698,7 +1999,7 @@ class Feature {
      * @param {string | string[]} value - A single feature value or, if this feature could have multiple
      * values, an array of values.
      * @param {string} type - A type of the feature, allowed values are specified in 'types' object.
-     * @param {String | Symbol} language - A language of a feature, allowed values are specified in 'languages' object.
+     * @param {string | symbol} language - A language of a feature, allowed values are specified in 'languages' object.
      * @param {int} sortOrder - an integer used for sorting
      */
   constructor (value, type, language, sortOrder = 1) {
@@ -2482,6 +2783,27 @@ class LanguageDataset {
       for (let inflection of lexeme.inflections) {
         // Set grammar rules for an inflection
         inflection.setGrammar();
+
+        if (inflection.grm.pronounClassRequired) {
+          /*
+          A `class` grammatical feature is an obligatory match for Greek pronouns. Class, however, is not present in
+          the Inflection object at the time we receive it from a morphological analyzer because a morphological analyzer
+          does not provide such data. To fix this, for pronouns we need to figure out what the `class` feature value is
+          by finding an exact pronoun form match in inflection data and obtaining a corresponding `class` value.
+          The value found will then be attached to an Inflection object.
+           */
+          let grmClass;
+          // Get a class this inflection belongs to
+          grmClass = this.model.getPronounClasses(this.forms, inflection.form);
+          if (grmClass.length === 0) {
+            console.warn(`Cannot determine a grammar class for a ${inflection.form} pronoun.`);
+          } else if (grmClass.length > 1) {
+            console.warn(`Several grammar classes found for a ${inflection.form} pronoun:`, grmClass);
+          } else {
+            // There is only one value found
+            inflection.grm.class = grmClass[0];
+          }
+        }
 
         // add the lemma to the inflection
         inflection[Feature.types.word] =
@@ -4203,8 +4525,6 @@ var papaparse = createCommonjsModule(function (module, exports) {
  */
 let languageModel = new LatinLanguageModel();
 let types = Feature.types;
-// Create a language data set that will keep all language-related information
-let dataSet = new LanguageDataset(constants.LANG_LATIN);
 
 // region Definition of grammatical features
 /*
@@ -4224,407 +4544,412 @@ languageModel.features[types.gender].addImporter(importerName)
   ]);
 languageModel.features[types.tense].addImporter(importerName)
     .map('future_perfect', languageModel.features[types.tense][constants.TENSE_FUTURE_PERFECT]);
-const footnotes = new FeatureType(types.footnote, [], dataSet.languageID);
+const footnotes = new FeatureType(types.footnote, [], constants.LANG_LATIN);
 const featureOptions = [types.grmCase, types.declension, types.gender, types.number, types.voice, types.mood, types.tense, types.person];
 
 // endregion Definition of grammatical features
 
+class LatinLanguageDataset extends LanguageDataset {
+  constructor () {
+    super(constants.LANG_LATIN);
+  }
+
 // For noun and adjectives
-dataSet.addSuffixes = function (partOfSpeech, data) {
+  addSuffixes (partOfSpeech, data) {
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
-  let noSuffixValue = '-';
+    let noSuffixValue = '-';
 
     // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let suffix = data[i][0];
-        // Handle special suffix values
-    if (suffix === noSuffixValue) {
-      suffix = null;
-    }
+    for (let i = 1; i < data.length; i++) {
+      let suffix = data[i][0];
+      // Handle special suffix values
+      if (suffix === noSuffixValue) {
+        suffix = null;
+      }
 
-    let features = [partOfSpeech,
-      languageModel.features[types.number].getFromImporter('csv', data[i][1]),
-      languageModel.features[types.grmCase].getFromImporter('csv', data[i][2]),
-      languageModel.features[types.declension].getFromImporter('csv', data[i][3]),
-      languageModel.features[types.gender].getFromImporter('csv', data[i][4]),
-      languageModel.features[types.type].getFromImporter('csv', data[i][5])];
-    if (data[i][6]) {
-            // There can be multiple footnote indexes separated by spaces
-      let indexes = data[i][6].split(' ').map(function (index) {
-        return footnotes.get(index)
-      });
-      features.push(...indexes);
+      let features = [partOfSpeech,
+        languageModel.features[types.number].getFromImporter('csv', data[i][1]),
+        languageModel.features[types.grmCase].getFromImporter('csv', data[i][2]),
+        languageModel.features[types.declension].getFromImporter('csv', data[i][3]),
+        languageModel.features[types.gender].getFromImporter('csv', data[i][4]),
+        languageModel.features[types.type].getFromImporter('csv', data[i][5])];
+      if (data[i][6]) {
+        // There can be multiple footnote indexes separated by spaces
+        let indexes = data[i][6].split(' ').map(function (index) {
+          return footnotes.get(index)
+        });
+        features.push(...indexes);
+      }
+      this.addItem(suffix, LanguageDataset.SUFFIX, features);
     }
-    this.addItem(suffix, LanguageDataset.SUFFIX, features);
   }
-};
 
 // For pronouns
-dataSet.addPronounForms = function (partOfSpeech, data) {
-  // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let features = [partOfSpeech];
+  addPronounForms (partOfSpeech, data) {
+    // First row are headers
+    for (let i = 1; i < data.length; i++) {
+      let features = [partOfSpeech];
 //    if (data[i][0]) {
 //      features.push(languageModel.features[types.formSet].getFromImporter('csv', data[i][0]))
 //    }
-    // TODO read a headword into a principalPars array
+      // TODO read a headword into a principalPars array
 //  if (data[i][1]) { }
-    if (data[i][2]) {
-      features.push(languageModel.features[types.grmClass].getFromImporter('csv', data[i][2]));
-    }
-    if (data[i][3]) {
-      features.push(languageModel.features[types.person].getFromImporter('csv', data[i][3]));
-    }
-    if (data[i][4]) {
-      features.push(languageModel.features[types.number].getFromImporter('csv', data[i][4]));
-    }
-    if (data[i][5]) {
-      features.push(languageModel.features[types.case].getFromImporter('csv', data[i][5]));
-    }
-    if (data[i][6]) {
-      features.push(languageModel.features[types.type].getFromImporter('csv', data[i][6]));
-    }
-    let form = data[i][7] ? data[i][7] : '';
+      if (data[i][2]) {
+        features.push(languageModel.features[types.grmClass].getFromImporter('csv', data[i][2]));
+      }
+      if (data[i][3]) {
+        features.push(languageModel.features[types.person].getFromImporter('csv', data[i][3]));
+      }
+      if (data[i][4]) {
+        features.push(languageModel.features[types.number].getFromImporter('csv', data[i][4]));
+      }
+      if (data[i][5]) {
+        features.push(languageModel.features[types.case].getFromImporter('csv', data[i][5]));
+      }
+      if (data[i][6]) {
+        features.push(languageModel.features[types.type].getFromImporter('csv', data[i][6]));
+      }
+      let form = data[i][7] ? data[i][7] : '';
 
-    // Footnotes
-    if (data[i][8]) {
-      // There can be multiple footnote indexes separated by spaces
-      let indexes = data[i][8].split(' ').map(function (index) {
-        return footnotes.get(index)
-      });
-      features.push(...indexes);
+      // Footnotes
+      if (data[i][8]) {
+        // There can be multiple footnote indexes separated by spaces
+        let indexes = data[i][8].split(' ').map(function (index) {
+          return footnotes.get(index)
+        });
+        features.push(...indexes);
+      }
+      this.addItem(form, LanguageDataset.FORM, features);
     }
-    this.addItem(form, LanguageDataset.FORM, features);
   }
-};
 
 // For verbs
-dataSet.addVerbSuffixes = function (partOfSpeech, data) {
+  addVerbSuffixes (partOfSpeech, data) {
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
-  let noSuffixValue = '-';
+    let noSuffixValue = '-';
 
     // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let suffix = data[i][0];
-        // Handle special suffix values
-    if (suffix === noSuffixValue) {
-      suffix = null;
-    }
-
-    let features = [partOfSpeech];
-    let columns = [types.conjugation, types.voice, types.mood, types.tense, types.number, types.person, types.case, types.type];
-    columns.forEach((c, j) => {
-      try {
-        features.push(languageModel.features[c].getFromImporter('csv', data[i][j + 1]));
-      } catch (e) {
-        // ignore empty or non-parsable values
+    for (let i = 1; i < data.length; i++) {
+      let suffix = data[i][0];
+      // Handle special suffix values
+      if (suffix === noSuffixValue) {
+        suffix = null;
       }
-    });
 
-    let grammartype = data[i][7];
-        // Type information can be empty if no ending is provided
-    if (grammartype) {
-      features.push(languageModel.features[types.type].getFromImporter('csv', grammartype));
-    }
-        // Footnotes
-    if (data[i][9]) {
-            // There can be multiple footnote indexes separated by spaces
-      let indexes = data[i][9].split(' ').map(function (index) {
-        return footnotes.get(index)
+      let features = [partOfSpeech];
+      let columns = [types.conjugation, types.voice, types.mood, types.tense, types.number, types.person, types.case, types.type];
+      columns.forEach((c, j) => {
+        try {
+          features.push(languageModel.features[c].getFromImporter('csv', data[i][j + 1]));
+        } catch (e) {
+          // ignore empty or non-parsable values
+        }
       });
-      features.push(...indexes);
-    }
-    this.addItem(suffix, LanguageDataset.SUFFIX, features);
-  }
-};
 
-dataSet.addVerbParticipleSuffixes = function (partOfSpeech, data) {
+      let grammartype = data[i][7];
+      // Type information can be empty if no ending is provided
+      if (grammartype) {
+        features.push(languageModel.features[types.type].getFromImporter('csv', grammartype));
+      }
+      // Footnotes
+      if (data[i][9]) {
+        // There can be multiple footnote indexes separated by spaces
+        let indexes = data[i][9].split(' ').map(function (index) {
+          return footnotes.get(index)
+        });
+        features.push(...indexes);
+      }
+      this.addItem(suffix, LanguageDataset.SUFFIX, features);
+    }
+  }
+
+  addVerbParticipleSuffixes (partOfSpeech, data) {
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
-  let noSuffixValue = '-';
+    let noSuffixValue = '-';
 
     // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let suffix = data[i][0];
-        // Handle special suffix values
-    if (suffix === noSuffixValue) {
-      suffix = null;
-    }
-
-    let features = [partOfSpeech];
-    let columns = [types.conjugation, types.voice, types.mood, types.tense, types.number, types.person, types.case, types.type];
-    columns.forEach((c, j) => {
-      try {
-        features.push(languageModel.features[c].getFromImporter('csv', data[i][j + 1]));
-      } catch (e) {
-        // ignore empty or non-parsable values
+    for (let i = 1; i < data.length; i++) {
+      let suffix = data[i][0];
+      // Handle special suffix values
+      if (suffix === noSuffixValue) {
+        suffix = null;
       }
-    });
 
-    let grammartype = data[i][7];
-        // Type information can be empty if no ending is provided
-    if (grammartype) {
-      features.push(languageModel.features[types.type].getFromImporter('csv', grammartype));
+      let features = [partOfSpeech];
+      let columns = [types.conjugation, types.voice, types.mood, types.tense, types.number, types.person, types.case, types.type];
+      columns.forEach((c, j) => {
+        try {
+          features.push(languageModel.features[c].getFromImporter('csv', data[i][j + 1]));
+        } catch (e) {
+          // ignore empty or non-parsable values
+        }
+      });
+
+      let grammartype = data[i][7];
+      // Type information can be empty if no ending is provided
+      if (grammartype) {
+        features.push(languageModel.features[types.type].getFromImporter('csv', grammartype));
+      }
+      this.addItem(suffix, LanguageDataset.SUFFIX, features);
     }
-    this.addItem(suffix, LanguageDataset.SUFFIX, features);
   }
-};
 
-dataSet.addVerbSupineSuffixes = function (partOfSpeech, data) {
+  addVerbSupineSuffixes (partOfSpeech, data) {
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
-  let noSuffixValue = '-';
+    let noSuffixValue = '-';
 
     // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let suffix = data[i][0];
-        // Handle special suffix values
-    if (suffix === noSuffixValue) {
-      suffix = null;
-    }
-
-    let features = [partOfSpeech];
-    let columns = [types.conjugation, types.voice, types.mood, types.tense, types.number, types.person, types.case, types.type];
-    columns.forEach((c, j) => {
-      try {
-        features.push(languageModel.features[c].getFromImporter('csv', data[i][j + 1]));
-      } catch (e) {
-        // ignore empty or non-parsable values
+    for (let i = 1; i < data.length; i++) {
+      let suffix = data[i][0];
+      // Handle special suffix values
+      if (suffix === noSuffixValue) {
+        suffix = null;
       }
-    });
 
-    let grammartype = data[i][7];
-        // Type information can be empty if no ending is provided
-    if (grammartype) {
-      features.push(languageModel.features[types.type].getFromImporter('csv', grammartype));
+      let features = [partOfSpeech];
+      let columns = [types.conjugation, types.voice, types.mood, types.tense, types.number, types.person, types.case, types.type];
+      columns.forEach((c, j) => {
+        try {
+          features.push(languageModel.features[c].getFromImporter('csv', data[i][j + 1]));
+        } catch (e) {
+          // ignore empty or non-parsable values
+        }
+      });
+
+      let grammartype = data[i][7];
+      // Type information can be empty if no ending is provided
+      if (grammartype) {
+        features.push(languageModel.features[types.type].getFromImporter('csv', grammartype));
+      }
+      this.addItem(suffix, LanguageDataset.SUFFIX, features);
     }
-    this.addItem(suffix, LanguageDataset.SUFFIX, features);
   }
-};
 
 // for Lemmas
-dataSet.addVerbForms = function (partOfSpeech, data) {
-  // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let lemma = data[i][0];
-    // let principalParts = data[i][1].split(/_/)
-    let form = data[i][2];
-
-    // Lemma,PrincipalParts,Form,Voice,Mood,Tense,Number,Person,Footnote
-    let features = [partOfSpeech,
-      new FeatureType(types.word, [FeatureType.UNRESTRICTED_VALUE], languageModel.toCode()).getFromImporter('csv', lemma)];
-    if (data[i][3]) {
-      features.push(languageModel.features[types.voice].getFromImporter('csv', data[i][3]));
-    }
-    if (data[i][4]) {
-      features.push(languageModel.features[types.mood].getFromImporter('csv', data[i][4]));
-    }
-    if (data[i][5]) {
-      features.push(languageModel.features[types.tense].getFromImporter('csv', data[i][5]));
-    }
-    if (data[i][6]) {
-      features.push(languageModel.features[types.number].getFromImporter('csv', data[i][6]));
-    }
-    if (data[i][7]) {
-      features.push(languageModel.features[types.person].getFromImporter('csv', data[i][7]));
-    }
-
-    // Footnotes
-    if (data[i][8]) {
-            // There can be multiple footnote indexes separated by spaces
-      let indexes = data[i][8].split(' ').map(function (index) {
-        return footnotes.get(index)
-      });
-      features.push(...indexes);
-    }
-    this.addItem(form, LanguageDataset.FORM, features);
-  }
-};
-
-dataSet.addFootnotes = function (partOfSpeech, data) {
+  addVerbForms (partOfSpeech, data) {
     // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    this.addFootnote(partOfSpeech, data[i][0], data[i][1]);
+    for (let i = 1; i < data.length; i++) {
+      let lemma = data[i][0];
+      // let principalParts = data[i][1].split(/_/)
+      let form = data[i][2];
+
+      // Lemma,PrincipalParts,Form,Voice,Mood,Tense,Number,Person,Footnote
+      let features = [partOfSpeech,
+        new FeatureType(types.word, [FeatureType.UNRESTRICTED_VALUE], languageModel.toCode()).getFromImporter('csv', lemma)];
+      if (data[i][3]) {
+        features.push(languageModel.features[types.voice].getFromImporter('csv', data[i][3]));
+      }
+      if (data[i][4]) {
+        features.push(languageModel.features[types.mood].getFromImporter('csv', data[i][4]));
+      }
+      if (data[i][5]) {
+        features.push(languageModel.features[types.tense].getFromImporter('csv', data[i][5]));
+      }
+      if (data[i][6]) {
+        features.push(languageModel.features[types.number].getFromImporter('csv', data[i][6]));
+      }
+      if (data[i][7]) {
+        features.push(languageModel.features[types.person].getFromImporter('csv', data[i][7]));
+      }
+
+      // Footnotes
+      if (data[i][8]) {
+        // There can be multiple footnote indexes separated by spaces
+        let indexes = data[i][8].split(' ').map(function (index) {
+          return footnotes.get(index)
+        });
+        features.push(...indexes);
+      }
+      this.addItem(form, LanguageDataset.FORM, features);
+    }
   }
-};
 
-dataSet.loadData = function () {
-  let partOfSpeech;
-  let suffixes;
-  let forms;
-  let footnotes;
+  addFootnotes (partOfSpeech, data) {
+    // First row are headers
+    for (let i = 1; i < data.length; i++) {
+      this.addFootnote(partOfSpeech, data[i][0], data[i][1]);
+    }
+  }
 
-  // Nouns
-  partOfSpeech = languageModel.features[types.part][constants.POFS_NOUN];
-  suffixes = papaparse.parse(nounSuffixesCSV, {});
-  this.addSuffixes(partOfSpeech, suffixes.data);
-  footnotes = papaparse.parse(nounFootnotesCSV, {});
-  this.addFootnotes(partOfSpeech, footnotes.data);
+  loadData () {
+    let partOfSpeech;
+    let suffixes;
+    let forms;
+    let footnotes;
 
-  // Pronouns
-  partOfSpeech = languageModel.features[types.part][constants.POFS_PRONOUN];
-  forms = papaparse.parse(pronounFormsCSV, {});
-  this.addPronounForms(partOfSpeech, forms.data);
-  footnotes = papaparse.parse(pronounFootnotesCSV, {});
-  this.addFootnotes(partOfSpeech, footnotes.data);
+    // Nouns
+    partOfSpeech = languageModel.features[types.part][constants.POFS_NOUN];
+    suffixes = papaparse.parse(nounSuffixesCSV, {});
+    this.addSuffixes(partOfSpeech, suffixes.data);
+    footnotes = papaparse.parse(nounFootnotesCSV, {});
+    this.addFootnotes(partOfSpeech, footnotes.data);
 
-  // Adjectives
-  partOfSpeech = languageModel.features[types.part][constants.POFS_ADJECTIVE];
-  suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
-  this.addSuffixes(partOfSpeech, suffixes.data);
-  footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
-  this.addFootnotes(partOfSpeech, footnotes.data);
+    // Pronouns
+    partOfSpeech = languageModel.features[types.part][constants.POFS_PRONOUN];
+    forms = papaparse.parse(pronounFormsCSV, {});
+    this.addPronounForms(partOfSpeech, forms.data);
+    footnotes = papaparse.parse(pronounFootnotesCSV, {});
+    this.addFootnotes(partOfSpeech, footnotes.data);
 
-  // Verbs
-  partOfSpeech = languageModel.features[types.part][constants.POFS_VERB];
-  suffixes = papaparse.parse(verbSuffixesCSV, {});
-  this.addVerbSuffixes(partOfSpeech, suffixes.data);
-  footnotes = papaparse.parse(verbFootnotesCSV, {});
-  this.addFootnotes(partOfSpeech, footnotes.data);
-  forms = papaparse.parse(verbFormsCSV, {});
-  this.addVerbForms(partOfSpeech, forms.data);
-  footnotes = papaparse.parse(verbFormFootnotesCSV, {});
-  this.addFootnotes(partOfSpeech, footnotes.data);
+    // Adjectives
+    partOfSpeech = languageModel.features[types.part][constants.POFS_ADJECTIVE];
+    suffixes = papaparse.parse(adjectiveSuffixesCSV, {});
+    this.addSuffixes(partOfSpeech, suffixes.data);
+    footnotes = papaparse.parse(adjectiveFootnotesCSV, {});
+    this.addFootnotes(partOfSpeech, footnotes.data);
 
-  // Verb Participles
-  partOfSpeech = languageModel.features[types.part][constants.POFS_VERB_PARTICIPLE];
-  suffixes = papaparse.parse(verbParticipleSuffixesCSV, {});
-  this.addVerbParticipleSuffixes(partOfSpeech, suffixes.data);
+    // Verbs
+    partOfSpeech = languageModel.features[types.part][constants.POFS_VERB];
+    suffixes = papaparse.parse(verbSuffixesCSV, {});
+    this.addVerbSuffixes(partOfSpeech, suffixes.data);
+    footnotes = papaparse.parse(verbFootnotesCSV, {});
+    this.addFootnotes(partOfSpeech, footnotes.data);
+    forms = papaparse.parse(verbFormsCSV, {});
+    this.addVerbForms(partOfSpeech, forms.data);
+    footnotes = papaparse.parse(verbFormFootnotesCSV, {});
+    this.addFootnotes(partOfSpeech, footnotes.data);
 
-  // Verb Supine
-  partOfSpeech = languageModel.features[types.part][constants.POFS_SUPINE];
-  suffixes = papaparse.parse(verbSupineSuffixesCSV, {});
-  this.addVerbSupineSuffixes(partOfSpeech, suffixes.data);
-};
+    // Verb Participles
+    partOfSpeech = languageModel.features[types.part][constants.POFS_VERB_PARTICIPLE];
+    suffixes = papaparse.parse(verbParticipleSuffixesCSV, {});
+    this.addVerbParticipleSuffixes(partOfSpeech, suffixes.data);
 
-// TODO: Define custom InflectionProperties object for Latin in needed
+    // Verb Supine
+    partOfSpeech = languageModel.features[types.part][constants.POFS_SUPINE];
+    suffixes = papaparse.parse(verbSupineSuffixesCSV, {});
+    this.addVerbSupineSuffixes(partOfSpeech, suffixes.data);
+    return this
+  }
 
-/**
- * Decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
- * @param {Inflection[]} inflections - an array of inflection objects to be matched against a suffix.
- * @param {Object} inflectionProperties - Inflection properties object, defines grammar properties such as
- * suffixBased or fullFormBased.
- * @param {Suffix} item - a suffix to be matched with inflections.
- * @returns {Suffix | null} if a match is found, returns a suffix object modified with some
- * additional information about a match. if no matches found, returns null.
- */
-dataSet.matcher = function (inflections, inflectionProperties, item) {
-  'use strict';
+  /**
+   * Decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
+   * @param {Inflection[]} inflections - an array of inflection objects to be matched against a suffix.
+   * @param {Object} inflectionProperties - Inflection properties object, defines grammar properties such as
+   * suffixBased or fullFormBased.
+   * @param {Suffix} item - a suffix to be matched with inflections.
+   * @returns {Suffix | null} if a match is found, returns a suffix object modified with some
+   * additional information about a match. if no matches found, returns null.
+   */
+  matcher (inflections, inflectionProperties, item) {
+    'use strict';
     // All of those features must match between an inflection and an ending
-  let obligatoryMatches, optionalMatches;
-  // I'm not sure if we ever want to restrict what we consider optional matches
-  // so this is just a placeholder for now
-  let matchOptional = true;
-  if (inflectionProperties.suffixBased) {
-    obligatoryMatches = [types.part];
-  } else {
-    obligatoryMatches = [types.word];
-  }
+    let obligatoryMatches, optionalMatches;
+    // I'm not sure if we ever want to restrict what we consider optional matches
+    // so this is just a placeholder for now
+    let matchOptional = true;
+    if (inflectionProperties.suffixBased) {
+      obligatoryMatches = [types.part];
+    } else {
+      obligatoryMatches = [types.word];
+    }
 
     // Any of those features must match between an inflection and an ending
-  let bestMatchData = null; // information about the best match we would be able to find
+    let bestMatchData = null; // information about the best match we would be able to find
 
     /*
      There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
      But there could be multiple partial matches. So we should try to find the best match possible and return it.
      a fullFeature match is when one of inflections has all grammatical features fully matching those of a suffix
      */
-  for (let inflection of inflections) {
-    let matchData = new MatchData(); // Create a match profile
-    if (matchOptional) {
-      optionalMatches = featureOptions.filter((f) => inflection[f]);
-    } else {
-      optionalMatches = [];
-    }
-
-    if (inflectionProperties.suffixBased) {
-      if (this.model.normalizeWord(inflection.suffix) === this.model.normalizeWord(item.value)) {
-        matchData.suffixMatch = true;
+    for (let inflection of inflections) {
+      let matchData = new MatchData(); // Create a match profile
+      if (matchOptional) {
+        optionalMatches = featureOptions.filter((f) => inflection[f]);
+      } else {
+        optionalMatches = [];
       }
-    } else {
-      let form = inflection.prefix ? inflection.prefix : '';
-      form = form + inflection.stem;
-      form = inflection.suffix ? form + inflection.suffix : form;
-      if (this.model.normalizeWord(form) === this.model.normalizeWord(item.value)) {
-        matchData.suffixMatch = true;
+
+      if (inflectionProperties.suffixBased) {
+        if (this.model.normalizeWord(inflection.suffix) === this.model.normalizeWord(item.value)) {
+          matchData.suffixMatch = true;
+        }
+      } else {
+        let form = inflection.prefix ? inflection.prefix : '';
+        form = form + inflection.stem;
+        form = inflection.suffix ? form + inflection.suffix : form;
+        if (this.model.normalizeWord(form) === this.model.normalizeWord(item.value)) {
+          matchData.suffixMatch = true;
+        }
       }
-    }
 
-        // Check obligatory matches
-    for (let feature of obligatoryMatches) {
-      let featureMatch = item.featureMatch(feature, inflection[feature]);
-            // matchFound = matchFound && featureMatch;
+      // Check obligatory matches
+      for (let feature of obligatoryMatches) {
+        let featureMatch = item.featureMatch(feature, inflection[feature]);
+        // matchFound = matchFound && featureMatch;
 
-      if (!featureMatch) {
-                // If an obligatory match is not found, there is no reason to check other items
-        break
-      }
-            // Inflection's value of this feature is matching the one of the suffix
-      matchData.matchedFeatures.push(feature);
-    }
-
-    if (matchData.matchedFeatures.length < obligatoryMatches.length) {
-            // Not all obligatory matches are found, this is not a match
-      break
-    }
-
-        // Check optional matches now
-    for (let feature of optionalMatches) {
-      let matchedValue = item.featureMatch(feature, inflection[feature]);
-      if (matchedValue) {
+        if (!featureMatch) {
+          // If an obligatory match is not found, there is no reason to check other items
+          break
+        }
+        // Inflection's value of this feature is matching the one of the suffix
         matchData.matchedFeatures.push(feature);
       }
+
+      if (matchData.matchedFeatures.length < obligatoryMatches.length) {
+        // Not all obligatory matches are found, this is not a match
+        break
+      }
+
+      // Check optional matches now
+      for (let feature of optionalMatches) {
+        let matchedValue = item.featureMatch(feature, inflection[feature]);
+        if (matchedValue) {
+          matchData.matchedFeatures.push(feature);
+        }
+      }
+
+      if (matchData.suffixMatch && (matchData.matchedFeatures.length === obligatoryMatches.length + optionalMatches.length)) {
+        // This is a full match
+        matchData.fullMatch = true;
+
+        // There can be only one full match, no need to search any further
+        item.match = matchData;
+        return item
+      }
+      bestMatchData = this.bestMatch(bestMatchData, matchData);
     }
-
-    if (matchData.suffixMatch && (matchData.matchedFeatures.length === obligatoryMatches.length + optionalMatches.length)) {
-            // This is a full match
-      matchData.fullMatch = true;
-
-            // There can be only one full match, no need to search any further
-      item.match = matchData;
+    if (bestMatchData) {
+      // There is some match found
+      item.match = bestMatchData;
       return item
     }
-    bestMatchData = this.bestMatch(bestMatchData, matchData);
+    return null
   }
-  if (bestMatchData) {
-        // There is some match found
-    item.match = bestMatchData;
-    return item
-  }
-  return null
-};
 
-/**
- * Decides whether matchA is 'better' (i.e. has more items matched) than matchB or not
- * @param {MatchData} matchA
- * @param {MatchData} matchB
- * @returns {MatchData} A best of two matches
- */
-dataSet.bestMatch = function (matchA, matchB) {
+  /**
+   * Decides whether matchA is 'better' (i.e. has more items matched) than matchB or not
+   * @param {MatchData} matchA
+   * @param {MatchData} matchB
+   * @returns {MatchData} A best of two matches
+   */
+  bestMatch (matchA, matchB) {
     // If one of the arguments is not set, return the other one
-  if (!matchA && matchB) {
-    return matchB
-  }
+    if (!matchA && matchB) {
+      return matchB
+    }
 
-  if (!matchB && matchA) {
-    return matchA
-  }
+    if (!matchB && matchA) {
+      return matchA
+    }
 
     // item match has a priority
-  if (matchA.suffixMatch !== matchB.suffixMatch) {
-    if (matchA.suffixMatch > matchB.suffixMatch) {
+    if (matchA.suffixMatch !== matchB.suffixMatch) {
+      if (matchA.suffixMatch > matchB.suffixMatch) {
+        return matchA
+      } else {
+        return matchB
+      }
+    }
+
+    // If same on suffix matche, compare by how many features matched
+    if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
+      // Arbitrarily return matchA if matches are the same
       return matchA
     } else {
       return matchB
     }
   }
-
-    // If same on suffix matche, compare by how many features matched
-  if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
-        // Arbitrarily return matchA if matches are the same
-    return matchA
-  } else {
-    return matchB
-  }
-};
+}
 
 class ExtendedGreekData extends ExtendedLanguageData {
   constructor () {
@@ -4691,7 +5016,7 @@ import verbSuffixesCSV from './data/verb/suffixes.csv';
 import verbFootnotesCSV from './data/verb/footnotes.csv'; */
 let languageModel$1 = new GreekLanguageModel();
 // Create a language data set that will keep all language-related information
-let dataSet$1 = new LanguageDataset(constants.LANG_GREEK);
+// let dataSet = new LanguageDataset(Constants.LANG_GREEK)
 let fTypes = Feature.types;
 
 const featureOptions$1 = [fTypes.grmCase, fTypes.declension, fTypes.gender, fTypes.number, fTypes.voice, fTypes.mood, fTypes.tense, fTypes.person];
@@ -4701,308 +5026,291 @@ const featureOptions$1 = [fTypes.grmCase, fTypes.declension, fTypes.gender, fTyp
  analyzer's language modules as well.
  */
 const impName = 'csv';
-const footnotes$1 = new FeatureType(Feature.types.footnote, [], dataSet$1.languageID);
+const footnotes$1 = new FeatureType(Feature.types.footnote, [], constants.LANG_GREEK);
 
 // endregion Definition of grammatical features
 
-// For noun and adjectives
-dataSet$1.addSuffixes = function (partOfSpeech, data) {
-  // An order of columns in a data CSV file
-  const n = {
-    suffix: 0,
-    number: 1,
-    grmCase: 2,
-    declension: 3,
-    gender: 4,
-    type: 5,
-    primary: 6,
-    footnote: 7
-  };
-  // Some suffix values will mean a lack of suffix, they will be mapped to a null
-  let noSuffixValue = '-';
+class GreekLanguageDataset extends LanguageDataset {
+  constructor () {
+    super(constants.LANG_GREEK);
+  }
 
-  // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let item = data[i];
-    let suffixValue = item[n.suffix];
-    // Handle special suffix values
-    if (suffixValue === noSuffixValue) {
-      suffixValue = null;
-    }
-
-    let primary = false;
-    let features = [partOfSpeech,
-      languageModel$1.features[fTypes.number].getFromImporter(impName, item[n.number]),
-      languageModel$1.features[fTypes.grmCase].getFromImporter(impName, item[n.grmCase]),
-      languageModel$1.features[fTypes.declension].getFromImporter(impName, item[n.declension]),
-      languageModel$1.features[fTypes.gender].getFromImporter(impName, item[n.gender]),
-      languageModel$1.features[fTypes.type].getFromImporter(impName, item[n.type])];
-    if (item[n.primary] === 'primary') {
-      primary = true;
-    }
-    if (item[n.footnote]) {
-      // There can be multiple footnote indexes separated by spaces
-      let indexes = item[n.footnote].split(' ').map(function (index) {
-        return footnotes$1.get(index)
-      });
-      features.push(...indexes);
-    }
-    let extendedGreekData = new ExtendedGreekData();
-    extendedGreekData.primary = primary;
-    let extendedLangData = {
-      [constants.STR_LANG_CODE_GRC]: extendedGreekData
+  // For noun and adjectives
+  addSuffixes (partOfSpeech, data) {
+    // An order of columns in a data CSV file
+    const n = {
+      suffix: 0,
+      number: 1,
+      grmCase: 2,
+      declension: 3,
+      gender: 4,
+      type: 5,
+      primary: 6,
+      footnote: 7
     };
-    this.addItem(suffixValue, LanguageDataset.SUFFIX, features, extendedLangData);
+    // Some suffix values will mean a lack of suffix, they will be mapped to a null
+    let noSuffixValue = '-';
+
+    // First row are headers
+    for (let i = 1; i < data.length; i++) {
+      let item = data[i];
+      let suffixValue = item[n.suffix];
+      // Handle special suffix values
+      if (suffixValue === noSuffixValue) {
+        suffixValue = null;
+      }
+
+      let primary = false;
+      let features = [partOfSpeech,
+        languageModel$1.features[fTypes.number].getFromImporter(impName, item[n.number]),
+        languageModel$1.features[fTypes.grmCase].getFromImporter(impName, item[n.grmCase]),
+        languageModel$1.features[fTypes.declension].getFromImporter(impName, item[n.declension]),
+        languageModel$1.features[fTypes.gender].getFromImporter(impName, item[n.gender]),
+        languageModel$1.features[fTypes.type].getFromImporter(impName, item[n.type])];
+      if (item[n.primary] === 'primary') {
+        primary = true;
+      }
+      if (item[n.footnote]) {
+        // There can be multiple footnote indexes separated by spaces
+        let indexes = item[n.footnote].split(' ').map(function (index) {
+          return footnotes$1.get(index)
+        });
+        features.push(...indexes);
+      }
+      let extendedGreekData = new ExtendedGreekData();
+      extendedGreekData.primary = primary;
+      let extendedLangData = {
+        [constants.STR_LANG_CODE_GRC]: extendedGreekData
+      };
+      this.addItem(suffixValue, LanguageDataset.SUFFIX, features, extendedLangData);
+    }
   }
-};
 
-// For pronouns
-dataSet$1.pronounGroupingLemmas = new Map([
-  ['demonstrative', ['ὅδε', 'οὗτος', 'ἐκεῖνος']]
-]);
+  // For pronoun
+  addPronounForms (partOfSpeech, data) {
+    this.pronounGroupingLemmas = new Map([
+      ['demonstrative', ['ὅδε', 'οὗτος', 'ἐκεῖνος']]
+    ]);
 
-dataSet$1.addPronounForms = function (partOfSpeech, data) {
-  // An order of columns in a data CSV file
-  const n = {
-    form: 0,
-    hdwd: 1,
-    grmClass: 2,
-    person: 3,
-    number: 4,
-    grmCase: 5,
-    gender: 6,
-    type: 7,
-    primary: 8,
-    dialect: 9,
-    footnote: 10
-  };
-
-  // Custom importers
-  // TODO: decide on the best way to keep mulitple values and re-enable later
-  /* languageModel.features[fTypes.gender].addImporter(impName)
-    .map('masculine feminine neuter', [
-      languageModel.features[fTypes.gender][Constants.GEND_MASCULINE],
-      languageModel.features[fTypes.gender][Constants.GEND_FEMININE],
-      languageModel.features[fTypes.gender][Constants.GEND_NEUTER]
-    ]) */
-
-  // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    let item = data[i];
-    let form = item[n.form];
-
-    let features = [ partOfSpeech ];
-
-    if (item[n.hdwd]) {
-      features.push(
-        new FeatureType(fTypes.word, [FeatureType.UNRESTRICTED_VALUE], languageModel$1.sourceLanguage).getFromImporter(impName, item[n.hdwd])
-      );
-    }
-    if (item[n.grmClass]) { features.push(languageModel$1.features[fTypes.grmClass].getFromImporter(impName, item[n.grmClass])); }
-    if (item[n.person]) { features.push(languageModel$1.features[fTypes.person].getFromImporter(impName, item[n.person])); }
-    if (item[n.number]) { features.push(languageModel$1.features[fTypes.number].getFromImporter(impName, item[n.number])); }
-    if (item[n.grmCase]) { features.push(languageModel$1.features[fTypes.grmCase].getFromImporter(impName, item[n.grmCase])); }
-    if (item[n.gender]) { features.push(languageModel$1.features[fTypes.gender].getFromImporter(impName, item[n.gender])); }
-    if (item[n.type]) { features.push(languageModel$1.features[fTypes.type].getFromImporter(impName, item[n.type])); }
-
-    let primary = (item[n.primary] === 'primary');
-
-    // Dialects could have multiple values
-    let dialects = item[n.dialect].split(',');
-    if (item[n.dialect] && dialects && dialects.length > 0) {
-      features.push(new Feature(dialects, fTypes.dialect, dataSet$1.languageID));
-    }
-
-    // Footnotes. There can be multiple footnote indexes separated by commas
-    let footnoteIndexes = item[n.footnote].split(',');
-    if (item[n.footnote] && footnoteIndexes && footnoteIndexes.length > 0) {
-      for (let index of footnoteIndexes) { features.push(footnotes$1.get(index)); }
-    }
-
-    let extendedGreekData = new ExtendedGreekData();
-    extendedGreekData.primary = primary;
-    let extendedLangData = {
-      [constants.STR_LANG_CODE_GRC]: extendedGreekData
+    // An order of columns in a data CSV file
+    const n = {
+      form: 0,
+      hdwd: 1,
+      grmClass: 2,
+      person: 3,
+      number: 4,
+      grmCase: 5,
+      gender: 6,
+      type: 7,
+      primary: 8,
+      dialect: 9,
+      footnote: 10
     };
-    this.addItem(form, LanguageDataset.FORM, features, extendedLangData);
+
+    // Custom importers
+    // TODO: decide on the best way to keep mulitple values and re-enable later
+    /* languageModel.features[fTypes.gender].addImporter(impName)
+      .map('masculine feminine neuter', [
+        languageModel.features[fTypes.gender][Constants.GEND_MASCULINE],
+        languageModel.features[fTypes.gender][Constants.GEND_FEMININE],
+        languageModel.features[fTypes.gender][Constants.GEND_NEUTER]
+      ]) */
+
+    // First row are headers
+    for (let i = 1; i < data.length; i++) {
+      let item = data[i];
+      let form = item[n.form];
+
+      let features = [partOfSpeech];
+
+      if (item[n.hdwd]) {
+        features.push(
+          new FeatureType(fTypes.word, [FeatureType.UNRESTRICTED_VALUE], languageModel$1.sourceLanguage).getFromImporter(impName, item[n.hdwd])
+        );
+      }
+      if (item[n.grmClass]) { features.push(languageModel$1.features[fTypes.grmClass].getFromImporter(impName, item[n.grmClass])); }
+      if (item[n.person]) { features.push(languageModel$1.features[fTypes.person].getFromImporter(impName, item[n.person])); }
+      if (item[n.number]) { features.push(languageModel$1.features[fTypes.number].getFromImporter(impName, item[n.number])); }
+      if (item[n.grmCase]) { features.push(languageModel$1.features[fTypes.grmCase].getFromImporter(impName, item[n.grmCase])); }
+      if (item[n.gender]) { features.push(languageModel$1.features[fTypes.gender].getFromImporter(impName, item[n.gender])); }
+      if (item[n.type]) { features.push(languageModel$1.features[fTypes.type].getFromImporter(impName, item[n.type])); }
+
+      let primary = (item[n.primary] === 'primary');
+
+      // Dialects could have multiple values
+      let dialects = item[n.dialect].split(',');
+      if (item[n.dialect] && dialects && dialects.length > 0) {
+        features.push(new Feature(dialects, fTypes.dialect, this.languageID));
+      }
+
+      // Footnotes. There can be multiple footnote indexes separated by commas
+      let footnoteIndexes = item[n.footnote].split(',');
+      if (item[n.footnote] && footnoteIndexes && footnoteIndexes.length > 0) {
+        for (let index of footnoteIndexes) { features.push(footnotes$1.get(index)); }
+      }
+
+      let extendedGreekData = new ExtendedGreekData();
+      extendedGreekData.primary = primary;
+      let extendedLangData = {
+        [constants.STR_LANG_CODE_GRC]: extendedGreekData
+      };
+      this.addItem(form, LanguageDataset.FORM, features, extendedLangData);
+    }
   }
-};
 
-dataSet$1.addFootnotes = function (partOfSpeech, data) {
-  // First row are headers
-  for (let i = 1; i < data.length; i++) {
-    this.addFootnote(partOfSpeech, data[i][0], data[i][1]);
+  addFootnotes (partOfSpeech, data) {
+    // First row are headers
+    for (let i = 1; i < data.length; i++) {
+      this.addFootnote(partOfSpeech, data[i][0], data[i][1]);
+    }
   }
-};
 
-dataSet$1.loadData = function () {
-  let forms;
+  loadData () {
+    let forms;
 
-  // Nouns
-  let partOfSpeech = languageModel$1.features[fTypes.part][constants.POFS_NOUN];
-  let suffixes = papaparse.parse(nounSuffixesCSV$1, {});
-  this.addSuffixes(partOfSpeech, suffixes.data);
-  let footnotes = papaparse.parse(nounFootnotesCSV$1, {});
-  this.addFootnotes(partOfSpeech, footnotes.data);
+    // Nouns
+    let partOfSpeech = languageModel$1.features[fTypes.part][constants.POFS_NOUN];
+    let suffixes = papaparse.parse(nounSuffixesCSV$1, {});
+    this.addSuffixes(partOfSpeech, suffixes.data);
+    let footnotes = papaparse.parse(nounFootnotesCSV$1, {});
+    this.addFootnotes(partOfSpeech, footnotes.data);
 
-  // Pronouns
-  partOfSpeech = languageModel$1.features[fTypes.part][constants.POFS_PRONOUN];
-  forms = papaparse.parse(pronounFormsCSV$1, {});
-  this.addPronounForms(partOfSpeech, forms.data);
-};
+    // Pronouns
+    partOfSpeech = languageModel$1.features[fTypes.part][constants.POFS_PRONOUN];
+    forms = papaparse.parse(pronounFormsCSV$1, {});
+    this.addPronounForms(partOfSpeech, forms.data);
+    return this
+  }
 
-dataSet$1.getInflectionProperties = function (partOfSpeech) {
-  return new GreekInflectionProperties(partOfSpeech)
-};
+  getInflectionProperties (partOfSpeech) {
+    return new GreekInflectionProperties(partOfSpeech)
+  }
 
-dataSet$1.getPronounGroupingLemmas = function (grammarClass) {
-  let values = this.pronounGroupingLemmas.has(grammarClass) ? this.pronounGroupingLemmas.get(grammarClass) : [];
-  return new FeatureType(Feature.types.word, values, this.languageID)
-};
+  getPronounGroupingLemmas (grammarClass) {
+    let values = this.pronounGroupingLemmas.has(grammarClass) ? this.pronounGroupingLemmas.get(grammarClass) : [];
+    return new FeatureType(Feature.types.word, values, this.languageID)
+  }
 
-/**
- * Decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
- * @param {Inflection[]} inflections - An array of Inflection objects to be matched against a suffix.
- * @param {Object} inflectionProperties - Inflection properties object, defines grammar properties such as
- * suffixBased or fullFormBased.
- * @param {Suffix} item - A suffix to be matched with inflections.
- * @returns {Suffix | null} If a match is found, returns a Suffix object modified with some
- * additional information about a match. If no matches found, returns null.
- */
-dataSet$1.matcher = function (inflections, inflectionProperties, item) {
-  'use strict';
-  // All of those features must match between an inflection and an ending
-  let optionalMatches;
-  // I'm not sure if we ever want to restrict what we consider optional matches
-  // so this is just a placeholder for now
-  let matchOptional = true;
+  /**
+   * Decides whether a suffix is a match to any of inflections, and if it is, what type of match it is.
+   * @param {Inflection[]} inflections - An array of Inflection objects to be matched against a suffix.
+   * @param {Object} inflectionProperties - Inflection properties object, defines grammar properties such as
+   * suffixBased or fullFormBased.
+   * @param {Suffix} item - A suffix to be matched with inflections.
+   * @returns {Suffix | null} If a match is found, returns a Suffix object modified with some
+   * additional information about a match. If no matches found, returns null.
+   */
+  matcher (inflections, inflectionProperties, item) {
+    'use strict';
+    // All of those features must match between an inflection and an ending
+    let optionalMatches;
+    // I'm not sure if we ever want to restrict what we consider optional matches
+    // so this is just a placeholder for now
+    let matchOptional = true;
 
     // Any of those features must match between an inflection and an ending
-  optionalMatches = [Feature.types.grmCase, Feature.types.declension, Feature.types.gender, Feature.types.number];
-  let bestMatchData = null; // Information about the best match we would be able to find
-
-  /*
-   There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
-   But there could be multiple partial matches. So we should try to find the best match possible and return it.
-   a fullFeature match is when one of inflections has all grammatical features fully matching those of a suffix
-   */
-  for (let inflection of inflections) {
-    let matchData = new MatchData(); // Create a match profile
-    if (matchOptional) {
-      optionalMatches = featureOptions$1.filter((f) => inflection[f]);
-    } else {
-      optionalMatches = [];
-    }
-
-    let form = inflection.form;
-    matchData.suffixMatch = inflection.compareWithWord(item.value);
+    optionalMatches = [Feature.types.grmCase, Feature.types.declension, Feature.types.gender, Feature.types.number];
+    let bestMatchData = null; // Information about the best match we would be able to find
 
     /*
-    A `class` grammatical feature is an obligatory match for Greek pronouns. Class, however, is not present in
-    the Inflection object at the time we receive it from a morphological analyzer because a morphological analyzer
-    does not provide such data. To fix this, for pronouns we need to figure out what the `class` feature value is
-    by finding an exact pronoun form match in inflection data and obtaining a corresponding `class` value.
-    The value found will then be attached to an Inflection object.
+     There can be only one full match between an inflection and a suffix (except when suffix has multiple values?)
+     But there could be multiple partial matches. So we should try to find the best match possible and return it.
+     a fullFeature match is when one of inflections has all grammatical features fully matching those of a suffix
      */
-    // TODO: Don't do it for every item, do it once for every inflection
-    let grmClass;
-    if (item.features[Feature.types.part] === constants.POFS_PRONOUN) {
-      // Get a class this inflection belongs to
-      grmClass = this.model.getPronounClasses(this.forms, form);
-      if (grmClass.length === 0) {
-        console.warn(`Cannot determine a grammar class for a ${form} pronoun.`);
-      } else if (grmClass.length > 1) {
-        console.warn(`Several grammar classes found for a ${form} pronoun:`, grmClass);
+    for (let inflection of inflections) {
+      let matchData = new MatchData(); // Create a match profile
+      if (matchOptional) {
+        optionalMatches = featureOptions$1.filter((f) => inflection[f]);
       } else {
-        // There is only one value found
-        grmClass = grmClass[0];
-      }
-    }
-
-    // Check for obligatory matches
-    for (let feature of inflectionProperties.obligatoryMatches) {
-      let featureMatch = false;
-      if (feature === Feature.types.grmClass) {
-        // TODO: Last argument must be a feature, not just a value
-        featureMatch = item.featureMatch(feature, grmClass);
-      } else {
-        featureMatch = item.featureMatch(feature, inflection[feature]);
+        optionalMatches = [];
       }
 
-     // matchFound = matchFound && featureMatch;
+      matchData.suffixMatch = inflection.compareWithWord(item.value);
 
-      if (!featureMatch) {
-        // If an obligatory match is not found, there is no reason to check other items
-        break
-      }
-      // Inflection's value of this feature is matching the one of the suffix
-      matchData.matchedFeatures.push(feature);
-    }
+      // Check for obligatory matches
+      for (let feature of inflectionProperties.obligatoryMatches) {
+        let featureMatch = false;
+        if (feature === Feature.types.grmClass) {
+          featureMatch = inflection.grm.class ? item.featureMatch(feature, inflection.grm.class) : false;
+        } else {
+          featureMatch = item.featureMatch(feature, inflection[feature]);
+        }
 
-    if (matchData.matchedFeatures.length < inflectionProperties.obligatoryMatches.length) {
-      // Not all obligatory matches are found, this is not a match
-      break
-    }
+        // matchFound = matchFound && featureMatch;
 
-    // Check optional matches now
-    for (let feature of optionalMatches) {
-      let matchedValue = item.featureMatch(feature, inflection[feature]);
-      if (matchedValue) {
+        if (!featureMatch) {
+          // If an obligatory match is not found, there is no reason to check other items
+          break
+        }
+        // Inflection's value of this feature is matching the one of the suffix
         matchData.matchedFeatures.push(feature);
       }
+
+      if (matchData.matchedFeatures.length < inflectionProperties.obligatoryMatches.length) {
+        // Not all obligatory matches are found, this is not a match
+        break
+      }
+
+      // Check optional matches now
+      for (let feature of optionalMatches) {
+        let matchedValue = item.featureMatch(feature, inflection[feature]);
+        if (matchedValue) {
+          matchData.matchedFeatures.push(feature);
+        }
+      }
+
+      if (matchData.suffixMatch && (matchData.matchedFeatures.length === inflectionProperties.obligatoryMatches.length + optionalMatches.length)) {
+        // This is a full match
+        matchData.fullMatch = true;
+
+        // There can be only one full match, no need to search any further
+        item.match = matchData;
+        return item
+      }
+      bestMatchData = this.bestMatch(bestMatchData, matchData);
     }
-
-    if (matchData.suffixMatch && (matchData.matchedFeatures.length === inflectionProperties.obligatoryMatches.length + optionalMatches.length)) {
-      // This is a full match
-      matchData.fullMatch = true;
-
-      // There can be only one full match, no need to search any further
-      item.match = matchData;
+    if (bestMatchData) {
+      // There is some match found
+      item.match = bestMatchData;
       return item
     }
-    bestMatchData = this.bestMatch(bestMatchData, matchData);
-  }
-  if (bestMatchData) {
-        // There is some match found
-    item.match = bestMatchData;
-    return item
-  }
-  return null
-};
-
-/**
- * Decides whether matchA is 'better' (i.e. has more items matched) than matchB or not
- * @param {MatchData} matchA
- * @param {MatchData} matchB
- * @returns {MatchData} A best of two matches
- */
-dataSet$1.bestMatch = function (matchA, matchB) {
-  // If one of the arguments is not set, return the other one
-  if (!matchA && matchB) {
-    return matchB
+    return null
   }
 
-  if (!matchB && matchA) {
-    return matchA
-  }
+  /**
+   * Decides whether matchA is 'better' (i.e. has more items matched) than matchB or not
+   * @param {MatchData} matchA
+   * @param {MatchData} matchB
+   * @returns {MatchData} A best of two matches
+   */
+  bestMatch (matchA, matchB) {
+    // If one of the arguments is not set, return the other one
+    if (!matchA && matchB) {
+      return matchB
+    }
 
-  // Suffix match has a priority
-  if (matchA.suffixMatch !== matchB.suffixMatch) {
-    if (matchA.suffixMatch > matchB.suffixMatch) {
+    if (!matchB && matchA) {
+      return matchA
+    }
+
+    // Suffix match has a priority
+    if (matchA.suffixMatch !== matchB.suffixMatch) {
+      if (matchA.suffixMatch > matchB.suffixMatch) {
+        return matchA
+      } else {
+        return matchB
+      }
+    }
+
+    // If same on suffix matches, compare by how many features matched
+    if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
+      // Arbitrarily return matchA if matches are the same
       return matchA
     } else {
       return matchB
     }
   }
-
-  // If same on suffix matches, compare by how many features matched
-  if (matchA.matchedFeatures.length >= matchB.matchedFeatures.length) {
-    // Arbitrarily return matchA if matches are the same
-    return matchA
-  } else {
-    return matchB
-  }
-};
+}
 
 /**
  * Stores one or several language datasets, one for each language
@@ -5013,7 +5321,7 @@ class LanguageDataList {
    * This function is chainable.
    * @param {LanguageDataset[]} languageData - Language datasets of different languages.
    */
-  constructor (languageData = [dataSet, dataSet$1]) {
+  constructor (languageData = [new LatinLanguageDataset(), new GreekLanguageDataset()]) {
     this.sets = new Map(languageData.map(item => [item.languageID, item]));
   }
 
@@ -9544,7 +9852,7 @@ class GreekView extends View {
   constructor (inflectionData, messages) {
     super(inflectionData, messages);
     this.languageID = GreekView.languageID;
-    this.dataset = dataSet$1;
+    this.dataset = new GreekLanguageDataset().loadData();
 
     /*
     Default grammatical features of a View. It child views need to have different feature values, redefine
@@ -11032,7 +11340,8 @@ class GreekLanguageModel$1 extends LanguageModel$1 {
   static getInflectionGrammar (inflection) {
     let grammar = {
       fullFormBased: false,
-      suffixBased: false
+      suffixBased: false,
+      pronounClassRequired: false
     };
     if (inflection.hasOwnProperty(Feature$1.types.part) &&
       Array.isArray(inflection[Feature$1.types.part]) &&
@@ -11047,11 +11356,20 @@ class GreekLanguageModel$1 extends LanguageModel$1 {
     } else {
       console.warn(`Unable to set grammar: part of speech data is missing or is incorrect`, inflection[Feature$1.types.part]);
     }
+
+    grammar.pronounClassRequired =
+      LanguageModelFactory$1.compareLanguages(GreekLanguageModel$1.languageID, inflection.languageID) &&
+      inflection.hasOwnProperty(Feature$1.types.part) &&
+      Array.isArray(inflection[Feature$1.types.part]) &&
+      inflection[Feature$1.types.part].length >= 1 &&
+      inflection[Feature$1.types.part][0].value === POFS_PRONOUN$1;
+
     return grammar
   }
 
   /**
-   * Finds a grammar class(es) in a pronoun source data that match(es) a provided pronoun.
+   * Determine a class of a given word (a pronoun).
+   * Finds grammar class(es) in a pronoun source data that match(es) a provided pronoun.
    * @param {Form[]} forms - An array of known forms of pronouns.
    * @param {string} word - A word we need to find a matching class for.
    * @param {boolean} normalize - Whether normalized forms of words shall be used for comparison.
@@ -11918,5 +12236,5 @@ class ViewSet {
   }
 }
 
-export { InflectionData, LanguageDataList, dataSet as LatinDataSet, dataSet$1 as GreekDataSet, L10n, messages as L10nMessages, ViewSet };
+export { InflectionData, LanguageDataList, LatinLanguageDataset as LatinDataSet, GreekLanguageDataset as GreekDataSet, L10n, messages as L10nMessages, ViewSet };
 //# sourceMappingURL=inflection-tables.standalone.js.map

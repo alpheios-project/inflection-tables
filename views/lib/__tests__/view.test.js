@@ -26,7 +26,7 @@ describe('Cell', () => {
 
   test('render() should create node elements properly.', () => {
     // Render is called in constructor so we don't need to call it explicitly
-    expect(cell.wNode.outerHTML).toMatch('<div class="infl-cell"><a class="infl-suff">endingOne</a>,&nbsp;<a class="infl-suff infl-suff--suffix-match">endingTwo</a></div>')
+    expect(cell.wNode.outerHTML).toMatch(`<div class="infl-cell"><span class="infl-suff">endingOne</span>, <span class="infl-suff infl-suff--suffix-match">endingTwo</span></div>`)
     expect(cell.wNode.outerHTML).toMatch(cell.nNode.outerHTML)
   })
 
