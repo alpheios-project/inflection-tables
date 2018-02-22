@@ -8,11 +8,10 @@ import Table from '../../lib/table'
  */
 export default class GreekLemmaGenderPronounView extends GreekPronounView {
   constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+    super(inflectionData, messages, GreekLemmaGenderPronounView.classes[0])
 
     // Add lemmas
-    let grammarClass = GreekPronounView.getClassFromInflection(this.inflectionData)
-    this.featureTypes.lemmas = this.dataset.getPronounGroupingLemmas(grammarClass)
+    this.featureTypes.lemmas = this.dataset.getPronounGroupingLemmas(GreekLemmaGenderPronounView.classes[0])
     this.features.lemmas = new GroupFeatureType(this.featureTypes.lemmas, 'Lemma')
 
     /*
@@ -45,11 +44,14 @@ export default class GreekLemmaGenderPronounView extends GreekPronounView {
    * @return {boolean}
    */
   static matchFilter (inflectionData) {
-    let grammarClass = GreekPronounView.getClassFromInflection(inflectionData)
-
-    if (LanguageModelFactory.compareLanguages(GreekLemmaGenderPronounView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(GreekLemmaGenderPronounView.partOfSpeech) &&
-        GreekLemmaGenderPronounView.classes.includes(grammarClass)
+    if (LanguageModelFactory.compareLanguages(GreekLemmaGenderPronounView.languageID, inflectionData.languageID) &&
+      inflectionData.hasOwnProperty(GreekLemmaGenderPronounView.partOfSpeech)) {
+      let found = inflectionData[GreekLemmaGenderPronounView.partOfSpeech].suffixes.find(
+        form => GreekLemmaGenderPronounView.classes.includes(form.features[Feature.types.grmClass]))
+      if (found) {
+        return true
+      }
     }
+    return false
   }
 }

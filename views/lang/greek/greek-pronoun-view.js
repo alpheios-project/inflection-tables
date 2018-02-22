@@ -8,12 +8,16 @@ import GroupFeatureType from '../../lib/group-feature-type.js'
  * is to define common features and properties for all pronoun classes.
  */
 export default class GreekPronounView extends GreekView {
-  constructor (inflectionData, messages) {
+  /**
+   * @param {InflectionData} inflectionData
+   * @param {MessageBundle} messages
+   * @param {string} grammarClass - For what pronoun class a view will be created
+   */
+  constructor (inflectionData, messages, grammarClass = 'Greek') {
     super(inflectionData, messages)
-    let grammarClass = GreekPronounView.getClassFromInflection(this.inflectionData)
-    this.id = `${grammarClass}${View.toTitleCase(GreekPronounView.partOfSpeech)}Declension`
-    this.name = `${grammarClass} ${GreekPronounView.partOfSpeech} declension`
-    this.title = View.toTitleCase(`${grammarClass} ${GreekPronounView.partOfSpeech} Declension`)
+    this.id = GreekPronounView.getID(grammarClass)
+    this.name = GreekPronounView.getName(grammarClass)
+    this.title = GreekPronounView.getTitle(grammarClass)
     this.partOfSpeech = GreekPronounView.partOfSpeech
     this.featureTypes = {}
 
@@ -74,20 +78,23 @@ export default class GreekPronounView extends GreekView {
   }
 
   /**
-   * Retrieves a value of a class feature from inflectionData. Inflection data should have the same class value
-   * among all its data items.
-   * @param {InflectionData} inflectionData
-   * @return {string} A grammar class name
+   * What classes of pronouns this view should be used with.
+   * Should be defined in descendants.
+   * @return {string[]} Array of class names
    */
-  static getClassFromInflection (inflectionData) {
-    let grammarClass = inflectionData.getFeatureValues(GreekPronounView.partOfSpeech, Feature.types.grmClass)
-    if (grammarClass.length === 1) {
-      grammarClass = grammarClass[0]
-    } else {
-      console.warn(`Cannot determine a grammar class of a Greek pronoun "${inflectionData.targetWord}": 
-        there is no grammar class in inflection data or there is more than one grammar class`)
-      grammarClass = ''
-    }
-    return grammarClass
+  static get classes () {
+    return []
+  }
+
+  static getID (grammarClass) {
+    return `${grammarClass}${View.toTitleCase(GreekPronounView.partOfSpeech)}Declension`
+  }
+
+  static getName (grammarClass) {
+    return `${grammarClass} ${GreekPronounView.partOfSpeech} declension`
+  }
+
+  static getTitle (grammarClass) {
+    return View.toTitleCase(`${grammarClass} ${GreekPronounView.partOfSpeech} Declension`).trim()
   }
 }

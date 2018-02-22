@@ -5,11 +5,11 @@ import Table from '../../lib/table'
 import FeatureType from '../../../../data-models/src/feature_type'
 
 /**
- * Used for reflexive pronouns. Produces a table grouped into columns by person and gender
+ * Used for personal pronouns. Produces a table grouped into columns by person
  */
-export default class GreekPersonGenderPronounView extends GreekPronounView {
+export default class GreekPersonPronounView extends GreekPronounView {
   constructor (inflectionData, messages) {
-    super(inflectionData, messages, GreekPersonGenderPronounView.classes[0])
+    super(inflectionData, messages, GreekPersonPronounView.classes[0])
 
     // Add persons
     this.featureTypes.persons = new FeatureType(
@@ -27,9 +27,9 @@ export default class GreekPersonGenderPronounView extends GreekPronounView {
     Features should go as: column features first, row features last. This specifies the order of grouping
     in which a table tree will be built.
      */
-    this.table = new Table([this.features.persons, this.features.genders, this.features.numbers, this.features.cases])
+    this.table = new Table([this.features.persons, this.features.numbers, this.features.cases])
     let features = this.table.features
-    features.columns = [this.featureTypes.persons, this.featureTypes.genders]
+    features.columns = [this.featureTypes.persons]
     features.rows = [this.featureTypes.numbers, GreekLanguageModel.getFeatureType(Feature.types.grmCase)]
     features.columnRowTitles = [GreekLanguageModel.getFeatureType(Feature.types.grmCase)]
     features.fullWidthRowTitles = [this.featureTypes.numbers]
@@ -40,7 +40,7 @@ export default class GreekPersonGenderPronounView extends GreekPronounView {
    * @return {string[]} Array of class names
    */
   static get classes () {
-    return [Constants.CLASS_REFLEXIVE]
+    return [Constants.CLASS_PERSONAL]
   }
 
   /**
@@ -53,10 +53,10 @@ export default class GreekPersonGenderPronounView extends GreekPronounView {
    * @return {boolean}
    */
   static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(GreekPersonGenderPronounView.languageID, inflectionData.languageID) &&
-      inflectionData.hasOwnProperty(GreekPersonGenderPronounView.partOfSpeech)) {
-      let found = inflectionData[GreekPersonGenderPronounView.partOfSpeech].suffixes.find(
-        form => GreekPersonGenderPronounView.classes.includes(form.features[Feature.types.grmClass]))
+    if (LanguageModelFactory.compareLanguages(GreekPersonPronounView.languageID, inflectionData.languageID) &&
+      inflectionData.hasOwnProperty(GreekPersonPronounView.partOfSpeech)) {
+      let found = inflectionData[GreekPersonPronounView.partOfSpeech].suffixes.find(
+        form => GreekPersonPronounView.classes.includes(form.features[Feature.types.grmClass]))
       if (found) {
         return true
       }

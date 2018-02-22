@@ -47,11 +47,14 @@ export default class GreekGenderPronounView extends GreekPronounView {
    * @return {boolean}
    */
   static matchFilter (inflectionData) {
-    let grammarClass = GreekPronounView.getClassFromInflection(inflectionData)
-
-    if (LanguageModelFactory.compareLanguages(GreekGenderPronounView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(GreekGenderPronounView.partOfSpeech) &&
-        GreekGenderPronounView.classes.includes(grammarClass)
+    if (LanguageModelFactory.compareLanguages(GreekGenderPronounView.languageID, inflectionData.languageID) &&
+      inflectionData.hasOwnProperty(GreekGenderPronounView.partOfSpeech)) {
+      let found = inflectionData[GreekGenderPronounView.partOfSpeech].suffixes.find(
+        form => GreekGenderPronounView.classes.includes(form.features[Feature.types.grmClass]))
+      if (found) {
+        return true
+      }
     }
+    return false
   }
 }
