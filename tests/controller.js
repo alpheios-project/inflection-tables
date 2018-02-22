@@ -1,6 +1,5 @@
 'use strict'
 // Import shared language data
-import languages from '../lib/languages'
 import * as Models from 'alpheios-data-models'
 import * as L10n from '../l10n/l10n'
 import * as Styles from '../views/styles/styles'
@@ -29,7 +28,6 @@ exports.Models = {
   Constants: Models.Constants
 }
 
-exports.languages = languages
 exports.Feature = Models.Feature
 exports.FeatureType = Models.FeatureType
 exports.FeatureImporter = Models.FeatureImporter
