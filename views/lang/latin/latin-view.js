@@ -7,24 +7,25 @@ export default class LatinView extends View {
   constructor (inflectionData, messages) {
     super(inflectionData, messages)
     this.languageModel = new LatinLanguageModel() // TODO: Do we really need to create it every time?
-    this.language_features = this.languageModel.features
+    this.model = LatinLanguageModel
+    this.language_features = this.model.features
     // limit regular verb moods
     this.language_features[Feature.types.mood] =
       new FeatureType(Feature.types.mood,
         [ Constants.MOOD_INDICATIVE,
           Constants.MOOD_SUBJUNCTIVE
-        ], this.languageModel.toCode())
+        ], this.model.languageID)
 
         /*
         Default grammatical features of a view. It child views need to have different feature values, redefine
         those values in child objects.
          */
     this.features = {
-      numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
-      cases: new GroupFeatureType(this.language_features[Feature.types.grmCase], 'Case'),
-      declensions: new GroupFeatureType(this.language_features[Feature.types.declension], 'Declension'),
-      genders: new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender'),
-      types: new GroupFeatureType(this.language_features[Feature.types.type], 'Type')
+      numbers: new GroupFeatureType(this.model.getFeatureType(Feature.types.number), 'Number'),
+      cases: new GroupFeatureType(this.model.getFeatureType(Feature.types.grmCase), 'Case'),
+      declensions: new GroupFeatureType(this.model.getFeatureType(Feature.types.declension), 'Declension'),
+      genders: new GroupFeatureType(this.model.getFeatureType(Feature.types.gender), 'Gender'),
+      types: new GroupFeatureType(this.model.getFeatureType(Feature.types.type), 'Type')
     }
     this.features.declensions.getTitle = LatinView.getDeclensionTitle
   }
@@ -34,7 +35,7 @@ export default class LatinView extends View {
    * @return {symbol}
    */
   static get languageID () {
-    return Constants.LANG_LATIN
+    return LatinLanguageModel.languageID
   }
 
     /*

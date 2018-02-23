@@ -11,7 +11,7 @@ export default class LatinVerbParticipleView extends LatinView {
     this.name = 'participle'
     this.title = 'Participle'
     this.language_features[Feature.types.tense] = new FeatureType(Feature.types.tense,
-      [Constants.TENSE_PRESENT, Constants.TENSE_PERFECT, Constants.TENSE_FUTURE], this.languageModel.toCode())
+      [Constants.TENSE_PRESENT, Constants.TENSE_PERFECT, Constants.TENSE_FUTURE], this.model.languageID)
     this.features = {
       tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
       voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),

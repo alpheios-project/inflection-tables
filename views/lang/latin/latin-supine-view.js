@@ -11,10 +11,10 @@ export default class LatinSupineView extends LatinView {
     this.name = 'supine'
     this.title = 'Supine'
     this.features.moods = new GroupFeatureType(
-      new FeatureType(Feature.types.mood, [Constants.MOOD_SUPINE], this.languageModel.toCode()),
+      new FeatureType(Feature.types.mood, [Constants.MOOD_SUPINE], this.model.languageID),
       'Mood')
     this.language_features[Feature.types.grmCase] = new FeatureType(Feature.types.grmCase,
-      [Constants.CASE_ACCUSATIVE, Constants.CASE_ABLATIVE], this.languageModel.toCode())
+      [Constants.CASE_ACCUSATIVE, Constants.CASE_ABLATIVE], this.model.languageID)
     this.features = {
       cases: new GroupFeatureType(this.language_features[Feature.types.grmCase], 'Case'),
       voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),

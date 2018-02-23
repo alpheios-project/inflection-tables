@@ -10,12 +10,12 @@ export default class LatinImperativeView extends LatinVerbMoodView {
     this.name = 'imperative'
     this.title = 'Imperative'
     this.features.moods = new GroupFeatureType(
-      new FeatureType(Feature.types.mood, [Constants.MOOD_IMPERATIVE], this.languageModel.toCode()),
+      new FeatureType(Feature.types.mood, [Constants.MOOD_IMPERATIVE], this.model.languageID),
       'Mood')
-    this.language_features[Feature.types.person] = new FeatureType(Feature.types.person, [Constants.ORD_2ND, Constants.ORD_3RD], this.languageModel.toCode())
+    this.language_features[Feature.types.person] = new FeatureType(Feature.types.person, [Constants.ORD_2ND, Constants.ORD_3RD], this.model.languageID)
     this.features.persons = new GroupFeatureType(this.language_features[Feature.types.person], 'Person')
     this.language_features[Feature.types.tense] = new FeatureType(Feature.types.tense,
-      [Constants.TENSE_PRESENT, Constants.TENSE_FUTURE], this.languageModel.toCode())
+      [Constants.TENSE_PRESENT, Constants.TENSE_FUTURE], this.model.languageID)
     this.features.tenses = new GroupFeatureType(this.language_features[Feature.types.tense], 'Tense')
     this.createTable()
     this.table.suffixCellFilter = LatinImperativeView.suffixCellFilter

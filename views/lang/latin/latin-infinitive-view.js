@@ -10,10 +10,10 @@ export default class LatinInfinitiveView extends LatinVerbMoodView {
     this.name = 'infinitive'
     this.title = 'Infinitive'
     this.features.moods = new GroupFeatureType(
-      new FeatureType(Feature.types.mood, [Constants.MOOD_INFINITIVE], this.languageModel.toCode()),
+      new FeatureType(Feature.types.mood, [Constants.MOOD_INFINITIVE], this.model.languageID),
       'Mood')
     this.language_features[Feature.types.tense] = new FeatureType(Feature.types.tense,
-      [Constants.TENSE_PRESENT, Constants.TENSE_PERFECT, Constants.TENSE_FUTURE], this.languageModel.toCode())
+      [Constants.TENSE_PRESENT, Constants.TENSE_PERFECT, Constants.TENSE_FUTURE], this.model.languageID)
     this.features.tenses = new GroupFeatureType(this.language_features[Feature.types.tense], 'Tense')
     this.createTable()
     this.table.suffixCellFilter = LatinInfinitiveView.suffixCellFilter
