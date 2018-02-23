@@ -581,9 +581,9 @@ class LanguageDataset {
    * @param {Inflection} inflection - An inflection data object
    * @return {Inflection} A modified inflection data object
    */
-  setInflectionGrammar (inflection) {
-    inflection.grm.obligatoryMatches = this.getObligatoryMatches(inflection);
-    inflection.grm.optionalMatches = this.getOptionalMatches(inflection);
+  setInflectionConstraints (inflection) {
+    inflection.constraints.obligatoryMatches = this.getObligatoryMatches(inflection);
+    inflection.constraints.optionalMatches = this.getOptionalMatches(inflection);
     return inflection
   }
 
@@ -594,7 +594,7 @@ class LanguageDataset {
 
     for (let lexeme of homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
-        if (inflection.grm.pronounClassRequired) {
+        if (inflection.constraints.pronounClassRequired) {
           /*
           A `class` grammatical feature is an obligatory match for Greek pronouns. Class, however, is not present in
           the Inflection object at the time we receive it from a morphological analyzer because a morphological analyzer
@@ -648,15 +648,15 @@ class LanguageDataset {
         let items = [];
         // TODO: improve suffixBase/fullFormBased detection
         // There might be both full form based and suffix based items in the same group
-        let suffixBased = inflectionsGroup.find(i => i.grm.suffixBased);
+        let suffixBased = inflectionsGroup.find(i => i.constraints.suffixBased);
         // If there is at least on full form based inflection, search for full form items
         if (!suffixBased) {
           // If it is an irregular verb or a pronoun there will be form matches
 
           // Let's assume that it might be full form based
           for (let inflection of inflectionsGroup) {
-            inflection.grm.fullFormBased = true;
-            this.setInflectionGrammar(inflection);
+            inflection.constraints.fullFormBased = true;
+            this.setInflectionConstraints(inflection);
           }
           items = this.forms.reduce(this['reducer'].bind(this, inflectionsGroup), []);
           if (items.length === 0) {
@@ -667,9 +667,9 @@ class LanguageDataset {
         // Otherwise, check for suffix matches
         if (suffixBased) {
           for (let inflection of inflectionsGroup) {
-            inflection.grm.suffixBased = true;
-            inflection.grm.fullFormBased = false;
-            this.setInflectionGrammar(inflection);
+            inflection.constraints.suffixBased = true;
+            inflection.constraints.fullFormBased = false;
+            this.setInflectionConstraints(inflection);
           }
           items = this.suffixes.reduce(this['reducer'].bind(this, inflectionsGroup), []);
         }
@@ -742,21 +742,21 @@ class LanguageDataset {
      */
     for (let inflection of inflections) {
       let matchData = new MatchData(); // Create a match profile
-      let optionalMatches = matchOptional ? inflection.grm.optionalMatches : [];
+      let optionalMatches = matchOptional ? inflection.constraints.optionalMatches : [];
       matchData.suffixMatch = inflection.compareWithWord(item.value);
 
       // Check for obligatory matches
-      for (let feature of inflection.grm.obligatoryMatches) {
-        let featureMatch = item.featureMatch(feature, inflection[feature]);
-        if (featureMatch) {
-          matchData.matchedFeatures.push(feature);
+      for (let featureName of inflection.constraints.obligatoryMatches) {
+        if (inflection.hasOwnProperty(featureName) && item.featureMatch(featureName, inflection[featureName])) {
+          // Add a matched feature name to a list of matched features
+          matchData.matchedFeatures.push(featureName);
         } else {
           // If an obligatory match is not found, there is no reason to check other items
           break
         }
       }
 
-      if (matchData.matchedFeatures.length < inflection.grm.obligatoryMatches.length) {
+      if (matchData.matchedFeatures.length < inflection.constraints.obligatoryMatches.length) {
         // Not all obligatory matches are found, this is not a match
         break
       }
@@ -769,7 +769,7 @@ class LanguageDataset {
         }
       }
 
-      if (matchData.suffixMatch && (matchData.matchedFeatures.length === inflection.grm.obligatoryMatches.length + optionalMatches.length)) {
+      if (matchData.suffixMatch && (matchData.matchedFeatures.length === inflection.constraints.obligatoryMatches.length + optionalMatches.length)) {
         // This is a full match
         matchData.fullMatch = true;
 
@@ -2743,7 +2743,7 @@ class LatinLanguageDataset extends LanguageDataset {
 
   getObligatoryMatches (inflection) {
     let obligatoryMatches = [];
-    if (inflection.grm.fullFormBased) {
+    if (inflection.constraints.fullFormBased) {
       obligatoryMatches.push(Feature.types.word);
     } else {
       // Default value for suffix matching
@@ -2989,7 +2989,7 @@ class GreekLanguageDataset extends LanguageDataset {
     let obligatoryMatches = [];
     if (inflection.hasFeatureValue(Feature.types.part, Constants.POFS_PRONOUN)) {
       obligatoryMatches.push(Feature.types.grmClass);
-    } else if (inflection.grm.fullFormBased) {
+    } else if (inflection.constraints.fullFormBased) {
       obligatoryMatches.push(Feature.types.word);
     } else {
       // Default value for suffix matching
@@ -3055,8 +3055,8 @@ class LanguageDataList {
       let dataset = this.sets.get(homonym.languageID);
       for (let inflection of homonym.inflections) {
         // Set grammar rules for an inflection
-        inflection.setGrammar();
-        dataset.setInflectionGrammar(inflection);
+        inflection.setConstraints();
+        dataset.setInflectionConstraints(inflection);
       }
       return dataset.getInflectionData(homonym)
     } else {
@@ -8881,7 +8881,7 @@ class LatinLanguageModel$1 extends LanguageModel {
    * @param {Inflection} inflection - An inflection object
    * @return {Object} Inflection properties
    */
-  static getInflectionGrammar (inflection) {
+  static getInflectionConstraints (inflection) {
     let grammar = {
       fullFormBased: false,
       suffixBased: false,
@@ -9098,8 +9098,8 @@ class GreekLanguageModel$1 extends LanguageModel {
    * @param {Inflection} inflection - An inflection object
    * @return {Object} Inflection properties
    */
-  static getInflectionGrammar (inflection) {
-    let grammar = {
+  static getInflectionConstraints (inflection) {
+    let constraints = {
       fullFormBased: false,
       suffixBased: false,
       pronounClassRequired: false
@@ -9109,22 +9109,22 @@ class GreekLanguageModel$1 extends LanguageModel {
       inflection[Feature$1.types.part].length === 1) {
       let partOfSpeech = inflection[Feature$1.types.part][0];
       if (partOfSpeech.value === POFS_PRONOUN) {
-        grammar.fullFormBased = true;
+        constraints.fullFormBased = true;
       } else {
-        grammar.suffixBased = true;
+        constraints.suffixBased = true;
       }
     } else {
       console.warn(`Unable to set grammar: part of speech data is missing or is incorrect`, inflection[Feature$1.types.part]);
     }
 
-    grammar.pronounClassRequired =
+    constraints.pronounClassRequired =
       LanguageModelFactory$1.compareLanguages(GreekLanguageModel$1.languageID, inflection.languageID) &&
       inflection.hasOwnProperty(Feature$1.types.part) &&
       Array.isArray(inflection[Feature$1.types.part]) &&
       inflection[Feature$1.types.part].length >= 1 &&
       inflection[Feature$1.types.part][0].value === POFS_PRONOUN;
 
-    return grammar
+    return constraints
   }
 
   /**
@@ -9231,11 +9231,17 @@ class ArabicLanguageModel extends LanguageModel {
  */
 class PersianLanguageModel extends LanguageModel {
   static get languageID () { return LANG_PERSIAN }
+
   static get languageCode () { return STR_LANG_CODE_PER }
+
   static get languageCodes () { return [STR_LANG_CODE_PER, STR_LANG_CODE_FAS, STR_LANG_CODE_FA, STR_LANG_CODE_FA_IR] }
+
   static get contextForward () { return 0 }
+
   static get contextBackward () { return 0 }
+
   static get direction () { return LANG_DIR_RTL }
+
   static get baseUnit () { return LANG_UNIT_WORD }
 
   /**
