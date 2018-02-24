@@ -1,5 +1,5 @@
-import { Constants, GreekLanguageModel, Feature } from 'alpheios-data-models'
-import GreekDataset from '../../../lib/lang/greek/greek-language-dataset.js'
+import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
+import LanguageDatasetFactory from '../../../lib/language-dataset-factory.js'
 import Table from '../../lib/table.js'
 import View from '../../lib/view.js'
 import GroupFeatureType from '../../lib/group-feature-type.js'
@@ -8,18 +8,19 @@ export default class GreekView extends View {
   constructor (inflectionData, messages) {
     super(inflectionData, messages)
     this.languageID = GreekView.languageID
-    this.dataset = new GreekDataset().loadData()
+    this.model = LanguageModelFactory.getLanguageModel(GreekView.languageID)
+    this.dataset = LanguageDatasetFactory.getDataset(GreekView.languageID)
 
     /*
     Default grammatical features of a View. It child views need to have different feature values, redefine
     those values in child objects.
      */
     this.features = {
-      numbers: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.number), 'Number'),
-      cases: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.grmCase), 'Case'),
-      declensions: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.declension), 'Declension'),
-      genders: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.gender), 'Gender'),
-      types: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.type), 'Type')
+      numbers: new GroupFeatureType(this.model.getFeatureType(Feature.types.number), 'Number'),
+      cases: new GroupFeatureType(this.model.getFeatureType(Feature.types.grmCase), 'Case'),
+      declensions: new GroupFeatureType(this.model.getFeatureType(Feature.types.declension), 'Declension'),
+      genders: new GroupFeatureType(this.model.getFeatureType(Feature.types.gender), 'Gender'),
+      types: new GroupFeatureType(this.model.getFeatureType(Feature.types.type), 'Type')
     }
   }
 
@@ -36,19 +37,19 @@ export default class GreekView extends View {
       this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
     features.columns = [
-      GreekLanguageModel.getFeatureType(Feature.types.declension),
-      GreekLanguageModel.getFeatureType(Feature.types.gender),
-      GreekLanguageModel.getFeatureType(Feature.types.type)
+      this.model.getFeatureType(Feature.types.declension),
+      this.model.getFeatureType(Feature.types.gender),
+      this.model.getFeatureType(Feature.types.type)
     ]
     features.rows = [
-      GreekLanguageModel.getFeatureType(Feature.types.number),
-      GreekLanguageModel.getFeatureType(Feature.types.grmCase)
+      this.model.getFeatureType(Feature.types.number),
+      this.model.getFeatureType(Feature.types.grmCase)
     ]
     features.columnRowTitles = [
-      GreekLanguageModel.getFeatureType(Feature.types.grmCase)
+      this.model.getFeatureType(Feature.types.grmCase)
     ]
     features.fullWidthRowTitles = [
-      GreekLanguageModel.getFeatureType(Feature.types.number)
+      this.model.getFeatureType(Feature.types.number)
     ]
   }
 }

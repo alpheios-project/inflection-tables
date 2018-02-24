@@ -2151,7 +2151,6 @@ class Feature {
 // Should have no spaces in values in order to be used in HTML templates
 Feature.types = {
   word: 'word',
-  altForm: 'alternative form', // An alternative form of a word
   part: 'part of speech', // Part of speech
   number: 'number',
   'case': 'case',
@@ -5249,11 +5248,12 @@ class LanguageDataset {
     }
 
     this.languageID = languageID;
+    this.dataLoaded = false;
     this.model = LanguageModelFactory.getLanguageModel(languageID);
     this.suffixes = []; // An array of suffixes.
     this.forms = []; // An array of suffixes.
     this.footnotes = []; // Footnotes
-  };
+  }
 
   /**
    * Each grammatical feature can be either a single or an array of Feature objects. The latter is the case when
@@ -5319,7 +5319,7 @@ class LanguageDataset {
     } else {
       store.push(item);
     }
-  };
+  }
 
   /**
    * Stores a footnote item.
@@ -7520,6 +7520,8 @@ class LatinLanguageDataset extends LanguageDataset {
     partOfSpeech = this.model.getFeatureType(types.part)[constants.POFS_SUPINE];
     suffixes = papaparse.parse(verbSupineSuffixesCSV, {});
     this.addVerbSupineSuffixes(partOfSpeech, suffixes.data);
+
+    this.dataLoaded = true;
     return this
   }
 
@@ -7753,6 +7755,8 @@ class GreekLanguageDataset extends LanguageDataset {
     partOfSpeech = this.model.getFeatureType(fTypes.part)[constants.POFS_PRONOUN];
     forms = papaparse.parse(pronounFormsCSV$1, {});
     this.addPronounForms(partOfSpeech, forms.data);
+
+    this.dataLoaded = true;
     return this
   }
 
@@ -7795,14 +7799,16 @@ class GreekLanguageDataset extends LanguageDataset {
   }
 }
 
+// Stores a LanguageDatasetFactory's single instance
+let datasetFactory;
+
 /**
- * Stores one or several language datasets, one for each language
+ * Creates and stores datasets for all available languages. This is a singleton.
+ * When created, datasets' data is not loaded yet. It will be loaded on a first call (lazy initialization).
  */
-class LanguageDataList {
+class LanguageDatasetFactory {
   /**
-   * Combines several language datasets representing supported languages. Allows to abstract away language data.
-   * This function is chainable.
-   * @param {Constructor[]} languageData - Language datasets of different languages.
+   * @param {Constructor[]} languageData - Language datasets of supported languages.
    */
   constructor (languageData = [LatinLanguageDataset, GreekLanguageDataset]) {
     this.sets = new Map();
@@ -7812,19 +7818,30 @@ class LanguageDataList {
   }
 
   /**
-   * Loads data for all data sets.
-   * This function is chainable.
-   * @return {LanguageDataList} Self instance for chaining.
+   * Returns a single instance of self.
+   * @return {LanguageDatasetFactory} A self instances.
    */
-  loadData () {
-    try {
-      for (let dataset of this.sets.values()) {
+  static get instance () {
+    if (!datasetFactory) {
+      datasetFactory = new LanguageDatasetFactory();
+    }
+    return datasetFactory
+  }
+
+  /**
+   * Returns an instance of a dataset for a language ID given.
+   * @param {symbol} languageID - A language ID of a dataset to be retrieved.
+   * @return {LanguageDataset} An instance of a language dataset.
+   */
+  static getDataset (languageID) {
+    let instance = this.instance;
+    if (instance.sets.has(languageID)) {
+      let dataset = instance.sets.get(languageID);
+      if (!dataset.dataLoaded) {
         dataset.loadData();
       }
-    } catch (e) {
-      console.error(e);
+      return dataset
     }
-    return this
   }
 
   /**
@@ -7832,9 +7849,10 @@ class LanguageDataList {
    * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
    * @return {InflectionData} A return value of an inflection query.
    */
-  getInflectionData (homonym) {
-    if (this.sets.has(homonym.languageID)) {
-      let dataset = this.sets.get(homonym.languageID);
+  static getInflectionData (homonym) {
+    let instance = this.instance;
+    if (instance.sets.has(homonym.languageID)) {
+      let dataset = this.getDataset(homonym.languageID);
       for (let inflection of homonym.inflections) {
         // Set grammar rules for an inflection
         inflection.setConstraints();
@@ -9566,10 +9584,10 @@ exports.Lexeme = Lexeme;
 exports.Homonym = Homonym;
 exports.Suffix = Suffix;
 exports.LanguageDataset = LanguageDataset;
-exports.LanguageDataList = LanguageDataList;
+exports.LanguageDatasetFactory = LanguageDatasetFactory;
 exports.MatchData = MatchData;
 exports.Footnote = Footnote;
-exports.ResultSet = InflectionData;
+exports.InflectionData = InflectionData;
 
 // L10n
 exports.LatinLanguageModel = LatinLanguageModel;

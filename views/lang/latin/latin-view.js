@@ -1,4 +1,5 @@
-import { Constants, LatinLanguageModel, Feature, FeatureType } from 'alpheios-data-models'
+import { Constants, LanguageModelFactory, Feature, FeatureType } from 'alpheios-data-models'
+import LanguageDatasetFactory from '../../../lib/language-dataset-factory.js'
 import View from '../../lib/view.js'
 import GroupFeatureType from '../../lib/group-feature-type.js'
 import Table from '../../lib/table.js'
@@ -6,15 +7,15 @@ import Table from '../../lib/table.js'
 export default class LatinView extends View {
   constructor (inflectionData, messages) {
     super(inflectionData, messages)
-    this.languageModel = new LatinLanguageModel() // TODO: Do we really need to create it every time?
-    this.model = LatinLanguageModel
+    this.model = LanguageModelFactory.getLanguageModel(LatinView.languageID)
+    this.dataset = LanguageDatasetFactory.getDataset(LatinView.languageID)
     this.language_features = this.model.features
     // limit regular verb moods
     this.language_features[Feature.types.mood] =
       new FeatureType(Feature.types.mood,
         [ Constants.MOOD_INDICATIVE,
           Constants.MOOD_SUBJUNCTIVE
-        ], this.model.languageID)
+        ], LatinView.languageID)
 
         /*
         Default grammatical features of a view. It child views need to have different feature values, redefine
@@ -35,7 +36,7 @@ export default class LatinView extends View {
    * @return {symbol}
    */
   static get languageID () {
-    return LatinLanguageModel.languageID
+    return Constants.LANG_LATIN
   }
 
     /*

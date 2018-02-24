@@ -467,11 +467,12 @@ class LanguageDataset {
     }
 
     this.languageID = languageID;
+    this.dataLoaded = false;
     this.model = LanguageModelFactory.getLanguageModel(languageID);
     this.suffixes = []; // An array of suffixes.
     this.forms = []; // An array of suffixes.
     this.footnotes = []; // Footnotes
-  };
+  }
 
   /**
    * Each grammatical feature can be either a single or an array of Feature objects. The latter is the case when
@@ -537,7 +538,7 @@ class LanguageDataset {
     } else {
       store.push(item);
     }
-  };
+  }
 
   /**
    * Stores a footnote item.
@@ -2738,6 +2739,8 @@ class LatinLanguageDataset extends LanguageDataset {
     partOfSpeech = this.model.getFeatureType(types.part)[Constants.POFS_SUPINE];
     suffixes = papaparse.parse(verbSupineSuffixesCSV, {});
     this.addVerbSupineSuffixes(partOfSpeech, suffixes.data);
+
+    this.dataLoaded = true;
     return this
   }
 
@@ -2971,6 +2974,8 @@ class GreekLanguageDataset extends LanguageDataset {
     partOfSpeech = this.model.getFeatureType(fTypes.part)[Constants.POFS_PRONOUN];
     forms = papaparse.parse(pronounFormsCSV$1, {});
     this.addPronounForms(partOfSpeech, forms.data);
+
+    this.dataLoaded = true;
     return this
   }
 
@@ -3013,14 +3018,16 @@ class GreekLanguageDataset extends LanguageDataset {
   }
 }
 
+// Stores a LanguageDatasetFactory's single instance
+let datasetFactory;
+
 /**
- * Stores one or several language datasets, one for each language
+ * Creates and stores datasets for all available languages. This is a singleton.
+ * When created, datasets' data is not loaded yet. It will be loaded on a first call (lazy initialization).
  */
-class LanguageDataList {
+class LanguageDatasetFactory {
   /**
-   * Combines several language datasets representing supported languages. Allows to abstract away language data.
-   * This function is chainable.
-   * @param {Constructor[]} languageData - Language datasets of different languages.
+   * @param {Constructor[]} languageData - Language datasets of supported languages.
    */
   constructor (languageData = [LatinLanguageDataset, GreekLanguageDataset]) {
     this.sets = new Map();
@@ -3030,19 +3037,30 @@ class LanguageDataList {
   }
 
   /**
-   * Loads data for all data sets.
-   * This function is chainable.
-   * @return {LanguageDataList} Self instance for chaining.
+   * Returns a single instance of self.
+   * @return {LanguageDatasetFactory} A self instances.
    */
-  loadData () {
-    try {
-      for (let dataset of this.sets.values()) {
+  static get instance () {
+    if (!datasetFactory) {
+      datasetFactory = new LanguageDatasetFactory();
+    }
+    return datasetFactory
+  }
+
+  /**
+   * Returns an instance of a dataset for a language ID given.
+   * @param {symbol} languageID - A language ID of a dataset to be retrieved.
+   * @return {LanguageDataset} An instance of a language dataset.
+   */
+  static getDataset (languageID) {
+    let instance = this.instance;
+    if (instance.sets.has(languageID)) {
+      let dataset = instance.sets.get(languageID);
+      if (!dataset.dataLoaded) {
         dataset.loadData();
       }
-    } catch (e) {
-      console.error(e);
+      return dataset
     }
-    return this
   }
 
   /**
@@ -3050,9 +3068,10 @@ class LanguageDataList {
    * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
    * @return {InflectionData} A return value of an inflection query.
    */
-  getInflectionData (homonym) {
-    if (this.sets.has(homonym.languageID)) {
-      let dataset = this.sets.get(homonym.languageID);
+  static getInflectionData (homonym) {
+    let instance = this.instance;
+    if (instance.sets.has(homonym.languageID)) {
+      let dataset = this.getDataset(homonym.languageID);
       for (let inflection of homonym.inflections) {
         // Set grammar rules for an inflection
         inflection.setConstraints();
@@ -6868,15 +6887,15 @@ class Table {
 class LatinView extends View {
   constructor (inflectionData, messages) {
     super(inflectionData, messages);
-    this.languageModel = new LatinLanguageModel(); // TODO: Do we really need to create it every time?
-    this.model = LatinLanguageModel;
+    this.model = LanguageModelFactory.getLanguageModel(LatinView.languageID);
+    this.dataset = LanguageDatasetFactory.getDataset(LatinView.languageID);
     this.language_features = this.model.features;
     // limit regular verb moods
     this.language_features[Feature.types.mood] =
       new FeatureType(Feature.types.mood,
         [ Constants.MOOD_INDICATIVE,
           Constants.MOOD_SUBJUNCTIVE
-        ], this.model.languageID);
+        ], LatinView.languageID);
 
         /*
         Default grammatical features of a view. It child views need to have different feature values, redefine
@@ -6897,7 +6916,7 @@ class LatinView extends View {
    * @return {symbol}
    */
   static get languageID () {
-    return LatinLanguageModel.languageID
+    return Constants.LANG_LATIN
   }
 
     /*
@@ -7563,18 +7582,19 @@ class GreekView extends View {
   constructor (inflectionData, messages) {
     super(inflectionData, messages);
     this.languageID = GreekView.languageID;
-    this.dataset = new GreekLanguageDataset().loadData();
+    this.model = LanguageModelFactory.getLanguageModel(GreekView.languageID);
+    this.dataset = LanguageDatasetFactory.getDataset(GreekView.languageID);
 
     /*
     Default grammatical features of a View. It child views need to have different feature values, redefine
     those values in child objects.
      */
     this.features = {
-      numbers: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.number), 'Number'),
-      cases: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.grmCase), 'Case'),
-      declensions: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.declension), 'Declension'),
-      genders: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.gender), 'Gender'),
-      types: new GroupFeatureType(GreekLanguageModel.getFeatureType(Feature.types.type), 'Type')
+      numbers: new GroupFeatureType(this.model.getFeatureType(Feature.types.number), 'Number'),
+      cases: new GroupFeatureType(this.model.getFeatureType(Feature.types.grmCase), 'Case'),
+      declensions: new GroupFeatureType(this.model.getFeatureType(Feature.types.declension), 'Declension'),
+      genders: new GroupFeatureType(this.model.getFeatureType(Feature.types.gender), 'Gender'),
+      types: new GroupFeatureType(this.model.getFeatureType(Feature.types.type), 'Type')
     };
   }
 
@@ -7591,19 +7611,19 @@ class GreekView extends View {
       this.features.types, this.features.numbers, this.features.cases]);
     let features = this.table.features;
     features.columns = [
-      GreekLanguageModel.getFeatureType(Feature.types.declension),
-      GreekLanguageModel.getFeatureType(Feature.types.gender),
-      GreekLanguageModel.getFeatureType(Feature.types.type)
+      this.model.getFeatureType(Feature.types.declension),
+      this.model.getFeatureType(Feature.types.gender),
+      this.model.getFeatureType(Feature.types.type)
     ];
     features.rows = [
-      GreekLanguageModel.getFeatureType(Feature.types.number),
-      GreekLanguageModel.getFeatureType(Feature.types.grmCase)
+      this.model.getFeatureType(Feature.types.number),
+      this.model.getFeatureType(Feature.types.grmCase)
     ];
     features.columnRowTitles = [
-      GreekLanguageModel.getFeatureType(Feature.types.grmCase)
+      this.model.getFeatureType(Feature.types.grmCase)
     ];
     features.fullWidthRowTitles = [
-      GreekLanguageModel.getFeatureType(Feature.types.number)
+      this.model.getFeatureType(Feature.types.number)
     ];
   }
 }
@@ -9491,7 +9511,6 @@ class Feature$1 {
 // Should have no spaces in values in order to be used in HTML templates
 Feature$1.types = {
   word: 'word',
-  altForm: 'alternative form', // An alternative form of a word
   part: 'part of speech', // Part of speech
   number: 'number',
   'case': 'case',
@@ -10004,4 +10023,4 @@ class ViewSet {
   }
 }
 
-export { InflectionData, LanguageDataList, LatinLanguageDataset as LatinDataSet, GreekLanguageDataset as GreekDataSet, L10n, messages as L10nMessages, ViewSet };
+export { InflectionData, LanguageDatasetFactory, LatinLanguageDataset as LatinDataSet, GreekLanguageDataset as GreekDataSet, L10n, messages as L10nMessages, ViewSet };
