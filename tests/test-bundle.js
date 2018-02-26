@@ -5136,9 +5136,99 @@ class Footnote {
   }
 }
 
+class Inflections {
+  constructor () {
+    this.items = []; // Suffixes or forms
+    this.footnotesMap = new Map(); // Footnotes (if any)
+  }
+
+  /**
+   * Returns a type (Suffix/Forms) of inflection items
+   * @return {string | undefined}
+   */
+  get type () {
+    // Determine a type according to the first item in an items array. We assume that there should be on items of different types.
+    if (this.items.length > 0) {
+      if (this.items[0] instanceof Suffix) {
+        return LanguageDataset.SUFFIX
+      } else if (this.items[0] instanceof Form) {
+        return LanguageDataset.FORM
+      }
+    }
+  }
+
+  /**
+   * Adds suffix of form items
+   * @param {Suffix[] | Form[]} items
+   */
+  addItems (items) {
+    if (!items) {
+      throw new Error(`Inflection items cannot be empty`)
+    }
+    if (!Array.isArray(items)) {
+      throw new Error(`Inflection items must be in an array`)
+    }
+    if (items.length === 0) {
+      throw new Error(`Inflection items array must not be empty`)
+    }
+    this.items = items;
+  }
+
+  /**
+   * Adds a singe footnote object
+   * @param {string} index - A footnote index
+   * @param {Footnote} footnote - A footnote object
+   */
+  addFootnote (index, footnote) {
+    this.footnotesMap.set(index, footnote);
+  }
+
+  /**
+   * Returns a sorted (as numbers) array of footnote indexes that are used by items within an `items` array
+   * @return {number[]}
+   */
+  get footnotesInUse () {
+    let set = new Set();
+    // Scan all selected suffixes to build a unique set of footnote indexes
+    for (const item of this.items) {
+      if (item.hasOwnProperty(Feature.types.footnote)) {
+        // Footnote indexes are stored in an array
+        for (let index of item[Feature.types.footnote]) {
+          set.add(index);
+        }
+      }
+    }
+    return Array.from(set).sort((a, b) => parseInt(a) - parseInt(b))
+  }
+}
+
+class InflectionSet {
+  constructor (partOfSpeech) {
+    this.partOfSpeech = partOfSpeech;
+    this.items = new Map();
+  }
+
+  addItems (inflections) {
+    if (!inflections) {
+      throw new Error(`Inflection items object must not be empty`)
+    }
+    if (!(inflections instanceof Inflections)) {
+      throw new Error(`Inflection items object must be of InflectionItems type`)
+    }
+    const type = inflections.type;
+    if (!type) {
+      throw new Error(`Inflection items must have a valid type`)
+    }
+
+    this.items.set(type, inflections);
+  }
+}
+
+// import InflectionItemsGroup from './inflection-items-group.js'
 /**
- * A return value for inflection queries. Stores suffixes and/or forms and suffixes they use.
- * Suffixes/forms and footnotes are grouped by part of speech within a [Models.Feature.types.part] property object.
+ * A return value for inflection queries. Stores suffixes, forms and corresponding footnotes.
+ * Inflection data is grouped first by a part of speech within a [Models.Feature.types.part] property object.
+ * Inside that object, it is grouped by type: suffixes, or forms.
  */
 class InflectionData {
   constructor (homonym) {
@@ -5146,6 +5236,12 @@ class InflectionData {
     /** Defines a language ID of this inflection data. */
     this.languageID = homonym.languageID;
     this[Feature.types.part] = []; // What parts of speech are represented by this object.
+
+    this.pos = new Map();
+  }
+
+  addInflectionSet (infectionSet) {
+    this.pos.set(infectionSet.partOfSpeech, infectionSet);
   }
 
   get targetWord () {
@@ -5166,7 +5262,44 @@ class InflectionData {
     }
   }
 
-  getSuffixes (partOfSpeech) {
+  /**
+   * Returns either suffixes or forms of a given part of speech.
+   * @param {string} partOfSpeech.
+   * @param {string} inflectionType.
+   * @return {Suffix[] | Form[]}
+   */
+  getMorphemes (partOfSpeech, inflectionType) {
+    if (this.pos.has(partOfSpeech)) {
+      let inflectionSet = this.pos.get(partOfSpeech);
+      if (inflectionSet.items.has(inflectionType)) {
+        return inflectionSet.items.get(inflectionType).items
+      }
+    }
+    return []
+  }
+
+  /**
+   * Returns footnotes for either suffixes or forms of a given part of speech.
+   * @param {string} partOfSpeech.
+   * @param {string} inflectionType.
+   * @return {Map}
+   */
+  getFootnotesMap (partOfSpeech, inflectionType) {
+    if (this.pos.has(partOfSpeech)) {
+      let inflectionSet = this.pos.get(partOfSpeech);
+      if (inflectionSet.items.has(inflectionType)) {
+        return inflectionSet.items.get(inflectionType).footnotesMap
+      }
+    }
+    return new Map()
+  }
+
+  /**
+   * @deprecated
+   * @param partOfSpeech
+   * @return {Array}
+   */
+  getLegacySuffixes (partOfSpeech) {
     if (this.hasOwnProperty(partOfSpeech) && this[partOfSpeech].hasOwnProperty('suffixes')) {
       return this[partOfSpeech].suffixes
     } else {
@@ -5174,7 +5307,12 @@ class InflectionData {
     }
   }
 
-  getFootnotesMap (partOfSpeech) {
+  /**
+   * @deprecated
+   * @param partOfSpeech
+   * @return {Map<any, any>}
+   */
+  getLagacyFootnotesMap (partOfSpeech) {
     let footnotes = new Map();
     if (this.hasOwnProperty(partOfSpeech) && this[partOfSpeech].hasOwnProperty('footnotes')) {
       for (const footnote of this[partOfSpeech].footnotes) {
@@ -5428,6 +5566,7 @@ class LanguageDataset {
         result[partOfSpeech] = {};
 
         let items = [];
+        let inflectionItems = new Inflections();
         // TODO: improve suffixBase/fullFormBased detection
         // There might be both full form based and suffix based items in the same group
         let suffixBased = inflectionsGroup.find(i => i.constraints.suffixBased);
@@ -5459,22 +5598,17 @@ class LanguageDataset {
         // TODO: Shall we produce a warning if no matches found?
         // TODO: for both suffix based and full form based matches store matches into separate
         // TODO: Each view should use either suffix based or full form based array
+        if (!items || items.length === 0) {
+          // No matches found for the current part of speech
+          break
+        }
+
         result[partOfSpeech].suffixes = items;
         result[partOfSpeech].footnotes = [];
+        inflectionItems.addItems(items);
 
-        // Create a set so all footnote indexes be unique
-        let footnotesIndex = new Set();
-        // Scan all selected suffixes to build a unique set of footnote indexes
-        for (let item of result[partOfSpeech].suffixes) {
-          if (item.hasOwnProperty(Feature.types.footnote)) {
-            // Footnote indexes are stored in an array
-            for (let index of item[Feature.types.footnote]) {
-              footnotesIndex.add(index);
-            }
-          }
-        }
         // Add footnote indexes and their texts to a result
-        for (let index of footnotesIndex) {
+        for (let index of inflectionItems.footnotesInUse) {
           let footnote = this.footnotes.find(footnoteElement =>
             footnoteElement.index === index &&
             footnoteElement[Feature.types.part] &&
@@ -5482,12 +5616,17 @@ class LanguageDataset {
           );
           if (footnote) {
             result[partOfSpeech].footnotes.push({index: index, text: footnote.text});
+            inflectionItems.addFootnote(index, footnote);
           } else {
             console.warn(`Cannot find a footnote "${index}" for ${LanguageModelFactory.getLanguageCodeFromId(this.languageID)} ${partOfSpeech}`);
           }
         }
         // Sort footnotes according to their index numbers
         result[partOfSpeech].footnotes.sort((a, b) => parseInt(a.index) - parseInt(b.index));
+
+        let inflectionSet = new InflectionSet(partOfSpeech);
+        inflectionSet.addItems(inflectionItems);
+        result.addInflectionSet(inflectionSet);
       }
     }
 
@@ -9431,6 +9570,7 @@ class View {
     this.name = 'base view';
     this.title = 'Base View';
     this.partOfSpeech = undefined;
+    this.inflectionType = undefined;
     this.forms = new Set();
     this.table = {};
   }
@@ -9485,7 +9625,7 @@ class View {
    * `messages` provides a translation for view's texts.
    */
   render () {
-    this.footnotes = this.inflectionData.getFootnotesMap(this.partOfSpeech);
+    this.footnotes = this.getFootnotes(this.inflectionData);
     // Table is already created during a view construction
     this.table.messages = this.messages;
     for (let lexeme of this.inflectionData.homonym.lexemes) {
@@ -9498,8 +9638,36 @@ class View {
         }
       }
     }
-    this.table.construct(this.inflectionData.getSuffixes(this.partOfSpeech)).constructViews().addEventListeners();
+    this.table.construct(this.getMorphemes(this.inflectionData)).constructViews().addEventListeners();
     return this
+  }
+
+  /**
+   * A compatibility function to get morphemes, either suffixes or forms, depending on the view type.
+   * By default, it returns suffixes
+   * @param {InflectionData} inflectionData
+   */
+  getMorphemes (inflectionData) {
+    if (this.inflectionType) {
+      return inflectionData.getMorphemes(this.partOfSpeech, this.inflectionType)
+    } else {
+      console.warn(`To avoid using legacy functions please set an inflectionType of this view to either SUFFIX or FORM`);
+      return inflectionData.getLegacySuffixes(this.partOfSpeech)
+    }
+  }
+
+  /**
+   * A compatibility function to get footnotes for either suffixes or forms, depending on the view type
+   * @param {InflectionData} inflectionData
+   */
+  getFootnotes (inflectionData) {
+    if (this.inflectionType) {
+      return inflectionData.getFootnotesMap(this.partOfSpeech, this.inflectionType)
+    } else {
+      // View does not support type-based data yet
+      console.warn(`To avoid using legacy functions please set an inflectionType of this view to either SUFFIX or FORM`);
+      return inflectionData.getLagacyFootnotesMap(this.partOfSpeech)
+    }
   }
 
   get wideViewNodes () {

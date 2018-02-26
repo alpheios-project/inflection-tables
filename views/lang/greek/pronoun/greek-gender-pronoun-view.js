@@ -1,6 +1,6 @@
-import { Constants, GreekLanguageModel, Feature, LanguageModelFactory } from 'alpheios-data-models'
+import { Constants, GreekLanguageModel, Feature } from 'alpheios-data-models'
 import GreekPronounView from './greek-pronoun-view.js'
-import Table from '../../lib/table'
+import Table from '../../../lib/table'
 
 /**
  * Used for several classes of pronouns, see `classes` method for a full list.
@@ -36,25 +36,5 @@ export default class GreekGenderPronounView extends GreekPronounView {
       Constants.CLASS_RECIPROCAL,
       Constants.CLASS_RELATIVE
     ]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(GreekGenderPronounView.languageID, inflectionData.languageID) &&
-      inflectionData.hasOwnProperty(GreekGenderPronounView.partOfSpeech)) {
-      let found = inflectionData[GreekGenderPronounView.partOfSpeech].suffixes.find(
-        form => GreekGenderPronounView.classes.includes(form.features[Feature.types.grmClass]))
-      if (found) {
-        return true
-      }
-    }
-    return false
   }
 }

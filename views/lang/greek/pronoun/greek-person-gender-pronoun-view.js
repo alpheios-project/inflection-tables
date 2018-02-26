@@ -1,8 +1,8 @@
-import { Constants, GreekLanguageModel, Feature, LanguageModelFactory } from 'alpheios-data-models'
+import { Constants, GreekLanguageModel, Feature } from 'alpheios-data-models'
 import GreekPronounView from './greek-pronoun-view.js'
-import GroupFeatureType from '../../lib/group-feature-type.js'
-import Table from '../../lib/table'
-import FeatureType from '../../../../data-models/src/feature_type'
+import GroupFeatureType from '../../../lib/group-feature-type.js'
+import Table from '../../../lib/table'
+import FeatureType from '../../../../../data-models/src/feature_type'
 
 /**
  * Used for reflexive pronouns. Produces a table grouped into columns by person and gender
@@ -41,26 +41,5 @@ export default class GreekPersonGenderPronounView extends GreekPronounView {
    */
   static get classes () {
     return [Constants.CLASS_REFLEXIVE]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * For that, inflectionData should match language and part of speech of this view,
-   * and inflection data should contain at least one data item with the class
-   * suitable for this view.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(GreekPersonGenderPronounView.languageID, inflectionData.languageID) &&
-      inflectionData.hasOwnProperty(GreekPersonGenderPronounView.partOfSpeech)) {
-      let found = inflectionData[GreekPersonGenderPronounView.partOfSpeech].suffixes.find(
-        form => GreekPersonGenderPronounView.classes.includes(form.features[Feature.types.grmClass]))
-      if (found) {
-        return true
-      }
-    }
-    return false
   }
 }

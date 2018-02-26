@@ -1,6 +1,7 @@
 import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import LatinView from './latin-view.js'
-import GroupFeatureType from '../../lib/group-feature-type'
+import LanguageDataset from '../../../../lib/language-dataset.js'
+import LatinView from '../latin-view.js'
+import GroupFeatureType from '../../../lib/group-feature-type'
 
 export default class LatinAdjectiveView extends LatinView {
   constructor (inflectionData, messages) {
@@ -9,6 +10,7 @@ export default class LatinAdjectiveView extends LatinView {
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
     this.partOfSpeech = this.language_features[Feature.types.part].adjective.value
+    this.inflectionType = LanguageDataset.SUFFIX
 
     // Feature that are different from base class values
     this.features.declensions = new GroupFeatureType(this.language_features[Feature.types.declension], 'Declension',

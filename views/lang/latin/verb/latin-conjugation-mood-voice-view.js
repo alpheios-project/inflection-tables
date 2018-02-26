@@ -1,13 +1,16 @@
 import { LanguageModelFactory, Feature } from 'alpheios-data-models'
+import LanguageDataset from '../../../../lib/language-dataset.js'
 import LatinVerbView from './latin-verb-view.js'
-import Table from '../../lib/table'
+import Table from '../../../lib/table'
 
-export default class LatinVoiceMoodConjugationView extends LatinVerbView {
+export default class LatinConjugationMoodVoiceView extends LatinVerbView {
   constructor (inflectionData, messages) {
     super(inflectionData, messages)
-    this.id = 'verbVoiceMoodConjugation'
-    this.name = 'voice-mood-conjugation'
+    this.id = 'verbConjugationMoodVoice'
+    this.name = 'conjugation-mood-voice'
     this.title = 'Verb Conjugation'
+
+    this.inflectionType = LanguageDataset.SUFFIX
 
     this.createTable()
   }
@@ -21,19 +24,19 @@ export default class LatinVoiceMoodConjugationView extends LatinVerbView {
    * @return {boolean}
    */
   static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(LatinVoiceMoodConjugationView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinVoiceMoodConjugationView.partOfSpeech)
+    if (LanguageModelFactory.compareLanguages(LatinConjugationMoodVoiceView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinConjugationMoodVoiceView.partOfSpeech)
     }
   }
 
   createTable () {
-    this.table = new Table([this.features.voices, this.features.moods, this.features.conjugations,
+    this.table = new Table([this.features.conjugations, this.features.moods, this.features.voices,
       this.features.tenses, this.features.numbers, this.features.persons])
     let features = this.table.features
     features.columns = [
-      this.language_features[Feature.types.voice],
+      this.language_features[Feature.types.conjugation],
       this.language_features[Feature.types.mood],
-      this.language_features[Feature.types.conjugation]]
+      this.language_features[Feature.types.voice]]
     features.rows = [
       this.language_features[Feature.types.tense],
       this.language_features[Feature.types.number],

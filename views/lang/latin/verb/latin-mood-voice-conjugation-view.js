@@ -1,6 +1,7 @@
 import { LanguageModelFactory, Feature } from 'alpheios-data-models'
+import LanguageDataset from '../../../../lib/language-dataset.js'
 import LatinVerbView from './latin-verb-view.js'
-import Table from '../../lib/table'
+import Table from '../../../lib/table'
 
 export default class LatinMoodVoiceConjugationView extends LatinVerbView {
   constructor (inflectionData, messages) {
@@ -8,6 +9,8 @@ export default class LatinMoodVoiceConjugationView extends LatinVerbView {
     this.id = 'verbMoodVoiceConjugation'
     this.name = 'mood-voice-conjugation'
     this.title = 'Verb Conjugation'
+
+    this.inflectionType = LanguageDataset.SUFFIX
 
     this.createTable()
   }

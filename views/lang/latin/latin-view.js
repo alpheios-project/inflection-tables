@@ -47,10 +47,10 @@ export default class LatinView extends View {
     this.table = new Table([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
-    features.columns = [this.language_features[Feature.types.declension], this.language_features[Feature.types.gender], this.language_features[Feature.types.type]]
-    features.rows = [this.language_features[Feature.types.number], this.language_features[Feature.types.grmCase]]
-    features.columnRowTitles = [this.language_features[Feature.types.grmCase]]
-    features.fullWidthRowTitles = [this.language_features[Feature.types.number]]
+    features.columns = [this.model.getFeatureType(Feature.types.declension), this.model.getFeatureType(Feature.types.gender), this.model.getFeatureType(Feature.types.type)]
+    features.rows = [this.model.getFeatureType(Feature.types.number), this.model.getFeatureType(Feature.types.grmCase)]
+    features.columnRowTitles = [this.model.getFeatureType(Feature.types.grmCase)]
+    features.fullWidthRowTitles = [this.model.getFeatureType(Feature.types.number)]
   }
 
   /**

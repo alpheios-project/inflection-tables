@@ -1,4 +1,4 @@
-import {LanguageModelFactory} from 'alpheios-data-models'
+import { LanguageModelFactory } from 'alpheios-data-models'
 
 /**
  * Represents a single view.
@@ -24,6 +24,7 @@ export default class View {
     this.name = 'base view'
     this.title = 'Base View'
     this.partOfSpeech = undefined
+    this.inflectionType = undefined
     this.forms = new Set()
     this.table = {}
   }
@@ -78,7 +79,7 @@ export default class View {
    * `messages` provides a translation for view's texts.
    */
   render () {
-    this.footnotes = this.inflectionData.getFootnotesMap(this.partOfSpeech)
+    this.footnotes = this.getFootnotes(this.inflectionData)
     // Table is already created during a view construction
     this.table.messages = this.messages
     for (let lexeme of this.inflectionData.homonym.lexemes) {
@@ -91,8 +92,36 @@ export default class View {
         }
       }
     }
-    this.table.construct(this.inflectionData.getSuffixes(this.partOfSpeech)).constructViews().addEventListeners()
+    this.table.construct(this.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
     return this
+  }
+
+  /**
+   * A compatibility function to get morphemes, either suffixes or forms, depending on the view type.
+   * By default, it returns suffixes
+   * @param {InflectionData} inflectionData
+   */
+  getMorphemes (inflectionData) {
+    if (this.inflectionType) {
+      return inflectionData.getMorphemes(this.partOfSpeech, this.inflectionType)
+    } else {
+      console.warn(`To avoid using legacy functions please set an inflectionType of this view to either SUFFIX or FORM`)
+      return inflectionData.getLegacySuffixes(this.partOfSpeech)
+    }
+  }
+
+  /**
+   * A compatibility function to get footnotes for either suffixes or forms, depending on the view type
+   * @param {InflectionData} inflectionData
+   */
+  getFootnotes (inflectionData) {
+    if (this.inflectionType) {
+      return inflectionData.getFootnotesMap(this.partOfSpeech, this.inflectionType)
+    } else {
+      // View does not support type-based data yet
+      console.warn(`To avoid using legacy functions please set an inflectionType of this view to either SUFFIX or FORM`)
+      return inflectionData.getLagacyFootnotesMap(this.partOfSpeech)
+    }
   }
 
   get wideViewNodes () {

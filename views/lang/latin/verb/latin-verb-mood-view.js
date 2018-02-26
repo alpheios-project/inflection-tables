@@ -1,6 +1,6 @@
 import { LanguageModelFactory, Feature } from 'alpheios-data-models'
 import LatinVerbView from './latin-verb-view.js'
-import GroupFeatureType from '../../lib/group-feature-type'
+import GroupFeatureType from '../../../lib/group-feature-type'
 
 export default class LatinVerbMoodView extends LatinVerbView {
   constructor (inflectionData, messages) {

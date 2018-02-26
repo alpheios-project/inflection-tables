@@ -1,7 +1,7 @@
 import { Constants, LanguageModelFactory, Feature, FeatureType } from 'alpheios-data-models'
-import LatinView from './latin-view.js'
-import GroupFeatureType from '../../lib/group-feature-type'
-import Table from '../../lib/table'
+import LatinView from '../latin-view.js'
+import GroupFeatureType from '../../../lib/group-feature-type'
+import Table from '../../../lib/table'
 
 export default class LatinVerbParticipleView extends LatinView {
   constructor (inflectionData, messages) {

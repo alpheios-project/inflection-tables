@@ -1,7 +1,7 @@
 import { Constants, LanguageModelFactory, Feature, FeatureType } from 'alpheios-data-models'
 import LatinVerbMoodView from './latin-verb-mood-view.js'
-import GroupFeatureType from '../../lib/group-feature-type'
-import Table from '../../lib/table'
+import GroupFeatureType from '../../../lib/group-feature-type'
+import Table from '../../../lib/table'
 
 export default class LatinInfinitiveView extends LatinVerbMoodView {
   constructor (inflectionData, messages) {

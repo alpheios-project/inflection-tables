@@ -1,7 +1,8 @@
-import { Constants, GreekLanguageModel, Feature, FeatureType } from 'alpheios-data-models'
-import View from '../../lib/view.js'
-import GreekView from './greek-view.js'
-import GroupFeatureType from '../../lib/group-feature-type.js'
+import { Constants, GreekLanguageModel, Feature, FeatureType, LanguageModelFactory } from 'alpheios-data-models'
+import LanguageDataset from '../../../../lib/language-dataset.js'
+import View from '../../../lib/view.js'
+import GreekView from '../greek-view.js'
+import GroupFeatureType from '../../../lib/group-feature-type.js'
 
 /**
  * This is a base class for all pronoun views. This class should not be used to create tables. Its purpose
@@ -19,6 +20,7 @@ export default class GreekPronounView extends GreekView {
     this.name = GreekPronounView.getName(grammarClass)
     this.title = GreekPronounView.getTitle(grammarClass)
     this.partOfSpeech = GreekPronounView.partOfSpeech
+    this.inflectionType = GreekPronounView.inflectionType
     this.featureTypes = {}
 
     const GEND_MASCULINE_FEMININE = 'masculine feminine'
@@ -77,6 +79,10 @@ export default class GreekPronounView extends GreekView {
     return Constants.POFS_PRONOUN
   }
 
+  static get inflectionType () {
+    return LanguageDataset.FORM
+  }
+
   /**
    * What classes of pronouns this view should be used with.
    * Should be defined in descendants.
@@ -96,5 +102,25 @@ export default class GreekPronounView extends GreekView {
 
   static getTitle (grammarClass) {
     return View.toTitleCase(`${grammarClass} ${GreekPronounView.partOfSpeech} Declension`).trim()
+  }
+
+  /**
+   * Determines wither this view can be used to display an inflection table of any data
+   * within an `inflectionData` object.
+   * By default a view can be used if a view and an inflection data piece have the same language,
+   * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflectionData
+   * @return {boolean}
+   */
+  static matchFilter (inflectionData) {
+    if (LanguageModelFactory.compareLanguages(this.languageID, inflectionData.languageID) &&
+      inflectionData.hasOwnProperty(this.partOfSpeech)) {
+      let inflectionItems = inflectionData.getMorphemes(this.partOfSpeech, this.inflectionType)
+      let found = inflectionItems.find(form => this.classes.includes(form.features[Feature.types.grmClass]))
+      if (found) {
+        return true
+      }
+    }
+    return false
   }
 }
