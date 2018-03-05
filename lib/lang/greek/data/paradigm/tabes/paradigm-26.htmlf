@@ -1,0 +1,201 @@
+<title>Present System Active of Contract Verbs in -<span xml:lang="grc">όω</span>
+</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" mood="indicative">indicative</cell>
+        <cell role="label" tense="present" voice="active" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="present" voice="active" mood="optative">optative</cell>
+        <cell role="label" tense="present" voice="active" mood="optative"/>
+        <cell role="label" tense="present" voice="active" mood="imperative">imperative</cell>
+        <cell role="label" tense="imperfect" voice="active" mood="indicative">imperfect indicative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">singular</cell>
+        <cell role="label" tense="present" voice="active" num="singular">1st</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">δηλῶ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">δηλῶ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="optative"><span xml:lang="grc">(δηλοῖμι)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">δηλοίην</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἐδήλουν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="singular">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">δηλοῖς</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δηλοῖς</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="optative"><span xml:lang="grc">(δηλοῖς)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">δηλοίης</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δήλου</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐδήλους</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="singular">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">δηλοῖ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δηλοῖ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="optative"><span xml:lang="grc">(δηλοῖ)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">δηλοίη</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δηλούτω</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐδήλου</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">dual</cell>
+        <cell role="label" tense="present" voice="active" num="dual">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">δηλοῦτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δηλῶτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">δηλοῖτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="optative"><span xml:lang="grc">(δηλοίητον)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δηλοῦτον</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐδηλοῦτον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="dual">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">δηλοῦτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δηλῶτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">δηλοίτην</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="optative"><span xml:lang="grc">(δηλοιήτην)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δηλούτων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐδηλούτην</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">plural</cell>
+        <cell role="label" tense="present" voice="active" num="plural">1st</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">δηλοῦμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">δηλῶμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">δηλοῖμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="optative"><span xml:lang="grc">(δηλοίημεν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἐδηλοῦμεν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="plural">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">δηλοῦτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δηλῶτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">δηλοῖτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="optative"><span xml:lang="grc">(δηλοίητε)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δηλοῦτε</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐδηλοῦτε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="plural">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">δηλοῦσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δηλῶσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">δηλοῖεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="optative"><span xml:lang="grc">(δηλοίησαν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δηλούντων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐδήλουν</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active">infinitive</cell>
+        <cell role="data" tense="present" voice="active" mood="infinitive">
+            <span xml:lang="grc">δηλοῦν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active">participle</cell>
+        <cell role="data" tense="present" voice="active" pofs="verb_participle">
+            <span xml:lang="grc">δηλῶν, δηλοῦσᾰ, δηλοῦν</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm55">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

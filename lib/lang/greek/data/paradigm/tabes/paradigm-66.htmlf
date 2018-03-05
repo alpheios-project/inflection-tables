@@ -1,0 +1,153 @@
+<title>Participles in <span xml:lang="grc">-μένος, -μένη, -μένον</span> (perfect middle-passive)</title>
+<table>
+    <row role="label">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" gend="masculine">masculine</cell>
+        <cell role="label" pofs="verb_participle" gend="feminine">feminine</cell>
+        <cell role="label" pofs="verb_participle" gend="neuter">neuter</cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">singular</cell>
+        <cell role="label" pofs="verb_participle" num="singular">nominative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένος</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative" gend="feminine">
+            <span xml:lang="grc">γεγραμμένη</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">genitive</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="masculine">
+            <span xml:lang="grc">γεγραμμένου</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="feminine">
+            <span xml:lang="grc">γεγραμμένης</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="neuter">
+            <span xml:lang="grc">γεγραμμένου</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">dative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένῳ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="feminine">
+            <span xml:lang="grc">γεγραμμένῃ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένῳ</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">accusative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένον</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="feminine">
+            <span xml:lang="grc">γεγραμμένην</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">vocative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="vocative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένε</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="vocative" gend="feminine">
+            <span xml:lang="grc">γεγραμμένη</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="vocative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">dual</cell>
+        <cell role="label" pofs="verb_participle" num="dual">n.a.v.</cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένω</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="feminine">
+            <span xml:lang="grc">γεγραμμένᾱ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένω</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="dual">g.d.</cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένοιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="feminine">
+            <span xml:lang="grc">γεγραμμέναιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένοιν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">plural</cell>
+        <cell role="label" pofs="verb_participle" num="plural">n.v.</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένοι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">γεγραμμέναι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένᾰ</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">genitive</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="masculine">
+            <span xml:lang="grc">γεγραμμένων</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="feminine">
+            <span xml:lang="grc">γεγραμμένων</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="neuter">
+            <span xml:lang="grc">γεγραμμένων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">dative</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένοις</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="feminine">
+            <span xml:lang="grc">γεγραμμέναις</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένοις</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">accusative</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="masculine">
+            <span xml:lang="grc">γεγραμμένους</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="feminine">
+            <span xml:lang="grc">γεγραμμένᾱς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="neuter">
+            <span xml:lang="grc">γεγραμμένᾰ</span>
+        </cell>
+    </row>
+</table>

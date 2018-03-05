@@ -1,0 +1,184 @@
+<title>
+    <span xml:lang="grc">δίδωμι</span>: Present System Active</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" mood="indicative">indicative</cell>
+        <cell role="label" tense="present" voice="active" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="present" voice="active" mood="optative">optative</cell>
+        <cell role="label" tense="present" voice="active" mood="imperative">imperative</cell>
+        <cell role="label" tense="imperfect" voice="active" mood="indicative">imperfect indicative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">singular</cell>
+        <cell role="label" tense="present" voice="active" num="singular">1st</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">δίδωμι</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">διδῶ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">διδοίην</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἐδίδουν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="singular">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">δίδως</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">διδῷς</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">διδοίης</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δίδου</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐδίδους</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="singular">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">δίδωσι(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">διδῷ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">διδοίη</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">διδότω</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐδίδου</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">dual</cell>
+        <cell role="label" tense="present" voice="active" num="dual">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">δίδοτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">διδῶτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">διδοῖτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δίδοτον</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐδίδοτον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="dual">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">δίδοτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">διδῶτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">διδοίτην</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">διδότων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐδιδότην</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">plural</cell>
+        <cell role="label" tense="present" voice="active" num="plural">1st</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">δίδομεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">διδῶμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">διδοῖμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἐδίδομεν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="plural">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">δίδοτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">διδῶτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">διδοῖτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δίδοτε</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐδίδοτε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="plural">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">διδόᾱσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">διδῶσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">διδοῖεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">διδόντων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐδίδοσαν</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active">infinitive</cell>
+        <cell role="data" tense="present" voice="active" mood="infinitive">
+            <span xml:lang="grc">διδόναι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active">participle</cell>
+        <cell role="data" tense="present" voice="active" pofs="verb_participle">
+            <span xml:lang="grc">διδούς, διδοῦσᾰ, διδόν</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm61">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

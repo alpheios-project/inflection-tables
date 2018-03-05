@@ -1,0 +1,184 @@
+<title>Present System Middle-Passive of Contract Verbs in -<span xml:lang="grc">έω</span>
+</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle" mood="indicative">indicative</cell>
+        <cell role="label" tense="present" voice="mediopassive middle" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="present" voice="mediopassive middle" mood="optative">optative</cell>
+        <cell role="label" tense="present" voice="mediopassive middle" mood="imperative">imperative</cell>
+        <cell role="label" tense="imperfect" voice="mediopassive middle" mood="indicative">imperfect indicative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle">singular</cell>
+        <cell role="label" tense="present" voice="mediopassive middle" num="singular">1st</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ποιοῦμαι</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ποιῶμαι</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">ποιοίμην</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="mediopassive middle" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἐποίουν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle" num="singular">2nd</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ποιῇ</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ποιῇ</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">ποιοῖο</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ποιοῦ</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="mediopassive middle" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐποίεις</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle" num="singular">3rd</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ποιεῖται</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ποιῆται</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">ποιοῖτο</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ποιείσθω</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="mediopassive middle" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐποίει</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle">dual</cell>
+        <cell role="label" tense="present" voice="mediopassive middle" num="dual">2nd</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ποιεῖσθον</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ποιῆσθον</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">ποιοῖσθον</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ποιεῖσθον</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="mediopassive middle" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐποίεῖσθον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle" num="dual">3rd</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ποιεῖσθον</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ποιῆσθον</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">ποιοίσθην</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ποιείσθων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="mediopassive middle" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐποιείσθην</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle">plural</cell>
+        <cell role="label" tense="present" voice="mediopassive middle" num="plural">1st</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ποιούμεθα</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ποιώμεθα</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">ποιοίμεθα</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="mediopassive middle" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἐποιούμεθα</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle" num="plural">2nd</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ποιεῖσθε</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ποιῆσθε</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">ποιοῖσθε</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ποιεῖσθε</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="mediopassive middle" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐποιεῖσθε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle" num="plural">3rd</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ποιοῦνται</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ποιῶνται</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">ποιοῖντο</span>
+        </cell>
+        <cell role="data" tense="present" voice="mediopassive middle" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ποιείσθων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="mediopassive middle" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐποιοῦντο</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle">infinitive</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" mood="infinitive">
+            <span xml:lang="grc">ποιεῖσθαι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="mediopassive middle"/>
+        <cell role="label" tense="present" voice="mediopassive middle">participle</cell>
+        <cell role="data" tense="present" voice="mediopassive middle" pofs="verb_participle">
+            <span xml:lang="grc">ποιούμενος, -η, -ον</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm65">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

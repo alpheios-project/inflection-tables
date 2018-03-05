@@ -690,7 +690,7 @@ describe('GroupFeatureList', () => {
   })
 
   test('items() should return a list of features.', () => {
-    expect(groupingFeatureList.items).toEqual(featureList)
+    expect(groupingFeatureList.types).toEqual(featureList)
   })
 
   test('columnFeatures() should return a list of column features.', () => {

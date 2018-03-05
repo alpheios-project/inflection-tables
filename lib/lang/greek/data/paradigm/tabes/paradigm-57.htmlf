@@ -1,0 +1,141 @@
+<title>Participles in <span xml:lang="grc">-ών, -οῦσα, -όν</span> (strong aorist active; present of <span
+        xml:lang="grc">εἰμί</span> and <span xml:lang="grc">εἶμι</span>)</title>
+<table>
+    <row role="label">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" gend="masculine">masculine</cell>
+        <cell role="label" pofs="verb_participle" gend="feminine">feminine</cell>
+        <cell role="label" pofs="verb_participle" gend="neuter">neuter</cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">singular</cell>
+        <cell role="label" pofs="verb_participle" num="singular">n.v.</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">λιπών</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">λιποῦσᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">λιπόν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">genitive</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="masculine">
+            <span xml:lang="grc">λιπόντος</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="feminine">
+            <span xml:lang="grc">λιπούσης</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="neuter">
+            <span xml:lang="grc">λιπόντος</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">dative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="masculine">
+            <span xml:lang="grc">λιπόντι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="feminine">
+            <span xml:lang="grc">λιπούσῃ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="neuter">
+            <span xml:lang="grc">λιπόντι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">accusative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="masculine">
+            <span xml:lang="grc">λιπόντᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="feminine">
+            <span xml:lang="grc">λιποῦσᾰν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="neuter">
+            <span xml:lang="grc">λιπόν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">dual</cell>
+        <cell role="label" pofs="verb_participle" num="dual">n.a.v.</cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="masculine">
+            <span xml:lang="grc">λιπόντε</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="feminine">
+            <span xml:lang="grc">λιπούσᾱ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="neuter">
+            <span xml:lang="grc">λιπόντε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="dual">g.d.</cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="masculine">
+            <span xml:lang="grc">λιπόντοιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="feminine">
+            <span xml:lang="grc">λιπούσαιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="neuter">
+            <span xml:lang="grc">λιπόντοιν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">plural</cell>
+        <cell role="label" pofs="verb_participle" num="plural">n.v.</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">λιπόντες</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">λιποῦσαι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">λιπόντᾰ</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">genitive</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="masculine">
+            <span xml:lang="grc">λιπόντων</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="feminine">
+            <span xml:lang="grc">λιπουσῶν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="neuter">
+            <span xml:lang="grc">λιπόντων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">dative</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="masculine">
+            <span xml:lang="grc">λιποῦσῐ(ν)</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="feminine">
+            <span xml:lang="grc">λιπούσαις</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="neuter">
+            <span xml:lang="grc">λιποῦσῐ(ν)</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">accusative</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="masculine">
+            <span xml:lang="grc">λιπόντᾰς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="feminine">
+            <span xml:lang="grc">λιπούσᾱς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="neuter">
+            <span xml:lang="grc">λιπόντᾰ</span>
+        </cell>
+    </row>
+</table>

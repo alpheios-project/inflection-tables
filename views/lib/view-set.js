@@ -20,6 +20,7 @@ import GreekGenderPronounView from '../lang/greek/pronoun/greek-gender-pronoun-v
 import GreekLemmaGenderPronounView from '../lang/greek/pronoun/greek-lemma-gender-pronoun-view.js'
 import GreekPersonGenderPronounView from '../lang/greek/pronoun/greek-person-gender-pronoun-view.js'
 import GreekPersonPronounView from '../lang/greek/pronoun/greek-person-pronoun-view.js'
+import GreekParadigmView from '../lang/greek/paradigm/greek-paradigm-view.js'
 
 /**
  * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
@@ -53,7 +54,8 @@ export default class ViewSet {
           GreekGenderPronounView,
           GreekPersonGenderPronounView,
           GreekPersonPronounView,
-          GreekLemmaGenderPronounView
+          GreekLemmaGenderPronounView,
+          GreekParadigmView
         ]
       ]
     ])
@@ -69,18 +71,12 @@ export default class ViewSet {
         }
       }
     }
-
-    this.partsOfSpeech = []
-    for (const view of this.matchingViews) {
-      if (!this.partsOfSpeech.includes(view.partOfSpeech)) {
-        this.partsOfSpeech.push(view.partOfSpeech)
-      }
-    }
+    this.partsOfSpeech = Array.from(new Set(this.matchingViews.map(view => view.constructor.partOfSpeech)))
   }
 
   getViews (partOfSpeech = undefined) {
     if (partOfSpeech) {
-      return this.matchingViews.filter(view => view.partOfSpeech === partOfSpeech)
+      return this.matchingViews.filter(view => view.constructor.partOfSpeech === partOfSpeech)
     } else {
       return this.matchingViews
     }

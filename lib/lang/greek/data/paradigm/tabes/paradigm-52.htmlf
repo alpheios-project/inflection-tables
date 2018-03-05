@@ -1,0 +1,159 @@
+<title>
+    <span xml:lang="grc">δύω</span>: Aorist System Active</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" mood="indicative">indicative</cell>
+        <cell role="label" tense="aorist" voice="active" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="aorist" voice="active" mood="optative">optative</cell>
+        <cell role="label" tense="aorist" voice="active" mood="imperative">imperative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active">singular</cell>
+        <cell role="label" tense="aorist" voice="active" num="singular">1st</cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἔδῡν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">δύω</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">δύοιμι</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="singular">2nd</cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἔδῡς</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δύῃς</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">δύοις</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δῦθι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="singular">3rd</cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἔδῡ</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δύῃ</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">δύοι</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δύτω</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active">dual</cell>
+        <cell role="label" tense="aorist" voice="active" num="dual">2nd</cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἔδῡτον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δύῶτον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">δύοιτον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δῦτον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="dual">3rd</cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐδύτην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δύῶτον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">δυοίτην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δύτων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active">plural</cell>
+        <cell role="label" tense="aorist" voice="active" num="plural">1st</cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἔδῡμεν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">δύῶμεν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">δύοιμεν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="plural">2nd</cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἔδῡτε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δύῶτε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">δύοιτε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δῦτε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="plural">3rd</cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἔδῡσαν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δύῶσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">δύοιεν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δύντων</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active">infinitive</cell>
+        <cell role="data" tense="aorist" voice="active" mood="infinitive">
+            <span xml:lang="grc">δῦναι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active">participle</cell>
+        <cell role="data" tense="aorist" voice="active" pofs="verb_participle">
+            <span xml:lang="grc">δύς, δῦσᾰ, δύν</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm62">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

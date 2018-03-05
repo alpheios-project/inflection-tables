@@ -1,0 +1,140 @@
+<title>Participles in <span xml:lang="grc">-άς, -ᾶσα, -άν (μι</span>-verb present and aorist active)</title>
+<table>
+    <row role="label">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" gend="masculine">masculine</cell>
+        <cell role="label" pofs="verb_participle" gend="feminine">feminine</cell>
+        <cell role="label" pofs="verb_participle" gend="neuter">neuter</cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">singular</cell>
+        <cell role="label" pofs="verb_participle" num="singular">n.v.</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">ἱστάς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">ἱστᾶσᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">ἱστάν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">genitive</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="masculine">
+            <span xml:lang="grc">ἱστάντος</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="feminine">
+            <span xml:lang="grc">ἱστάσης</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="neuter">
+            <span xml:lang="grc">ἱστάντος</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">dative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="masculine">
+            <span xml:lang="grc">ἱστάντι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="feminine">
+            <span xml:lang="grc">ἱστάσῃ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="neuter">
+            <span xml:lang="grc">ἱστάντι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">accusative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="masculine">
+            <span xml:lang="grc">ἱστάντᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="feminine">
+            <span xml:lang="grc">ἱστᾶσᾰν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="neuter">
+            <span xml:lang="grc">ἱστάν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">dual</cell>
+        <cell role="label" pofs="verb_participle" num="dual">n.a.v.</cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="masculine">
+            <span xml:lang="grc">ἱστάντε</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="feminine">
+            <span xml:lang="grc">ἱστάσᾱ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="neuter">
+            <span xml:lang="grc">ἱστάντε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="dual">g.d.</cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="masculine">
+            <span xml:lang="grc">ἱστάντοιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="feminine">
+            <span xml:lang="grc">ἱστάσαιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="neuter">
+            <span xml:lang="grc">ἱστάντοιν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">plural</cell>
+        <cell role="label" pofs="verb_participle" num="plural">n.v.</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">ἱστάντες</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">ἱστᾶσαι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">ἱστάντᾰ</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">genitive</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="masculine">
+            <span xml:lang="grc">ἱστάντων</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="feminine">
+            <span xml:lang="grc">ἱστᾱσῶν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="neuter">
+            <span xml:lang="grc">ἱστάντων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">dative</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="masculine">
+            <span xml:lang="grc">ἱστᾶσῐ(ν)</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="feminine">
+            <span xml:lang="grc">ἱστάσαις</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="neuter">
+            <span xml:lang="grc">ἱστᾶσῐ(ν)</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">accusative</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="masculine">
+            <span xml:lang="grc">ἱστάντᾰς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="feminine">
+            <span xml:lang="grc">ἱστάσᾱς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="neuter">
+            <span xml:lang="grc">ἱστάντᾰ</span>
+        </cell>
+    </row>
+</table>

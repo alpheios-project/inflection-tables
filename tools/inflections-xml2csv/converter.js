@@ -190,7 +190,6 @@ const config = {
           for (const group of data) {
             // Iterate over group's individual items
             for (const suffix of group['infl-ending']) {
-
               let footnote = ''
               if (suffix['_attr'].hasOwnProperty('footnote')) {
                 // There can be multiple footnotes separated by spaces
@@ -240,7 +239,7 @@ const config = {
     },
 
     verb: {
-      inputFN: ['alph-verb-conj.xml','alph-verb-conj-supp.xml'],
+      inputFN: ['alph-verb-conj.xml', 'alph-verb-conj-supp.xml'],
       outputSubDir: 'verb/',
       suffixes: {
         outputFN: 'suffixes.csv',
@@ -271,7 +270,7 @@ const config = {
                   'Conjugation': group['_attr']['conj']['_value'],
                   'Voice': group['_attr']['voice']['_value'],
                   'Mood': group['_attr']['mood']['_value'],
-                  'Tense': group['_attr']['tense']? group['_attr']['tense']['_value'] : '',
+                  'Tense': group['_attr']['tense'] ? group['_attr']['tense']['_value'] : '',
                   'Number': group['_attr']['num'] ? group['_attr']['num']['_value'] : '',
                   'Person': group['_attr']['pers'] ? group['_attr']['pers']['_value'] : '',
                   'Case': group['_attr']['case'] ? group['_attr']['case']['_value'] : '',
@@ -286,7 +285,7 @@ const config = {
                 'Conjugation': group['_attr']['conj']['_value'],
                 'Voice': group['_attr']['voice']['_value'],
                 'Mood': group['_attr']['mood']['_value'],
-                'Tense': group['_attr']['tense']? group['_attr']['tense']['_value'] : '',
+                'Tense': group['_attr']['tense'] ? group['_attr']['tense']['_value'] : '',
                 'Number': group['_attr']['num'] ? group['_attr']['num']['_value'] : '',
                 'Person': group['_attr']['pers'] ? group['_attr']['pers']['_value'] : '',
                 'Case': group['_attr']['case'] ? group['_attr']['case']['_value'] : '',
@@ -609,6 +608,84 @@ const config = {
           return path.join(__dirname, config.greek.outputBaseDir, config.greek.pronoun.outputSubDir, this.outputFN)
         }
       }
+    },
+    paradigm: {
+      inputFileName: 'alph-infl-verb-paradigms.xml',
+      outputSubDir: 'paradigm/',
+      rulesFileName: 'rules.csv',
+      footnotesFileName: 'footnotes.csv',
+      createParadigmTables () {
+        // let forms = []
+        // let footnotes = []
+        // let footnoteBase = 0
+        let data = readFile(path.join(__dirname, config.greek.inputBaseDir, config.greek.paradigm.inputFileName))
+        const json = xmlToJSON.parseString(data)
+
+        // Rules of matching
+        data = json['infl-paradigms'][0]['morpheus-paradigm-match'][0]['match']
+        let rules = []
+        for (const paradigm of data) {
+          const id = paradigm['_attr']['paradigm_id_ref']['_value']
+          const matchOrder = paradigm['_attr']['match_order']['_value']
+          let partOfSpeech = ''
+          let stemtype = ''
+          let voice = ''
+          let mood = ''
+          let tense = ''
+          let lemma = ''
+          let morphFlags = ''
+          let dialect = ''
+          for (const constraint of paradigm['constraint']) {
+            const name = constraint['_attr']['name']['_value']
+            if (name === 'pofs') {
+              partOfSpeech = constraint['_text']
+            } else if (name === 'stemtype') {
+              stemtype = constraint['_text']
+            } else if (name === 'voice') {
+              voice = constraint['_text']
+            } else if (name === 'mood') {
+              mood = constraint['_text']
+            } else if (name === 'tense') {
+              tense = constraint['_text']
+            } else if (name === 'lemma') {
+              lemma = constraint['_text']
+            } else if (name === 'morphflags') {
+              morphFlags = constraint['_text']
+            } else if (name === 'dial') {
+              dialect = constraint['_text']
+            }
+          }
+          rules.push({
+            'ID ref': id,
+            'Match order': matchOrder,
+            'Part of speech': partOfSpeech,
+            'Stem type': stemtype,
+            'Voice': voice,
+            'Mood': mood,
+            'Tense': tense,
+            'Lemma': lemma,
+            'Morph flags': morphFlags,
+            'Dialect': dialect
+          })
+        }
+        writeData(csvParser.unparse(rules), path.join(__dirname, config.greek.outputBaseDir,
+          config.greek.paradigm.outputSubDir, config.greek.paradigm.rulesFileName))
+
+        // Footnotes
+        data = json['infl-paradigms'][0]['footnotes'][0]['footnote']
+        let footnotes = []
+        for (const footnote of data) {
+          let index = footnote['_attr']['id']['_value'].replace(/\D+/g, '')
+          let text = footnote['_text']
+          footnotes.push({
+            Index: index,
+            Text: text
+          })
+        }
+
+        writeData(csvParser.unparse(footnotes), path.join(__dirname, config.greek.outputBaseDir,
+          config.greek.paradigm.outputSubDir, config.greek.paradigm.footnotesFileName))
+      }
     }
   }
 }
@@ -632,6 +709,7 @@ const POS_PRONOUN = 'pronoun'
 const POS_ADJECTIVE = 'adjective'
 const POS_VERB = 'verb'
 const POS_LEMMA = 'lemma'
+const POS_PARADIGM = 'paradigm'
 
 /*
  To convert flies selectively a script can take the following parameters: <language> <part of speech>, where
@@ -685,10 +763,10 @@ try {
     if (posName === POS_VERB || posName === POS_ALL) {
       posCfg = lCfg[POS_VERB]
       data = readFile(path.join(__dirname, lCfg.inputBaseDir, posCfg.inputFN))
-      json = {'infl-data':[]}
+      json = {'infl-data': []}
       for (let f of latin.verb.inputFN) {
-        let d = readFile(path.join(__dirname, latin.inputBaseDir, f));
-        let j = xmlToJSON.parseString(d);
+        let d = readFile(path.join(__dirname, latin.inputBaseDir, f))
+        let j = xmlToJSON.parseString(d)
         json['infl-data'] = json['infl-data'].concat(j['infl-data'])
       }
       writeData(posCfg.suffixes.get(json), posCfg.suffixes.outputPath)
@@ -727,6 +805,12 @@ try {
       const {forms, footnotes} = posCfg.forms.getFromFiles(posCfg.inputFiles, lCfg.inputBaseDir)
       writeData(forms, posCfg.forms.outputPath)
       writeData(footnotes, posCfg.footnotes.outputPath)
+    }
+
+    // Paradigms
+    if (posName === POS_PARADIGM || posName === POS_ALL) {
+      posCfg = lCfg[POS_PARADIGM]
+      posCfg.createParadigmTables()
     }
   }
   // endregion Greek

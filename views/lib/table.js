@@ -35,7 +35,6 @@ export default class Table {
    */
   construct (suffixes) {
     this.suffixes = suffixes
-    console.log(`Constructing a tree`)
     this.tree = this.groupByFeature(suffixes)
     this.headers = this.constructHeaders()
     this.columns = this.constructColumns()

@@ -1,0 +1,159 @@
+<title>
+    <span xml:lang="grc">δίδωμι</span>: Aorist System Active</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" mood="indicative">indicative</cell>
+        <cell role="label" tense="aorist" voice="active" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="aorist" voice="active" mood="optative">optative</cell>
+        <cell role="label" tense="aorist" voice="active" mood="imperative">imperative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active">singular</cell>
+        <cell role="label" tense="aorist" voice="active" num="singular">1st</cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἔδωκα</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">δῶ</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">δοίην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="singular">2nd</cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἔδωκας</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δῷς</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">δοίης</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δός</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="singular">3rd</cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἔδωκε(ν)</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δῷ</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">δοίη</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δότω</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active">dual</cell>
+        <cell role="label" tense="aorist" voice="active" num="dual">2nd</cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἔδοτον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δῶτον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">δοῖτον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δότον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="dual">3rd</cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐδότην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δῶτον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">δοίτην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δότων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active">plural</cell>
+        <cell role="label" tense="aorist" voice="active" num="plural">1st</cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἔδομεν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">δῶμεν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">δοίημεν</span>, <span xml:lang="grc">δοῖμεν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="plural">2nd</cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἔδοτε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">δῶτε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">δοίητε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">δότε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active" num="plural">3rd</cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἔδοσαν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">δῶσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">δοῖεν</span>, <span xml:lang="grc">δοίησαν</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="active" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">δόντων</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active">infinitive</cell>
+        <cell role="data" tense="aorist" voice="active" mood="infinitive">
+            <span xml:lang="grc">δοῦναι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="active"/>
+        <cell role="label" tense="aorist" voice="active">participle</cell>
+        <cell role="data" tense="aorist" voice="active" pofs="verb_participle">
+            <span xml:lang="grc">δούς, δοῦσᾰ, δόν</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm61">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

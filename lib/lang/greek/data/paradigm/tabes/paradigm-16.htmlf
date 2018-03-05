@@ -1,0 +1,183 @@
+<title>Future Perfect Indicative, Infinitive, Participle</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="future_perfect" mood="indicative"/>
+        <cell role="label" tense="future_perfect" mood="indicative"/>
+        <cell role="label" tense="future_perfect" mood="indicative" voice="active">periphrastic active</cell>
+        <cell role="label" tense="future_perfect" mood="indicative" voice="active">simple active (rare)</cell>
+        <cell role="label" tense="future_perfect" mood="indicative" voice="mediopassive middle">middle-passive</cell>
+        <cell role="label" tense="future_perfect" mood="indicative" voice="mediopassive middle"/>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative">singular</cell>
+        <cell role="label" tense="future_perfect" mood="indicative" num="singular">1st</cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="1st" voice="active">
+            <span xml:lang="grc">λελυκὼς (-υῖα) ἔσομαι</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="1st" voice="active">
+            <span xml:lang="grc">τεθνήξω</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="1st"
+              voice="mediopassive middle">
+            <span xml:lang="grc">λελύσομαι</span></cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="1st"
+              voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένος (-η) ἔσομαι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative"/>
+        <cell role="label" tense="future_perfect" mood="indicative" num="singular">2nd</cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="2nd" voice="active">
+            <span xml:lang="grc">λελυκὼς (-υῖα) ἔσῃ</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="2nd" voice="active">
+            <span xml:lang="grc">τεθνήξεις</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="2nd"
+              voice="mediopassive middle">
+            <span xml:lang="grc">λελύσῃ</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="2nd"
+              voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένος (-η) ἔσῃ</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative"/>
+        <cell role="label" tense="future_perfect" mood="indicative" num="singular">3rd</cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="3rd" voice="active">
+            <span xml:lang="grc">λελυκὼς (-υῖα, -ὸς) ἔσται</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="3rd" voice="active">
+            <span xml:lang="grc">τεθνήξει</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="3rd"
+              voice="mediopassive middle">
+            <span xml:lang="grc">λελύσεται</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="singular" pers="3rd"
+              voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένος (-η, -ον) ἔσται</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative">dual</cell>
+        <cell role="label" tense="future_perfect" mood="indicative" num="dual">2nd</cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="dual" pers="2nd" voice="active">
+            <span xml:lang="grc">λελυκότε (-υία) ἔσεσθον</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="dual" pers="2nd" voice="active">
+            <span xml:lang="grc">τεθνήξετον</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="dual" pers="2nd" voice="mediopassive middle">
+            <span xml:lang="grc">λελύσεσθον</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="dual" pers="2nd" voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένω (-ᾱ) ἔσεσθον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative"/>
+        <cell role="label" tense="future_perfect" mood="indicative" num="dual">3rd</cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="dual" pers="3rd" voice="active">
+            <span xml:lang="grc">λελυκότε (-υία) ἔσεσθον</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="dual" pers="3rd" voice="active">
+            <span xml:lang="grc">τεθνήξετον</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="dual" pers="3rd" voice="mediopassive middle">
+            <span xml:lang="grc">λελύσεσθον</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="dual" pers="3rd" voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένω (-ᾱ) ἔσεσθον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative">plural</cell>
+        <cell role="label" tense="future_perfect" mood="indicative" num="plural">1st</cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="1st" voice="active">
+            <span xml:lang="grc">λελυκότες (-υῖαι) ἐσόμεθα</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="1st" voice="active">
+            <span xml:lang="grc">τεθνήξομεν</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="1st" voice="mediopassive middle">
+            <span xml:lang="grc">λελυσόμεθα</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="1st" voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένοι (-αι) ἐσόμεθα</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative"/>
+        <cell role="label" tense="future_perfect" mood="indicative" num="plural">2nd</cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="2nd" voice="active">
+            <span xml:lang="grc">λελυκότες (-υῖαι) ἔσεσθε</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="2nd" voice="active">
+            <span xml:lang="grc">τεθνήξετε</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="2nd" voice="mediopassive middle">
+            <span xml:lang="grc">λελύσεσθε</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="2nd" voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένοι (-αι) ἔσεσθε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative"/>
+        <cell role="label" tense="future_perfect" mood="indicative" num="plural">3rd</cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="3rd" voice="active">
+            <span xml:lang="grc">λελυκότες (-υῖαι) ἔσονται</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="3rd" voice="active">
+            <span xml:lang="grc">τεθνήξουσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="3rd" voice="mediopassive middle">
+            <span xml:lang="grc">λελύσονται</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="3rd" voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένοι (-αι) ἔσονται</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative"/>
+        <cell role="label" tense="future_perfect" mood="indicative" num="plural"/>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="3rd" voice="active"><span
+                xml:lang="grc">λελυκότα ἔσται</span>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="3rd" voice="active">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="3rd" voice="mediopassive middle">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="future_perfect" mood="indicative" num="plural" pers="3rd" voice="mediopassive middle">
+            <span xml:lang="grc">λελυμένᾰ ἔσται</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative"> active infinitive</cell>
+        <cell role="label" tense="future_perfect" mood="infinitive" voice="active">periphrastic: <span xml:lang="grc">λελυκὼς ἔσεσθαι;</span>
+            <span xml:lang="grc">simple (rare): τεθνήξειν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative"> middle-passive infinitive</cell>
+        <cell role="label" tense="future_perfect" mood="infinitive" voice="mediopassive middle">
+            <span xml:lang="grc">λελύσεσθαι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="future_perfect" mood="indicative">middle-passive participle</cell>
+        <cell role="label" tense="future_perfect" pofs="verb_participle" voice="mediopassive middle">
+            <span xml:lang="grc">λελυσόμενος, -η, -ον</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm65">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

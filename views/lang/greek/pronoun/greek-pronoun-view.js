@@ -1,5 +1,5 @@
 import { Constants, GreekLanguageModel, Feature, FeatureType, LanguageModelFactory } from 'alpheios-data-models'
-import LanguageDataset from '../../../../lib/language-dataset.js'
+import Form from '../../../../lib/form.js'
 import View from '../../../lib/view.js'
 import GreekView from '../greek-view.js'
 import GroupFeatureType from '../../../lib/group-feature-type.js'
@@ -19,8 +19,6 @@ export default class GreekPronounView extends GreekView {
     this.id = GreekPronounView.getID(grammarClass)
     this.name = GreekPronounView.getName(grammarClass)
     this.title = GreekPronounView.getTitle(grammarClass)
-    this.partOfSpeech = GreekPronounView.partOfSpeech
-    this.inflectionType = GreekPronounView.inflectionType
     this.featureTypes = {}
 
     const GEND_MASCULINE_FEMININE = 'masculine feminine'
@@ -80,7 +78,7 @@ export default class GreekPronounView extends GreekView {
   }
 
   static get inflectionType () {
-    return LanguageDataset.FORM
+    return Form
   }
 
   /**
@@ -114,11 +112,14 @@ export default class GreekPronounView extends GreekView {
    */
   static matchFilter (inflectionData) {
     if (LanguageModelFactory.compareLanguages(this.languageID, inflectionData.languageID) &&
-      inflectionData.hasOwnProperty(this.partOfSpeech)) {
-      let inflectionItems = inflectionData.getMorphemes(this.partOfSpeech, this.inflectionType)
-      let found = inflectionItems.find(form => this.classes.includes(form.features[Feature.types.grmClass]))
-      if (found) {
-        return true
+      inflectionData.pos.has(this.partOfSpeech)) {
+      let inflectionSet = inflectionData.pos.get(this.partOfSpeech)
+      if (inflectionSet.types.has(this.inflectionType)) {
+        let inflections = inflectionSet.types.get(this.inflectionType)
+        let found = inflections.items.find(form => this.classes.includes(form.features[Feature.types.grmClass]))
+        if (found) {
+          return true
+        }
       }
     }
     return false

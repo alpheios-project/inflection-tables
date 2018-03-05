@@ -1,0 +1,232 @@
+<title>
+    <span xml:lang="grc">εἶμι</span> (go): Present System</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" mood="indicative">indicative</cell>
+        <cell role="label" tense="present" voice="active" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="present" voice="active" mood="optative">optative</cell>
+        <cell role="label" tense="present" voice="active" mood="optative"/>
+        <cell role="label" tense="present" voice="active" mood="imperative">imperative</cell>
+        <cell role="label" tense="imperfect" voice="active" mood="indicative">imperfect indicative</cell>
+        <cell role="label" tense="imperfect" voice="active" mood="indicative"/>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">singular</cell>
+        <cell role="label" tense="present" voice="active" num="singular">1st</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">εἶμι</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ἴω</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">ἴοιμι</span></cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">ἰοίην</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ᾖα</span></cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ᾔειν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="singular">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">εἶ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἴῃς</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἴοις</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἴθι</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ᾔεισθα</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ᾔεις</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="singular">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">εἶσι(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἴῃ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἴοι</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἴτω</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ᾔειν</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ᾔει</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">dual</cell>
+        <cell role="label" tense="present" voice="active" num="dual">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἴτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἴητον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἴοιτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἴτον</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ᾖτον</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="dual">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἴτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἴητον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἰοίτην</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἴτων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ᾔτην</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">plural</cell>
+        <cell role="label" tense="present" voice="active" num="plural">1st</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἴμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ἴωμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">ἴοιμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ᾖμεν</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="plural">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἴτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἴητε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἴοιτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἴτε</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ᾖτε</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="plural">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἴᾱσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἴωσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἴοιεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἰόντων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ᾖσαν</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ᾔεσαν</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active">infinitive</cell>
+        <cell role="data" tense="present" voice="active" mood="infinitive">
+            <span xml:lang="grc">ἰέναι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active">participle</cell>
+        <cell role="data" tense="present" voice="active" pofs="verb_participle">
+            <span xml:lang="grc">ἰών, ἰοῦσᾰ, ἰόν</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm57">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

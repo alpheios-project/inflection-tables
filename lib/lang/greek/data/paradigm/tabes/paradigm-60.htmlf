@@ -1,0 +1,307 @@
+<title>Participles in <span xml:lang="grc">-είς, -εῖσα, -έν</span>
+</title>
+<table>
+    <row role="label">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" tense="aorist present" voice="active">μι-verb present and aorist
+            active
+        </cell>
+        <cell role="label" pofs="verb_participle" tense="aorist present" voice="active"/>
+        <cell role="label" pofs="verb_participle" tense="aorist present" voice="active"/>
+        <cell role="label" pofs="verb_participle" tense="aorist" voice="passive">aorist passive</cell>
+        <cell role="label" pofs="verb_participle" tense="aorist" voice="passive"/>
+        <cell role="label" pofs="verb_participle" tense="aorist" voice="passive"/>
+    </row>
+    <row role="label">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" tense="aorist present" voice="active" gend="masculine">masculine
+        </cell>
+        <cell role="label" pofs="verb_participle" tense="aorist present" voice="active" gend="feminine">feminine</cell>
+        <cell role="label" pofs="verb_participle" tense="aorist present" voice="active" gend="neuter">neuter</cell>
+        <cell role="label" pofs="verb_participle" tense="aorist" voice="passive" gend="masculine">masculine</cell>
+        <cell role="label" pofs="verb_participle" tense="aorist" voice="passive" gend="feminine">feminine</cell>
+        <cell role="label" pofs="verb_participle" tense="aorist" voice="passive" gend="neuter">neuter</cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">singular</cell>
+        <cell role="label" pofs="verb_participle" num="singular">n.v.</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular"
+              case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">τιθείς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular"
+              case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">τιθεῖσᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular"
+              case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">τιθέν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular"
+              case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">λυθείς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular"
+              case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">λυθεῖσᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular"
+              case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">λυθέν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">genitive</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular" case="genitive"
+              gend="masculine">
+            <span xml:lang="grc">τιθέντος</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aoris present" voice="active" num="singular" case="genitive"
+              gend="feminine">
+            <span xml:lang="grc">τιθείσης</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular" case="genitive"
+              gend="neuter">
+            <span xml:lang="grc">τιθέντος</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="genitive"
+              gend="masculine">
+            <span xml:lang="grc">λυθέντος</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="genitive"
+              gend="feminine">
+            <span xml:lang="grc">λυθείσης</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="genitive"
+              gend="neuter">
+            <span xml:lang="grc">λυθέντος</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">dative</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular" case="dative"
+              gend="masculine">
+            <span xml:lang="grc">τιθέντι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular" case="dative"
+              gend="feminine">
+            <span xml:lang="grc">τιθείσῃ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular" case="dative"
+              gend="neuter">
+            <span xml:lang="grc">τιθέντι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="dative"
+              gend="masculine">
+            <span xml:lang="grc">λυθέντι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="dative"
+              gend="feminine">
+            <span xml:lang="grc">λυθείσῃ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="dative"
+              gend="neuter">
+            <span xml:lang="grc">λυθέντι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">accusative</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular" case="accusative"
+              gend="masculine">
+            <span xml:lang="grc">τιθέντᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular" case="accusative"
+              gend="feminine">
+            <span xml:lang="grc">τιθεῖσᾰν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="singular" case="accusative"
+              gend="neuter">
+            <span xml:lang="grc">τιθέν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="accusative"
+              gend="masculine">
+            <span xml:lang="grc">λυθέντᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="accusative"
+              gend="feminine">
+            <span xml:lang="grc">λυθεῖσᾰν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="singular" case="accusative"
+              gend="neuter">
+            <span xml:lang="grc">λυθέν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">dual</cell>
+        <cell role="label" pofs="verb_participle" num="dual">n.a.v.</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" num="dual" case="nominative accusative vocative"
+              gend="masculine">
+            <span xml:lang="grc">τιθέντε</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="dual"
+              case="nominative accusative vocative" gend="feminine">
+            <span xml:lang="grc">τιθείσᾱ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="dual"
+              case="nominative accusative vocative" gend="neuter">
+            <span xml:lang="grc">τιθέντε</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="dual"
+              case="nominative accusative vocative" gend="masculine">
+            <span xml:lang="grc">λυθέντε</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="dual"
+              case="nominative accusative vocative" gend="feminine">
+            <span xml:lang="grc">λυθείσᾱ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="dual"
+              case="nominative accusative vocative" gend="neuter">
+            <span xml:lang="grc">λυθέντε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="dual">g.d.</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="dual" case="genitive dative"
+              gend="masculine">
+            <span xml:lang="grc">τιθέντοιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="dual" case="genitive dative"
+              gend="feminine">
+            <span xml:lang="grc">τιθείσαιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="dual" case="genitive dative"
+              gend="neuter">
+            <span xml:lang="grc">τιθέντοιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="dual" case="genitive dative"
+              gend="masculine">
+            <span xml:lang="grc">λυθέντοιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="dual" case="genitive dative"
+              gend="feminine">
+            <span xml:lang="grc">λυθείσαιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="dual" case="genitive dative"
+              gend="neuter">
+            <span xml:lang="grc">λυθέντοιν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">plural</cell>
+        <cell role="label" pofs="verb_participle" num="plural">n.v.</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural"
+              case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">τιθέντες</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural"
+              case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">τιθεῖσαι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural"
+              case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">τιθέντᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="nominative vocative"
+              gend="masculine">
+            <span xml:lang="grc">λυθέντες</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="nominative vocative"
+              gend="feminine">
+            <span xml:lang="grc">λυθεῖσαι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="nominative vocative"
+              gend="neuter">
+            <span xml:lang="grc">λυθέντᾰ</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">genitive</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="genitive"
+              gend="masculine">
+            <span xml:lang="grc">τιθέντων</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="genitive"
+              gend="feminine">
+            <span xml:lang="grc">τιθεισῶν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="genitive"
+              gend="neuter">
+            <span xml:lang="grc">τιθέντων</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="genitive"
+              gend="masculine">
+            <span xml:lang="grc">λυθέντων</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="genitive"
+              gend="feminine">
+            <span xml:lang="grc">λυθεισῶν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="genitive"
+              gend="neuter">
+            <span xml:lang="grc">λυθέντων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">dative</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="dative"
+              gend="masculine">
+            <span xml:lang="grc">τιθεῖσῐ(ν)</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="dative"
+              gend="feminine">
+            <span xml:lang="grc">τιθείσαις</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="dative"
+              gend="neuter">
+            <span xml:lang="grc">τιθεῖσῐ(ν)</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="dative"
+              gend="masculine">
+            <span xml:lang="grc">λυθεῖσῐ(ν)</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="dative"
+              gend="feminine">
+            <span xml:lang="grc">λυθείσαις</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="dative"
+              gend="neuter">
+            <span xml:lang="grc">λυθεῖσῐ(ν)</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">accusative</cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="accusative"
+              gend="masculine">
+            <span xml:lang="grc">τιθέντᾰς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="accusative"
+              gend="feminine">
+            <span xml:lang="grc">τιθείσᾱς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist present" voice="active" num="plural" case="accusative"
+              gend="neuter">
+            <span xml:lang="grc">τιθέντᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="accusative"
+              gend="masculine">
+            <span xml:lang="grc">λυθέντᾰς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="accusative"
+              gend="feminine">
+            <span xml:lang="grc">λυθείσᾱς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" tense="aorist" voice="passive" num="plural" case="accusative"
+              gend="neuter">
+            <span xml:lang="grc">λυθέντᾰ</span>
+        </cell>
+    </row>
+</table>

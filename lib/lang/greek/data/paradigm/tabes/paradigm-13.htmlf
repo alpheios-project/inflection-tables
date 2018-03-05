@@ -1,0 +1,127 @@
+<title>Perfect System Middle-Passive: periphrastic subjunctive, optative, imperative</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" mood="optative">optative</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" mood="imperative">imperative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle">singular</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="singular">1st</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">λελυμένος (-η) ὦ</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">λελυμένος (-η) εἴην</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="singular">2nd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">λελυμένος (-η) ᾖς</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">λελυμένος (-η) εἴης</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">λελυμένος (-η) ἴσθι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="singular">3rd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">λελυμένος (-η, -ον) ᾖ</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">λελυμένος (-η, -ον) εἴη</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">λελυμένος (-η, -ον) ἔστω</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle">dual</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="dual">2nd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">λελυμένω (-ᾱ) ἦτον</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">λελυμένω (-ᾱ) εἴητον</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">λελυμένω (-ᾱ) ἔστον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="dual">3rd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">λελυμένω (-ᾱ) ἦτον</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">λελυμένω (-ᾱ) εἰήτην</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">λελυμένω (-ᾱ) ἔστων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle">plural</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="plural">1st</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">λελυμένοι (-αι) ὦμεν</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">λελυμένοι (-αι) εἶμεν</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="plural">2nd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">λελυμένοι (-αι) ἦτε</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">λελυμένοι (-αι) εἶτε</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">λελυμένοι (-αι) ἔστε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="plural">3rd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">λελυμένοι (-αι) ὦσι(ν)</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">λελυμένοι (-αι) εἴεν</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">λελυμένοι (-αι) ἔστων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="plural"/>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="subjunctive"><span
+                xml:lang="grc">λελυμένᾰ ᾖ</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="optative"><span
+                xml:lang="grc">λελυμένᾰ εἴη</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="imperative"><span
+                xml:lang="grc">λελυμένᾰ ἔστω</span>
+        </cell>
+    </row>
+</table>

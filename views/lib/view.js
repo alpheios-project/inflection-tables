@@ -23,8 +23,8 @@ export default class View {
     this.id = 'baseView'
     this.name = 'base view'
     this.title = 'Base View'
-    this.partOfSpeech = undefined
-    this.inflectionType = undefined
+    // this.partOfSpeech = undefined
+    // this.inflectionType = undefined
     this.forms = new Set()
     this.table = {}
   }
@@ -39,10 +39,16 @@ export default class View {
 
   /**
    * Defines a part of speech of a view. Should be redefined in child classes.
-   * @return {string}
+   * @return {string | undefined}
    */
   static get partOfSpeech () {
-    return 'Undefined part of speech'
+  }
+
+  /**
+   * Defines an inflection type (Suffix/Form) of a view. Should be redefined in child classes.
+   * @return {Function | undefined}
+   */
+  static get inflectionType () {
   }
 
   /**
@@ -84,7 +90,7 @@ export default class View {
     this.table.messages = this.messages
     for (let lexeme of this.inflectionData.homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
-        if (inflection['part of speech'].filter((f) => f.hasValue(this.partOfSpeech)).length > 0) {
+        if (inflection['part of speech'].filter((f) => f.hasValue(this.constructor.partOfSpeech)).length > 0) {
           let form = inflection.prefix ? `${inflection.prefix} - ` : ''
           form = form + inflection.stem
           form = inflection.suffix ? `${form} - ${inflection.suffix}` : form
@@ -102,12 +108,7 @@ export default class View {
    * @param {InflectionData} inflectionData
    */
   getMorphemes (inflectionData) {
-    if (this.inflectionType) {
-      return inflectionData.getMorphemes(this.partOfSpeech, this.inflectionType)
-    } else {
-      console.warn(`To avoid using legacy functions please set an inflectionType of this view to either SUFFIX or FORM`)
-      return inflectionData.getLegacySuffixes(this.partOfSpeech)
-    }
+    return inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType).items
   }
 
   /**
@@ -115,13 +116,7 @@ export default class View {
    * @param {InflectionData} inflectionData
    */
   getFootnotes (inflectionData) {
-    if (this.inflectionType) {
-      return inflectionData.getFootnotesMap(this.partOfSpeech, this.inflectionType)
-    } else {
-      // View does not support type-based data yet
-      console.warn(`To avoid using legacy functions please set an inflectionType of this view to either SUFFIX or FORM`)
-      return inflectionData.getLagacyFootnotesMap(this.partOfSpeech)
-    }
+    return inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
   }
 
   get wideViewNodes () {

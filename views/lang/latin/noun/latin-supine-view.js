@@ -1,4 +1,5 @@
 import { Constants, LanguageModelFactory, Feature, FeatureType } from 'alpheios-data-models'
+import Suffix from '../../../../lib/suffix.js'
 import LatinView from '../latin-view.js'
 import GroupFeatureType from '../../../lib/group-feature-type'
 import Table from '../../../lib/table'
@@ -25,6 +26,10 @@ export default class LatinSupineView extends LatinView {
 
   static get partOfSpeech () {
     return Constants.POFS_SUPINE
+  }
+
+  static get inflectionType () {
+    return Suffix
   }
 
   /**

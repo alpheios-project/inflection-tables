@@ -1,0 +1,201 @@
+<title>Present System Active of Contract Verbs in -<span xml:lang="grc">έω</span>
+</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" mood="indicative">indicative</cell>
+        <cell role="label" tense="present" voice="active" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="present" voice="active" mood="optative">optative</cell>
+        <cell role="label" tense="present" voice="active" mood="optative"/>
+        <cell role="label" tense="present" voice="active" mood="imperative">imperative</cell>
+        <cell role="label" tense="imperfect" voice="active" mood="indicative">imperfect indicative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">singular</cell>
+        <cell role="label" tense="present" voice="active" num="singular">1st</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ποιῶ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ποιῶ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="optative"><span xml:lang="grc">(ποιοῖμι)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">ποιοίην</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἐποίουν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="singular">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ποιεῖς</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ποιῇς</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="optative"><span xml:lang="grc">(ποιοῖς)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">ποιοίης</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ποίει</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐποίεις</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="singular">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ποιεῖ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ποιῇ</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="optative"><span xml:lang="grc">(ποιοῖ)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">ποιοίη</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ποιείτω</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐποίει</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">dual</cell>
+        <cell role="label" tense="present" voice="active" num="dual">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ποιεῖτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ποιῆτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">ποιοῖτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="optative"><span xml:lang="grc">(ποιοίητον)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ποιεῖτον</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐποιεῖτον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="dual">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ποιεῖτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ποιῆτον</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">ποιοίτην</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="optative"><span xml:lang="grc">(ποιοιήτην)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ποιείτων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐποιείτην</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active">plural</cell>
+        <cell role="label" tense="present" voice="active" num="plural">1st</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ποιοῦμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ποιῶμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">ποιοῖμεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="optative"><span xml:lang="grc">(ποιοίημεν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἐποιούμεθα</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="plural">2nd</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ποιεῖτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ποιῆτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">ποιοῖτε</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="optative"><span xml:lang="grc">(ποιοίητε)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ποιεῖτε</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἐποιεῖτε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active" num="plural">3rd</cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ποιοῦσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ποιῶσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">ποιοῖεν</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="optative"><span xml:lang="grc">(ποιοίησαν)</span>
+        </cell>
+        <cell role="data" tense="present" voice="active" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ποιούντων</span>
+        </cell>
+        <cell role="data" tense="imperfect" voice="active" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἐποιοῦντο</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active">infinitive</cell>
+        <cell role="data" tense="present" voice="active" mood="infinitive">
+            <span xml:lang="grc">ποιεῖν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="present" voice="active"/>
+        <cell role="label" tense="present" voice="active">participle</cell>
+        <cell role="data" tense="present" voice="active" pofs="verb_participle">
+            <span xml:lang="grc">ποιῶν, ποιοῦσᾰ, ποιοῦν</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm55">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

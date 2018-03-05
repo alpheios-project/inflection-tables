@@ -5,7 +5,7 @@ const string = require('rollup-plugin-string')
 
 const defaultPlugins = [
   string({
-    include: ['lib/lang/**/*.csv', 'tests/data/**/*.json']
+    include: ['lib/lang/**/*.csv', 'lib/lang/**/*.htmlf', 'tests/data/**/*.json']
   }),
   commonjs({
     ignoreGlobal: true,  // Default: false

@@ -1,0 +1,138 @@
+<title>Perfect System Middle-Passive: simple subjunctive, optative, imperative</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" mood="optative">optative</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" mood="optative"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" mood="imperative">imperative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle">singular</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="singular">1st</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">μεμνῶμαι</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">μεμνῄμην</span></cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">μεμνῴμην</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="singular">2nd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">μεμνῇ</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">μεμνῇο</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">μεμνῷο</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">μέμνησο</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="singular">3rd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">μεμνῆται</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">μεμνῇτο</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">μεμνῷτο</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">μεμνήσθω</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle">dual</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="dual">2nd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">μεμνῆσθον</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">μεμνῇσθον</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">μεμνῷσθον</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="dual">3rd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">μεμνῆσθον</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">μεμνῄσθην</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">μεμνῴσθην</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle">plural</cell>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="plural">1st</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">μεμνώμεθα</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">μεμνῄμεθα</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">μεμνῴμεθα</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="plural">2nd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">μεμνῆσθε</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">μεμνῇσθε</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">μεμνῷσθε</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">μέμνησθε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect" voice="mediopassive middle"/>
+        <cell role="label" tense="perfect" voice="mediopassive middle" num="plural">3rd</cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">μεμνῶνται</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">μεμνῇντο</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">μεμνῷντο</span>
+        </cell>
+        <cell role="data" tense="perfect" voice="mediopassive middle" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+</table>

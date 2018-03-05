@@ -1,0 +1,158 @@
+<title>Strong (2nd) Aorist System Middle</title>
+<table>
+    <row role="label">
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle" mood="indicative">indicative</cell>
+        <cell role="label" tense="aorist" voice="middle" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="aorist" voice="middle" mood="optative">optative</cell>
+        <cell role="label" tense="aorist" voice="middle" mood="imperative">imperative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle">singular</cell>
+        <cell role="label" tense="aorist" voice="middle" num="singular">1st</cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἠγαγόμην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ἀγάγωμαι</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">ἀγαγοίμην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle" num="singular">2nd</cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἠγάγου</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἀγάγῃ</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἀγάγοιο</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἀγαγοῦ</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle" num="singular">3rd</cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἠγάγετο</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἀγάγηται</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἀγάγοιτο</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἀγαγέσθω</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle">dual</cell>
+        <cell role="label" tense="aorist" voice="middle" num="dual">2nd</cell>
+        <cell role="data" tense="aorist" voice="middle" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἠγάγεσθον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἀγάγησθον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἀγάγοισθον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἀγάγεσθον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle" num="dual">3rd</cell>
+        <cell role="data" tense="aorist" voice="middle" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἠγαγέσθην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἀγάγησθον</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἀγαγοίσθην</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἀγαγέσθων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle">plural</cell>
+        <cell role="label" tense="aorist" voice="middle" num="plural">1st</cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἠγαγόμεθα</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ἀγαγώμεθα</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">ἀγαγοίμεθα</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle" num="plural">2nd</cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἠγάγεσθε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἀγάγησθε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἀγάγοισθε</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἀγάγεσθε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle" num="plural">3rd</cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἠγάγοντο</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἀγάγωνται</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἀγάγοιντο</span>
+        </cell>
+        <cell role="data" tense="aorist" voice="middle" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἀγαγέσθων</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle">infinitive</cell>
+        <cell role="data" tense="aorist" voice="middle" mood="infinitive">
+            <span xml:lang="grc">ἀγαγέσθαι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="aorist" voice="middle"/>
+        <cell role="label" tense="aorist" voice="middle">participle</cell>
+        <cell role="data" tense="aorist" voice="middle" pofs="verb_participle">
+            <span xml:lang="grc">ἀγαγόμενος, -η, -ον</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink"
+                     xlink:href="inflect:#verb|type:paradigm|paradigm_id:verbpdgm65">(see declension)
+            </reflink>
+        </cell>
+    </row>
+</table>

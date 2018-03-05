@@ -1,5 +1,5 @@
 import { Constants, GreekLanguageModel, Feature, LanguageModelFactory } from 'alpheios-data-models'
-import LanguageDataset from '../../../../lib/language-dataset.js'
+import Suffix from '../../../../lib/suffix.js'
 import GreekNounView from './greek-noun-view'
 
 export default class GreekNounSimplifiedView extends GreekNounView {
@@ -9,7 +9,7 @@ export default class GreekNounSimplifiedView extends GreekNounView {
     this.name = 'noun declension simplified'
     this.title = 'Noun declension (simplified)'
     this.partOfSpeech = Constants.POFS_NOUN
-    this.inflectionType = LanguageDataset.SUFFIX
+    this.inflectionType = Suffix
     let genderMasculine = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_MASCULINE].value
     let genderFeminine = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_FEMININE].value
     let genderNeuter = GreekLanguageModel.getFeatureType(Feature.types.gender)[Constants.GEND_NEUTER].value
@@ -35,6 +35,10 @@ export default class GreekNounSimplifiedView extends GreekNounView {
     return Constants.POFS_NOUN
   }
 
+  static get inflectionType () {
+    return Suffix
+  }
+
   /**
    * Determines wither this view can be used to display an inflection table of any data
    * within an `inflectionData` object.
@@ -45,7 +49,7 @@ export default class GreekNounSimplifiedView extends GreekNounView {
    */
   static matchFilter (inflectionData) {
     if (LanguageModelFactory.compareLanguages(GreekNounSimplifiedView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(GreekNounSimplifiedView.partOfSpeech)
+      return inflectionData.pos.has(GreekNounSimplifiedView.partOfSpeech)
     }
   }
 

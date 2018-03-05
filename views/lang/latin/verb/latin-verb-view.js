@@ -5,7 +5,6 @@ import GroupFeatureType from '../../../lib/group-feature-type'
 export default class LatinVerbView extends LatinView {
   constructor (inflectionData, messages) {
     super(inflectionData, messages)
-    this.partOfSpeech = this.language_features[Feature.types.part][Constants.POFS_VERB].value
 
     this.features = {
       tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),

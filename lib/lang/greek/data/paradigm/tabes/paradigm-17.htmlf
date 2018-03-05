@@ -1,0 +1,182 @@
+<title>Athematic Perfects
+    <span xml:lang="grc">ἵστημι</span> (in addition to forms from <span xml:lang="grc">ἕστηκα</span>) </title>
+<table>
+    <row role="label">
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect" mood="indicative">indicative</cell>
+        <cell role="label" tense="perfect" mood="subjunctive">subjunctive</cell>
+        <cell role="label" tense="perfect" mood="optative">optative (poetic)</cell>
+        <cell role="label" tense="perfect" mood="imperative">imperative (poetic)</cell>
+        <cell role="label" tense="pluperfect" mood="indicative">pluperfect indicative</cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect">singular</cell>
+        <cell role="label" tense="perfect" num="singular">1st</cell>
+        <cell role="data" tense="perfect" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ἑστῶ</span>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="1st" mood="optative">
+            <span xml:lang="grc">ἕσταίην</span>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="pluperfect" num="singular" pers="1st" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect" num="singular">2nd</cell>
+        <cell role="data" tense="perfect" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἑστῇς</span>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἕσταίης</span>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἕσταθι</span>
+        </cell>
+        <cell role="data" tense="pluperfect" num="singular" pers="2nd" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect" num="singular">3rd</cell>
+        <cell role="data" tense="perfect" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἑστῇ</span>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἕσταίη</span>
+        </cell>
+        <cell role="data" tense="perfect" num="singular" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἑστάτω</span>
+        </cell>
+        <cell role="data" tense="pluperfect" num="singular" pers="3rd" mood="indicative">
+            <span xml:lang="grc"/>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect">dual</cell>
+        <cell role="label" tense="perfect" num="dual">2nd</cell>
+        <cell role="data" tense="perfect" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἕστατον</span>
+        </cell>
+        <cell role="data" tense="perfect" num="dual" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἑστῆτον</span>
+        </cell>
+        <cell role="data" tense="perfect" num="dual" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἑσταῖτον</span>
+        </cell>
+        <cell role="data" tense="perfect" num="dual" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἕστατον</span>
+        </cell>
+        <cell role="data" tense="pluperfect" num="dual" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἕστατον</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect" num="dual">3rd</cell>
+        <cell role="data" tense="perfect" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἕστατον</span>
+        </cell>
+        <cell role="data" tense="perfect" num="dual" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἑστῆτον</span>
+        </cell>
+        <cell role="data" tense="perfect" num="dual" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἑσταίτην</span>
+        </cell>
+        <cell role="data" tense="perfect" num="dual" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἑστάτων</span>
+        </cell>
+        <cell role="data" tense="pluperfect" num="dual" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἑστάτην</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect">plural</cell>
+        <cell role="label" tense="perfect" num="plural">1st</cell>
+        <cell role="data" tense="perfect" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἕσταμεν</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="1st" mood="subjunctive">
+            <span xml:lang="grc">ἑστῶμεν</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="1st" mood="optative">
+            <span xml:lang="grc">ἑσταῖμεν</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="1st" mood="imperative">
+            <span xml:lang="grc"/>
+        </cell>
+        <cell role="data" tense="pluperfect" num="plural" pers="1st" mood="indicative">
+            <span xml:lang="grc">ἕσταμεν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect" num="plural">2nd</cell>
+        <cell role="data" tense="perfect" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἕστατε</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="2nd" mood="subjunctive">
+            <span xml:lang="grc">ἑστῆτε</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="2nd" mood="optative">
+            <span xml:lang="grc">ἑσταῖτε</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="2nd" mood="imperative">
+            <span xml:lang="grc">ἕστατε</span>
+        </cell>
+        <cell role="data" tense="pluperfect" num="plural" pers="2nd" mood="indicative">
+            <span xml:lang="grc">ἕστατε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect" num="plural">3rd</cell>
+        <cell role="data" tense="perfect" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἑστᾶσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="3rd" mood="subjunctive">
+            <span xml:lang="grc">ἑστῶσῐ(ν)</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="3rd" mood="optative">
+            <span xml:lang="grc">ἑσταῖεν</span>
+        </cell>
+        <cell role="data" tense="perfect" num="plural" pers="3rd" mood="imperative">
+            <span xml:lang="grc">ἑστάντων</span>
+        </cell>
+        <cell role="data" tense="pluperfect" num="plural" pers="3rd" mood="indicative">
+            <span xml:lang="grc">ἕστασαν</span>
+        </cell>
+    </row>
+</table>
+<table role="sub">
+    <row role="data">
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect">infinitive</cell>
+        <cell role="data" tense="perfect" mood="infinitive">
+            <span xml:lang="grc">ἑστάναι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" tense="perfect"/>
+        <cell role="label" tense="perfect">participle</cell>
+        <cell role="data" tense="perfect" pofs="verb_participle">
+            <span xml:lang="grc">ἑστώς, ἑστῶσᾰ, ἑστός</span> <span xml:lang="grc">(m./n. stem ἑστώτ- )</span>
+            <reflink xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="verbpdgm64">(see declension)</reflink>
+        </cell>
+    </row>
+</table>

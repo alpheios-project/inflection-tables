@@ -1,0 +1,140 @@
+<title>Participles in <span xml:lang="grc">-ώς, -υῖᾰ, -ός</span> (perfect active)</title>
+<table>
+    <row role="label">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" gend="masculine">masculine</cell>
+        <cell role="label" pofs="verb_participle" gend="feminine">feminine</cell>
+        <cell role="label" pofs="verb_participle" gend="neuter">neuter</cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">singular</cell>
+        <cell role="label" pofs="verb_participle" num="singular">n.v.</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">λελοιπώς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">λελοιπυῖᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">λελοιπός</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">genitive</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="masculine">
+            <span xml:lang="grc">λελοιπότος</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="feminine">
+            <span xml:lang="grc">λελοιπυίας</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="genitive" gend="neuter">
+            <span xml:lang="grc">λελοιπότος</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">dative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="masculine">
+            <span xml:lang="grc">λελοιπότι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="feminine">
+            <span xml:lang="grc">λελοιπυίᾳ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="dative" gend="neuter">
+            <span xml:lang="grc">λελοιπότι</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="singular">accusative</cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="masculine">
+            <span xml:lang="grc">λελοιπότᾰ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="feminine">
+            <span xml:lang="grc">λελοιπυῖᾰν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="singular" case="accusative" gend="neuter">
+            <span xml:lang="grc">λελοιπός</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">dual</cell>
+        <cell role="label" pofs="verb_participle" num="dual">n.a.v.</cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="masculine">
+            <span xml:lang="grc">λελοιπότε</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="feminine">
+            <span xml:lang="grc">λελοιπυίᾱ</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="nominative accusative vocative" gend="neuter">
+            <span xml:lang="grc">λελοιπότε</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="dual">g.d.</cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="masculine">
+            <span xml:lang="grc">λελοιπότοιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="feminine">
+            <span xml:lang="grc">λελοιπυίαιν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="dual" case="genitive dative" gend="neuter">
+            <span xml:lang="grc">λελοιπότοιν</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle">plural</cell>
+        <cell role="label" pofs="verb_participle" num="plural">n.v.</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="masculine">
+            <span xml:lang="grc">λελοιπότες</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="feminine">
+            <span xml:lang="grc">λελοιπυῖαι</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="nominative vocative" gend="neuter">
+            <span xml:lang="grc">λελοιπότᾰ</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">genitive</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="masculine">
+            <span xml:lang="grc">λελοιπότων</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="feminine">
+            <span xml:lang="grc">λελοιπυιῶν</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="genitive" gend="neuter">
+            <span xml:lang="grc">λελοιπότων</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">dative</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="masculine">
+            <span xml:lang="grc">λελοιπόσῐ(ν)</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="feminine">
+            <span xml:lang="grc">λελοιπυίαις</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="dative" gend="neuter">
+            <span xml:lang="grc">λελοιπόσῐ(ν)</span>
+        </cell>
+    </row>
+    <row role="data">
+        <cell role="label" pofs="verb_participle"/>
+        <cell role="label" pofs="verb_participle" num="plural">accusative</cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="masculine">
+            <span xml:lang="grc">λελοιπότᾰς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="feminine">
+            <span xml:lang="grc">λελοιπυίᾱς</span>
+        </cell>
+        <cell role="data" pofs="verb_participle" num="plural" case="accusative" gend="neuter">
+            <span xml:lang="grc">λελοιπότᾰ</span>
+        </cell>
+    </row>
+</table>
