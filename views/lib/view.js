@@ -1,4 +1,5 @@
 import { LanguageModelFactory } from 'alpheios-data-models'
+import uuidv4 from 'uuid/v4'
 
 /**
  * Represents a single view.
@@ -20,7 +21,7 @@ export default class View {
     this.container = undefined
 
     // Must be implemented in a descendant
-    this.id = 'baseView'
+    this.id = uuidv4() // A unique ID of a view instance. Can be used as a value in view selectors.
     this.name = 'base view'
     this.title = 'Base View'
     // this.partOfSpeech = undefined
@@ -63,6 +64,22 @@ export default class View {
     if (LanguageModelFactory.compareLanguages(View.languageID, inflectionData.languageID)) {
       return inflectionData.partsOfSpeech.includes(View.partOfSpeech) && View.enabledForLexemes(inflectionData.homonym.lexemes)
     }
+  }
+
+  /**
+   * Finds out what views match inflection data and return initialized instances of those views.
+   * By default only one instance of the view is returned, by views can override this method
+   * to return multiple views if necessary (e.g. paradigm view can return multiple instances of the view
+   * with different data).
+   * @param {InflectionData} inflectionData
+   * @param {MessageBundle} messages
+   * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
+   */
+  static getMatchingInstances (inflectionData, messages) {
+    if (this.matchFilter(inflectionData)) {
+      return [new this(inflectionData, messages)]
+    }
+    return []
   }
 
   /**

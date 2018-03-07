@@ -14,11 +14,12 @@ export default class GreekParadigmView extends GreekView {
    * @param {MessageBundle} messages
    * @param {string} grammarClass - For what pronoun class a view will be created
    */
-  constructor (inflectionData, messages, grammarClass = 'Greek') {
+  constructor (paradigm, inflectionData, messages, grammarClass = 'Greek') {
     super(inflectionData, messages)
-    this.id = GreekParadigmView.getID(grammarClass)
+    this.id = paradigm.id
     this.name = GreekParadigmView.getName(grammarClass)
     this.title = GreekParadigmView.getTitle(grammarClass)
+    this.paradigm = paradigm
     this.featureTypes = {}
 
     const GEND_MASCULINE_FEMININE = 'masculine feminine'
@@ -121,10 +122,16 @@ export default class GreekParadigmView extends GreekView {
     return false
   }
 
+  static getMatchingInstances (inflectionData, messages) {
+    console.log(`Get matching instances`)
+    if (this.matchFilter(inflectionData)) {
+      let paradigms = inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items
+      return paradigms.map(paradigm => new this(paradigm, inflectionData, messages))
+    }
+    return []
+  }
+
   render () {
-    console.log(`render`)
-    // Take a fist paradigm for now
-    this.paradigm = this.inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType).items[0]
     this.nodes = document.createElement('div')
     this.nodes.innerHTML = this.paradigm.html
 

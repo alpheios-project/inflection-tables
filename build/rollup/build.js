@@ -7,16 +7,17 @@ const defaultPlugins = [
   string({
     include: ['lib/lang/**/*.csv', 'lib/lang/**/*.htmlf', 'tests/data/**/*.json']
   }),
-  commonjs({
-    ignoreGlobal: true,  // Default: false
-    sourceMap: true  // Default: true
-  }),
+  // Resolve plugin must run before commonjs. please see https://github.com/rollup/rollup-plugin-commonjs/issues/145
   resolve({
     // use "module" field for ES6 module if possible
     module: true, // Default: true
-    jsnext: true,  // Default: false
-    main: true,  // Default: true
-    browser: true  // Default: false
+    jsnext: true, // Default: false
+    main: true, // Default: true
+    browser: true // Default: false
+  }),
+  commonjs({
+    ignoreGlobal: true, // Default: false
+    sourceMap: true // Default: true
   })
 ]
 

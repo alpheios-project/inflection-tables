@@ -611,7 +611,8 @@ const config = {
     },
     paradigm: {
       inputFileName: 'alph-infl-verb-paradigms.xml',
-      outputSubDir: 'paradigm/',
+      outputVerbSubDir: 'verb/paradigm',
+      outputVerbParticipleSubDir: 'verb-participle/paradigm',
       rulesFileName: 'rules.csv',
       footnotesFileName: 'footnotes.csv',
       createParadigmTables () {
@@ -623,7 +624,8 @@ const config = {
 
         // Rules of matching
         data = json['infl-paradigms'][0]['morpheus-paradigm-match'][0]['match']
-        let rules = []
+        let verbRules = []
+        let verbParticipleRules = []
         for (const paradigm of data) {
           const id = paradigm['_attr']['paradigm_id_ref']['_value']
           const matchOrder = paradigm['_attr']['match_order']['_value']
@@ -655,7 +657,11 @@ const config = {
               dialect = constraint['_text']
             }
           }
-          rules.push({
+          if (!partOfSpeech) {
+            partOfSpeech = 'verb' // If not specified, set to verb by default
+          }
+          let store = (partOfSpeech === 'verb_participle') ? verbParticipleRules : verbRules
+          store.push({
             'ID ref': id,
             'Match order': matchOrder,
             'Part of speech': partOfSpeech,
@@ -668,8 +674,10 @@ const config = {
             'Dialect': dialect
           })
         }
-        writeData(csvParser.unparse(rules), path.join(__dirname, config.greek.outputBaseDir,
-          config.greek.paradigm.outputSubDir, config.greek.paradigm.rulesFileName))
+        writeData(csvParser.unparse(verbRules), path.join(__dirname, config.greek.outputBaseDir,
+          config.greek.paradigm.outputVerbSubDir, config.greek.paradigm.rulesFileName))
+        writeData(csvParser.unparse(verbParticipleRules), path.join(__dirname, config.greek.outputBaseDir,
+          config.greek.paradigm.outputVerbParticipleSubDir, config.greek.paradigm.rulesFileName))
 
         // Footnotes
         data = json['infl-paradigms'][0]['footnotes'][0]['footnote']
@@ -684,7 +692,8 @@ const config = {
         }
 
         writeData(csvParser.unparse(footnotes), path.join(__dirname, config.greek.outputBaseDir,
-          config.greek.paradigm.outputSubDir, config.greek.paradigm.footnotesFileName))
+          config.greek.paradigm.outputVerbSubDir, config.greek.paradigm.footnotesFileName))
+        // There are no footnotes for verb participles
       }
     }
   }

@@ -65,10 +65,8 @@ export default class ViewSet {
     this.matchingViews = []
 
     if (this.views.has(this.languageID)) {
-      for (let ViewConstructor of this.views.get(this.languageID)) {
-        if (ViewConstructor.matchFilter(this.inflectionData)) {
-          this.matchingViews.push(new ViewConstructor(this.inflectionData, this.messages))
-        }
+      for (let view of this.views.get(this.languageID)) {
+        this.matchingViews.push(...view.getMatchingInstances(this.inflectionData, this.messages))
       }
     }
     this.partsOfSpeech = Array.from(new Set(this.matchingViews.map(view => view.constructor.partOfSpeech)))

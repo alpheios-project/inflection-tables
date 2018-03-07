@@ -17,7 +17,7 @@ export default class LatinView extends View {
           Constants.MOOD_SUBJUNCTIVE
         ], LatinView.languageID)
 
-        /*
+    /*
         Default grammatical features of a view. It child views need to have different feature values, redefine
         those values in child objects.
          */
@@ -39,7 +39,7 @@ export default class LatinView extends View {
     return Constants.LANG_LATIN
   }
 
-    /*
+  /*
     Creates and initializes an inflection table. Redefine this method in child objects in order to create
     an inflection table differently
      */
