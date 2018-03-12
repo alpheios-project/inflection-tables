@@ -5,8 +5,8 @@ import LatinView from '../latin-view.js'
 import GroupFeatureType from '../../../lib/group-feature-type'
 
 export default class LatinAdjectiveView extends LatinView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
     this.title = 'Adjective declension'

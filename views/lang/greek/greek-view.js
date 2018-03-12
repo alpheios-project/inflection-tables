@@ -5,8 +5,8 @@ import View from '../../lib/view.js'
 import GroupFeatureType from '../../lib/group-feature-type.js'
 
 export default class GreekView extends View {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.languageID = GreekView.languageID
     this.model = LanguageModelFactory.getLanguageModel(GreekView.languageID)
     this.dataset = LanguageDatasetFactory.getDataset(GreekView.languageID)

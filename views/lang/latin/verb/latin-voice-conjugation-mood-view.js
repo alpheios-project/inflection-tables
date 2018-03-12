@@ -4,8 +4,8 @@ import LatinVerbView from './latin-verb-view.js'
 import Table from '../../../lib/table'
 
 export default class LatinVoiceConjugationMoodView extends LatinVerbView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.id = 'verbVoiceConjugationMood'
     this.name = 'voice-conjugation-mood'
     this.title = 'Verb Conjugation'

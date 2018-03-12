@@ -4,8 +4,8 @@ import LatinVerbView from './latin-verb-view.js'
 import GroupFeatureType from '../../../lib/group-feature-type'
 
 export default class LatinVerbMoodView extends LatinVerbView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.features = {
       tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
       numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),

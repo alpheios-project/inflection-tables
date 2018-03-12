@@ -4,8 +4,8 @@ import GroupFeatureType from '../../../lib/group-feature-type'
 import Table from '../../../lib/table'
 
 export default class LatinImperativeView extends LatinVerbMoodView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.id = 'verbImperative'
     this.name = 'imperative'
     this.title = 'Imperative'

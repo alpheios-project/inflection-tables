@@ -5,7 +5,7 @@ const string = require('rollup-plugin-string')
 
 const defaultPlugins = [
   string({
-    include: ['lib/lang/**/*.csv', 'lib/lang/**/*.htmlf', 'tests/data/**/*.json']
+    include: ['lib/lang/**/*.csv', 'lib/lang/**/*.json', 'l10n/locale/**/*.json', 'tests/data/**/*.json']
   }),
   // Resolve plugin must run before commonjs. please see https://github.com/rollup/rollup-plugin-commonjs/issues/145
   resolve({

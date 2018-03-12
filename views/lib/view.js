@@ -1,5 +1,6 @@
 import { LanguageModelFactory } from 'alpheios-data-models'
 import uuidv4 from 'uuid/v4'
+import L10n from '../../l10n/l10n.js'
 
 /**
  * Represents a single view.
@@ -9,12 +10,12 @@ export default class View {
    * Initializes a View object with options. There is at least one view per part of speech,
    * but there could be several views for the same part of speech that show different table representation of a view.
    * @param {InflectionData} inflectionData - An inflection data object.
-   * @param {MessageBundle} messages - A message bundle with message translations.
+   * @param {string} locale - A locale for serving localized messages. If none provided, a default language will be used.
    */
-  constructor (inflectionData, messages) {
+  constructor (inflectionData, locale = L10n.defaultLocale) {
     this.languageID = View.languageID
     this.inflectionData = inflectionData
-    this.messages = messages
+    this.messages = L10n.getMessages(locale)
     this.pageHeader = {}
 
     // An HTML element where this view is rendered
@@ -24,8 +25,8 @@ export default class View {
     this.id = uuidv4() // A unique ID of a view instance. Can be used as a value in view selectors.
     this.name = 'base view'
     this.title = 'Base View'
-    // this.partOfSpeech = undefined
-    // this.inflectionType = undefined
+    this.hasComponentData = false // True if vue supports Vue.js components
+
     this.forms = new Set()
     this.table = {}
   }
@@ -92,8 +93,14 @@ export default class View {
     return true
   }
 
-  updateMessages (messages) {
-    this.messages = messages
+  get locale () {
+    return this.messages.locale
+  }
+
+  setLocale (locale) {
+    if (this.locale !== locale) {
+      this.messages = L10n.getMessages(locale)
+    }
     return this
   }
 

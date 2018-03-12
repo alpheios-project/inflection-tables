@@ -8,8 +8,8 @@ import FeatureType from '../../../../../data-models/src/feature_type'
  * Used for reflexive pronouns. Produces a table grouped into columns by person and gender
  */
 export default class GreekPersonGenderPronounView extends GreekPronounView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages, GreekPersonGenderPronounView.classes[0])
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale, GreekPersonGenderPronounView.classes[0])
 
     // Add persons
     this.featureTypes.persons = new FeatureType(

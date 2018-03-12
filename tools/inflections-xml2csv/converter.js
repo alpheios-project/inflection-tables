@@ -625,7 +625,9 @@ const config = {
         // Rules of matching
         data = json['infl-paradigms'][0]['morpheus-paradigm-match'][0]['match']
         let verbRules = []
+        let verbRuleIDs = []
         let verbParticipleRules = []
+        let verbParticipleRuleIDs = []
         for (const paradigm of data) {
           const id = paradigm['_attr']['paradigm_id_ref']['_value']
           const matchOrder = paradigm['_attr']['match_order']['_value']
@@ -659,6 +661,10 @@ const config = {
           }
           if (!partOfSpeech) {
             partOfSpeech = 'verb' // If not specified, set to verb by default
+            verbRuleIDs.push(id)
+          } else {
+            // This is a verb participle
+            verbParticipleRuleIDs.push(id)
           }
           let store = (partOfSpeech === 'verb_participle') ? verbParticipleRules : verbRules
           store.push({
@@ -678,6 +684,77 @@ const config = {
           config.greek.paradigm.outputVerbSubDir, config.greek.paradigm.rulesFileName))
         writeData(csvParser.unparse(verbParticipleRules), path.join(__dirname, config.greek.outputBaseDir,
           config.greek.paradigm.outputVerbParticipleSubDir, config.greek.paradigm.rulesFileName))
+
+        // Tables
+        data = json['infl-paradigms'][0]['infl-paradigm']
+        for (const tableEntry of data) {
+          let tableObject = {}
+          tableObject.ID = tableEntry['_attr']['id']['_value']
+          let index = tableObject.ID.replace('verbpdgm', '')
+          if (index.length === 1) { index = '0' + index }
+          tableObject.partOfSpeech = verbRuleIDs.includes(tableObject.ID) ? 'verb' : 'verb_participle'
+          tableObject.title = tableEntry['title'][0]['_text']
+          tableObject.table = undefined
+          tableObject.subTables = []
+          for (const tableData of tableEntry['table']) {
+            let table = {
+              rows: []
+            }
+            for (const rowData of tableData['row']) {
+              let row = {
+                cells: []
+              }
+              for (const cellData of rowData['cell']) {
+                let cell = {}
+                cell.role = cellData['_attr']['role']['_value']
+                if (cellData['_attr'].hasOwnProperty('tense')) { cell.tense = cellData['_attr']['tense']['_value'] }
+                if (cellData['_attr'].hasOwnProperty('voice')) { cell.voice = cellData['_attr']['voice']['_value'] }
+                if (cellData['_attr'].hasOwnProperty('num')) { cell.number = cellData['_attr']['num']['_value'] }
+                if (cellData['_attr'].hasOwnProperty('pers')) { cell.person = cellData['_attr']['pers']['_value'] }
+                if (cellData['_attr'].hasOwnProperty('mood')) { cell.mood = cellData['_attr']['mood']['_value'] }
+                if (cell.role === 'data') {
+                  cell.value = ''
+                  if (cellData.hasOwnProperty('span') &&
+                    cellData['span'][0].hasOwnProperty('_text') &&
+                    !Array.isArray(cellData['span'][0]['_text'])) {
+                    cell.value = cellData['span'][0]['_text']
+                  }
+                  if (cellData.hasOwnProperty('reflink')) {
+                    cell.reflink = {}
+                    if (cellData['reflink'][0].hasOwnProperty('_text')) {
+                      cell.reflink.text = cellData['reflink'][0]['_text']
+                    }
+                    if (cellData['reflink'][0].hasOwnProperty('_attr') &&
+                      cellData['reflink'][0]['_attr'].hasOwnProperty('href')) {
+                      cell.reflink.href = cellData['reflink'][0]['_attr']['href']['_value']
+                    }
+                  }
+                } else if (cell.role === 'label') {
+                  cell.value = ''
+                  if (cellData.hasOwnProperty('_text') && !Array.isArray(cellData['_text'])) {
+                    cell.value = cellData['_text']
+                  }
+                }
+                row.cells.push(cell)
+              }
+              table.rows.push(row)
+            }
+            if (tableData.hasOwnProperty('_attr') &&
+              tableData['_attr'].hasOwnProperty('role') &&
+              tableData['_attr']['role']['_value'] === 'sub') {
+              // This is a sub table
+              tableObject.subTables.push(table)
+            } else {
+              // This is a main table
+              tableObject.table = table
+            }
+          }
+          const outputSubDir = (tableObject.partOfSpeech === 'verb_participle')
+            ? config.greek.paradigm.outputVerbParticipleSubDir
+            : config.greek.paradigm.outputVerbSubDir
+          writeData(JSON.stringify(tableObject), path.join(__dirname, config.greek.outputBaseDir,
+            outputSubDir, `tables`, `paradigm-${index}.json`))
+        }
 
         // Footnotes
         data = json['infl-paradigms'][0]['footnotes'][0]['footnote']

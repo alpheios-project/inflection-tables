@@ -11,11 +11,11 @@ import GroupFeatureType from '../../../lib/group-feature-type.js'
 export default class GreekPronounView extends GreekView {
   /**
    * @param {InflectionData} inflectionData
-   * @param {MessageBundle} messages
+   * @param {string} locale
    * @param {string} grammarClass - For what pronoun class a view will be created
    */
-  constructor (inflectionData, messages, grammarClass = 'Greek') {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale, grammarClass = 'Greek') {
+    super(inflectionData, locale)
     this.id = GreekPronounView.getID(grammarClass)
     this.name = GreekPronounView.getName(grammarClass)
     this.title = GreekPronounView.getTitle(grammarClass)

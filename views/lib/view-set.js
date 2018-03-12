@@ -27,7 +27,7 @@ import GreekParadigmView from '../lang/greek/paradigm/greek-paradigm-view.js'
  * mast be created for each new inflection data piece.
  */
 export default class ViewSet {
-  constructor (inflectionData, messages) {
+  constructor (inflectionData, locale) {
     this.views = new Map([
       [
         Constants.LANG_LATIN,
@@ -61,7 +61,7 @@ export default class ViewSet {
     ])
     this.inflectionData = inflectionData
     this.languageID = this.inflectionData.languageID
-    this.messages = messages
+    this.locale = locale
     this.matchingViews = []
 
     if (this.views.has(this.languageID)) {
@@ -84,6 +84,12 @@ export default class ViewSet {
     this.messages = messages
     for (let view of this.matchingViews) {
       view.updateMessages(messages)
+    }
+  }
+
+  setLocale (locale) {
+    for (let view of this.matchingViews) {
+      view.setLocale(locale)
     }
   }
 }

@@ -4,8 +4,8 @@ import GroupFeatureType from '../../../lib/group-feature-type'
 import Table from '../../../lib/table'
 
 export default class LatinInfinitiveView extends LatinVerbMoodView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.id = 'verbInfinitive'
     this.name = 'infinitive'
     this.title = 'Infinitive'

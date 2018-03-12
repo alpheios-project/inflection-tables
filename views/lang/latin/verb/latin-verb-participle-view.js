@@ -5,8 +5,8 @@ import GroupFeatureType from '../../../lib/group-feature-type'
 import Table from '../../../lib/table'
 
 export default class LatinVerbParticipleView extends LatinView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.partOfSpeech = this.language_features[Feature.types.part][Constants.POFS_VERB_PARTICIPLE].value
     this.id = 'verbParticiple'
     this.name = 'participle'

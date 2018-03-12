@@ -3,8 +3,8 @@ import Suffix from '../../../../lib/suffix.js'
 import GreekNounView from './greek-noun-view'
 
 export default class GreekNounSimplifiedView extends GreekNounView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.id = 'nounDeclensionSimplified'
     this.name = 'noun declension simplified'
     this.title = 'Noun declension (simplified)'

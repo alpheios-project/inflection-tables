@@ -7,8 +7,8 @@ import Table from '../../../lib/table'
  * Produces a table grouped into columns by gender.
  */
 export default class GreekGenderPronounView extends GreekPronounView {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
 
     /*
     Define tables and table features.

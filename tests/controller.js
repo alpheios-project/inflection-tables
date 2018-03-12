@@ -1,7 +1,7 @@
 'use strict'
 // Import shared language data
 import * as Models from 'alpheios-data-models'
-import * as L10n from '../l10n/l10n'
+import L10n from '../l10n/l10n.js'
 import * as Styles from '../views/styles/styles'
 import Suffix from '../lib/suffix'
 import LanguageDataset from '../lib/language-dataset'
@@ -46,10 +46,7 @@ exports.InflectionData = InflectionData
 exports.LatinLanguageModel = Models.LatinLanguageModel
 
 // L10n
-exports.L10n = {
-  MessageBundle: L10n.MessageBundle,
-  L10n: L10n.L10n
-}
+exports.L10n = L10n
 
 // Styles
 exports.Styles = {

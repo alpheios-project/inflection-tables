@@ -5,8 +5,8 @@ import GroupFeatureType from '../../lib/group-feature-type.js'
 import Table from '../../lib/table.js'
 
 export default class LatinView extends View {
-  constructor (inflectionData, messages) {
-    super(inflectionData, messages)
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
     this.model = LanguageModelFactory.getLanguageModel(LatinView.languageID)
     this.dataset = LanguageDatasetFactory.getDataset(LatinView.languageID)
     this.language_features = this.model.features
