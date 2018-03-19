@@ -61,7 +61,7 @@ export default class GroupFeatureType extends Models.FeatureType {
    * @returns {Feature[] | Feature[][]} A sorted array of feature values.
    */
   getOrderedFeatures (ancestorFeatures) {
-    return this.getOrderedValues(ancestorFeatures).map((value) => new Models.Feature(value, this.type, this.languageID))
+    return this.getOrderedValues(ancestorFeatures).map((value) => new Models.Feature(this.type, value, this.languageID))
   }
 
   /**
