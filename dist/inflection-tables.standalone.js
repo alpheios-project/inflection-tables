@@ -2950,20 +2950,31 @@ class Morpheme {
   }
 
   /**
-   * Checks if suffix has a feature that is a match to the one provided.
+   * Checks if a morpheme has at least one common feature value with a `feature`.
    * @param {Feature} feature - A feature we need to match with the ones stored inside the morpheme object.
-   * @returns {string | undefined} - If provided feature is a match, returns a value of that value.
-   * If no match found, returns undefined.
+   * @returns {boolean} - True if a `feature` has at least one value in common with a morpheme, false otherwise.
    */
   featureMatch (feature) {
-    if (!feature) { return undefined }
-    const featureType = feature.type;
-    if (this.features.hasOwnProperty(featureType)) {
-      if (feature.values.includes(this.features[featureType])) {
-        return feature.value
+    const matchingValues = this.matchingValues(feature);
+    return matchingValues.length > 0
+  }
+
+  /**
+   * Returns a list of values that are the same between a morpheme and a feature (an intersection).
+   * @param {Feature} feature
+   * @return {string[]}
+   */
+  matchingValues (feature) {
+    let matches = [];
+    if (feature && this.features.hasOwnProperty(feature.type)) {
+      const morphemeValue = this.features[feature.type];
+      for (const featureValue of feature.values) {
+        if (morphemeValue.values.includes(featureValue)) {
+          matches.push(featureValue);
+        }
       }
     }
-    return undefined
+    return matches
   }
 
   /**
@@ -3303,8 +3314,16 @@ class InflectionSet {
   }
 
   /**
+   * Adds a single inflection item to the set
+   * @param {Suffix | Form | Paradigm} inflection
+   */
+  addInflectionItem (inflection) {
+    this.addInflectionItems([inflection]);
+  }
+
+  /**
    * Adds an array of inflection items of the same type.
-   * @param {Object[]} inflections
+   * @param {Suffix[] | Form[] | Paradigm[]} inflections
    */
   addInflectionItems (inflections) {
     let classType = inflections[0].constructor.ClassType;
@@ -3386,9 +3405,6 @@ class LanguageDataset {
     let item = new ClassType(itemValue);
     item.extendedLangData = extendedLangData;
 
-    // Build all possible combinations of features
-    let multiValueFeatures = [];
-
     // Go through all features provided
     for (let feature of features) {
       // If this is a footnote. Footnotes should go in a flat array
@@ -3396,41 +3412,15 @@ class LanguageDataset {
       if (feature.type === GrmFeature.types.footnote) {
         item[GrmFeature.types.footnote] = item[GrmFeature.types.footnote] || [];
         item[GrmFeature.types.footnote].push(feature.value);
-        continue
-      }
-
-      // If this ending has several grammatical feature values then they will be in an array
-      if (Array.isArray(feature)) {
-        if (feature.length > 0) {
-          if (feature[0]) {
-            let type = feature[0].type;
-            // Store all multi-value features to create a separate copy of a a Suffix object for each of them
-            multiValueFeatures.push({type: type, features: feature});
-          }
-        } else {
-          // Array is empty
-          throw new Error('An empty array is provided as a feature argument to the "addSuffix" method.')
-        }
       } else {
-        item.features[feature.type] = feature.value;
+        item.features[feature.type] = feature;
       }
-    }
-
-    let items = [];
-    // Create a copy of an Suffix object for each multi-value item
-    if (multiValueFeatures.length > 0) {
-      for (let featureGroup of multiValueFeatures) {
-        let endingItems = item.split(featureGroup.type, featureGroup.features);
-        items.push(...endingItems);
-      }
-    } else {
-      items.push(item);
     }
 
     if (!this.pos.has(partOfSpeech)) {
       this.pos.set(partOfSpeech, new InflectionSet(partOfSpeech));
     }
-    this.pos.get(partOfSpeech).addInflectionItems(items);
+    this.pos.get(partOfSpeech).addInflectionItem(item);
   }
 
   addParadigms (partOfSpeech, paradigms) {
@@ -3474,28 +3464,31 @@ class LanguageDataset {
    *   {Feature[]} matchedItems - Features that matched (if any)
    *   {boolean} matchResult - True if all obligatory matches are fulfilled, false otherwise.
    */
-  getObligatoryMatches (inflection, item) {
-    return this.constructor.checkMatches(this.constructor.getObligatoryMatchList(inflection), inflection, item)
-  }
-
-  static checkMatches (matchList, inflection, item) {
-    let matches = [];
-    for (const feature of matchList) {
-      let match = item.featureMatch(inflection[feature]);
-      if (match) {
-        matches.push(Feature.types.fullForm);
-      }
-    }
-    let result = (matches.length === matchList.length);
-    return { fullMatch: result, matchedItems: matches }
+  static getObligatoryMatches (inflection, item) {
+    return this.checkMatches(this.getObligatoryMatchList(inflection), inflection, item)
   }
 
   /**
-   * Should be redefined in child classes
-   * @return {Array}
+   * Checks for optional matches between an inflection and an item.
+   * @param {Inflection} inflection - An inflection object.
+   * @param {Morpheme} item - An inflection data item: a Suffix, a Form, or a Paradigm
+   * @return {Object} A results in the following format:
+   *   {Feature[]} matchedItems - Features that matched (if any)
+   *   {boolean} matchResult - True if all obligatory matches are fulfilled, false otherwise.
    */
-  getOptionalMatches (inflection) {
-    return []
+  static getOptionalMatches (inflection, item) {
+    return this.checkMatches(this.getOptionalMatchList(inflection), inflection, item)
+  }
+
+  static checkMatches (matchList, inflection, item) {
+    let matches = matchList.reduce((acc, f) => {
+      if (inflection.hasOwnProperty(f) && item.featureMatch(inflection[f])) {
+        acc.push(f);
+      }
+      return acc
+    }, []);
+    let result = (matches.length === matchList.length);
+    return { fullMatch: result, matchedItems: matches }
   }
 
   /**
@@ -3503,11 +3496,10 @@ class LanguageDataset {
    * @param {Inflection} inflection - An inflection data object
    * @return {Inflection} A modified inflection data object
    */
-  setInflectionConstraints (inflection) {
-    // inflection.constraints.obligatoryMatches = this.getObligatoryMatches(inflection)
-    inflection.constraints.optionalMatches = this.getOptionalMatches(inflection);
+  /* setInflectionConstraints (inflection) {
+    inflection.constraints.optionalMatches = this.constructor.getOptionalMatches(inflection)
     return inflection
-  }
+  } */
 
   getInflectionData (homonym) {
     // Add support for languages
@@ -3676,10 +3668,6 @@ class LanguageDataset {
    * additional information about a match. if no matches found, returns null.
    */
   matcher (inflections, item) {
-    // I'm not sure if we ever want to restrict what we consider optional matches
-    // so this is just a placeholder for now
-    let matchOptional = true;
-
     // Any of those features must match between an inflection and an ending
     let bestMatchData = null; // information about the best match we would be able to find
 
@@ -3690,21 +3678,10 @@ class LanguageDataset {
      */
     for (let inflection of inflections) {
       let matchData = new MatchData(); // Create a match profile
-      let optionalMatches = matchOptional ? inflection.constraints.optionalMatches : [];
       matchData.suffixMatch = inflection.compareWithWord(item.value);
 
       // Check for obligatory matches
-      /* for (let featureName of inflection.constraints.obligatoryMatches) {
-        if (inflection.hasOwnProperty(featureName) && item.featureMatch(featureName, inflection[featureName])) {
-          // Add a matched feature name to a list of matched features
-          matchData.matchedFeatures.push(featureName)
-        } else {
-          // If an obligatory match is not found, there is no reason to check other items
-          break
-        }
-      } */
-
-      let obligatoryMatches = this.getObligatoryMatches(inflection, item);
+      const obligatoryMatches = this.constructor.getObligatoryMatches(inflection, item);
       if (obligatoryMatches.fullMatch) {
         matchData.matchedFeatures.push(...obligatoryMatches.matchedItems);
       } else {
@@ -3712,15 +3689,11 @@ class LanguageDataset {
         break
       }
 
-      // Check optional matches now
-      for (let feature of optionalMatches) {
-        let matchedValue = item.featureMatch(feature, inflection[feature]);
-        if (matchedValue) {
-          matchData.matchedFeatures.push(feature);
-        }
-      }
+      // Check for optional matches
+      const optionalMatches = this.constructor.getOptionalMatches(inflection, item);
+      matchData.matchedFeatures.push(...optionalMatches.matchedItems);
 
-      if (matchData.suffixMatch && (matchData.matchedFeatures.length === inflection.constraints.obligatoryMatches.length + optionalMatches.length)) {
+      if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
         // This is a full match
         matchData.fullMatch = true;
 
@@ -5410,14 +5383,12 @@ class LatinLanguageDataset extends LanguageDataset {
 
     // Create importer mapping for special language-specific values
     this.features.get(Feature.types.declension).getImporter()
-      .map('1st 2nd', LatinLanguageModel.typeFeature(Feature.types.declension)
-        .createFeatures([constants.ORD_1ST, constants.ORD_2ND]));
+      .map('1st 2nd', [constants.ORD_1ST, constants.ORD_2ND]);
     this.features.get(Feature.types.gender).getImporter()
-      .map('masculine feminine', LatinLanguageModel.typeFeature(Feature.types.declension)
-        .createFeatures([constants.GEND_MASCULINE, constants.GEND_FEMININE]));
+      .map('masculine feminine', [constants.GEND_MASCULINE, constants.GEND_FEMININE]);
 
     this.features.get(Feature.types.tense).getImporter()
-      .map('future_perfect', LatinLanguageModel.typeFeature(Feature.types.tense).createFeature(constants.TENSE_FUTURE_PERFECT));
+      .map('future_perfect', constants.TENSE_FUTURE_PERFECT);
   }
 
   static get languageID () {
@@ -5751,7 +5722,7 @@ class LatinLanguageDataset extends LanguageDataset {
     }
   }
 
-  getOptionalMatches (inflection) {
+  static getOptionalMatchList (inflection) {
     const featureOptions = [
       Feature.types.grmCase,
       Feature.types.declension,
@@ -5969,6 +5940,9 @@ class GreekLanguageDataset extends LanguageDataset {
     for (let feature of this.features.values()) {
       feature.addImporter(new FeatureImporter(feature.values, true));
     }
+    // Custom importers for Greek-specific feature values
+    this.features.get(Feature.types.gender).getImporter()
+      .map('masculine feminine neuter', [constants.GEND_MASCULINE, constants.GEND_FEMININE, constants.GEND_NEUTER]);
   }
 
   static get languageID () {
@@ -6045,15 +6019,6 @@ class GreekLanguageDataset extends LanguageDataset {
       dialect: 9,
       footnote: 10
     };
-
-    // Custom importers
-    // TODO: decide on the best way to keep mulitple values and re-enable later
-    /* languageModel.features[Feature.types.gender].addImporter(impName)
-      .map('masculine feminine neuter', [
-        languageModel.features[Feature.types.gender][Constants.GEND_MASCULINE],
-        languageModel.features[Feature.types.gender][Constants.GEND_FEMININE],
-        languageModel.features[Feature.types.gender][Constants.GEND_NEUTER]
-      ]) */
 
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -6276,14 +6241,13 @@ class GreekLanguageDataset extends LanguageDataset {
   }
 
   /**
-   * Returns a feature type with lemmas that are used to group values within inflection tables,
+   * Returns an array of lemmas that are used to group values within inflection tables,
    * such as for demonstrative pronouns
    * @param {string} grammarClass - A name of a pronoun class
-   * @return {Feature} An object with lemma values
+   * @return {string[]} An array of lemma values
    */
   getPronounGroupingLemmas (grammarClass) {
-    let values = this.pronounGroupingLemmas.has(grammarClass) ? this.pronounGroupingLemmas.get(grammarClass) : [];
-    return new Feature(Feature.types.fullForm, values, this.languageID)
+    return this.pronounGroupingLemmas.has(grammarClass) ? this.pronounGroupingLemmas.get(grammarClass) : []
   }
 
   static getObligatoryMatchList (inflection) {
@@ -6299,7 +6263,7 @@ class GreekLanguageDataset extends LanguageDataset {
     }
   }
 
-  getOptionalMatches (inflection) {
+  static getOptionalMatchList (inflection) {
     const featureOptions = [
       Feature.types.grmCase,
       Feature.types.declension,
@@ -6371,7 +6335,7 @@ class LanguageDatasetFactory {
       for (let inflection of homonym.inflections) {
         // Set grammar rules for an inflection
         inflection.setConstraints();
-        dataset.setInflectionConstraints(inflection);
+        // dataset.setInflectionConstraints(inflection)
       }
       return dataset.getInflectionData(homonym)
     } else {
@@ -8362,9 +8326,9 @@ class MessageBundle {
   }
 }
 
-var enUS = "{\n  \"Number\": \"Number\",\n  \"Case\": \"Case\",\n  \"Declension\": \"Declension\",\n  \"Gender\": \"Gender\",\n  \"Type\": \"Type\",\n  \"Voice\": \"Voice\",\n  \"Conjugation Stem\": \"Conjugation Stem\",\n  \"Mood\": \"Mood\",\n  \"Person\": \"Person\"\n}";
+var enUS = "{\n  \"Number\": \"Number\",\n  \"Case\": \"Case\",\n  \"Declension\": \"Declension\",\n  \"Gender\": \"Gender\",\n  \"Type\": \"Type\",\n  \"Voice\": \"Voice\",\n  \"Conjugation Stem\": \"Conjugation Stem\",\n  \"Mood\": \"Mood\",\n  \"Person\": \"Person\",\n  \"Lemma\": \"Lemma\"\n}";
 
-var enGB = "{\n  \"Number\": \"Number (GB)\",\n  \"Case\": \"Case (GB)\",\n  \"Declension\": \"Declension (GB)\",\n  \"Gender\": \"Gender (GB)\",\n  \"Type\": \"Type (GB)\",\n  \"Voice\": \"Voice (GB)\",\n  \"Conjugation Stem\": \"Conjugation Stem (GB)\",\n  \"Mood\": \"Mood (GB)\",\n  \"Person\": \"Person (GB)\"\n}";
+var enGB = "{\n  \"Number\": \"Number (GB)\",\n  \"Case\": \"Case (GB)\",\n  \"Declension\": \"Declension (GB)\",\n  \"Gender\": \"Gender (GB)\",\n  \"Type\": \"Type (GB)\",\n  \"Voice\": \"Voice (GB)\",\n  \"Conjugation Stem\": \"Conjugation Stem (GB)\",\n  \"Mood\": \"Mood (GB)\",\n  \"Person\": \"Person (GB)\",\n  \"Lemma\": \"Lemma (GB)\"\n}";
 
 const messages = new Map([
   ['en-US', enUS],
@@ -8896,30 +8860,6 @@ class GroupFeatureType extends FeatureType {
     } else {
       return 'not available'
     }
-  }
-
-  /**
-   * Returns true if an ending grammatical feature defined by featureType has a value that is listed in a featureValues array.
-   * This function is used with Array.prototype.filter().
-   * If you want to provide a custom grouping for any particular feature type, redefine this function
-   * to implement a custom grouping logic.
-   * @param {string | string[]} featureValues - a list of possible values of a type specified by featureType that
-   * this ending should have.
-   * @param {Suffix} suffix - an ending we need to filter out.
-   * @returns {boolean} True if suffix has a value of a grammatical feature specified.
-   */
-  filter (featureValues, suffix) {
-    // If not an array, convert it to array for uniformity
-    if (!Array.isArray(featureValues)) {
-      featureValues = [featureValues];
-    }
-    for (const value of featureValues) {
-      if (suffix.features[this.type] === value) {
-        return true
-      }
-    }
-
-    return false
   }
 
   /**
@@ -9986,7 +9926,8 @@ class Table {
       ancestorFeatures.push(featureValue);
 
       // Suffixes that are selected for current combination of feature values
-      let selectedSuffixes = suffixes.filter(group.groupFeatureType.filter.bind(group.groupFeatureType, featureValue.value));
+      // let selectedSuffixes = suffixes.filter(group.groupFeatureType.filter.bind(group.groupFeatureType, featureValue.value))
+      let selectedSuffixes = suffixes.filter(s => s.featureMatch(featureValue));
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups
@@ -11159,13 +11100,13 @@ class GreekPronounView extends GreekView {
     );
 
     // This is just a placeholder. Lemma values will be generated dynamically
-    this.featureTypes.lemmas = new Feature(Feature.types.word, [], this.languageID);
+    this.featureTypes.lemmas = new Feature(Feature.types.hdwd, [], this.languageID);
 
     this.features = {
       numbers: new GroupFeatureType(this.featureTypes.numbers, 'Number'),
       cases: new GroupFeatureType(GreekLanguageModel.typeFeature(Feature.types.grmCase), 'Case'),
       genders: new GroupFeatureType(this.featureTypes.genders, 'Gender'),
-      persons: new GroupFeatureType(GreekLanguageModel.typeFeature(Feature.types.grmCase), 'Case')
+      persons: new GroupFeatureType(GreekLanguageModel.typeFeature(Feature.types.person), 'Person')
     };
 
     this.features.genders.getTitle = function getTitle (featureValue) {
@@ -11235,7 +11176,13 @@ class GreekPronounView extends GreekView {
       let inflectionSet = inflectionData.pos.get(this.partOfSpeech);
       if (inflectionSet.types.has(this.inflectionType)) {
         let inflections = inflectionSet.types.get(this.inflectionType);
-        let found = inflections.items.find(form => this.classes.includes(form.features[Feature.types.grmClass]));
+        let found = inflections.items.find(form => {
+          let match = false;
+          for (const value of form.features[Feature.types.grmClass].values) {
+            match = match || this.classes.includes(value);
+          }
+          return match
+        });
         if (found) {
           return true
         }
@@ -11290,7 +11237,8 @@ class GreekLemmaGenderPronounView extends GreekPronounView {
     super(inflectionData, locale, GreekLemmaGenderPronounView.classes[0]);
 
     // Add lemmas
-    this.featureTypes.lemmas = this.dataset.getPronounGroupingLemmas(GreekLemmaGenderPronounView.classes[0]);
+    const lemmaValues = this.dataset.getPronounGroupingLemmas(GreekLemmaGenderPronounView.classes[0]);
+    this.featureTypes.lemmas = new Feature(Feature.types.hdwd, lemmaValues, GreekLemmaGenderPronounView.languageID);
     this.features.lemmas = new GroupFeatureType(this.featureTypes.lemmas, 'Lemma');
 
     /*
