@@ -18,7 +18,7 @@ const webpack = {
       rules: [
         {
           test: /\.csv$/,
-          use: ['csv-loader'],
+          use: ['raw-loader'],
           enforce: 'pre'
         }
       ]
