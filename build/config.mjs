@@ -20,6 +20,12 @@ const webpack = {
           test: /\.csv$/,
           use: ['raw-loader'],
           enforce: 'pre'
+        },
+        {
+          test: /\.json$/,
+          use: ['raw-loader'],
+          enforce: 'pre',
+          type: 'javascript/auto' // To prevent running Webpack's default JSON parser on the output of raw-loader
         }
       ]
     }
