@@ -119,6 +119,9 @@ export default class View {
         }
       }
     }
+    console.log('*********************render table 1', this.constructor.getMorphemes(this.inflectionData))
+    console.log('*********************render table 2', this.table.construct(this.constructor.getMorphemes(this.inflectionData)))
+    console.log('*********************render table 3', this.table.construct(this.constructor.getMorphemes(this.inflectionData)).constructViews())
     this.table.construct(this.constructor.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
     return this
   }
@@ -129,6 +132,15 @@ export default class View {
    * @param {InflectionData} inflectionData
    */
   static getMorphemes (inflectionData) {
+    /*
+    console.log('************getMorphemes1', inflectionData)
+    console.log('************getMorphemes2', this.partOfSpeech)
+    console.log('************getMorphemes3', this.inflectionType)
+    console.log('************getMorphemes4', inflectionData.pos.get(this.partOfSpeech))
+    console.log('************getMorphemes5', inflectionData.pos.get(this.partOfSpeech).types)
+    console.log('************getMorphemes6', inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType))
+    console.log('************getMorphemes7', inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items)
+    */
     return inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items
   }
 

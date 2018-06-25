@@ -1,26 +1,29 @@
 import {Constants} from 'alpheios-data-models'
 // Latin views
-import LatinNounView from '../lang/latin/noun/latin-noun-view.js'
-import LatinAdjectiveView from '../lang/latin/adjective/latin-adjective-view.js'
-import LatinVoiceConjugationMoodView from '../lang/latin/verb/latin-voice-conjugation-mood-view.js'
-import LatinVoiceMoodConjugationView from '../lang/latin/verb/latin-voice-mood-conjugation-view.js'
-import LatinConjugationVoiceMoodView from '../lang/latin/verb/latin-conjugation-voice-mood-view.js'
-import LatinConjugationMoodVoiceView from '../lang/latin/verb/latin-conjugation-mood-voice-view.js'
-import LatinMoodVoiceConjugationView from '../lang/latin/verb/latin-mood-voice-conjugation-view.js'
-import LatinMoodConjugationVoiceView from '../lang/latin/verb/latin-mood-conjugation-voice-view.js'
-import LatinImperativeView from '../lang/latin/verb/latin-imperative-view.js'
-import LatinSupineView from '../lang/latin/noun/latin-supine-view.js'
-import LatinVerbParticipleView from '../lang/latin/verb/latin-verb-participle-view.js'
-import LatinInfinitiveView from '../lang/latin/verb/latin-infinitive-view.js'
+import LatinNounView from '@views/lang/latin/noun/latin-noun-view.js'
+import LatinAdjectiveView from '@views/lang/latin/adjective/latin-adjective-view.js'
+import LatinVoiceConjugationMoodView from '@views/lang/latin/verb/latin-voice-conjugation-mood-view.js'
+import LatinVoiceMoodConjugationView from '@views/lang/latin/verb/latin-voice-mood-conjugation-view.js'
+import LatinConjugationVoiceMoodView from '@views/lang/latin/verb/latin-conjugation-voice-mood-view.js'
+import LatinConjugationMoodVoiceView from '@views/lang/latin/verb/latin-conjugation-mood-voice-view.js'
+import LatinMoodVoiceConjugationView from '@views/lang/latin/verb/latin-mood-voice-conjugation-view.js'
+import LatinMoodConjugationVoiceView from '@views/lang/latin/verb/latin-mood-conjugation-voice-view.js'
+import LatinImperativeView from '@views/lang/latin/verb/latin-imperative-view.js'
+import LatinSupineView from '@views/lang/latin/noun/latin-supine-view.js'
+import LatinVerbParticipleView from '@views/lang/latin/verb/latin-verb-participle-view.js'
+import LatinInfinitiveView from '@views/lang/latin/verb/latin-infinitive-view.js'
 
 // Greek views
-import GreekNounView from '../lang/greek/noun/greek-noun-view.js'
-import GreekNounSimplifiedView from '../lang/greek/noun/greek-noun-simplified-view.js'
-import GreekGenderPronounView from '../lang/greek/pronoun/greek-gender-pronoun-view.js'
-import GreekLemmaGenderPronounView from '../lang/greek/pronoun/greek-lemma-gender-pronoun-view.js'
-import GreekPersonGenderPronounView from '../lang/greek/pronoun/greek-person-gender-pronoun-view.js'
-import GreekPersonPronounView from '../lang/greek/pronoun/greek-person-pronoun-view.js'
-import GreekParadigmView from '../lang/greek/paradigm/greek-paradigm-view.js'
+import GreekNounView from '@views/lang/greek/noun/greek-noun-view.js'
+import GreekNounSimplifiedView from '@views/lang/greek/noun/greek-noun-simplified-view.js'
+
+import GreekNumeralView from '@views/lang/greek/numeral/greek-numeral-view.js'
+
+import GreekGenderPronounView from '@views/lang/greek/pronoun/greek-gender-pronoun-view.js'
+import GreekLemmaGenderPronounView from '@views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js'
+import GreekPersonGenderPronounView from '@views/lang/greek/pronoun/greek-person-gender-pronoun-view.js'
+import GreekPersonPronounView from '@views/lang/greek/pronoun/greek-person-pronoun-view.js'
+import GreekParadigmView from '@views/lang/greek/paradigm/greek-paradigm-view.js'
 
 /**
  * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
@@ -51,6 +54,7 @@ export default class ViewSet {
         [
           GreekNounView,
           GreekNounSimplifiedView,
+          GreekNumeralView,
           GreekGenderPronounView,
           GreekPersonGenderPronounView,
           GreekPersonPronounView,
@@ -77,9 +81,12 @@ export default class ViewSet {
   }
 
   getViews (partOfSpeech = undefined) {
+    console.log('************getViews1', partOfSpeech, this.inflectionData)
     if (partOfSpeech) {
+      console.log('************getViews2', partOfSpeech, this.matchingViews.filter(view => view.constructor.partOfSpeech === partOfSpeech))
       return this.matchingViews.filter(view => view.constructor.partOfSpeech === partOfSpeech)
     } else {
+      console.log('************getViews3', partOfSpeech, this.matchingViews)
       return this.matchingViews
     }
   }

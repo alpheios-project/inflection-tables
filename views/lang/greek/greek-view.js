@@ -1,8 +1,8 @@
 import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import LanguageDatasetFactory from '../../../lib/language-dataset-factory.js'
-import Table from '../../lib/table.js'
-import View from '../../lib/view.js'
-import GroupFeatureType from '../../lib/group-feature-type.js'
+import LanguageDatasetFactory from '@lib/language-dataset-factory.js'
+import Table from '@views/lib/table.js'
+import View from '@views/lib/view.js'
+import GroupFeatureType from '@views/lib/group-feature-type.js'
 
 export default class GreekView extends View {
   constructor (inflectionData, locale) {
@@ -35,6 +35,7 @@ export default class GreekView extends View {
   createTable () {
     this.table = new Table([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases])
+
     let features = this.table.features
     features.columns = [
       this.model.typeFeature(Feature.types.declension),
