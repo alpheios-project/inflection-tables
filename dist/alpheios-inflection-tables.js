@@ -5567,9 +5567,9 @@ class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adj
     this.title = 'Adjective declension (simplified)'
     this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
     this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-    let genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
-    let genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
-    let genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
+    const genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
+    const genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
+    const genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
 
     this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
       if (ancestorFeatures) {
@@ -5646,9 +5646,9 @@ class GreekAdjectiveView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORT
     this.title = 'Adjective declension'
     this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
     this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-    let genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
-    let genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
-    let genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
+    const genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
+    const genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
+    const genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
 
     this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
       if (ancestorFeatures) {
