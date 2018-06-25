@@ -104,20 +104,29 @@ export default class Table {
    */
   groupByFeature (suffixes, ancestorFeatures = [], currentLevel = 0) {
     let group = new NodeGroup()
+    console.log('****************groupByFeature features', this.features)
     group.groupFeatureType = this.features.items[currentLevel]
     group.ancestorFeatures = ancestorFeatures.slice()
 
+    console.log('*********************groupByFeature', ancestorFeatures)
     // Iterate over each value of the feature
     for (const featureValue of group.groupFeatureType.getOrderedFeatures(ancestorFeatures)) {
+      console.log('*********************groupByFeature ancestorFeatures1', featureValue, JSON.stringify(featureValue.values))
+
       if (ancestorFeatures.length > 0 && ancestorFeatures[ancestorFeatures.length - 1].type === group.groupFeatureType.type) {
         // Remove previously inserted feature of the same type
         ancestorFeatures.pop()
+        console.log('*********************groupByFeature ancestorFeatures2', JSON.stringify(ancestorFeatures))
       }
       ancestorFeatures.push(featureValue)
+      console.log('*********************groupByFeature ancestorFeatures3', JSON.stringify(ancestorFeatures))
 
       // Suffixes that are selected for current combination of feature values
       // let selectedSuffixes = suffixes.filter(group.groupFeatureType.filter.bind(group.groupFeatureType, featureValue.value))
       let selectedSuffixes = suffixes.filter(s => s.featureMatch(featureValue))
+
+      console.log('*********************groupByFeature selectedSuffixes', suffixes)
+      console.log('*********************groupByFeature selectedSuffixes2', selectedSuffixes)
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups
@@ -143,6 +152,7 @@ export default class Table {
       }
     }
     ancestorFeatures.pop()
+    console.log('*********************groupByFeature ancestorFeatures', ancestorFeatures)
     return group
   }
 
