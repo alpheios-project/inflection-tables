@@ -31,7 +31,6 @@ export default class GreekNumeralView extends GreekView {
       this.languageID
     )
 
-    // console.log('************numeral', this.featureTypes.genders)
     const lemmaValues = this.dataset.getNumeralGroupingLemmas()
     this.featureTypes.lemmas = new Feature(Feature.types.hdwd, lemmaValues, GreekNumeralView.languageID)
 
@@ -54,7 +53,6 @@ export default class GreekNumeralView extends GreekView {
 
     this.features.genders.filter = function filter (featureValues, suffix) {
       // If not an array, convert it to array for uniformity
-      // console.log('***********************filter', JSON.stringify(featureValues), suffix.features[this.type])
       if (!Array.isArray(featureValues)) {
         featureValues = [featureValues]
       }
@@ -86,10 +84,6 @@ export default class GreekNumeralView extends GreekView {
    * @return {boolean}
    */
   static matchFilter (inflectionData) {
-    // console.log('**********************matchFilter1', GreekNumeralView.languageID)
-    // console.log('**********************matchFilter2', inflectionData.languageID)
-    // console.log('**********************matchFilter3', GreekNumeralView.partOfSpeech)
-    // console.log('**********************matchFilter4', inflectionData.pos.has(GreekNumeralView.partOfSpeech))
     if (LanguageModelFactory.compareLanguages(GreekNumeralView.languageID, inflectionData.languageID)) {
       return inflectionData.pos.has(GreekNumeralView.partOfSpeech)
     }
