@@ -37,6 +37,7 @@ export default class Table {
     this.suffixes = suffixes
 
     this.tree = this.groupByFeature(suffixes)
+    // console.log('************************this.tree', this.tree)
     this.headers = this.constructHeaders()
     this.columns = this.constructColumns()
     this.rows = this.constructRows()
@@ -119,14 +120,14 @@ export default class Table {
         // console.log('*********************groupByFeature ancestorFeatures2', JSON.stringify(ancestorFeatures))
       }
       ancestorFeatures.push(featureValue)
-      console.log('*********************groupByFeature ancestorFeatures3', JSON.stringify(ancestorFeatures))
+      // console.log('*********************groupByFeature ancestorFeatures3', JSON.stringify(ancestorFeatures))
 
       // Suffixes that are selected for current combination of feature values
       // let selectedSuffixes = suffixes.filter(group.groupFeatureType.filter.bind(group.groupFeatureType, featureValue.value))
       let selectedSuffixes = suffixes.filter(s => s.featureMatch(featureValue))
 
-      console.log('*********************groupByFeature selectedSuffixes', suffixes)
-      console.log('*********************groupByFeature selectedSuffixes2', selectedSuffixes)
+      // console.log('*********************groupByFeature selectedSuffixes', suffixes)
+      // console.log('*********************groupByFeature selectedSuffixes2', selectedSuffixes)
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups
@@ -152,7 +153,7 @@ export default class Table {
       }
     }
     ancestorFeatures.pop()
-    // console.log('*********************groupByFeature ancestorFeatures', ancestorFeatures)
+    // console.log('*********************groupByFeature group', group)
     return group
   }
 
@@ -169,7 +170,7 @@ export default class Table {
     let groups = []
     for (let [index, featureValue] of currentFeature.getOrderedValues(tree.ancestorFeatures).entries()) {
       let cellGroup = tree.subgroups[index]
-
+      // console.log('**********************constructColumns cellGroup', cellGroup.empty, cellGroup)
       // Iterate until it is the last row feature
 
       if (!currentFeature.isSameType(this.features.lastRowFeature)) {
@@ -204,8 +205,10 @@ export default class Table {
       }
     }
     if (currentFeature.formsRow) {
+      // console.log('*********************Construct columns groups', groups)
       return groups
     }
+    // console.log('*********************Construct columns', columns)
     return columns
   }
 

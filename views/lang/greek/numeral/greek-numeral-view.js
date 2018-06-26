@@ -54,6 +54,7 @@ export default class GreekNumeralView extends GreekView {
 
     this.features.genders.filter = function filter (featureValues, suffix) {
       // If not an array, convert it to array for uniformity
+      // console.log('***********************filter', JSON.stringify(featureValues), suffix.features[this.type])
       if (!Array.isArray(featureValues)) {
         featureValues = [featureValues]
       }

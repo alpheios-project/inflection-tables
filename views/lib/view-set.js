@@ -81,12 +81,9 @@ export default class ViewSet {
   }
 
   getViews (partOfSpeech = undefined) {
-    console.log('************getViews1', partOfSpeech, this.inflectionData)
     if (partOfSpeech) {
-      console.log('************getViews2', partOfSpeech, this.matchingViews.filter(view => view.constructor.partOfSpeech === partOfSpeech))
       return this.matchingViews.filter(view => view.constructor.partOfSpeech === partOfSpeech)
     } else {
-      console.log('************getViews3', partOfSpeech, this.matchingViews)
       return this.matchingViews
     }
   }

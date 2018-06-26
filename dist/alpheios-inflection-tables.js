@@ -1976,7 +1976,14 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
   // For numerals
   addNumeralForms (partOfSpeech, data) {
     // An order of columns in a data CSV file
-    this.numeralGroupingLemmas = ['δύο (2)', 'εἱς - μία - ἑν (1)', 'τέτταρες - τέτταρα (4)', 'τρεῖς - τρία (3)']
+    this.numeralGroupingLemmas = ['εἱς - μία - ἑν (1)', 'δύο (2)', 'τρεῖς - τρία (3)', 'τέτταρες - τέτταρα (4)']
+    this.numeralFullFormValues = {
+      'εἱς - μία - ἑν (1)': [],
+      'δύο (2)': [],
+      'τρεῖς - τρία (3)': [],
+      'τέτταρες - τέτταρα (4)': []
+    }
+
     const n = {
       form: 0,
       hdwd: 1,
@@ -2000,6 +2007,7 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
 
       if (item[n.hdwd]) {
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd).createFromImporter(item[n.hdwd]))
+        this.numeralFullFormValues[item[n.hdwd]].push(form)
       }
 
       if (item[n.number]) { features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number).createFromImporter(item[n.number])) }
@@ -2018,9 +2026,11 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
       let extendedGreekData = new _lib_extended_greek_data__WEBPACK_IMPORTED_MODULE_2__["default"]()
       extendedGreekData.primary = primary
       let extendedLangData = {
-        [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData
+        [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData,
+        numeralFullFormValues: this.numeralFullFormValues
       }
-      console.log('*************************greek-l-d', partOfSpeech.value, form, features, extendedLangData)
+
+      // console.log('*************************greek-l-d', partOfSpeech.value, form, features, extendedLangData)
       this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], form, features, extendedLangData)
     }
   }
@@ -2285,6 +2295,10 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
 
   getNumeralGroupingLemmas () {
     return this.numeralGroupingLemmas
+  }
+
+  getNumeralFullFormValues () {
+    return this.numeralFullFormValues
   }
 
   static getObligatoryMatchList (inflection) {
@@ -2956,7 +2970,6 @@ class LanguageDatasetFactory {
    * @return {InflectionData} A return value of an inflection query.
    */
   static getInflectionData (homonym) {
-    console.log('**********************LanguageDatasetFactory getInflectionData')
     let instance = this.instance
     if (instance.sets.has(homonym.languageID)) {
       let dataset = this.getDataset(homonym.languageID)
@@ -3605,38 +3618,48 @@ class Morpheme {
    * @return {string[]}
    */
   matchingValues (feature) {
-    if (feature.type === 'gender') {
-      console.log('****************matchingValues feature.type', feature.type, feature.value)
-    }
     let matches = []
+
     if (feature && this.features.hasOwnProperty(feature.type)) {
       const morphemeValue = this.features[feature.type]
-      if (feature.type === 'gender') {
-        console.log('****************matchingValues morphemeValue', JSON.stringify(morphemeValue.values))
-      }
-      for (const featureValue of feature.values) {
-        if (feature.type === 'gender') {
-          console.log('****************matchingValues for1', morphemeValue.values.includes(featureValue))
-          console.log('****************matchingValues for2', morphemeValue.isMultiple, morphemeValue.hasValues(featureValue.split(' ')))
-          /* console.log('****************matchingValues for2', morphemeValue.values.includes(featureValue), morphemeValue.values)
-          console.log('****************matchingValues for3', morphemeValue.isMultiple)
-          console.log('****************matchingValues for4', feature.values, featureValue.split(' '), morphemeValue.hasValues(featureValue.split(' ')))
-          */
-        }
 
-        if (morphemeValue.isMultiple && morphemeValue.hasValues(featureValue.split(' '))) {
-          matches.push(featureValue)
-        } else if (!morphemeValue.isMultiple && morphemeValue.values.includes(featureValue)) {
-          matches.push(featureValue)
-        }
+      let flagPush = false
+
+      if (feature.type !== 'full form' && morphemeValue.value === feature.value) {
+        flagPush = true
+      } else if (feature.type === 'full form' && (!this.extendedLangData || !this.extendedLangData.numeralFullFormValues) && morphemeValue.value.indexOf(feature.value) > -1) {
+        flagPush = true
+      } else if (feature.type === 'full form' && this.extendedLangData && this.extendedLangData.numeralFullFormValues && this.findFromNumeralFullFormValues(feature)) {
+        flagPush = true
+      }
+
+      if (flagPush) {
+        matches.push(feature.value)
       }
     }
-    if (feature.type === 'case') {
-      // console.log('****************matchingValues matches', matches)
-    }
+
     return matches
   }
 
+  findFromNumeralFullFormValues (feature) {
+    const morphemeValue = this.features[feature.type]
+    let check1 = false
+    let check2 = false
+    let checkFinal = false
+
+    let numeralsCheckObj = (this.extendedLangData) ? this.extendedLangData.numeralFullFormValues : null
+    if (numeralsCheckObj) {
+      Object.keys(numeralsCheckObj).forEach(function (lemmaKey) {
+        if (!checkFinal) {
+          check1 = numeralsCheckObj[lemmaKey].filter(item => item === feature.value)
+          check2 = numeralsCheckObj[lemmaKey].filter(item => item === morphemeValue.value)
+          checkFinal = check1 && check2
+        }
+      })
+    }
+
+    return checkFinal
+  }
   /**
    * Find feature groups in Suffix.featureGroups that are the same between suffixes provided
    * @param suffixes
@@ -5968,6 +5991,7 @@ class GreekNumeralView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
 
     this.features.genders.filter = function filter (featureValues, suffix) {
       // If not an array, convert it to array for uniformity
+      // console.log('***********************filter', JSON.stringify(featureValues), suffix.features[this.type])
       if (!Array.isArray(featureValues)) {
         featureValues = [featureValues]
       }
@@ -8946,6 +8970,7 @@ class Table {
     this.suffixes = suffixes
 
     this.tree = this.groupByFeature(suffixes)
+    // console.log('************************this.tree', this.tree)
     this.headers = this.constructHeaders()
     this.columns = this.constructColumns()
     this.rows = this.constructRows()
@@ -9028,14 +9053,14 @@ class Table {
         // console.log('*********************groupByFeature ancestorFeatures2', JSON.stringify(ancestorFeatures))
       }
       ancestorFeatures.push(featureValue)
-      console.log('*********************groupByFeature ancestorFeatures3', JSON.stringify(ancestorFeatures))
+      // console.log('*********************groupByFeature ancestorFeatures3', JSON.stringify(ancestorFeatures))
 
       // Suffixes that are selected for current combination of feature values
       // let selectedSuffixes = suffixes.filter(group.groupFeatureType.filter.bind(group.groupFeatureType, featureValue.value))
       let selectedSuffixes = suffixes.filter(s => s.featureMatch(featureValue))
 
-      console.log('*********************groupByFeature selectedSuffixes', suffixes)
-      console.log('*********************groupByFeature selectedSuffixes2', selectedSuffixes)
+      // console.log('*********************groupByFeature selectedSuffixes', suffixes)
+      // console.log('*********************groupByFeature selectedSuffixes2', selectedSuffixes)
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups
@@ -9061,7 +9086,7 @@ class Table {
       }
     }
     ancestorFeatures.pop()
-    // console.log('*********************groupByFeature ancestorFeatures', ancestorFeatures)
+    // console.log('*********************groupByFeature group', group)
     return group
   }
 
@@ -9078,7 +9103,7 @@ class Table {
     let groups = []
     for (let [index, featureValue] of currentFeature.getOrderedValues(tree.ancestorFeatures).entries()) {
       let cellGroup = tree.subgroups[index]
-
+      // console.log('**********************constructColumns cellGroup', cellGroup.empty, cellGroup)
       // Iterate until it is the last row feature
 
       if (!currentFeature.isSameType(this.features.lastRowFeature)) {
@@ -9113,8 +9138,10 @@ class Table {
       }
     }
     if (currentFeature.formsRow) {
+      // console.log('*********************Construct columns groups', groups)
       return groups
     }
+    // console.log('*********************Construct columns', columns)
     return columns
   }
 
@@ -9411,12 +9438,9 @@ class ViewSet {
   }
 
   getViews (partOfSpeech = undefined) {
-    console.log('************getViews1', partOfSpeech, this.inflectionData)
     if (partOfSpeech) {
-      console.log('************getViews2', partOfSpeech, this.matchingViews.filter(view => view.constructor.partOfSpeech === partOfSpeech))
       return this.matchingViews.filter(view => view.constructor.partOfSpeech === partOfSpeech)
     } else {
-      console.log('************getViews3', partOfSpeech, this.matchingViews)
       return this.matchingViews
     }
   }
@@ -9574,9 +9598,6 @@ class View {
         }
       }
     }
-    console.log('*********************render table 1', this.constructor.getMorphemes(this.inflectionData))
-    console.log('*********************render table 2', this.table.construct(this.constructor.getMorphemes(this.inflectionData)))
-    console.log('*********************render table 3', this.table.construct(this.constructor.getMorphemes(this.inflectionData)).constructViews())
     this.table.construct(this.constructor.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
     return this
   }
@@ -9587,15 +9608,6 @@ class View {
    * @param {InflectionData} inflectionData
    */
   static getMorphemes (inflectionData) {
-    /*
-    console.log('************getMorphemes1', inflectionData)
-    console.log('************getMorphemes2', this.partOfSpeech)
-    console.log('************getMorphemes3', this.inflectionType)
-    console.log('************getMorphemes4', inflectionData.pos.get(this.partOfSpeech))
-    console.log('************getMorphemes5', inflectionData.pos.get(this.partOfSpeech).types)
-    console.log('************getMorphemes6', inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType))
-    console.log('************getMorphemes7', inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items)
-    */
     return inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items
   }
 
