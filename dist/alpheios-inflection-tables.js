@@ -1917,22 +1917,6 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
     // Custom importers for Greek-specific feature values
     this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender).getImporter()
       .map('masculine feminine neuter', [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER])
-
-    // this.features.get(Feature.types.gender).addValue('masculine feminine', 1)
-    // this.features.get(Feature.types.gender).addValue('masculine feminine neuter', 1)
-    // console.log('******************gender 1', this.features.get(Feature.types.gender))
-    /*
-    const GEND_MASCULINE_FEMININE = 'masculine feminine'
-    const GEND_MASCULINE_FEMININE_NEUTER = 'masculine feminine neuter'
-
-    let featureTypesGenders = new Feature(
-      Feature.types.gender,
-      [Constants.GEND_MASCULINE, Constants.GEND_FEMININE, GEND_MASCULINE_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
-      this.languageID
-    )
-
-    this.features.set(Feature.types.gender, featureTypesGenders)
-    */
   }
 
   static get languageID () {
@@ -2019,7 +2003,7 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
       }
 
       if (item[n.number]) { features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number).createFromImporter(item[n.number])) }
-      if (item[n.grmClass]) { features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass).createFromImporter(item[n.grmClass])) }
+      if (item[n.grmCase]) { features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase).createFromImporter(item[n.grmCase])) }
       if (item[n.gender]) { features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender).createFromImporter(item[n.gender])) }
       if (item[n.type]) { features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type).createFromImporter(item[n.type])) }
 
@@ -2036,7 +2020,7 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
       let extendedLangData = {
         [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData
       }
-      console.log('*************************greek-l-d', partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], form, features, extendedLangData)
+      console.log('*************************greek-l-d', partOfSpeech.value, form, features, extendedLangData)
       this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], form, features, extendedLangData)
     }
   }
@@ -3622,19 +3606,33 @@ class Morpheme {
    */
   matchingValues (feature) {
     if (feature.type === 'gender') {
-      console.log('****************matchingValues', this.features)
+      console.log('****************matchingValues feature.type', feature.type, feature.value)
     }
     let matches = []
     if (feature && this.features.hasOwnProperty(feature.type)) {
       const morphemeValue = this.features[feature.type]
       if (feature.type === 'gender') {
-        console.log('****************matchingValues morphemeValue', morphemeValue)
+        console.log('****************matchingValues morphemeValue', JSON.stringify(morphemeValue.values))
       }
       for (const featureValue of feature.values) {
-        if (morphemeValue.values.includes(featureValue)) {
+        if (feature.type === 'gender') {
+          console.log('****************matchingValues for1', morphemeValue.values.includes(featureValue))
+          console.log('****************matchingValues for2', morphemeValue.isMultiple, morphemeValue.hasValues(featureValue.split(' ')))
+          /* console.log('****************matchingValues for2', morphemeValue.values.includes(featureValue), morphemeValue.values)
+          console.log('****************matchingValues for3', morphemeValue.isMultiple)
+          console.log('****************matchingValues for4', feature.values, featureValue.split(' '), morphemeValue.hasValues(featureValue.split(' ')))
+          */
+        }
+
+        if (morphemeValue.isMultiple && morphemeValue.hasValues(featureValue.split(' '))) {
+          matches.push(featureValue)
+        } else if (!morphemeValue.isMultiple && morphemeValue.values.includes(featureValue)) {
           matches.push(featureValue)
         }
       }
+    }
+    if (feature.type === 'case') {
+      // console.log('****************matchingValues matches', matches)
     }
     return matches
   }
@@ -5947,7 +5945,7 @@ class GreekNumeralView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
       this.languageID
     )
 
-    console.log('************numeral', this.featureTypes.genders)
+    // console.log('************numeral', this.featureTypes.genders)
     const lemmaValues = this.dataset.getNumeralGroupingLemmas()
     this.featureTypes.lemmas = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, lemmaValues, GreekNumeralView.languageID)
 
@@ -9015,19 +9013,19 @@ class Table {
    */
   groupByFeature (suffixes, ancestorFeatures = [], currentLevel = 0) {
     let group = new _node_group__WEBPACK_IMPORTED_MODULE_6__["default"]()
-    console.log('****************groupByFeature features', this.features)
+    // console.log('****************groupByFeature features', this.features)
     group.groupFeatureType = this.features.items[currentLevel]
     group.ancestorFeatures = ancestorFeatures.slice()
 
-    console.log('*********************groupByFeature', ancestorFeatures)
+    // console.log('*********************groupByFeature', ancestorFeatures)
     // Iterate over each value of the feature
     for (const featureValue of group.groupFeatureType.getOrderedFeatures(ancestorFeatures)) {
-      console.log('*********************groupByFeature ancestorFeatures1', featureValue, JSON.stringify(featureValue.values))
+      // console.log('*********************groupByFeature ancestorFeatures1', featureValue, JSON.stringify(featureValue.values))
 
       if (ancestorFeatures.length > 0 && ancestorFeatures[ancestorFeatures.length - 1].type === group.groupFeatureType.type) {
         // Remove previously inserted feature of the same type
         ancestorFeatures.pop()
-        console.log('*********************groupByFeature ancestorFeatures2', JSON.stringify(ancestorFeatures))
+        // console.log('*********************groupByFeature ancestorFeatures2', JSON.stringify(ancestorFeatures))
       }
       ancestorFeatures.push(featureValue)
       console.log('*********************groupByFeature ancestorFeatures3', JSON.stringify(ancestorFeatures))
@@ -9063,7 +9061,7 @@ class Table {
       }
     }
     ancestorFeatures.pop()
-    console.log('*********************groupByFeature ancestorFeatures', ancestorFeatures)
+    // console.log('*********************groupByFeature ancestorFeatures', ancestorFeatures)
     return group
   }
 
