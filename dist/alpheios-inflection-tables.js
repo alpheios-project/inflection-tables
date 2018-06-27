@@ -2002,13 +2002,8 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
   // For numerals
   addNumeralForms (partOfSpeech, data) {
     // An order of columns in a data CSV file
-    this.numeralGroupingLemmas = ['εἱς - μία - ἑν (1)', 'δύο (2)', 'τρεῖς - τρία (3)', 'τέτταρες - τέτταρα (4)']
-    this.numeralFullFormValues = {
-      'εἱς - μία - ἑν (1)': [],
-      'δύο (2)': [],
-      'τρεῖς - τρία (3)': [],
-      'τέτταρες - τέτταρα (4)': []
-    }
+    // this.numeralGroupingLemmas = ['εἱς - μία - ἑν (1)', 'δύο (2)', 'τρεῖς - τρία (3)', 'τέτταρες - τέτταρα (4)']
+    this.numeralGroupingLemmas = []
 
     const n = {
       form: 0,
@@ -2033,7 +2028,8 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
 
       if (item[n.hdwd]) {
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd).createFromImporter(item[n.hdwd]))
-        this.numeralFullFormValues[item[n.hdwd]].push(form)
+
+        if (this.numeralGroupingLemmas.indexOf(item[n.hdwd]) === -1) { this.numeralGroupingLemmas.push(item[n.hdwd]) }
       }
 
       if (item[n.number]) { features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number).createFromImporter(item[n.number])) }
@@ -2052,9 +2048,14 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
       let extendedGreekData = new _lib_extended_greek_data__WEBPACK_IMPORTED_MODULE_2__["default"]()
       extendedGreekData.primary = primary
       let extendedLangData = {
-        [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData,
-        numeralFullFormValues: this.numeralFullFormValues
+        [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData
       }
+
+      this.numeralGroupingLemmas.sort((a, b) => {
+        let aN = parseInt(a.match(/[0-9]+/g)[0])
+        let bN = parseInt(b.match(/[0-9]+/g)[0])
+        return aN - bN
+      })
 
       this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], form, features, extendedLangData)
     }
@@ -2329,14 +2330,13 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
     return this.numeralGroupingLemmas
   }
 
-  getNumeralFullFormValues () {
-    return this.numeralFullFormValues
-  }
-
   static getObligatoryMatchList (inflection) {
     if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)) {
       // If it is a pronoun, it must match a grammatical class
       return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass]
+    } else if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL)) {
+      // If it is a pronoun, it must match a grammatical class
+      return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
     } else if (inflection.constraints.fullFormBased) {
       // Not a pronoun, but the other form-based word
       return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm]
@@ -3326,7 +3326,7 @@ class LanguageDataset {
       let inflectionSet = this.pos.get(partOfSpeech)
 
       if (inflectionSet.types.has(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"])) {
-        return inflectionSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.find((item) => this.matcher([inflection], item)) !== undefined
+        return inflectionSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.find(item => this.matcher([inflection], item)) !== undefined
       }
     }
     return false
@@ -3613,42 +3613,12 @@ class Morpheme {
     if (feature && this.features.hasOwnProperty(feature.type)) {
       const morphemeValue = this.features[feature.type]
 
-      let flagPush = false
-
       if (feature.type !== 'full form' && morphemeValue.value === feature.value) {
-        flagPush = true
-      } else if (feature.type === 'full form' && (!this.extendedLangData || !this.extendedLangData.numeralFullFormValues) && morphemeValue.value.indexOf(feature.value) > -1) {
-        flagPush = true
-      } else if (feature.type === 'full form' && this.extendedLangData && this.extendedLangData.numeralFullFormValues && this.findFromNumeralFullFormValues(feature)) {
-        flagPush = true
-      }
-
-      if (flagPush) {
         matches.push(feature.value)
       }
     }
 
     return matches
-  }
-
-  findFromNumeralFullFormValues (feature) {
-    const morphemeValue = this.features[feature.type]
-    let check1 = false
-    let check2 = false
-    let checkFinal = false
-
-    let numeralsCheckObj = (this.extendedLangData) ? this.extendedLangData.numeralFullFormValues : null
-    if (numeralsCheckObj) {
-      Object.keys(numeralsCheckObj).forEach(function (lemmaKey) {
-        if (!checkFinal) {
-          check1 = numeralsCheckObj[lemmaKey].filter(item => item === feature.value)
-          check2 = numeralsCheckObj[lemmaKey].filter(item => item === morphemeValue.value)
-          checkFinal = check1 && check2
-        }
-      })
-    }
-
-    return checkFinal
   }
   /**
    * Find feature groups in Suffix.featureGroups that are the same between suffixes provided
