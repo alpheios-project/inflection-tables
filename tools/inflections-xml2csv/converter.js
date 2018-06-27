@@ -570,6 +570,62 @@ const config = {
       }
     },
 
+    article: {
+      inputFN: 'alph-infl-article.xml',
+      outputSubDir: 'article/',
+      suffixes: {
+        outputFN: 'suffixes.csv',
+        get outputPath () {
+          return path.join(__dirname, config.greek.outputBaseDir, config.greek.article.outputSubDir, this.outputFN)
+        },
+        get (json) {
+          'use strict'
+
+          let data = json['infl-data'][0]['infl-endings'][0]['infl-ending-set']
+          let result = []
+
+          for (const group of data) {
+            for (const suffix of group['infl-ending']) {
+              let type = suffix['_attr']['type']['_value']
+              let primary = ''
+              let typeArray = type.split(' ')
+
+              if (typeArray.length > 2) {
+                throw new Error('Type value is expected to contain up to two word.')
+              } else if (typeArray.length > 1) {
+                // Array probably contain two values, one of which is 'primary'
+                let primaryIndex = typeArray.indexOf('primary')
+                if (primaryIndex > -1) {
+                  primary = 'primary'
+                  typeArray.splice(primaryIndex, 1)
+                  type = typeArray[0]
+                } else {
+                  throw new Error('Type value is expected to contain up to two words, ' +
+                    'one of them should be "primary".')
+                }
+              }
+
+              let footnote = ''
+              if (suffix['_attr'].hasOwnProperty('footnote')) {
+                // There can be multiple footnotes separated by spaces
+                footnote = config.greek.noun.footnotes.normalizeIndex(suffix['_attr']['footnote']['_value'])
+              }
+
+              result.push({
+                'Ending': suffix['_text'],
+                'Number': group['_attr']['num']['_value'],
+                'Case': group['_attr']['case']['_value'],
+                'Gender': group['_attr']['gend']['_value'],
+                'Type': type,
+                'Primary': primary
+              })
+            }
+          }
+          return csvParser.unparse(result)
+        }
+      }
+    },
+
     numeral: {
       inputFN: 'alph-infl-numeral.xml',
       outputSubDir: 'numeral/',
@@ -961,6 +1017,7 @@ const POS_ALL = 'all'
 const POS_NOUN = 'noun'
 const POS_PRONOUN = 'pronoun'
 const POS_ADJECTIVE = 'adjective'
+const POS_ARTICLE = 'article'
 const POS_NUMERAL = 'numeral'
 const POS_VERB = 'verb'
 const POS_LEMMA = 'lemma'
@@ -1054,12 +1111,21 @@ try {
       writeData(posCfg.footnotes.get(json), posCfg.footnotes.outputPath)
     }
 
+    //adjecyive
     if (posName === POS_ADJECTIVE || posName === POS_ALL) {
       posCfg = lCfg[POS_ADJECTIVE]
       data = readFile(path.join(__dirname, lCfg.inputBaseDir, posCfg.inputFN))
       json = xmlToJSON.parseString(data)
       writeData(posCfg.suffixes.get(json), posCfg.suffixes.outputPath)
       writeData(posCfg.footnotes.get(json), posCfg.footnotes.outputPath)
+    }
+
+    // article
+    if (posName === POS_ARTICLE || posName === POS_ALL) {
+      posCfg = lCfg[POS_ARTICLE]
+      data = readFile(path.join(__dirname, lCfg.inputBaseDir, posCfg.inputFN))
+      json = xmlToJSON.parseString(data)
+      writeData(posCfg.suffixes.get(json), posCfg.suffixes.outputPath)
     }
 
     // Numeral
