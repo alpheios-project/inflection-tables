@@ -3613,7 +3613,7 @@ class Morpheme {
     if (feature && this.features.hasOwnProperty(feature.type)) {
       const morphemeValue = this.features[feature.type]
 
-      if (feature.type !== 'full form' && morphemeValue.value === feature.value) {
+      if (morphemeValue.value === feature.value) {
         matches.push(feature.value)
       }
     }
