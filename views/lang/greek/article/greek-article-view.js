@@ -7,7 +7,10 @@ import Table from '@views/lib/table.js'
 export default class GreekArticleView extends GreekView {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
-    this.partOfSpeech = GreekArticleView.partOfSpeech
+
+    this.partOfSpeech = Constants.POFS_ARTICLE
+    this.inflectionType = Suffix
+
     this.id = 'articleDeclension'
     this.name = 'article declension'
     this.title = 'Article Declension'
@@ -22,7 +25,8 @@ export default class GreekArticleView extends GreekView {
     this.features = {
       numbers: new GroupFeatureType(this.featureTypes.numbers, 'Number'),
       cases: new GroupFeatureType(this.model.typeFeature(Feature.types.grmCase), 'Case'),
-      genders: new GroupFeatureType(this.model.typeFeature(Feature.types.gender), 'Gender')
+      genders: new GroupFeatureType(this.model.typeFeature(Feature.types.gender), 'Gender'),
+      types: new GroupFeatureType(this.model.typeFeature(Feature.types.type), 'Type')
     }
     this.createTable()
   }
@@ -50,12 +54,17 @@ export default class GreekArticleView extends GreekView {
   }
 
   createTable () {
-    this.table = new Table([this.features.genders, this.features.numbers, this.features.genders])
+    this.table = new Table([this.features.genders, this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
     features.columns = [ this.features.genders ]
 
-    features.rows = [this.features.numbers, this.features.genders]
-    features.columnRowTitles = [this.features.numbers]
-    features.fullWidthRowTitles = []
+    features.rows = [this.features.numbers, this.features.cases]
+    features.columnRowTitles = [this.features.cases]
+    features.fullWidthRowTitles = [this.featureTypes.numbers]
+  }
+
+  static getMorphemes (inflectionData) {
+    return inflectionData.pos.get(this.partOfSpeech)
+      .types.get(this.inflectionType).items
   }
 }
