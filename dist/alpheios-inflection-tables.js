@@ -2414,19 +2414,18 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
   static getOptionalMatchList (inflection) {
     let featureOptions = []
 
-    if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL)) {
-      const GEND_MASCULINE_FEMININE = 'masculine feminine'
-      const GEND_MASCULINE_FEMININE_NEUTER = 'masculine feminine neuter'
+    const GEND_MASCULINE_FEMININE = 'masculine feminine'
+    const GEND_MASCULINE_FEMININE_NEUTER = 'masculine feminine neuter'
+    let wideGenders = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, GEND_MASCULINE_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
+      this.languageID
+    )
 
-      let genders = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
-        [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, GEND_MASCULINE_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
-        this.languageID
-      )
-
+    if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL) || inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)) {
       featureOptions = [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
-        new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_15__["default"](genders, 'Gender'),
+        new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_15__["default"](wideGenders, 'Gender'),
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number
       ]
     } else {
