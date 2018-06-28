@@ -1,5 +1,5 @@
 import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import Suffix from '@lib/suffix.js'
+import Form from '@lib/form.js'
 import GreekView from '@views/lang/greek/greek-view.js'
 import GroupFeatureType from '@views/lib/group-feature-type.js'
 import Table from '@views/lib/table.js'
@@ -9,7 +9,7 @@ export default class GreekArticleView extends GreekView {
     super(inflectionData, locale)
 
     this.partOfSpeech = Constants.POFS_ARTICLE
-    this.inflectionType = Suffix
+    this.inflectionType = Form
 
     this.id = 'articleDeclension'
     this.name = 'article declension'
@@ -36,7 +36,7 @@ export default class GreekArticleView extends GreekView {
   }
 
   static get inflectionType () {
-    return Suffix
+    return Form
   }
 
   /**

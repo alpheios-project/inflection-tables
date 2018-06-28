@@ -574,7 +574,7 @@ const config = {
       inputFN: 'alph-infl-article.xml',
       outputSubDir: 'article/',
       suffixes: {
-        outputFN: 'suffixes.csv',
+        outputFN: 'forms.csv',
         get outputPath () {
           return path.join(__dirname, config.greek.outputBaseDir, config.greek.article.outputSubDir, this.outputFN)
         },
@@ -585,8 +585,8 @@ const config = {
           let result = []
 
           for (const group of data) {
-            for (const suffix of group['infl-ending']) {
-              let type = suffix['_attr']['type']['_value']
+            for (const form of group['infl-ending']) {
+              let type = form['_attr']['type']['_value']
               let primary = ''
               let typeArray = type.split(' ')
 
@@ -606,13 +606,13 @@ const config = {
               }
 
               let footnote = ''
-              if (suffix['_attr'].hasOwnProperty('footnote')) {
+              if (form['_attr'].hasOwnProperty('footnote')) {
                 // There can be multiple footnotes separated by spaces
-                footnote = config.greek.noun.footnotes.normalizeIndex(suffix['_attr']['footnote']['_value'])
+                footnote = config.greek.noun.footnotes.normalizeIndex(form['_attr']['footnote']['_value'])
               }
 
               result.push({
-                'Ending': suffix['_text'],
+                'Form': form['_text'],
                 'Number': group['_attr']['num']['_value'],
                 'Case': group['_attr']['case']['_value'],
                 'Gender': group['_attr']['gend']['_value'],

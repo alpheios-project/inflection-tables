@@ -816,14 +816,14 @@ module.exports = "Ending,Number,Case,Declension,Gender,Type,Primary,Footnote\r\n
 
 /***/ }),
 
-/***/ "./lib/lang/greek/data/article/suffixes.csv":
-/*!**************************************************!*\
-  !*** ./lib/lang/greek/data/article/suffixes.csv ***!
-  \**************************************************/
+/***/ "./lib/lang/greek/data/article/forms.csv":
+/*!***********************************************!*\
+  !*** ./lib/lang/greek/data/article/forms.csv ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Ending,Number,Case,Gender,Type,Primary\r\nτά,dual,accusative,feminine,regular,primary\r\nταῖν,dual,dative,feminine,regular,primary\r\nταῖν,dual,genitive,feminine,regular,primary\r\nτά,dual,nominative,feminine,regular,primary\r\nτώ,dual,accusative,masculine,regular,primary\r\nτοῖν,dual,dative,masculine,regular,primary\r\nτοῖν,dual,genitive,masculine,regular,primary\r\nτώ,dual,nominative,masculine,regular,primary\r\nτώ,dual,accusative,neuter,regular,primary\r\nτοῖν,dual,dative,neuter,regular,primary\r\nτοῖν,dual,genitive,neuter,regular,primary\r\nτώ,dual,nominative,neuter,regular,primary\r\nτάς,plural,accusative,feminine,regular,primary\r\nταῖς,plural,dative,feminine,regular,primary\r\nτῶν,plural,genitive,feminine,regular,primary\r\nαἱ,plural,nominative,feminine,regular,primary\r\nτούς,plural,accusative,masculine,regular,primary\r\nτοῖς,plural,dative,masculine,regular,primary\r\nτῶν,plural,genitive,masculine,regular,primary\r\nοἱ,plural,nominative,masculine,regular,primary\r\nτά,plural,accusative,neuter,regular,primary\r\nτοῖς,plural,dative,neuter,regular,primary\r\nτῶν,plural,genitive,neuter,regular,primary\r\nτά,plural,nominative,neuter,regular,primary\r\nτήν,singular,accusative,feminine,regular,primary\r\nτῇ,singular,dative,feminine,regular,primary\r\nτῆς,singular,genitive,feminine,regular,primary\r\nἡ,singular,nominative,feminine,regular,primary\r\nτόν,singular,accusative,masculine,regular,primary\r\nτῷ,singular,dative,masculine,regular,primary\r\nτοῦ,singular,genitive,masculine,regular,primary\r\nὁ,singular,nominative,masculine,regular,primary\r\nτό,singular,accusative,neuter,regular,primary\r\nτῷ,singular,dative,neuter,regular,primary\r\nτοῦ,singular,genitive,neuter,regular,primary\r\nτό,singular,nominative,neuter,regular,primary"
+module.exports = "Form,Number,Case,Gender,Type,Primary\r\nτά,dual,accusative,feminine,regular,primary\r\nταῖν,dual,dative,feminine,regular,primary\r\nταῖν,dual,genitive,feminine,regular,primary\r\nτά,dual,nominative,feminine,regular,primary\r\nτώ,dual,accusative,masculine,regular,primary\r\nτοῖν,dual,dative,masculine,regular,primary\r\nτοῖν,dual,genitive,masculine,regular,primary\r\nτώ,dual,nominative,masculine,regular,primary\r\nτώ,dual,accusative,neuter,regular,primary\r\nτοῖν,dual,dative,neuter,regular,primary\r\nτοῖν,dual,genitive,neuter,regular,primary\r\nτώ,dual,nominative,neuter,regular,primary\r\nτάς,plural,accusative,feminine,regular,primary\r\nταῖς,plural,dative,feminine,regular,primary\r\nτῶν,plural,genitive,feminine,regular,primary\r\nαἱ,plural,nominative,feminine,regular,primary\r\nτούς,plural,accusative,masculine,regular,primary\r\nτοῖς,plural,dative,masculine,regular,primary\r\nτῶν,plural,genitive,masculine,regular,primary\r\nοἱ,plural,nominative,masculine,regular,primary\r\nτά,plural,accusative,neuter,regular,primary\r\nτοῖς,plural,dative,neuter,regular,primary\r\nτῶν,plural,genitive,neuter,regular,primary\r\nτά,plural,nominative,neuter,regular,primary\r\nτήν,singular,accusative,feminine,regular,primary\r\nτῇ,singular,dative,feminine,regular,primary\r\nτῆς,singular,genitive,feminine,regular,primary\r\nἡ,singular,nominative,feminine,regular,primary\r\nτόν,singular,accusative,masculine,regular,primary\r\nτῷ,singular,dative,masculine,regular,primary\r\nτοῦ,singular,genitive,masculine,regular,primary\r\nὁ,singular,nominative,masculine,regular,primary\r\nτό,singular,accusative,neuter,regular,primary\r\nτῷ,singular,dative,neuter,regular,primary\r\nτοῦ,singular,genitive,neuter,regular,primary\r\nτό,singular,nominative,neuter,regular,primary"
 
 /***/ }),
 
@@ -1677,8 +1677,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var _lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @lib/lang/greek/data/adjective/footnotes.csv */ "./lib/lang/greek/data/adjective/footnotes.csv");
 /* harmony import */ var _lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _lib_lang_greek_data_article_suffixes_csv__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @lib/lang/greek/data/article/suffixes.csv */ "./lib/lang/greek/data/article/suffixes.csv");
-/* harmony import */ var _lib_lang_greek_data_article_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_article_suffixes_csv__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @lib/lang/greek/data/article/forms.csv */ "./lib/lang/greek/data/article/forms.csv");
+/* harmony import */ var _lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10__);
 /* harmony import */ var _data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./data/numeral/forms.csv */ "./lib/lang/greek/data/numeral/forms.csv");
 /* harmony import */ var _data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./data/numeral/footnotes.csv */ "./lib/lang/greek/data/numeral/footnotes.csv");
@@ -2017,27 +2017,21 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
     }
   }
 
-  addArticleSuffixes (partOfSpeech, data) {
+  addArticleForms (partOfSpeech, data) {
     // An order of columns in a data CSV file
     const n = {
-      suffix: 0,
+      form: 0,
       number: 1,
       grmCase: 2,
       gender: 3,
       type: 4,
       primary: 5
     }
-    // Some suffix values will mean a lack of suffix, they will be mapped to a null
-    let noSuffixValue = '-'
 
     // First row are headers
     for (let i = 1; i < data.length; i++) {
       let item = data[i]
-      let suffixValue = item[n.suffix]
-      // Handle special suffix values
-      if (suffixValue === noSuffixValue) {
-        suffixValue = null
-      }
+      let formValue = item[n.form]
 
       let primary = false
       let features = [partOfSpeech,
@@ -2055,7 +2049,7 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
         [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData
       }
 
-      this.addInflection(partOfSpeech.value, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], suffixValue, features, extendedLangData)
+      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], formValue, features, extendedLangData)
     }
   }
 
@@ -2345,8 +2339,8 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
 
     // Articles
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_article_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {})
-    this.addArticleSuffixes(partOfSpeech, suffixes.data)
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {})
+    this.addArticleForms(partOfSpeech, forms.data)
 
     // Pronouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
@@ -2399,7 +2393,7 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
     if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)) {
       // If it is a pronoun, it must match a grammatical class
       return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass]
-    } else if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL) || inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE)) {
+    } else if ([alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE].includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
       // If it is a numeral, it must match a part of speach
       return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
     } else if (inflection.constraints.fullFormBased) {
@@ -2422,7 +2416,7 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
       this.languageID
     )
 
-    if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL) || inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)) {
+    if ([alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE].includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
       featureOptions = [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
         new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_15__["default"](wideGenders, 'Gender'),
@@ -5906,7 +5900,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekArticleView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/suffix.js */ "./lib/suffix.js");
+/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/form.js */ "./lib/form.js");
 /* harmony import */ var _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lang/greek/greek-view.js */ "./views/lang/greek/greek-view.js");
 /* harmony import */ var _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
 /* harmony import */ var _views_lib_table_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lib/table.js */ "./views/lib/table.js");
@@ -5921,7 +5915,7 @@ class GreekArticleView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
     super(inflectionData, locale)
 
     this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE
-    this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
+    this.inflectionType = _lib_form_js__WEBPACK_IMPORTED_MODULE_1__["default"]
 
     this.id = 'articleDeclension'
     this.name = 'article declension'
@@ -5948,7 +5942,7 @@ class GreekArticleView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
   }
 
   static get inflectionType () {
-    return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
+    return _lib_form_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
   /**
