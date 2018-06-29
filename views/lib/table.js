@@ -116,8 +116,11 @@ export default class Table {
       ancestorFeatures.push(featureValue)
 
       // Suffixes that are selected for current combination of feature values
-
+      console.log('*********************************groupByFeature featureValue', JSON.stringify(featureValue))
+      console.log('*********************************groupByFeature ancestorFeatures', JSON.stringify(ancestorFeatures))
       let selectedSuffixes = suffixes.filter(s => s.featureMatch(featureValue))
+      console.log('*********************************groupByFeature suffixes', suffixes)
+      console.log('*********************************groupByFeature selectedSuffixes', selectedSuffixes)
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups
