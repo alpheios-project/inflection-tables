@@ -3000,8 +3000,23 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     return this
   }
 
-  getVerbsIrregularLemmas () {
-    return this.verbsIrregularLemmas
+  getVerbsIrregularLemma (verbForm) {
+    let res = this.pos.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB).types.get(_lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items.map(item => { return { val: item.value, lemma: item.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd].value, fullForm: item.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm].value } })
+    let res1 = {}
+    res.forEach(function (item) {
+      res1[item.val] = item.lemma
+      res1[item.fullForm] = item.lemma
+    })
+
+    return res1[verbForm] ? res1[verbForm] : null
+  }
+
+  checkIrregularVerb (inflection) {
+    if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB) && this.getVerbsIrregularLemma(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm])) {
+      return true
+    }
+
+    return false
   }
 
   static getObligatoryMatchList (inflection) {
@@ -3281,10 +3296,8 @@ class LanguageDataset {
 
   getInflectionData (homonym) {
     // Add support for languages
-    console.log('*************************getInflectionData homonym', homonym)
     let result = new _inflection_data_js__WEBPACK_IMPORTED_MODULE_5__["default"](homonym)
 
-    console.log('*************************getInflectionData begin result.pos', JSON.stringify(result.pos))
     let inflections = {}
 
     for (let lexeme of homonym.lexemes) {
@@ -3379,6 +3392,8 @@ class LanguageDataset {
             // If it is not full form based, then probably it is suffix base
             inflection.constraints.suffixBased = true
           }
+
+          inflection.constraints.irregularVerb = this.checkIrregularVerb(inflection)
         }
         if (paradigmBased) {
           inflectionSet.addInflectionItems(paradigms)
@@ -3388,13 +3403,10 @@ class LanguageDataset {
         let suffixBased = (inflectionsGroup.find(i => i.constraints.suffixBased) !== undefined)
         let formBased = (inflectionsGroup.find(i => i.constraints.fullFormBased) !== undefined)
 
-        console.log('*******************************getInflectionData suffixBased', suffixBased, formBased)
-        console.log('*******************************getInflectionData inflectionsGroup', inflectionsGroup)
         // Check for suffix matches
         if (suffixBased) {
           if (sourceSet.types.has(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"])) {
             let items = sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]).items.reduce(this['reducer'].bind(this, inflectionsGroup), [])
-            console.log('*******************************getInflectionData suffixBased items', items, sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]).items)
             if (items.length > 0) {
               inflectionSet.addInflectionItems(items)
             }
@@ -3404,7 +3416,6 @@ class LanguageDataset {
         // If there is at least on full form based inflection, search for full form items
         if (formBased) {
           let items = sourceSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.reduce(this['reducer'].bind(this, inflectionsGroup), [])
-          console.log('*******************************getInflectionData formBased items', items)
           if (items.length > 0) {
             inflectionSet.addInflectionItems(items)
           }
@@ -3425,7 +3436,6 @@ class LanguageDataset {
       }
     }
 
-    console.log('*************************getInflectionData end result.pos', JSON.stringify(result.pos), result)
     return result
   }
 
@@ -3470,7 +3480,6 @@ class LanguageDataset {
 
       // Check for obligatory matches
       const obligatoryMatches = this.constructor.getObligatoryMatches(inflection, item)
-      console.log('*************************matcher obligatoryMatches', obligatoryMatches, inflection, item)
 
       if (obligatoryMatches.fullMatch) {
         matchData.matchedFeatures.push(...obligatoryMatches.matchedItems)
@@ -3534,6 +3543,10 @@ class LanguageDataset {
     } else {
       return matchB
     }
+  }
+
+  checkIrregularVerb (inflection) {
+    return false
   }
 }
 
@@ -14401,11 +14414,11 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
     super(inflectionData, locale)
 
     this.id = 'verbConjugationIrregular'
-    this.name = 'verbConjugationIrregular'
+    this.name = 'verb-irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
     // const lemmaValues = ['esse_fui_futurus']
-    const lemmaValues = this.dataset.getVerbsIrregularLemmas()
+    const lemmaValues = this.dataset.getVerbsIrregularLemma(inflectionData.targetWord)
     let lemmasType = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, lemmaValues, LatinVerbIrregularView.languageID)
 
     this.features = {
@@ -14445,8 +14458,22 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
    */
   static matchFilter (inflectionData) {
     if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinVerbIrregularView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinVerbIrregularView.partOfSpeech)
+      return inflectionData.partsOfSpeech.includes(LatinVerbIrregularView.partOfSpeech) &&
+             LatinVerbIrregularView.enabledForLexemes(inflectionData.homonym.lexemes)
     }
+  }
+
+  static enabledForLexemes (lexemes) {
+    // default is true
+    for (let lexeme of lexemes) {
+      for (let inflection of lexeme.inflections) {
+        // console.log('************************enabledForLexemes inflection', JSON.stringify(inflection.constraints))
+        if (inflection.constraints && inflection.constraints.irregularVerb) {
+          return true
+        }
+      }
+    }
+    return false
   }
 }
 
@@ -16191,11 +16218,7 @@ class Table {
       ancestorFeatures.push(featureValue)
 
       // Suffixes that are selected for current combination of feature values
-      // console.log('*********************************groupByFeature featureValue', JSON.stringify(featureValue))
-      // console.log('*********************************groupByFeature ancestorFeatures', JSON.stringify(ancestorFeatures))
       let selectedSuffixes = suffixes.filter(s => s.featureMatch(featureValue))
-      // console.log('*********************************groupByFeature suffixes', suffixes)
-      // console.log('*********************************groupByFeature selectedSuffixes', selectedSuffixes)
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups
@@ -16566,7 +16589,6 @@ class ViewSet {
       ]
     ])
     this.inflectionData = inflectionData
-    // console.log('*******************inflectionData', JSON.stringify(inflectionData.pos))
     this.languageID = this.inflectionData.languageID
     this.locale = locale
     this.matchingViews = []
@@ -16762,10 +16784,6 @@ class View {
    * @param {InflectionData} inflectionData
    */
   getFootnotes (inflectionData) {
-    // console.log('*******************getFootnotes1', inflectionData.pos.get(this.constructor.partOfSpeech))
-    // console.log('*******************getFootnotes2', inflectionData.pos.get(this.constructor.partOfSpeech).types)
-    // console.log('*******************getFootnotes3', inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType))
-
     return inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
   }
 

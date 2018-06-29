@@ -10,11 +10,11 @@ export default class LatinVerbIrregularView extends LatinView {
     super(inflectionData, locale)
 
     this.id = 'verbConjugationIrregular'
-    this.name = 'verbConjugationIrregular'
+    this.name = 'verb-irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
     // const lemmaValues = ['esse_fui_futurus']
-    const lemmaValues = this.dataset.getVerbsIrregularLemmas()
+    const lemmaValues = this.dataset.getVerbsIrregularLemma(inflectionData.targetWord)
     let lemmasType = new Feature(Feature.types.hdwd, lemmaValues, LatinVerbIrregularView.languageID)
 
     this.features = {
@@ -54,7 +54,21 @@ export default class LatinVerbIrregularView extends LatinView {
    */
   static matchFilter (inflectionData) {
     if (LanguageModelFactory.compareLanguages(LatinVerbIrregularView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinVerbIrregularView.partOfSpeech)
+      return inflectionData.partsOfSpeech.includes(LatinVerbIrregularView.partOfSpeech) &&
+             LatinVerbIrregularView.enabledForLexemes(inflectionData.homonym.lexemes)
     }
+  }
+
+  static enabledForLexemes (lexemes) {
+    // default is true
+    for (let lexeme of lexemes) {
+      for (let inflection of lexeme.inflections) {
+        // console.log('************************enabledForLexemes inflection', JSON.stringify(inflection.constraints))
+        if (inflection.constraints && inflection.constraints.irregularVerb) {
+          return true
+        }
+      }
+    }
+    return false
   }
 }
