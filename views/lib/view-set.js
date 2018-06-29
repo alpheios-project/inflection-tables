@@ -76,7 +76,7 @@ export default class ViewSet {
       ]
     ])
     this.inflectionData = inflectionData
-    console.log('*******************inflectionData', JSON.stringify(inflectionData.pos))
+    // console.log('*******************inflectionData', JSON.stringify(inflectionData.pos))
     this.languageID = this.inflectionData.languageID
     this.locale = locale
     this.matchingViews = []

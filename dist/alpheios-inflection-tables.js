@@ -14400,9 +14400,9 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
 
-    this.id = 'verbIrregular'
-    this.name = 'irregular'
-    this.title = 'irregular'
+    this.id = 'verbConjugationIrregular'
+    this.name = 'verbConjugationIrregular'
+    this.title = 'Verb Conjugation (Irregular)'
 
     // const lemmaValues = ['esse_fui_futurus']
     const lemmaValues = this.dataset.getVerbsIrregularLemmas()
@@ -16191,11 +16191,11 @@ class Table {
       ancestorFeatures.push(featureValue)
 
       // Suffixes that are selected for current combination of feature values
-      console.log('*********************************groupByFeature featureValue', JSON.stringify(featureValue))
-      console.log('*********************************groupByFeature ancestorFeatures', JSON.stringify(ancestorFeatures))
+      // console.log('*********************************groupByFeature featureValue', JSON.stringify(featureValue))
+      // console.log('*********************************groupByFeature ancestorFeatures', JSON.stringify(ancestorFeatures))
       let selectedSuffixes = suffixes.filter(s => s.featureMatch(featureValue))
-      console.log('*********************************groupByFeature suffixes', suffixes)
-      console.log('*********************************groupByFeature selectedSuffixes', selectedSuffixes)
+      // console.log('*********************************groupByFeature suffixes', suffixes)
+      // console.log('*********************************groupByFeature selectedSuffixes', selectedSuffixes)
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups
@@ -16566,7 +16566,7 @@ class ViewSet {
       ]
     ])
     this.inflectionData = inflectionData
-    console.log('*******************inflectionData', JSON.stringify(inflectionData.pos))
+    // console.log('*******************inflectionData', JSON.stringify(inflectionData.pos))
     this.languageID = this.inflectionData.languageID
     this.locale = locale
     this.matchingViews = []
@@ -16762,9 +16762,9 @@ class View {
    * @param {InflectionData} inflectionData
    */
   getFootnotes (inflectionData) {
-    console.log('*******************getFootnotes1', inflectionData.pos.get(this.constructor.partOfSpeech))
-    console.log('*******************getFootnotes2', inflectionData.pos.get(this.constructor.partOfSpeech).types)
-    console.log('*******************getFootnotes3', inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType))
+    // console.log('*******************getFootnotes1', inflectionData.pos.get(this.constructor.partOfSpeech))
+    // console.log('*******************getFootnotes2', inflectionData.pos.get(this.constructor.partOfSpeech).types)
+    // console.log('*******************getFootnotes3', inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType))
 
     return inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
   }

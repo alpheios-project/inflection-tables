@@ -137,9 +137,9 @@ export default class View {
    * @param {InflectionData} inflectionData
    */
   getFootnotes (inflectionData) {
-    console.log('*******************getFootnotes1', inflectionData.pos.get(this.constructor.partOfSpeech))
-    console.log('*******************getFootnotes2', inflectionData.pos.get(this.constructor.partOfSpeech).types)
-    console.log('*******************getFootnotes3', inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType))
+    // console.log('*******************getFootnotes1', inflectionData.pos.get(this.constructor.partOfSpeech))
+    // console.log('*******************getFootnotes2', inflectionData.pos.get(this.constructor.partOfSpeech).types)
+    // console.log('*******************getFootnotes3', inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType))
 
     return inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
   }
