@@ -3041,7 +3041,16 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person
     ]
-    return featureOptions.filter(f => inflection[f])
+    if (inflection.constraints.irregularVerb) {
+      return [
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person
+      ]
+    } else {
+      return featureOptions.filter(f => inflection[f])
+    }
   }
 }
 
@@ -3474,6 +3483,7 @@ class LanguageDataset {
      But there could be multiple partial matches. So we should try to find the best match possible and return it.
      a fullFeature match is when one of inflections has all grammatical features fully matching those of a suffix
      */
+
     for (let inflection of inflections) {
       let matchData = new _match_data_js__WEBPACK_IMPORTED_MODULE_6__["default"]() // Create a match profile
       matchData.suffixMatch = inflection.compareWithWord(item.value)
@@ -3490,6 +3500,7 @@ class LanguageDataset {
 
       // Check for optional matches
       const optionalMatches = this.constructor.getOptionalMatches(inflection, item)
+
       matchData.matchedFeatures.push(...optionalMatches.matchedItems)
 
       if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
