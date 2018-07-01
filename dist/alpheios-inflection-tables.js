@@ -2422,6 +2422,13 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
         new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_15__["default"](wideGenders, 'Gender'),
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number
       ]
+    } else if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)) {
+      featureOptions = [
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
+        new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_15__["default"](wideGenders, 'Gender'),
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension
+      ]
     } else {
       featureOptions = [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
@@ -3502,6 +3509,13 @@ class LanguageDataset {
       const optionalMatches = this.constructor.getOptionalMatches(inflection, item)
 
       matchData.matchedFeatures.push(...optionalMatches.matchedItems)
+
+      if (matchData.suffixMatch) {
+        console.log('---------------------------------------------matcher')
+        console.log('*********************suffixMatch', matchData.suffixMatch, item.value, inflection.suffix)
+        console.log('*********************obligatoryMatches', obligatoryMatches.fullMatch)
+        console.log('*********************optionalMatches', optionalMatches.fullMatch, inflection)
+      }
 
       if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
         // This is a full match
@@ -12643,6 +12657,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/suffix.js */ "./lib/suffix.js");
 /* harmony import */ var _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lang/greek/greek-view.js */ "./views/lang/greek/greek-view.js");
+/* harmony import */ var _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+
 
 
 
@@ -12655,19 +12671,33 @@ class GreekAdjectiveView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORT
     this.title = 'Adjective declension'
     this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
     this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-    const genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
-    const genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
-    const genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
 
+    const GEND_MASCULINE_FEMININE = 'masculine feminine'
+    const GEND_MASCULINE_FEMININE_NEUTER = 'masculine feminine neuter'
+
+    let featureTypesGenders = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, GEND_MASCULINE_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
+      this.languageID
+    )
+    this.features.genders = new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](featureTypesGenders, 'Gender')
     this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
-      if (ancestorFeatures) {
-        if (ancestorFeatures.value === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND || ancestorFeatures.value === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD) {
-          return [[genderMasculine, genderFeminine], genderNeuter]
+      /* if (ancestorFeatures) {
+        if (ancestorFeatures.value === Constants.ORD_2ND || ancestorFeatures.value === Constants.ORD_3RD) {
+          return [[Constants.GEND_MASCULINE, Constants.GEND_FEMININE], Constants.GEND_NEUTER]
         }
-      }
-      return [genderMasculine, genderFeminine, genderNeuter]
+      } */
+      return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, GEND_MASCULINE_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER]
     }
 
+    this.features.genders.getTitle = function getTitle (featureValue) {
+      if (featureValue === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE) { return 'm.' }
+      if (featureValue === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE) { return 'f.' }
+      if (featureValue === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER) { return 'n.' }
+      if (featureValue === GEND_MASCULINE_FEMININE) { return 'm./f.' }
+      if (featureValue === GEND_MASCULINE_FEMININE_NEUTER) { return 'm./f./n.' }
+      return featureValue
+    }
     this.createTable()
   }
 
