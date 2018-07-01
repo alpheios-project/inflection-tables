@@ -12583,18 +12583,6 @@ class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adj
     this.title = 'Adjective declension (simplified)'
     this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
     this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-    const genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
-    const genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
-    const genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
-
-    this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
-      if (ancestorFeatures) {
-        if (ancestorFeatures.value === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND || ancestorFeatures.value === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD) {
-          return [[genderMasculine, genderFeminine], genderNeuter]
-        }
-      }
-      return [genderMasculine, genderFeminine, genderNeuter]
-    }
 
     this.createTable()
 
@@ -12675,11 +12663,6 @@ class GreekAdjectiveView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORT
     )
     this.features.genders = new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](featureTypesGenders, 'Gender')
     this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
-      /* if (ancestorFeatures) {
-        if (ancestorFeatures.value === Constants.ORD_2ND || ancestorFeatures.value === Constants.ORD_3RD) {
-          return [[Constants.GEND_MASCULINE, Constants.GEND_FEMININE], Constants.GEND_NEUTER]
-        }
-      } */
       return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, GEND_MASCULINE_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER]
     }
 

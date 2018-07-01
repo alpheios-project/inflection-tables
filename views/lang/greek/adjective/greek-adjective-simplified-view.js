@@ -10,18 +10,6 @@ export default class GreekAdjectiveSimplifiedView extends GreekAdjectiveView {
     this.title = 'Adjective declension (simplified)'
     this.partOfSpeech = Constants.POFS_ADJECTIVE
     this.inflectionType = Suffix
-    const genderMasculine = Constants.GEND_MASCULINE
-    const genderFeminine = Constants.GEND_FEMININE
-    const genderNeuter = Constants.GEND_NEUTER
-
-    this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
-      if (ancestorFeatures) {
-        if (ancestorFeatures.value === Constants.ORD_2ND || ancestorFeatures.value === Constants.ORD_3RD) {
-          return [[genderMasculine, genderFeminine], genderNeuter]
-        }
-      }
-      return [genderMasculine, genderFeminine, genderNeuter]
-    }
 
     this.createTable()
 

@@ -22,11 +22,6 @@ export default class GreekAdjectiveView extends GreekView {
     )
     this.features.genders = new GroupFeatureType(featureTypesGenders, 'Gender')
     this.features.genders.getOrderedValues = function getOrderedValues (ancestorFeatures) {
-      /* if (ancestorFeatures) {
-        if (ancestorFeatures.value === Constants.ORD_2ND || ancestorFeatures.value === Constants.ORD_3RD) {
-          return [[Constants.GEND_MASCULINE, Constants.GEND_FEMININE], Constants.GEND_NEUTER]
-        }
-      } */
       return [Constants.GEND_MASCULINE, Constants.GEND_FEMININE, GEND_MASCULINE_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER]
     }
 
