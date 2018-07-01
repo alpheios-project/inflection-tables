@@ -3510,13 +3510,6 @@ class LanguageDataset {
 
       matchData.matchedFeatures.push(...optionalMatches.matchedItems)
 
-      if (matchData.suffixMatch) {
-        console.log('---------------------------------------------matcher')
-        console.log('*********************suffixMatch', matchData.suffixMatch, item.value, inflection.suffix)
-        console.log('*********************obligatoryMatches', obligatoryMatches.fullMatch)
-        console.log('*********************optionalMatches', optionalMatches.fullMatch, inflection)
-      }
-
       if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
         // This is a full match
         matchData.fullMatch = true
