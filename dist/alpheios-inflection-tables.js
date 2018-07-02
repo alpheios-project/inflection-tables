@@ -1664,30 +1664,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekLanguageDataset; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_language_dataset__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/language-dataset */ "./lib/language-dataset.js");
-/* harmony import */ var _lib_extended_greek_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @lib/extended-greek-data */ "./lib/extended-greek-data.js");
-/* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @lib/suffix.js */ "./lib/suffix.js");
-/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @lib/form.js */ "./lib/form.js");
-/* harmony import */ var _lib_paradigm_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @lib/paradigm.js */ "./lib/paradigm.js");
-/* harmony import */ var _lib_lang_greek_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @lib/lang/greek/data/noun/suffixes.csv */ "./lib/lang/greek/data/noun/suffixes.csv");
-/* harmony import */ var _lib_lang_greek_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _lib_lang_greek_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @lib/lang/greek/data/noun/footnotes.csv */ "./lib/lang/greek/data/noun/footnotes.csv");
-/* harmony import */ var _lib_lang_greek_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @lib/lang/greek/data/adjective/suffixes.csv */ "./lib/lang/greek/data/adjective/suffixes.csv");
-/* harmony import */ var _lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @lib/lang/greek/data/adjective/footnotes.csv */ "./lib/lang/greek/data/adjective/footnotes.csv");
-/* harmony import */ var _lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @lib/lang/greek/data/article/forms.csv */ "./lib/lang/greek/data/article/forms.csv");
-/* harmony import */ var _lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../lib/language-dataset.js */ "./lib/language-dataset.js");
+/* harmony import */ var _lib_extended_greek_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../lib/extended-greek-data */ "./lib/extended-greek-data.js");
+/* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../lib/suffix.js */ "./lib/suffix.js");
+/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../lib/form.js */ "./lib/form.js");
+/* harmony import */ var _lib_paradigm_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../lib/paradigm.js */ "./lib/paradigm.js");
+/* harmony import */ var _data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./data/noun/suffixes.csv */ "./lib/lang/greek/data/noun/suffixes.csv");
+/* harmony import */ var _data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./data/noun/footnotes.csv */ "./lib/lang/greek/data/noun/footnotes.csv");
+/* harmony import */ var _data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./data/adjective/suffixes.csv */ "./lib/lang/greek/data/adjective/suffixes.csv");
+/* harmony import */ var _data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./data/adjective/footnotes.csv */ "./lib/lang/greek/data/adjective/footnotes.csv");
+/* harmony import */ var _data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./data/article/forms.csv */ "./lib/lang/greek/data/article/forms.csv");
+/* harmony import */ var _data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10__);
 /* harmony import */ var _data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./data/numeral/forms.csv */ "./lib/lang/greek/data/numeral/forms.csv");
 /* harmony import */ var _data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./data/numeral/footnotes.csv */ "./lib/lang/greek/data/numeral/footnotes.csv");
 /* harmony import */ var _data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @lib/lang/greek/data/pronoun/forms.csv */ "./lib/lang/greek/data/pronoun/forms.csv");
-/* harmony import */ var _lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var _lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @lib/lang/greek/data/pronoun/footnotes.csv */ "./lib/lang/greek/data/pronoun/footnotes.csv");
-/* harmony import */ var _lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @views/lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./data/pronoun/forms.csv */ "./lib/lang/greek/data/pronoun/forms.csv");
+/* harmony import */ var _data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./data/pronoun/footnotes.csv */ "./lib/lang/greek/data/pronoun/footnotes.csv");
+/* harmony import */ var _data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../../views/lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
 /* harmony import */ var _data_verb_paradigm_tables_paradigm_01_json__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./data/verb/paradigm/tables/paradigm-01.json */ "./lib/lang/greek/data/verb/paradigm/tables/paradigm-01.json");
 /* harmony import */ var _data_verb_paradigm_tables_paradigm_01_json__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_data_verb_paradigm_tables_paradigm_01_json__WEBPACK_IMPORTED_MODULE_16__);
 /* harmony import */ var _data_verb_paradigm_tables_paradigm_02_json__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./data/verb/paradigm/tables/paradigm-02.json */ "./lib/lang/greek/data/verb/paradigm/tables/paradigm-02.json");
@@ -1944,7 +1944,7 @@ import verbFootnotesCSV from './data/verb/footnotes.csv'; */
 
 // endregion Definition of grammatical features
 
-class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
   constructor () {
     super(GreekLanguageDataset.languageID)
 
@@ -2325,28 +2325,28 @@ class GreekLanguageDataset extends _lib_language_dataset__WEBPACK_IMPORTED_MODUL
 
     // Nouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6___default.a, {})
     this.addSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
+    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
     this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotes.data)
 
     // Adjective
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, {})
     this.addSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
+    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
     this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotes.data)
 
     // Articles
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {})
     this.addArticleForms(partOfSpeech, forms.data)
 
     // Pronouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {})
     this.addPronounForms(partOfSpeech, forms.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, {})
+    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, {})
     this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], footnotes.data)
 
     // Numerals
@@ -12654,17 +12654,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekArticleView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/form.js */ "./lib/form.js");
-/* harmony import */ var _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lang/greek/greek-view.js */ "./views/lang/greek/greek-view.js");
-/* harmony import */ var _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
-/* harmony import */ var _views_lib_table_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lib/table.js */ "./views/lib/table.js");
+/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../lib/form.js */ "./lib/form.js");
+/* harmony import */ var _greek_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../greek-view.js */ "./views/lang/greek/greek-view.js");
+/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _lib_table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../lib/table */ "./views/lib/table.js");
 
 
 
 
 
 
-class GreekArticleView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
 
@@ -12683,10 +12683,10 @@ class GreekArticleView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
     )
 
     this.features = {
-      numbers: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.featureTypes.numbers, 'Number'),
-      cases: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
-      genders: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
-      types: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
+      numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.featureTypes.numbers, 'Number'),
+      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
+      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
+      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
     }
     this.createTable()
   }
@@ -12714,7 +12714,7 @@ class GreekArticleView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
   }
 
   createTable () {
-    this.table = new _views_lib_table_js__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.genders, this.features.types, this.features.numbers, this.features.cases])
+    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.genders, this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
     features.columns = [ this.features.genders ]
 
@@ -12967,10 +12967,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekNumeralView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/form.js */ "./lib/form.js");
-/* harmony import */ var _views_lib_table_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lib/table.js */ "./views/lib/table.js");
-/* harmony import */ var _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lang/greek/greek-view.js */ "./views/lang/greek/greek-view.js");
-/* harmony import */ var _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../lib/form.js */ "./lib/form.js");
+/* harmony import */ var _lib_table__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../lib/table */ "./views/lib/table.js");
+/* harmony import */ var _greek_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../greek-view.js */ "./views/lang/greek/greek-view.js");
+/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
 
 
 
@@ -12978,7 +12978,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class GreekNumeralView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
+class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
     this.id = 'numeralDeclension'
@@ -13008,11 +13008,11 @@ class GreekNumeralView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
     this.featureTypes.lemmas = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, lemmaValues, GreekNumeralView.languageID)
 
     this.features = {
-      lemmas: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.lemmas, 'Lemma'),
-      genders: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.genders, 'Gender'),
-      types: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type'),
-      numbers: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.numbers, 'Number'),
-      cases: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case')
+      lemmas: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.lemmas, 'Lemma'),
+      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.genders, 'Gender'),
+      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type'),
+      numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.numbers, 'Number'),
+      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case')
     }
 
     this.features.genders.getTitle = function getTitle (featureValue) {
@@ -13063,7 +13063,7 @@ class GreekNumeralView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
   }
 
   createTable () {
-    this.table = new _views_lib_table_js__WEBPACK_IMPORTED_MODULE_2__["default"]([this.features.lemmas, this.features.genders, this.features.types, this.features.numbers, this.features.cases])
+    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_2__["default"]([this.features.lemmas, this.features.genders, this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
     features.columns = [this.featureTypes.lemmas, this.featureTypes.genders, this.features.types]
     features.rows = [this.featureTypes.numbers, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GreekLanguageModel"].typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
