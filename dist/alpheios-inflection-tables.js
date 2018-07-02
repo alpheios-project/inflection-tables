@@ -3456,7 +3456,7 @@ class LanguageDataset {
       let inflectionSet = this.pos.get(partOfSpeech)
 
       if (inflectionSet.types.has(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"])) {
-        return inflectionSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.find((item) => this.matcher([inflection], item)) !== undefined
+        return inflectionSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.find(item => this.matcher([inflection], item)) !== undefined
       }
     }
     return false
