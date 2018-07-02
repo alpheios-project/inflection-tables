@@ -1,9 +1,9 @@
 import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import LatinView from '@views/lang/latin/latin-view.js'
+import LatinView from '../latin-view.js'
 
-import GroupFeatureType from '@views/lib/group-feature-type'
-import Form from '@lib/form.js'
-import Table from '@views/lib/table'
+import GroupFeatureType from '../../../lib/group-feature-type'
+import Form from '../../../../lib/form.js'
+import Table from '../../../lib/table'
 
 export default class LatinVerbIrregularView extends LatinView {
   constructor (inflectionData, locale) {
@@ -13,7 +13,6 @@ export default class LatinVerbIrregularView extends LatinView {
     this.name = 'verb-irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
-    // const lemmaValues = ['esse_fui_futurus']
     const lemmaValues = this.dataset.getVerbsIrregularLemma(inflectionData.targetWord)
     let lemmasType = new Feature(Feature.types.hdwd, lemmaValues, LatinVerbIrregularView.languageID)
 
@@ -63,7 +62,6 @@ export default class LatinVerbIrregularView extends LatinView {
     // default is true
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
-        // console.log('************************enabledForLexemes inflection', JSON.stringify(inflection.constraints))
         if (inflection.constraints && inflection.constraints.irregularVerb) {
           return true
         }

@@ -1,8 +1,8 @@
 import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import Form from '@lib/form.js'
-import GreekView from '@views/lang/greek/greek-view.js'
-import GroupFeatureType from '@views/lib/group-feature-type.js'
-import Table from '@views/lib/table.js'
+import Form from '../../../../lib/form.js'
+import GreekView from '../greek-view.js'
+import GroupFeatureType from '../../../lib/group-feature-type.js'
+import Table from '../../../lib/table'
 
 export default class GreekArticleView extends GreekView {
   constructor (inflectionData, locale) {
