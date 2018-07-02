@@ -12744,17 +12744,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
-/* harmony import */ var _views_lib_table_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lib/table.js */ "./views/lib/table.js");
-/* harmony import */ var _views_lib_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lib/view.js */ "./views/lib/view.js");
-/* harmony import */ var _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
+/* harmony import */ var _lib_table_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/table.js */ "./views/lib/table.js");
+/* harmony import */ var _lib_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/view.js */ "./views/lib/view.js");
+/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
 
 
 
 
 
 
-class GreekView extends _views_lib_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
+class GreekView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
     this.languageID = GreekView.languageID
@@ -12766,11 +12766,11 @@ class GreekView extends _views_lib_view_js__WEBPACK_IMPORTED_MODULE_3__["default
     those values in child objects.
      */
     this.features = {
-      numbers: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), 'Number'),
-      cases: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
-      declensions: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), 'Declension'),
-      genders: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
-      types: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
+      numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), 'Number'),
+      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
+      declensions: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), 'Declension'),
+      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
+      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
     }
   }
 
@@ -12783,7 +12783,7 @@ class GreekView extends _views_lib_view_js__WEBPACK_IMPORTED_MODULE_3__["default
    * an inflection table differently.
    */
   createTable () {
-    this.table = new _views_lib_table_js__WEBPACK_IMPORTED_MODULE_2__["default"]([this.features.declensions, this.features.genders,
+    this.table = new _lib_table_js__WEBPACK_IMPORTED_MODULE_2__["default"]([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases])
 
     let features = this.table.features
