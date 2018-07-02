@@ -1,6 +1,6 @@
 import { Constants, LanguageModelFactory } from 'alpheios-data-models'
-import Suffix from '@lib/suffix.js'
-import GreekAdjectiveView from '@views/lang/greek/adjective/greek-adjective-view'
+import Suffix from '../../../../lib/suffix.js'
+import GreekAdjectiveView from './greek-adjective-view'
 
 export default class GreekAdjectiveSimplifiedView extends GreekAdjectiveView {
   constructor (inflectionData, locale) {

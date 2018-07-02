@@ -1,7 +1,7 @@
 import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import Suffix from '@lib/suffix.js'
-import GreekView from '@views/lang/greek/greek-view.js'
-import GroupFeatureType from '@views/lib/group-feature-type.js'
+import Suffix from '../../../../lib/suffix.js'
+import GreekView from '../greek-view.js'
+import GroupFeatureType from '../../../lib/group-feature-type.js'
 
 export default class GreekAdjectiveView extends GreekView {
   constructor (inflectionData, locale) {
