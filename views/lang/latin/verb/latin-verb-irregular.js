@@ -1,9 +1,9 @@
 import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import LatinView from '@views/lang/latin/latin-view.js'
+import LatinView from '../latin-view.js'
 
-import GroupFeatureType from '@views/lib/group-feature-type'
-import Form from '@lib/form.js'
-import Table from '@views/lib/table'
+import GroupFeatureType from '../../../lib/group-feature-type'
+import Form from '../../../../lib/form.js'
+import Table from '../../../lib/table'
 
 export default class LatinVerbIrregularView extends LatinView {
   constructor (inflectionData, locale) {
@@ -13,24 +13,29 @@ export default class LatinVerbIrregularView extends LatinView {
     this.name = 'verb-irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
-    // const lemmaValues = ['esse_fui_futurus']
-    const lemmaValues = this.dataset.getVerbsIrregularLemma(inflectionData.targetWord)
+    const inflectionsWords = inflectionData.homonym.inflections.map(item => item[Feature.types.word].value)
+    const lemmaValues = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item) > -1)
+
     let lemmasType = new Feature(Feature.types.hdwd, lemmaValues, LatinVerbIrregularView.languageID)
+
+    this.language_features[Feature.types.voice] = new Feature(Feature.types.voice,
+      [Constants.VOICE_ACTIVE, Constants.VOICE_PASSIVE, '-'], this.model.languageID)
 
     this.features = {
       lemmas: new GroupFeatureType(lemmasType, 'Lemma'),
       tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
       numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
       persons: new GroupFeatureType(this.language_features[Feature.types.person], 'Person'),
-      moods: new GroupFeatureType(this.language_features[Feature.types.mood], 'Mood')
+      moods: new GroupFeatureType(this.language_features[Feature.types.mood], 'Mood'),
+      voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice')
     }
     this.createTable()
   }
 
   createTable () {
-    this.table = new Table([this.features.lemmas, this.features.moods, this.features.tenses, this.features.numbers, this.features.persons])
+    this.table = new Table([this.features.lemmas, this.features.voices, this.features.moods, this.features.tenses, this.features.numbers, this.features.persons])
     let features = this.table.features
-    features.columns = [ this.features.lemmas, this.features.moods ]
+    features.columns = [ this.features.voices, this.features.moods ]
     features.rows = [this.features.tenses, this.features.numbers, this.features.persons]
     features.columnRowTitles = [this.features.numbers, this.features.persons]
     features.fullWidthRowTitles = [this.features.tenses]
@@ -63,7 +68,6 @@ export default class LatinVerbIrregularView extends LatinView {
     // default is true
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
-        // console.log('************************enabledForLexemes inflection', JSON.stringify(inflection.constraints))
         if (inflection.constraints && inflection.constraints.irregularVerb) {
           return true
         }

@@ -2909,7 +2909,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       const item = data[i]
       let lemma = item[0]
       // let principalParts = item[1].split(/_/)
-      let principalParts = item[1]
+      // let principalParts = item[1]
 
       let form = item[2]
 
@@ -2919,15 +2919,17 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm).createFromImporter(lemma)
       ]
 
-      if (principalParts) {
-        features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd).createFromImporter(principalParts))
-        if (this.verbsIrregularLemmas.indexOf(principalParts) === -1) {
-          this.verbsIrregularLemmas.push(principalParts)
+      if (lemma) {
+        features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd).createFromImporter(lemma))
+        if (this.verbsIrregularLemmas.indexOf(lemma) === -1) {
+          this.verbsIrregularLemmas.push(lemma)
         }
       }
 
       if (item[3]) {
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice).createFromImporter(item[3]))
+      } else {
+        features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice).createFromImporter('-'))
       }
       if (item[4]) {
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood).createFromImporter(item[4]))
@@ -3014,19 +3016,11 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     return this
   }
 
-  getVerbsIrregularLemma (verbForm) {
-    let formatedFormsToObjects = this.pos.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB).types.get(_lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items.map(item => { return { val: item.value, lemma: item.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd].value, fullForm: item.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm].value } })
-    let formatedFormsToObjectsSimplified = {}
-    formatedFormsToObjects.forEach(function (item) {
-      formatedFormsToObjectsSimplified[item.val] = item.lemma
-      formatedFormsToObjectsSimplified[item.fullForm] = item.lemma
-    })
-
-    return formatedFormsToObjectsSimplified[verbForm] ? formatedFormsToObjectsSimplified[verbForm] : null
-  }
-
   checkIrregularVerb (inflection) {
-    return (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB) && this.getVerbsIrregularLemma(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm]))
+    if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB) && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word]) {
+      return this.verbsIrregularLemmas.indexOf(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value) > -1
+    }
+    return false
   }
 
   static getObligatoryMatchList (inflection) {
@@ -3049,14 +3043,18 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
-      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation
     ]
+
     if (inflection.constraints.irregularVerb) {
       return [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation
       ]
     } else {
       return featureOptions.filter(f => inflection[f])
@@ -3293,7 +3291,9 @@ class LanguageDataset {
 
   static checkMatches (matchList, inflection, item) {
     let matches = matchList.reduce((acc, f) => {
-      if (inflection.hasOwnProperty(f) && item.featureMatch(inflection[f])) {
+      if (inflection.hasOwnProperty(f) && item.features.hasOwnProperty(f) && item.featureMatch(inflection[f])) {
+        acc.push(f)
+      } else if (!item.features.hasOwnProperty(f)) {
         acc.push(f)
       }
       return acc
@@ -3496,9 +3496,10 @@ class LanguageDataset {
 
     for (let inflection of inflections) {
       let matchData = new _match_data_js__WEBPACK_IMPORTED_MODULE_6__["default"]() // Create a match profile
-      matchData.suffixMatch = inflection.compareWithWord(item.value)
+      matchData.suffixMatch = inflection.compareWithWordDependsOnType(item.value, item.constructor.name)
 
       // Check for obligatory matches
+
       const obligatoryMatches = this.constructor.getObligatoryMatches(inflection, item)
 
       if (obligatoryMatches.fullMatch) {
@@ -14495,10 +14496,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LatinVerbIrregularView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _views_lang_latin_latin_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @views/lang/latin/latin-view.js */ "./views/lang/latin/latin-view.js");
-/* harmony import */ var _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lib/group-feature-type */ "./views/lib/group-feature-type.js");
-/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @lib/form.js */ "./lib/form.js");
-/* harmony import */ var _views_lib_table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lib/table */ "./views/lib/table.js");
+/* harmony import */ var _latin_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../latin-view.js */ "./views/lang/latin/latin-view.js");
+/* harmony import */ var _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../lib/group-feature-type */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../lib/form.js */ "./lib/form.js");
+/* harmony import */ var _lib_table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../lib/table */ "./views/lib/table.js");
 
 
 
@@ -14506,7 +14507,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class LatinVerbIrregularView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
 
@@ -14514,24 +14515,29 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
     this.name = 'verb-irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
-    // const lemmaValues = ['esse_fui_futurus']
-    const lemmaValues = this.dataset.getVerbsIrregularLemma(inflectionData.targetWord)
+    const inflectionsWords = inflectionData.homonym.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
+    const lemmaValues = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item) > -1)
+
     let lemmasType = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, lemmaValues, LatinVerbIrregularView.languageID)
 
+    this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_ACTIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_PASSIVE, '-'], this.model.languageID)
+
     this.features = {
-      lemmas: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](lemmasType, 'Lemma'),
-      tenses: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tenses'),
-      numbers: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number], 'Number'),
-      persons: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person], 'Person'),
-      moods: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood], 'Mood')
+      lemmas: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](lemmasType, 'Lemma'),
+      tenses: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tenses'),
+      numbers: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number], 'Number'),
+      persons: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person], 'Person'),
+      moods: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood], 'Mood'),
+      voices: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice], 'Voice')
     }
     this.createTable()
   }
 
   createTable () {
-    this.table = new _views_lib_table__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.lemmas, this.features.moods, this.features.tenses, this.features.numbers, this.features.persons])
+    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.lemmas, this.features.voices, this.features.moods, this.features.tenses, this.features.numbers, this.features.persons])
     let features = this.table.features
-    features.columns = [ this.features.lemmas, this.features.moods ]
+    features.columns = [ this.features.voices, this.features.moods ]
     features.rows = [this.features.tenses, this.features.numbers, this.features.persons]
     features.columnRowTitles = [this.features.numbers, this.features.persons]
     features.fullWidthRowTitles = [this.features.tenses]
@@ -14564,7 +14570,6 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
     // default is true
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
-        // console.log('************************enabledForLexemes inflection', JSON.stringify(inflection.constraints))
         if (inflection.constraints && inflection.constraints.irregularVerb) {
           return true
         }
