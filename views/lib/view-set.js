@@ -11,6 +11,7 @@ import LatinMoodConjugationVoiceView from '@views/lang/latin/verb/latin-mood-con
 import LatinImperativeView from '@views/lang/latin/verb/latin-imperative-view.js'
 
 import LatinVerbIrregularView from '@views/lang/latin/verb/latin-verb-irregular.js'
+import LatinVerbParticipleIrregularView from '@views/lang/latin/verb/latin-verb-participle-irregular.js'
 
 import LatinSupineView from '@views/lang/latin/noun/latin-supine-view.js'
 import LatinVerbParticipleView from '@views/lang/latin/verb/latin-verb-participle-view.js'
@@ -53,6 +54,7 @@ export default class ViewSet {
           LatinMoodConjugationVoiceView,
           LatinImperativeView,
           LatinVerbIrregularView,
+          LatinVerbParticipleIrregularView,
           LatinSupineView,
           LatinVerbParticipleView,
           LatinInfinitiveView

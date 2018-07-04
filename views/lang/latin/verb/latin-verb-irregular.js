@@ -1,9 +1,9 @@
 import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import LatinView from '../latin-view.js'
+import LatinView from '@views/lang/latin/latin-view.js'
 
-import GroupFeatureType from '../../../lib/group-feature-type'
-import Form from '../../../../lib/form.js'
-import Table from '../../../lib/table'
+import GroupFeatureType from '@views/lib/group-feature-type'
+import Form from '@lib/form.js'
+import Table from '@views/lib/table'
 
 export default class LatinVerbIrregularView extends LatinView {
   constructor (inflectionData, locale) {
@@ -14,15 +14,17 @@ export default class LatinVerbIrregularView extends LatinView {
     this.title = 'Verb Conjugation (Irregular)'
 
     const inflectionsWords = inflectionData.homonym.inflections.map(item => item[Feature.types.word].value)
-    const lemmaValues = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item) > -1)
+    const lemma = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
-    let lemmasType = new Feature(Feature.types.hdwd, lemmaValues, LatinVerbIrregularView.languageID)
+    this.additionalTitle = lemma.word + ' - ' + lemma.principalParts
+
+    this.language_features[Feature.types.hdwd] = new Feature(Feature.types.hdwd, [lemma.word], LatinVerbIrregularView.languageID)
 
     this.language_features[Feature.types.voice] = new Feature(Feature.types.voice,
       [Constants.VOICE_ACTIVE, Constants.VOICE_PASSIVE, '-'], this.model.languageID)
 
     this.features = {
-      lemmas: new GroupFeatureType(lemmasType, 'Lemma'),
+      lemmas: new GroupFeatureType(this.language_features[Feature.types.hdwd], 'Lemma'),
       tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),
       numbers: new GroupFeatureType(this.language_features[Feature.types.number], 'Number'),
       persons: new GroupFeatureType(this.language_features[Feature.types.person], 'Person'),

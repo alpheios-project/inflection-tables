@@ -2599,33 +2599,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LatinLanguageDataset; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../lib/language-dataset.js */ "./lib/language-dataset.js");
-/* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../lib/suffix.js */ "./lib/suffix.js");
-/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../lib/form.js */ "./lib/form.js");
-/* harmony import */ var _data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./data/noun/suffixes.csv */ "./lib/lang/latin/data/noun/suffixes.csv");
-/* harmony import */ var _data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./data/noun/footnotes.csv */ "./lib/lang/latin/data/noun/footnotes.csv");
-/* harmony import */ var _data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./data/pronoun/forms.csv */ "./lib/lang/latin/data/pronoun/forms.csv");
-/* harmony import */ var _data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./data/pronoun/footnotes.csv */ "./lib/lang/latin/data/pronoun/footnotes.csv");
-/* harmony import */ var _data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./data/adjective/suffixes.csv */ "./lib/lang/latin/data/adjective/suffixes.csv");
-/* harmony import */ var _data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./data/adjective/footnotes.csv */ "./lib/lang/latin/data/adjective/footnotes.csv");
-/* harmony import */ var _data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./data/verb/suffixes.csv */ "./lib/lang/latin/data/verb/suffixes.csv");
-/* harmony import */ var _data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var _data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./data/verb/footnotes.csv */ "./lib/lang/latin/data/verb/footnotes.csv");
-/* harmony import */ var _data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./data/verb/forms.csv */ "./lib/lang/latin/data/verb/forms.csv");
-/* harmony import */ var _data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./data/verb/form_footnotes.csv */ "./lib/lang/latin/data/verb/form_footnotes.csv");
-/* harmony import */ var _data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var _data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./data/participle/suffixes.csv */ "./lib/lang/latin/data/participle/suffixes.csv");
-/* harmony import */ var _data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./data/supine/suffixes.csv */ "./lib/lang/latin/data/supine/suffixes.csv");
-/* harmony import */ var _data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/language-dataset.js */ "./lib/language-dataset.js");
+/* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @lib/suffix.js */ "./lib/suffix.js");
+/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @lib/form.js */ "./lib/form.js");
+/* harmony import */ var _lib_lang_latin_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @lib/lang/latin/data/noun/suffixes.csv */ "./lib/lang/latin/data/noun/suffixes.csv");
+/* harmony import */ var _lib_lang_latin_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _lib_lang_latin_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @lib/lang/latin/data/noun/footnotes.csv */ "./lib/lang/latin/data/noun/footnotes.csv");
+/* harmony import */ var _lib_lang_latin_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lib_lang_latin_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @lib/lang/latin/data/pronoun/forms.csv */ "./lib/lang/latin/data/pronoun/forms.csv");
+/* harmony import */ var _lib_lang_latin_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _lib_lang_latin_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @lib/lang/latin/data/pronoun/footnotes.csv */ "./lib/lang/latin/data/pronoun/footnotes.csv");
+/* harmony import */ var _lib_lang_latin_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _lib_lang_latin_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @lib/lang/latin/data/adjective/suffixes.csv */ "./lib/lang/latin/data/adjective/suffixes.csv");
+/* harmony import */ var _lib_lang_latin_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _lib_lang_latin_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @lib/lang/latin/data/adjective/footnotes.csv */ "./lib/lang/latin/data/adjective/footnotes.csv");
+/* harmony import */ var _lib_lang_latin_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _lib_lang_latin_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @lib/lang/latin/data/verb/suffixes.csv */ "./lib/lang/latin/data/verb/suffixes.csv");
+/* harmony import */ var _lib_lang_latin_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _lib_lang_latin_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @lib/lang/latin/data/verb/footnotes.csv */ "./lib/lang/latin/data/verb/footnotes.csv");
+/* harmony import */ var _lib_lang_latin_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _lib_lang_latin_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @lib/lang/latin/data/verb/forms.csv */ "./lib/lang/latin/data/verb/forms.csv");
+/* harmony import */ var _lib_lang_latin_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _lib_lang_latin_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @lib/lang/latin/data/verb/form_footnotes.csv */ "./lib/lang/latin/data/verb/form_footnotes.csv");
+/* harmony import */ var _lib_lang_latin_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _lib_lang_latin_data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @lib/lang/latin/data/participle/suffixes.csv */ "./lib/lang/latin/data/participle/suffixes.csv");
+/* harmony import */ var _lib_lang_latin_data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _lib_lang_latin_data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @lib/lang/latin/data/supine/suffixes.csv */ "./lib/lang/latin/data/supine/suffixes.csv");
+/* harmony import */ var _lib_lang_latin_data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_lib_lang_latin_data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_15__);
 /* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! papaparse */ "./node_modules/papaparse/papaparse.js");
 /* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(papaparse__WEBPACK_IMPORTED_MODULE_16__);
 /*
@@ -2907,21 +2907,21 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 
     for (let i = 1; i < data.length; i++) {
       const item = data[i]
-      let lemma = item[0]
-      // let principalParts = item[1].split(/_/)
-      // let principalParts = item[1]
+      let hdwd = item[0]
+      let principalParts = item[1].split(/_/)
+      let lemma = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Lemma"](hdwd, LatinLanguageDataset.languageID, principalParts)
 
       let form = item[2]
 
       // Lemma,PrincipalParts,Form,Voice,Mood,Tense,Number,Person,Footnote
       let features = [
-        partOfSpeech,
-        this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm).createFromImporter(lemma)
+        partOfSpeech/*,
+        this.features.get(Feature.types.fullForm).createFromImporter(lemma.word) */
       ]
 
-      if (lemma) {
-        features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd).createFromImporter(lemma))
-        if (this.verbsIrregularLemmas.indexOf(lemma) === -1) {
+      if (hdwd && lemma) {
+        features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd).createFromImporter(hdwd))
+        if (this.verbsIrregularLemmas.filter(item => item.word === lemma.word).length === 0) {
           this.verbsIrregularLemmas.push(lemma)
         }
       }
@@ -2969,47 +2969,51 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 
     // Nouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4___default.a, {})
     this.addSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5___default.a, {})
+    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5___default.a, {})
     this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotes.data)
 
     // Pronouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6___default.a, {})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6___default.a, {})
     this.addPronounForms(partOfSpeech, forms.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
+    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
     this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotes.data)
 
     // Adjectives
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, {})
     this.addSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
+    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
     this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotes.data)
 
     // Verbs
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {})
     this.addVerbSuffixes(partOfSpeech, suffixes.data)
 
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11___default.a, {})
+    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11___default.a, {})
     this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotes.data)
 
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12___default.a, {})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12___default.a, {})
     this.addVerbForms(partOfSpeech, forms.data)
 
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {})
+    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {})
     this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotes.data)
 
     // Verb Participles
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, {})
     this.addVerbParticipleSuffixes(partOfSpeech, suffixes.data)
+
+    // Verb Participles from irregular verbs
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12___default.a, {})
+    this.addVerbForms(partOfSpeech, forms.data)
 
     // Verb Supine
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_15___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_lib_lang_latin_data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_15___default.a, {})
     this.addVerbSupineSuffixes(partOfSpeech, suffixes.data)
 
     this.dataLoaded = true
@@ -3017,8 +3021,8 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   }
 
   checkIrregularVerb (inflection) {
-    if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB) && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word]) {
-      return this.verbsIrregularLemmas.indexOf(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value) > -1
+    if ([alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE].includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value) && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word]) {
+      return this.verbsIrregularLemmas.filter(item => item.word === inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value).length > 0
     }
     return false
   }
@@ -13826,17 +13830,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LatinView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
-/* harmony import */ var _lib_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/view.js */ "./views/lib/view.js");
-/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
-/* harmony import */ var _lib_table_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/table.js */ "./views/lib/table.js");
+/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
+/* harmony import */ var _views_lib_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lib/view.js */ "./views/lib/view.js");
+/* harmony import */ var _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _views_lib_table_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lib/table.js */ "./views/lib/table.js");
 
 
 
 
 
 
-class LatinView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class LatinView extends _views_lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
     this.model = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].getLanguageModel(LatinView.languageID)
@@ -13854,11 +13858,11 @@ class LatinView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
         those values in child objects.
          */
     this.features = {
-      numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), 'Number'),
-      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
-      declensions: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), 'Declension'),
-      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
-      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
+      numbers: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), 'Number'),
+      cases: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
+      declensions: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), 'Declension'),
+      genders: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
+      types: new _views_lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
     }
     this.features.declensions.getTitle = LatinView.getDeclensionTitle
   }
@@ -13876,7 +13880,7 @@ class LatinView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
     an inflection table differently
      */
   createTable () {
-    this.table = new _lib_table_js__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.declensions, this.features.genders,
+    this.table = new _views_lib_table_js__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
     features.columns = [this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type)]
@@ -14496,10 +14500,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LatinVerbIrregularView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _latin_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../latin-view.js */ "./views/lang/latin/latin-view.js");
-/* harmony import */ var _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../lib/group-feature-type */ "./views/lib/group-feature-type.js");
-/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../lib/form.js */ "./lib/form.js");
-/* harmony import */ var _lib_table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../lib/table */ "./views/lib/table.js");
+/* harmony import */ var _views_lang_latin_latin_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @views/lang/latin/latin-view.js */ "./views/lang/latin/latin-view.js");
+/* harmony import */ var _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lib/group-feature-type */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _lib_form_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @lib/form.js */ "./lib/form.js");
+/* harmony import */ var _views_lib_table__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lib/table */ "./views/lib/table.js");
 
 
 
@@ -14507,7 +14511,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class LatinVerbIrregularView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
 
@@ -14516,26 +14520,28 @@ class LatinVerbIrregularView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_1__
     this.title = 'Verb Conjugation (Irregular)'
 
     const inflectionsWords = inflectionData.homonym.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
-    const lemmaValues = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item) > -1)
+    const lemma = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
-    let lemmasType = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, lemmaValues, LatinVerbIrregularView.languageID)
+    this.additionalTitle = lemma.word + ' - ' + lemma.principalParts
+
+    this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, [lemma.word], LatinVerbIrregularView.languageID)
 
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
       [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_ACTIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_PASSIVE, '-'], this.model.languageID)
 
     this.features = {
-      lemmas: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](lemmasType, 'Lemma'),
-      tenses: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tenses'),
-      numbers: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number], 'Number'),
-      persons: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person], 'Person'),
-      moods: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood], 'Mood'),
-      voices: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice], 'Voice')
+      lemmas: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd], 'Lemma'),
+      tenses: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tenses'),
+      numbers: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number], 'Number'),
+      persons: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person], 'Person'),
+      moods: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood], 'Mood'),
+      voices: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice], 'Voice')
     }
     this.createTable()
   }
 
   createTable () {
-    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.lemmas, this.features.voices, this.features.moods, this.features.tenses, this.features.numbers, this.features.persons])
+    this.table = new _views_lib_table__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.lemmas, this.features.voices, this.features.moods, this.features.tenses, this.features.numbers, this.features.persons])
     let features = this.table.features
     features.columns = [ this.features.voices, this.features.moods ]
     features.rows = [this.features.tenses, this.features.numbers, this.features.persons]
@@ -14629,6 +14635,47 @@ class LatinVerbMoodView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__
   static matchFilter (inflectionData) {
     if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinVerbMoodView.languageID, inflectionData.languageID)) {
       return inflectionData.partsOfSpeech.includes(LatinVerbMoodView.partOfSpeech)
+    }
+  }
+}
+
+
+/***/ }),
+
+/***/ "./views/lang/latin/verb/latin-verb-participle-irregular.js":
+/*!******************************************************************!*\
+  !*** ./views/lang/latin/verb/latin-verb-participle-irregular.js ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LatinVerbParticipleIrregularView; });
+/* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
+/* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _views_lang_latin_verb_latin_verb_irregular_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @views/lang/latin/verb/latin-verb-irregular.js */ "./views/lang/latin/verb/latin-verb-irregular.js");
+
+
+// import GroupFeatureType from '@views/lib/group-feature-type'
+
+class LatinVerbParticipleIrregularView extends _views_lang_latin_verb_latin_verb_irregular_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
+  constructor (inflectionData, locale) {
+    super(inflectionData, locale)
+
+    this.id = 'verbParticipleConjugationIrregular'
+    this.name = 'verb-participle-irregular'
+    this.title = 'Verb Participle Conjugation (Irregular)'
+  }
+
+  static get partOfSpeech () {
+    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE
+  }
+
+  static matchFilter (inflectionData) {
+    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinVerbParticipleIrregularView.languageID, inflectionData.languageID)) {
+      return inflectionData.partsOfSpeech.includes(LatinVerbParticipleIrregularView.partOfSpeech) &&
+             LatinVerbParticipleIrregularView.enabledForLexemes(inflectionData.homonym.lexemes)
     }
   }
 }
@@ -16599,22 +16646,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_lang_latin_verb_latin_mood_conjugation_voice_view_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @views/lang/latin/verb/latin-mood-conjugation-voice-view.js */ "./views/lang/latin/verb/latin-mood-conjugation-voice-view.js");
 /* harmony import */ var _views_lang_latin_verb_latin_imperative_view_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @views/lang/latin/verb/latin-imperative-view.js */ "./views/lang/latin/verb/latin-imperative-view.js");
 /* harmony import */ var _views_lang_latin_verb_latin_verb_irregular_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @views/lang/latin/verb/latin-verb-irregular.js */ "./views/lang/latin/verb/latin-verb-irregular.js");
-/* harmony import */ var _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @views/lang/latin/noun/latin-supine-view.js */ "./views/lang/latin/noun/latin-supine-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @views/lang/latin/verb/latin-verb-participle-view.js */ "./views/lang/latin/verb/latin-verb-participle-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @views/lang/latin/verb/latin-infinitive-view.js */ "./views/lang/latin/verb/latin-infinitive-view.js");
-/* harmony import */ var _views_lang_greek_noun_greek_noun_view_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @views/lang/greek/noun/greek-noun-view.js */ "./views/lang/greek/noun/greek-noun-view.js");
-/* harmony import */ var _views_lang_greek_noun_greek_noun_simplified_view_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @views/lang/greek/noun/greek-noun-simplified-view.js */ "./views/lang/greek/noun/greek-noun-simplified-view.js");
-/* harmony import */ var _views_lang_greek_numeral_greek_numeral_view_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @views/lang/greek/numeral/greek-numeral-view.js */ "./views/lang/greek/numeral/greek-numeral-view.js");
-/* harmony import */ var _views_lang_greek_article_greek_article_view_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @views/lang/greek/article/greek-article-view.js */ "./views/lang/greek/article/greek-article-view.js");
-/* harmony import */ var _views_lang_greek_adjective_greek_adjective_view_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @views/lang/greek/adjective/greek-adjective-view.js */ "./views/lang/greek/adjective/greek-adjective-view.js");
-/* harmony import */ var _views_lang_greek_adjective_greek_adjective_simplified_view_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @views/lang/greek/adjective/greek-adjective-simplified-view.js */ "./views/lang/greek/adjective/greek-adjective-simplified-view.js");
-/* harmony import */ var _views_lang_greek_pronoun_greek_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-gender-pronoun-view.js");
-/* harmony import */ var _views_lang_greek_pronoun_greek_lemma_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js");
-/* harmony import */ var _views_lang_greek_pronoun_greek_person_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-person-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-person-gender-pronoun-view.js");
-/* harmony import */ var _views_lang_greek_pronoun_greek_person_pronoun_view_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-person-pronoun-view.js */ "./views/lang/greek/pronoun/greek-person-pronoun-view.js");
-/* harmony import */ var _views_lang_greek_paradigm_greek_paradigm_view_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @views/lang/greek/paradigm/greek-paradigm-view.js */ "./views/lang/greek/paradigm/greek-paradigm-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_verb_participle_irregular_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @views/lang/latin/verb/latin-verb-participle-irregular.js */ "./views/lang/latin/verb/latin-verb-participle-irregular.js");
+/* harmony import */ var _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @views/lang/latin/noun/latin-supine-view.js */ "./views/lang/latin/noun/latin-supine-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @views/lang/latin/verb/latin-verb-participle-view.js */ "./views/lang/latin/verb/latin-verb-participle-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @views/lang/latin/verb/latin-infinitive-view.js */ "./views/lang/latin/verb/latin-infinitive-view.js");
+/* harmony import */ var _views_lang_greek_noun_greek_noun_view_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @views/lang/greek/noun/greek-noun-view.js */ "./views/lang/greek/noun/greek-noun-view.js");
+/* harmony import */ var _views_lang_greek_noun_greek_noun_simplified_view_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @views/lang/greek/noun/greek-noun-simplified-view.js */ "./views/lang/greek/noun/greek-noun-simplified-view.js");
+/* harmony import */ var _views_lang_greek_numeral_greek_numeral_view_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @views/lang/greek/numeral/greek-numeral-view.js */ "./views/lang/greek/numeral/greek-numeral-view.js");
+/* harmony import */ var _views_lang_greek_article_greek_article_view_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @views/lang/greek/article/greek-article-view.js */ "./views/lang/greek/article/greek-article-view.js");
+/* harmony import */ var _views_lang_greek_adjective_greek_adjective_view_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @views/lang/greek/adjective/greek-adjective-view.js */ "./views/lang/greek/adjective/greek-adjective-view.js");
+/* harmony import */ var _views_lang_greek_adjective_greek_adjective_simplified_view_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @views/lang/greek/adjective/greek-adjective-simplified-view.js */ "./views/lang/greek/adjective/greek-adjective-simplified-view.js");
+/* harmony import */ var _views_lang_greek_pronoun_greek_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-gender-pronoun-view.js");
+/* harmony import */ var _views_lang_greek_pronoun_greek_lemma_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js");
+/* harmony import */ var _views_lang_greek_pronoun_greek_person_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-person-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-person-gender-pronoun-view.js");
+/* harmony import */ var _views_lang_greek_pronoun_greek_person_pronoun_view_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-person-pronoun-view.js */ "./views/lang/greek/pronoun/greek-person-pronoun-view.js");
+/* harmony import */ var _views_lang_greek_paradigm_greek_paradigm_view_js__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! @views/lang/greek/paradigm/greek-paradigm-view.js */ "./views/lang/greek/paradigm/greek-paradigm-view.js");
 
 // Latin views
+
 
 
 
@@ -16668,25 +16717,26 @@ class ViewSet {
           _views_lang_latin_verb_latin_mood_conjugation_voice_view_js__WEBPACK_IMPORTED_MODULE_8__["default"],
           _views_lang_latin_verb_latin_imperative_view_js__WEBPACK_IMPORTED_MODULE_9__["default"],
           _views_lang_latin_verb_latin_verb_irregular_js__WEBPACK_IMPORTED_MODULE_10__["default"],
-          _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_11__["default"],
-          _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_12__["default"],
-          _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_13__["default"]
+          _views_lang_latin_verb_latin_verb_participle_irregular_js__WEBPACK_IMPORTED_MODULE_11__["default"],
+          _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_12__["default"],
+          _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_13__["default"],
+          _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_14__["default"]
         ]
       ],
       [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK,
         [
-          _views_lang_greek_noun_greek_noun_view_js__WEBPACK_IMPORTED_MODULE_14__["default"],
-          _views_lang_greek_noun_greek_noun_simplified_view_js__WEBPACK_IMPORTED_MODULE_15__["default"],
-          _views_lang_greek_numeral_greek_numeral_view_js__WEBPACK_IMPORTED_MODULE_16__["default"],
-          _views_lang_greek_article_greek_article_view_js__WEBPACK_IMPORTED_MODULE_17__["default"],
-          _views_lang_greek_adjective_greek_adjective_view_js__WEBPACK_IMPORTED_MODULE_18__["default"],
-          _views_lang_greek_adjective_greek_adjective_simplified_view_js__WEBPACK_IMPORTED_MODULE_19__["default"],
-          _views_lang_greek_pronoun_greek_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_20__["default"],
-          _views_lang_greek_pronoun_greek_person_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_22__["default"],
-          _views_lang_greek_pronoun_greek_person_pronoun_view_js__WEBPACK_IMPORTED_MODULE_23__["default"],
-          _views_lang_greek_pronoun_greek_lemma_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_21__["default"],
-          _views_lang_greek_paradigm_greek_paradigm_view_js__WEBPACK_IMPORTED_MODULE_24__["default"]
+          _views_lang_greek_noun_greek_noun_view_js__WEBPACK_IMPORTED_MODULE_15__["default"],
+          _views_lang_greek_noun_greek_noun_simplified_view_js__WEBPACK_IMPORTED_MODULE_16__["default"],
+          _views_lang_greek_numeral_greek_numeral_view_js__WEBPACK_IMPORTED_MODULE_17__["default"],
+          _views_lang_greek_article_greek_article_view_js__WEBPACK_IMPORTED_MODULE_18__["default"],
+          _views_lang_greek_adjective_greek_adjective_view_js__WEBPACK_IMPORTED_MODULE_19__["default"],
+          _views_lang_greek_adjective_greek_adjective_simplified_view_js__WEBPACK_IMPORTED_MODULE_20__["default"],
+          _views_lang_greek_pronoun_greek_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_21__["default"],
+          _views_lang_greek_pronoun_greek_person_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_23__["default"],
+          _views_lang_greek_pronoun_greek_person_pronoun_view_js__WEBPACK_IMPORTED_MODULE_24__["default"],
+          _views_lang_greek_pronoun_greek_lemma_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_22__["default"],
+          _views_lang_greek_paradigm_greek_paradigm_view_js__WEBPACK_IMPORTED_MODULE_25__["default"]
         ]
       ]
     ])
