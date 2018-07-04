@@ -14510,17 +14510,17 @@ class LatinVerbIrregularView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_1__
     this.title = 'Verb Conjugation (Irregular)'
 
     const inflectionsWords = inflectionData.homonym.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
-    const lemmaValues = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)
+    const lemma = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
-    console.log('***************************lemmaValues ', lemmaValues.map(item => item.word))
+    this.additionalTitle = lemma.word + ' - ' + lemma.principalParts
 
-    let lemmasType = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, lemmaValues.map(item => item.word), LatinVerbIrregularView.languageID)
+    this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, [lemma.word], LatinVerbIrregularView.languageID)
 
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
       [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_ACTIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_PASSIVE, '-'], this.model.languageID)
 
     this.features = {
-      lemmas: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](lemmasType, 'Lemma'),
+      lemmas: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd], 'Lemma'),
       tenses: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tenses'),
       numbers: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number], 'Number'),
       persons: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person], 'Person'),
