@@ -14,9 +14,11 @@ export default class LatinVerbIrregularView extends LatinView {
     this.title = 'Verb Conjugation (Irregular)'
 
     const inflectionsWords = inflectionData.homonym.inflections.map(item => item[Feature.types.word].value)
-    const lemmaValues = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item) > -1)
+    const lemmaValues = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)
 
-    let lemmasType = new Feature(Feature.types.hdwd, lemmaValues, LatinVerbIrregularView.languageID)
+    console.log('***************************lemmaValues ', lemmaValues.map(item => item.word))
+
+    let lemmasType = new Feature(Feature.types.hdwd, lemmaValues.map(item => item.word), LatinVerbIrregularView.languageID)
 
     this.language_features[Feature.types.voice] = new Feature(Feature.types.voice,
       [Constants.VOICE_ACTIVE, Constants.VOICE_PASSIVE, '-'], this.model.languageID)
