@@ -16,7 +16,7 @@ export default class LatinVerbIrregularView extends LatinView {
     const inflectionsWords = inflectionData.homonym.inflections.map(item => item[Feature.types.word].value)
     const lemma = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
-    this.additionalTitle = lemma.word + ' - ' + lemma.principalParts
+    this.additionalTitle = lemma.word + ', ' + lemma.principalParts
 
     this.language_features[Feature.types.hdwd] = new Feature(Feature.types.hdwd, [lemma.word], LatinVerbIrregularView.languageID)
 
