@@ -7,7 +7,7 @@ import GreekView from '../greek-view.js'
  * This is a base class for all pronoun views. This class should not be used to create tables. Its purpose
  * is to define common features and properties for all pronoun classes.
  */
-export default class GreekParadigmView extends GreekView {
+export default class GreekVerbParadigmView extends GreekView {
   /**
    * @param {Paradigm} paradigm
    * @param {InflectionData} inflectionData
@@ -65,15 +65,15 @@ export default class GreekParadigmView extends GreekView {
   }
 
   static getID (grammarClass) {
-    return `${grammarClass}${View.toTitleCase(GreekParadigmView.partOfSpeech)}Paradigm`
+    return `${grammarClass}${View.toTitleCase(GreekVerbParadigmView.partOfSpeech)}Paradigm`
   }
 
   static getName (grammarClass) {
-    return `${grammarClass} ${GreekParadigmView.partOfSpeech} paradigm`
+    return `${grammarClass} ${GreekVerbParadigmView.partOfSpeech} paradigm`
   }
 
   static getTitle (grammarClass) {
-    return View.toTitleCase(`${grammarClass} ${GreekParadigmView.partOfSpeech} Paradigm`).trim()
+    return View.toTitleCase(`${grammarClass} ${GreekVerbParadigmView.partOfSpeech} Paradigm`).trim()
   }
 
   /**

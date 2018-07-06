@@ -28,7 +28,8 @@ import GreekGenderPronounView from '@views/lang/greek/pronoun/greek-gender-prono
 import GreekLemmaGenderPronounView from '@views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js'
 import GreekPersonGenderPronounView from '@views/lang/greek/pronoun/greek-person-gender-pronoun-view.js'
 import GreekPersonPronounView from '@views/lang/greek/pronoun/greek-person-pronoun-view.js'
-import GreekParadigmView from '@views/lang/greek/paradigm/greek-paradigm-view.js'
+import GreekVerbParadigmView from '@views/lang/greek/verb/greek-verb-paradigm-view.js'
+import GreekVerbParticipleParadigmView from '@views/lang/greek/verb-participle/greek-verb-participle-paradigm-view.js'
 
 /**
  * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
@@ -67,7 +68,8 @@ export default class ViewSet {
           GreekPersonGenderPronounView,
           GreekPersonPronounView,
           GreekLemmaGenderPronounView,
-          GreekParadigmView
+          GreekVerbParadigmView,
+          GreekVerbParticipleParadigmView
         ]
       ]
     ])
