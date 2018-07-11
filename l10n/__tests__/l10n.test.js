@@ -1,5 +1,6 @@
 /* eslint-env jest */
-const t = require('../../tests/test-bundle')
+import MessageBundle from '../message-bundle.js'
+import L10n from '../l10n.js'
 
 describe('MessageBundle', () => {
   let localeEnUs = 'en-US'
@@ -11,25 +12,23 @@ describe('MessageBundle', () => {
   let messageBundleEnUs
 
   beforeAll(() => {
-    messageBundleEnUs = new t.L10n.MessageBundle(localeEnUs, messagesEnUs)
+    messageBundleEnUs = new MessageBundle(localeEnUs, messagesEnUs)
   })
 
   test('Should be initialized properly', () => {
-    expect(messagesEnUs).toEqual({
-      one: 'Message One (en_US)',
-      two: 'Message Two (en_US)'
-    })
+    expect(messageBundleEnUs.one.format()).toEqual('Message One (en_US)')
+    expect(messageBundleEnUs.two.format()).toEqual('Message Two (en_US)')
   })
 
   test('Constructor should throw an exception if no arguments are provided.', () => {
     expect(() => {
-      new t.L10n.MessageBundle() // eslint-disable-line
+      new MessageBundle() // eslint-disable-line
     }).toThrowError()
   })
 
   test('Constructor should throw an exception if no locale and message data provided.', () => {
     expect(() => {
-      new t.L10n.MessageBundle(localeEnUs) //eslint-disable-line
+      new MessageBundle(localeEnUs) //eslint-disable-line
     }).toThrowError()
   })
 
@@ -65,14 +64,14 @@ describe('L10n', () => {
   let l10n
 
   beforeAll(() => {
-    l10n = new t.L10n.L10n([
-      new t.L10n.MessageBundle(localeEnUs, messagesEnUs),
-      new t.L10n.MessageBundle(localeEnGb, messagesEnGb)
+    l10n = new L10n([
+      new MessageBundle(localeEnUs, messagesEnUs),
+      new MessageBundle(localeEnGb, messagesEnGb)
     ])
   })
 
   test('Constructor should create an empty object.', () => {
-    let l10n = new t.L10n.L10n()
+    let l10n = new L10n()
 
     expect(l10n).toEqual({
       '_localeList': [],

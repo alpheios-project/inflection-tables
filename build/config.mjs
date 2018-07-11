@@ -9,7 +9,7 @@ const webpack = {
       'alpheios-data-models': 'alpheios-data-models',
       'uuid': 'uuid'
     },
-    resolve:{
+    resolve: {
       alias: {
         'alpheios-data-models': path.join(projectRoot, 'node_modules/alpheios-data-models/dist/alpheios-data-models.js'),
         '@lib': path.join(projectRoot, 'lib'),

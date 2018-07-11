@@ -1,4 +1,4 @@
-import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
+import { Constants, Feature } from 'alpheios-data-models'
 import Suffix from '../../../../lib/suffix.js'
 import LanguageDataset from '../../../../lib/language-dataset.js'
 import LatinView from '../latin-view.js'
@@ -28,19 +28,5 @@ export default class LatinAdjectiveView extends LatinView {
 
   static get inflectionType () {
     return Suffix
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(LatinAdjectiveView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinAdjectiveView.partOfSpeech)
-    }
   }
 }

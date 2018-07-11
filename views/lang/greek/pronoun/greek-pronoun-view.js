@@ -1,4 +1,4 @@
-import { Constants, GreekLanguageModel, Feature, LanguageModelFactory } from 'alpheios-data-models'
+import { Constants, GreekLanguageModel, Feature } from 'alpheios-data-models'
 import Form from '../../../../lib/form.js'
 import View from '../../../lib/view.js'
 import GreekView from '../greek-view.js'
@@ -103,12 +103,12 @@ export default class GreekPronounView extends GreekView {
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflection
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(this.languageID, inflectionData.languageID) &&
-      inflectionData.pos.has(this.partOfSpeech)) {
+  static matchFilter (inflection, inflectionData) {
+    if (this.languageID === inflection.languageID && inflection[Feature.types.part].value === this.partOfSpeech) {
       let inflectionSet = inflectionData.pos.get(this.partOfSpeech)
       if (inflectionSet.types.has(this.inflectionType)) {
         let inflections = inflectionSet.types.get(this.inflectionType)

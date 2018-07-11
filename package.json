@@ -27,15 +27,15 @@
   "devDependencies": {
     "alpheios-data-models": "github:alpheios-project/data-models",
     "alpheios-node-build": "github:alpheios-project/node-build",
-    "babyparse": "^0.4.6",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.2.0",
     "coveralls": "^3.0.1",
     "intl-messageformat": "^2.2.0",
-    "jest": "^22.4.4",
+    "jest": "^23.3.0",
+    "jest-raw-loader": "^1.0.1",
     "papaparse": "^4.5.0",
-    "raw-loader": "^0.5.1",
-    "source-map-loader": "^0.2.3",
+    "regenerator-runtime": "^0.12.0",
     "standard": "^11.0.1",
-    "uglifyjs-webpack-plugin": "^1.2.7",
     "uuid": "^3.3.0",
     "xmldom": "^0.1.27",
     "xmltojson": "^1.3.5"
@@ -46,7 +46,15 @@
     "uuid": "3.x.x"
   },
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      "^.+\\.csv$": "jest-raw-loader",
+      "^.+\\.json$": "jest-raw-loader"
+    },
+    "transformIgnorePatterns": [
+
+    ]
   },
   "eslintConfig": {
     "env": {
@@ -62,8 +70,7 @@
   "standard": {
     "ignore": [
       "**/dist",
-      "**/tools",
-      "**/tests/test-bundle.js"
+      "**/tools"
     ]
   }
 }

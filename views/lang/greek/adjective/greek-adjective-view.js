@@ -1,4 +1,4 @@
-import { Constants, LanguageModelFactory } from 'alpheios-data-models'
+import { Constants } from 'alpheios-data-models'
 import Suffix from '@lib/suffix.js'
 import GreekView from '@views/lang/greek/greek-view.js'
 
@@ -32,19 +32,5 @@ export default class GreekAdjectiveView extends GreekView {
 
   static get inflectionType () {
     return Suffix
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(GreekAdjectiveView.languageID, inflectionData.languageID)) {
-      return inflectionData.pos.has(GreekAdjectiveView.partOfSpeech)
-    }
   }
 }

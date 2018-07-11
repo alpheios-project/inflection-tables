@@ -1,4 +1,4 @@
-import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
+import { Constants, Feature } from 'alpheios-data-models'
 import LatinVerbMoodView from './latin-verb-mood-view.js'
 import GroupFeatureType from '../../../lib/group-feature-type'
 import Table from '../../../lib/table'
@@ -41,11 +41,10 @@ export default class LatinImperativeView extends LatinVerbMoodView {
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(LatinImperativeView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinImperativeView.partOfSpeech) &&
-        LatinImperativeView.enabledForLexemes(inflectionData.homonym.lexemes)
-    }
+  static matchFilter (inflection, inflectionData) {
+    return (this.languageID === inflection.languageID &&
+      inflection[Feature.types.part].value === this.partOfSpeech &&
+      this.enabledForLexemes(inflectionData.homonym.lexemes))
   }
 
   static enabledForLexemes (lexemes) {

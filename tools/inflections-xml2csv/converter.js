@@ -4,7 +4,7 @@ const {DOMParser} = require('xmldom')
 const xmlToJSON = require('xmltojson')
 // A workaround for Node.js environment
 xmlToJSON.stringToXML = (string) => new DOMParser().parseFromString(string, 'text/xml')
-const csvParser = require('babyparse')
+const csvParser = require('papaparse')
 
 const config = {
   latin: {
@@ -861,9 +861,6 @@ const config = {
           const matchOrder = paradigm['_attr']['match_order']['_value']
           let partOfSpeech = ''
           let stemtype = ''
-          let gender = ''
-          let grmCase = ''
-          let number = ''
           let voice = ''
           let mood = ''
           let tense = ''

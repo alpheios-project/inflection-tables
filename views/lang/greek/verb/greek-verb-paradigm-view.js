@@ -1,4 +1,4 @@
-import { Constants, LanguageModelFactory } from 'alpheios-data-models'
+import { Constants, Feature } from 'alpheios-data-models'
 import Paradigm from '../../../../lib/paradigm.js'
 import View from '../../../lib/view.js'
 import GreekView from '../greek-view.js'
@@ -84,9 +84,8 @@ export default class GreekVerbParadigmView extends GreekView {
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(this.languageID, inflectionData.languageID) &&
-      inflectionData.pos.has(this.partOfSpeech)) {
+  static matchFilter (inflection, inflectionData) {
+    if (this.languageID === inflection.languageID && inflection[Feature.types.part].value === this.partOfSpeech) {
       let inflectionSet = inflectionData.pos.get(this.partOfSpeech)
       if (inflectionSet.types.has(this.inflectionType)) {
         return true
@@ -95,8 +94,8 @@ export default class GreekVerbParadigmView extends GreekView {
     return false
   }
 
-  static getMatchingInstances (inflectionData, messages) {
-    if (this.matchFilter(inflectionData)) {
+  static getMatchingInstances (inflection, inflectionData, messages) {
+    if (this.matchFilter(inflection, inflectionData)) {
       let paradigms = inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items
       return paradigms.map(paradigm => new this(paradigm, inflectionData, messages))
     }

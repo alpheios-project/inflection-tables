@@ -1,4 +1,4 @@
-import { Constants, LanguageModelFactory, GreekLanguageModel, Feature } from 'alpheios-data-models'
+import { Constants, GreekLanguageModel, Feature } from 'alpheios-data-models'
 import Form from '../../../../lib/form.js'
 import Table from '../../../lib/table'
 
@@ -73,20 +73,6 @@ export default class GreekNumeralView extends GreekView {
 
   static get inflectionType () {
     return Form
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(GreekNumeralView.languageID, inflectionData.languageID)) {
-      return inflectionData.pos.has(GreekNumeralView.partOfSpeech)
-    }
   }
 
   createTable () {

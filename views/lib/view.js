@@ -1,4 +1,4 @@
-import { LanguageModelFactory } from 'alpheios-data-models'
+import { Feature } from 'alpheios-data-models'
 import uuidv4 from 'uuid/v4'
 import L10n from '../../l10n/l10n.js'
 
@@ -64,18 +64,21 @@ export default class View {
   static get inflectionType () {
   }
 
+  sameAs (view) {
+    return this.id === view.id
+  }
+
   /**
    * Determines wither this view can be used to display an inflection table of any data
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflection
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (LanguageModelFactory.compareLanguages(View.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(View.partOfSpeech) && View.enabledForLexemes(inflectionData.homonym.lexemes)
-    }
+  static matchFilter (inflection, inflectionData) {
+    return (this.languageID === inflection.languageID && inflection[Feature.types.part].value === this.partOfSpeech)
   }
 
   /**
@@ -87,8 +90,8 @@ export default class View {
    * @param {MessageBundle} messages
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
-  static getMatchingInstances (inflectionData, messages) {
-    if (this.matchFilter(inflectionData)) {
+  static getMatchingInstances (inflection, inflectionData, messages) {
+    if (this.matchFilter(inflection, inflectionData)) {
       return [new this(inflectionData, messages)]
     }
     return []

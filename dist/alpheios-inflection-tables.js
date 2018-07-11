@@ -100,7 +100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /*!******************!*\
   !*** ./index.js ***!
   \******************/
-/*! exports provided: InflectionData, LanguageDatasetFactory, LatinDataSet, GreekDataSet, L10n, ViewSet */
+/*! exports provided: InflectionData, LanguageDatasetFactory, LatinDataSet, GreekDataSet, L10n, ViewSetFactory */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -120,8 +120,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./l10n/l10n.js */ "./l10n/l10n.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "L10n", function() { return _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_4__["default"]; });
 
-/* harmony import */ var _views_lib_view_set_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/lib/view-set.js */ "./views/lib/view-set.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewSet", function() { return _views_lib_view_set_js__WEBPACK_IMPORTED_MODULE_5__["default"]; });
+/* harmony import */ var _views_lib_view_set_factory_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/lib/view-set-factory.js */ "./views/lib/view-set-factory.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ViewSetFactory", function() { return _views_lib_view_set_factory_js__WEBPACK_IMPORTED_MODULE_5__["default"]; });
 
 
 
@@ -3153,7 +3153,7 @@ class LanguageDataset {
   }
 
   /**
-   * Each grammatical feature can be either a single or an array of GrmFeature objects. The latter is the case when
+   * Each grammatical feature can be either a single or an array of Feature objects. The latter is the case when
    * an ending can belong to several grammatical features at once (i.e. belong to both 'masculine' and
    * 'feminine' genders.
    *
@@ -3171,9 +3171,9 @@ class LanguageDataset {
     for (let feature of features) {
       // If this is a footnote. Footnotes should go in a flat array
       // because we don't need to split by them
-      if (feature.type === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote) {
-        item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote] = item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote] || []
-        item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote].push(feature.value)
+      if (feature.type === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote) {
+        item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote] = item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote] || []
+        item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote].push(feature.value)
       } else {
         item.features[feature.type] = feature
       }
@@ -3272,7 +3272,7 @@ class LanguageDataset {
 
     for (let lexeme of homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
-        let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.part]
+        let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
 
         if (!partOfSpeech) {
           throw new Error('Part of speech data is missing in an inflection')
@@ -3304,7 +3304,7 @@ class LanguageDataset {
               Table construction will probably fail`)
           } else {
             // One or more values found
-            inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.grmClass] = grmClasses
+            inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass] = grmClasses
           }
         }
 
@@ -12677,20 +12677,6 @@ class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adj
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(GreekAdjectiveSimplifiedView.languageID, inflectionData.languageID)) {
-      return inflectionData.pos.has(GreekAdjectiveSimplifiedView.partOfSpeech)
-    }
-  }
-
   static suffixCellFilter (suffix) {
     if (suffix.extendedLangData && suffix.extendedLangData[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]) {
       return suffix.extendedLangData[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC].primary
@@ -12752,20 +12738,6 @@ class GreekAdjectiveView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORT
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(GreekAdjectiveView.languageID, inflectionData.languageID)) {
-      return inflectionData.pos.has(GreekAdjectiveView.partOfSpeech)
-    }
   }
 }
 
@@ -12829,20 +12801,6 @@ class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["defa
     return _lib_form_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(GreekArticleView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(GreekArticleView.partOfSpeech)
-    }
-  }
-
   createTable () {
     this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.genders, this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
@@ -12856,6 +12814,74 @@ class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["defa
   static getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
       .types.get(this.inflectionType).items
+  }
+}
+
+
+/***/ }),
+
+/***/ "./views/lang/greek/greek-view-set.js":
+/*!********************************************!*\
+  !*** ./views/lang/greek/greek-view-set.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekViewSet; });
+/* harmony import */ var _lib_view_set_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../lib/view-set.js */ "./views/lib/view-set.js");
+/* harmony import */ var _views_lang_greek_noun_greek_noun_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @views/lang/greek/noun/greek-noun-view.js */ "./views/lang/greek/noun/greek-noun-view.js");
+/* harmony import */ var _views_lang_greek_noun_greek_noun_simplified_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lang/greek/noun/greek-noun-simplified-view.js */ "./views/lang/greek/noun/greek-noun-simplified-view.js");
+/* harmony import */ var _views_lang_greek_numeral_greek_numeral_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lang/greek/numeral/greek-numeral-view.js */ "./views/lang/greek/numeral/greek-numeral-view.js");
+/* harmony import */ var _views_lang_greek_article_greek_article_view_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lang/greek/article/greek-article-view.js */ "./views/lang/greek/article/greek-article-view.js");
+/* harmony import */ var _views_lang_greek_adjective_greek_adjective_view_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @views/lang/greek/adjective/greek-adjective-view.js */ "./views/lang/greek/adjective/greek-adjective-view.js");
+/* harmony import */ var _views_lang_greek_adjective_greek_adjective_simplified_view_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @views/lang/greek/adjective/greek-adjective-simplified-view.js */ "./views/lang/greek/adjective/greek-adjective-simplified-view.js");
+/* harmony import */ var _views_lang_greek_pronoun_greek_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-gender-pronoun-view.js");
+/* harmony import */ var _views_lang_greek_pronoun_greek_lemma_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js");
+/* harmony import */ var _views_lang_greek_pronoun_greek_person_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-person-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-person-gender-pronoun-view.js");
+/* harmony import */ var _views_lang_greek_pronoun_greek_person_pronoun_view_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-person-pronoun-view.js */ "./views/lang/greek/pronoun/greek-person-pronoun-view.js");
+/* harmony import */ var _views_lang_greek_verb_greek_verb_paradigm_view_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @views/lang/greek/verb/greek-verb-paradigm-view.js */ "./views/lang/greek/verb/greek-verb-paradigm-view.js");
+/* harmony import */ var _views_lang_greek_verb_participle_greek_verb_participle_paradigm_view_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @views/lang/greek/verb-participle/greek-verb-participle-paradigm-view.js */ "./views/lang/greek/verb-participle/greek-verb-participle-paradigm-view.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class GreekViewSet extends _lib_view_set_js__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  /**
+   * Returns a list of views available within a view set.
+   * @return {View[]} A list of views available within the view set.
+   */
+  static get views () {
+    return [
+      _views_lang_greek_noun_greek_noun_view_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+      _views_lang_greek_noun_greek_noun_simplified_view_js__WEBPACK_IMPORTED_MODULE_2__["default"],
+      _views_lang_greek_numeral_greek_numeral_view_js__WEBPACK_IMPORTED_MODULE_3__["default"],
+      _views_lang_greek_article_greek_article_view_js__WEBPACK_IMPORTED_MODULE_4__["default"],
+      _views_lang_greek_adjective_greek_adjective_view_js__WEBPACK_IMPORTED_MODULE_5__["default"],
+      _views_lang_greek_adjective_greek_adjective_simplified_view_js__WEBPACK_IMPORTED_MODULE_6__["default"],
+      _views_lang_greek_pronoun_greek_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_7__["default"],
+      _views_lang_greek_pronoun_greek_person_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_9__["default"],
+      _views_lang_greek_pronoun_greek_person_pronoun_view_js__WEBPACK_IMPORTED_MODULE_10__["default"],
+      _views_lang_greek_pronoun_greek_lemma_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_8__["default"],
+      _views_lang_greek_verb_greek_verb_paradigm_view_js__WEBPACK_IMPORTED_MODULE_11__["default"],
+      _views_lang_greek_verb_participle_greek_verb_participle_paradigm_view_js__WEBPACK_IMPORTED_MODULE_12__["default"]
+    ]
   }
 }
 
@@ -12990,20 +13016,6 @@ class GreekNounSimplifiedView extends _greek_noun_view__WEBPACK_IMPORTED_MODULE_
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(GreekNounSimplifiedView.languageID, inflectionData.languageID)) {
-      return inflectionData.pos.has(GreekNounSimplifiedView.partOfSpeech)
-    }
-  }
-
   static suffixCellFilter (suffix) {
     if (suffix.extendedLangData && suffix.extendedLangData[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]) {
       return suffix.extendedLangData[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC].primary
@@ -13065,20 +13077,6 @@ class GreekNounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["default
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(GreekNounView.languageID, inflectionData.languageID)) {
-      return inflectionData.pos.has(GreekNounView.partOfSpeech)
-    }
   }
 }
 
@@ -13176,20 +13174,6 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
 
   static get inflectionType () {
     return _lib_form_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(GreekNumeralView.languageID, inflectionData.languageID)) {
-      return inflectionData.pos.has(GreekNumeralView.partOfSpeech)
-    }
   }
 
   createTable () {
@@ -13572,12 +13556,12 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflection
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(this.languageID, inflectionData.languageID) &&
-      inflectionData.pos.has(this.partOfSpeech)) {
+  static matchFilter (inflection, inflectionData) {
+    if (this.languageID === inflection.languageID && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech) {
       let inflectionSet = inflectionData.pos.get(this.partOfSpeech)
       if (inflectionSet.types.has(this.inflectionType)) {
         let inflections = inflectionSet.types.get(this.inflectionType)
@@ -13734,9 +13718,8 @@ class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__[
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(this.languageID, inflectionData.languageID) &&
-      inflectionData.pos.has(this.partOfSpeech)) {
+  static matchFilter (inflection, inflectionData) {
+    if (this.languageID === inflection.languageID && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech) {
       let inflectionSet = inflectionData.pos.get(this.partOfSpeech)
       if (inflectionSet.types.has(this.inflectionType)) {
         return true
@@ -13745,8 +13728,8 @@ class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__[
     return false
   }
 
-  static getMatchingInstances (inflectionData, messages) {
-    if (this.matchFilter(inflectionData)) {
+  static getMatchingInstances (inflection, inflectionData, messages) {
+    if (this.matchFilter(inflection, inflectionData)) {
       let paradigms = inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items
       return paradigms.map(paradigm => new this(paradigm, inflectionData, messages))
     }
@@ -13829,19 +13812,69 @@ class LatinAdjectiveView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_3__["de
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
+}
 
+
+/***/ }),
+
+/***/ "./views/lang/latin/latin-view-set.js":
+/*!********************************************!*\
+  !*** ./views/lang/latin/latin-view-set.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LatinViewSet; });
+/* harmony import */ var _lib_view_set_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../lib/view-set.js */ "./views/lib/view-set.js");
+/* harmony import */ var _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @views/lang/latin/noun/latin-noun-view.js */ "./views/lang/latin/noun/latin-noun-view.js");
+/* harmony import */ var _views_lang_latin_adjective_latin_adjective_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lang/latin/adjective/latin-adjective-view.js */ "./views/lang/latin/adjective/latin-adjective-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_voice_conjugation_mood_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lang/latin/verb/latin-voice-conjugation-mood-view.js */ "./views/lang/latin/verb/latin-voice-conjugation-mood-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_voice_mood_conjugation_view_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lang/latin/verb/latin-voice-mood-conjugation-view.js */ "./views/lang/latin/verb/latin-voice-mood-conjugation-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_conjugation_voice_mood_view_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @views/lang/latin/verb/latin-conjugation-voice-mood-view.js */ "./views/lang/latin/verb/latin-conjugation-voice-mood-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_conjugation_mood_voice_view_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @views/lang/latin/verb/latin-conjugation-mood-voice-view.js */ "./views/lang/latin/verb/latin-conjugation-mood-voice-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_mood_voice_conjugation_view_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @views/lang/latin/verb/latin-mood-voice-conjugation-view.js */ "./views/lang/latin/verb/latin-mood-voice-conjugation-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_mood_conjugation_voice_view_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @views/lang/latin/verb/latin-mood-conjugation-voice-view.js */ "./views/lang/latin/verb/latin-mood-conjugation-voice-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_imperative_view_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @views/lang/latin/verb/latin-imperative-view.js */ "./views/lang/latin/verb/latin-imperative-view.js");
+/* harmony import */ var _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @views/lang/latin/noun/latin-supine-view.js */ "./views/lang/latin/noun/latin-supine-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @views/lang/latin/verb/latin-verb-participle-view.js */ "./views/lang/latin/verb/latin-verb-participle-view.js");
+/* harmony import */ var _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @views/lang/latin/verb/latin-infinitive-view.js */ "./views/lang/latin/verb/latin-infinitive-view.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class LatinViewSet extends _lib_view_set_js__WEBPACK_IMPORTED_MODULE_0__["default"] {
   /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
+   * Returns a list of views available within a view set.
+   * @return {View[]} A list of views available within the view set.
    */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinAdjectiveView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinAdjectiveView.partOfSpeech)
-    }
+  static get views () {
+    return [
+      _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+      _views_lang_latin_adjective_latin_adjective_view_js__WEBPACK_IMPORTED_MODULE_2__["default"],
+      _views_lang_latin_verb_latin_voice_conjugation_mood_view_js__WEBPACK_IMPORTED_MODULE_3__["default"],
+      _views_lang_latin_verb_latin_voice_mood_conjugation_view_js__WEBPACK_IMPORTED_MODULE_4__["default"],
+      _views_lang_latin_verb_latin_conjugation_voice_mood_view_js__WEBPACK_IMPORTED_MODULE_5__["default"],
+      _views_lang_latin_verb_latin_conjugation_mood_voice_view_js__WEBPACK_IMPORTED_MODULE_6__["default"],
+      _views_lang_latin_verb_latin_mood_voice_conjugation_view_js__WEBPACK_IMPORTED_MODULE_7__["default"],
+      _views_lang_latin_verb_latin_mood_conjugation_voice_view_js__WEBPACK_IMPORTED_MODULE_8__["default"],
+      _views_lang_latin_verb_latin_imperative_view_js__WEBPACK_IMPORTED_MODULE_9__["default"],
+      _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_10__["default"],
+      _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_11__["default"],
+      _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_12__["default"]
+    ]
   }
 }
 
@@ -13986,20 +14019,6 @@ class LatinNounView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinNounView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinNounView.partOfSpeech)
-    }
-  }
 }
 
 
@@ -14055,20 +14074,6 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinSupineView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinSupineView.partOfSpeech)
-    }
-  }
-
   createTable () {
     this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.voices, this.features.conjugations,
       this.features.cases])
@@ -14117,20 +14122,6 @@ class LatinConjugationMoodVoiceView extends _latin_verb_view_js__WEBPACK_IMPORTE
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinConjugationMoodVoiceView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinConjugationMoodVoiceView.partOfSpeech)
-    }
   }
 
   createTable () {
@@ -14187,20 +14178,6 @@ class LatinConjugationVoiceMoodView extends _latin_verb_view_js__WEBPACK_IMPORTE
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinConjugationVoiceMoodView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinConjugationVoiceMoodView.partOfSpeech)
-    }
   }
 
   createTable () {
@@ -14282,11 +14259,10 @@ class LatinImperativeView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinImperativeView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinImperativeView.partOfSpeech) &&
-        LatinImperativeView.enabledForLexemes(inflectionData.homonym.lexemes)
-    }
+  static matchFilter (inflection, inflectionData) {
+    return (this.languageID === inflection.languageID &&
+      inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech &&
+      this.enabledForLexemes(inflectionData.homonym.lexemes))
   }
 
   static enabledForLexemes (lexemes) {
@@ -14366,11 +14342,10 @@ class LatinInfinitiveView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinInfinitiveView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinInfinitiveView.partOfSpeech) &&
-        LatinInfinitiveView.enabledForLexemes(inflectionData.homonym.lexemes)
-    }
+  static matchFilter (inflection, inflectionData) {
+    return (this.languageID === inflection.languageID &&
+      inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech &&
+      this.enabledForLexemes(inflectionData.homonym.lexemes))
   }
 
   static enabledForLexemes (lexemes) {
@@ -14428,20 +14403,6 @@ class LatinMoodConjugationVoiceView extends _latin_verb_view_js__WEBPACK_IMPORTE
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinMoodConjugationVoiceView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinMoodConjugationVoiceView.partOfSpeech)
-    }
-  }
-
   createTable () {
     this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.moods, this.features.conjugations, this.features.voices,
       this.features.tenses, this.features.numbers, this.features.persons])
@@ -14488,20 +14449,6 @@ class LatinMoodVoiceConjugationView extends _latin_verb_view_js__WEBPACK_IMPORTE
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinMoodVoiceConjugationView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinMoodVoiceConjugationView.partOfSpeech)
-    }
   }
 
   createTable () {
@@ -14553,20 +14500,6 @@ class LatinVerbMoodView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinVerbMoodView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinVerbMoodView.partOfSpeech)
-    }
-  }
 }
 
 
@@ -14617,20 +14550,6 @@ class LatinVerbParticipleView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2_
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinVerbParticipleView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinVerbParticipleView.partOfSpeech)
-    }
   }
 
   createTable () {
@@ -14706,20 +14625,6 @@ class LatinVerbView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_1__["default
   static get partOfSpeech () {
     return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB
   }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinVerbView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinVerbView.partOfSpeech)
-    }
-  }
 }
 
 
@@ -14757,20 +14662,6 @@ class LatinVoiceConjugationMoodView extends _latin_verb_view_js__WEBPACK_IMPORTE
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinVoiceConjugationMoodView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinVoiceConjugationMoodView.partOfSpeech)
-    }
   }
 
   createTable () {
@@ -14827,20 +14718,6 @@ class LatinVoiceMoodConjugationView extends _latin_verb_view_js__WEBPACK_IMPORTE
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  /**
-   * Determines wither this view can be used to display an inflection table of any data
-   * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
-   * @return {boolean}
-   */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(LatinVoiceMoodConjugationView.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(LatinVoiceMoodConjugationView.partOfSpeech)
-    }
   }
 
   createTable () {
@@ -16514,6 +16391,38 @@ class Table {
 
 /***/ }),
 
+/***/ "./views/lib/view-set-factory.js":
+/*!***************************************!*\
+  !*** ./views/lib/view-set-factory.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewSetFactory; });
+/* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
+/* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lang/latin/latin-view-set.js */ "./views/lang/latin/latin-view-set.js");
+/* harmony import */ var _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../lang/greek/greek-view-set.js */ "./views/lang/greek/greek-view-set.js");
+
+
+
+
+class ViewSetFactory {
+  static create (inflectionData, locale) {
+    switch (inflectionData.languageID) {
+      case alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_LATIN:
+        return new _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_1__["default"](inflectionData, locale)
+      case alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK:
+        return new _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_2__["default"](inflectionData, locale)
+    }
+  }
+}
+
+
+/***/ }),
+
 /***/ "./views/lib/view-set.js":
 /*!*******************************!*\
   !*** ./views/lib/view-set.js ***!
@@ -16526,127 +16435,72 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewSet; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @views/lang/latin/noun/latin-noun-view.js */ "./views/lang/latin/noun/latin-noun-view.js");
-/* harmony import */ var _views_lang_latin_adjective_latin_adjective_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lang/latin/adjective/latin-adjective-view.js */ "./views/lang/latin/adjective/latin-adjective-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_voice_conjugation_mood_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lang/latin/verb/latin-voice-conjugation-mood-view.js */ "./views/lang/latin/verb/latin-voice-conjugation-mood-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_voice_mood_conjugation_view_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @views/lang/latin/verb/latin-voice-mood-conjugation-view.js */ "./views/lang/latin/verb/latin-voice-mood-conjugation-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_conjugation_voice_mood_view_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @views/lang/latin/verb/latin-conjugation-voice-mood-view.js */ "./views/lang/latin/verb/latin-conjugation-voice-mood-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_conjugation_mood_voice_view_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @views/lang/latin/verb/latin-conjugation-mood-voice-view.js */ "./views/lang/latin/verb/latin-conjugation-mood-voice-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_mood_voice_conjugation_view_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @views/lang/latin/verb/latin-mood-voice-conjugation-view.js */ "./views/lang/latin/verb/latin-mood-voice-conjugation-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_mood_conjugation_voice_view_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @views/lang/latin/verb/latin-mood-conjugation-voice-view.js */ "./views/lang/latin/verb/latin-mood-conjugation-voice-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_imperative_view_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @views/lang/latin/verb/latin-imperative-view.js */ "./views/lang/latin/verb/latin-imperative-view.js");
-/* harmony import */ var _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @views/lang/latin/noun/latin-supine-view.js */ "./views/lang/latin/noun/latin-supine-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @views/lang/latin/verb/latin-verb-participle-view.js */ "./views/lang/latin/verb/latin-verb-participle-view.js");
-/* harmony import */ var _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @views/lang/latin/verb/latin-infinitive-view.js */ "./views/lang/latin/verb/latin-infinitive-view.js");
-/* harmony import */ var _views_lang_greek_noun_greek_noun_view_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @views/lang/greek/noun/greek-noun-view.js */ "./views/lang/greek/noun/greek-noun-view.js");
-/* harmony import */ var _views_lang_greek_noun_greek_noun_simplified_view_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @views/lang/greek/noun/greek-noun-simplified-view.js */ "./views/lang/greek/noun/greek-noun-simplified-view.js");
-/* harmony import */ var _views_lang_greek_numeral_greek_numeral_view_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @views/lang/greek/numeral/greek-numeral-view.js */ "./views/lang/greek/numeral/greek-numeral-view.js");
-/* harmony import */ var _views_lang_greek_article_greek_article_view_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @views/lang/greek/article/greek-article-view.js */ "./views/lang/greek/article/greek-article-view.js");
-/* harmony import */ var _views_lang_greek_adjective_greek_adjective_view_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @views/lang/greek/adjective/greek-adjective-view.js */ "./views/lang/greek/adjective/greek-adjective-view.js");
-/* harmony import */ var _views_lang_greek_adjective_greek_adjective_simplified_view_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @views/lang/greek/adjective/greek-adjective-simplified-view.js */ "./views/lang/greek/adjective/greek-adjective-simplified-view.js");
-/* harmony import */ var _views_lang_greek_pronoun_greek_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-gender-pronoun-view.js");
-/* harmony import */ var _views_lang_greek_pronoun_greek_lemma_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-lemma-gender-pronoun-view.js");
-/* harmony import */ var _views_lang_greek_pronoun_greek_person_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-person-gender-pronoun-view.js */ "./views/lang/greek/pronoun/greek-person-gender-pronoun-view.js");
-/* harmony import */ var _views_lang_greek_pronoun_greek_person_pronoun_view_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! @views/lang/greek/pronoun/greek-person-pronoun-view.js */ "./views/lang/greek/pronoun/greek-person-pronoun-view.js");
-/* harmony import */ var _views_lang_greek_verb_greek_verb_paradigm_view_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! @views/lang/greek/verb/greek-verb-paradigm-view.js */ "./views/lang/greek/verb/greek-verb-paradigm-view.js");
-/* harmony import */ var _views_lang_greek_verb_participle_greek_verb_participle_paradigm_view_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! @views/lang/greek/verb-participle/greek-verb-participle-paradigm-view.js */ "./views/lang/greek/verb-participle/greek-verb-participle-paradigm-view.js");
-
-// Latin views
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Greek views
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /**
  * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
  * mast be created for each new inflection data piece.
  */
 class ViewSet {
+  /**
+   * @param {InflectionData} inflectionData - Data about inflections we need to build views for
+   * @param {string} locale - A locale's IETF language tag (ex. `en-US`)
+   */
   constructor (inflectionData, locale) {
-    this.views = new Map([
-      [
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_LATIN,
-        [
-          _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_1__["default"],
-          _views_lang_latin_adjective_latin_adjective_view_js__WEBPACK_IMPORTED_MODULE_2__["default"],
-          _views_lang_latin_verb_latin_voice_conjugation_mood_view_js__WEBPACK_IMPORTED_MODULE_3__["default"],
-          _views_lang_latin_verb_latin_voice_mood_conjugation_view_js__WEBPACK_IMPORTED_MODULE_4__["default"],
-          _views_lang_latin_verb_latin_conjugation_voice_mood_view_js__WEBPACK_IMPORTED_MODULE_5__["default"],
-          _views_lang_latin_verb_latin_conjugation_mood_voice_view_js__WEBPACK_IMPORTED_MODULE_6__["default"],
-          _views_lang_latin_verb_latin_mood_voice_conjugation_view_js__WEBPACK_IMPORTED_MODULE_7__["default"],
-          _views_lang_latin_verb_latin_mood_conjugation_voice_view_js__WEBPACK_IMPORTED_MODULE_8__["default"],
-          _views_lang_latin_verb_latin_imperative_view_js__WEBPACK_IMPORTED_MODULE_9__["default"],
-          _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_10__["default"],
-          _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_11__["default"],
-          _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_12__["default"]
-        ]
-      ],
-      [
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK,
-        [
-          _views_lang_greek_noun_greek_noun_view_js__WEBPACK_IMPORTED_MODULE_13__["default"],
-          _views_lang_greek_noun_greek_noun_simplified_view_js__WEBPACK_IMPORTED_MODULE_14__["default"],
-          _views_lang_greek_numeral_greek_numeral_view_js__WEBPACK_IMPORTED_MODULE_15__["default"],
-          _views_lang_greek_article_greek_article_view_js__WEBPACK_IMPORTED_MODULE_16__["default"],
-          _views_lang_greek_adjective_greek_adjective_view_js__WEBPACK_IMPORTED_MODULE_17__["default"],
-          _views_lang_greek_adjective_greek_adjective_simplified_view_js__WEBPACK_IMPORTED_MODULE_18__["default"],
-          _views_lang_greek_pronoun_greek_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_19__["default"],
-          _views_lang_greek_pronoun_greek_person_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_21__["default"],
-          _views_lang_greek_pronoun_greek_person_pronoun_view_js__WEBPACK_IMPORTED_MODULE_22__["default"],
-          _views_lang_greek_pronoun_greek_lemma_gender_pronoun_view_js__WEBPACK_IMPORTED_MODULE_20__["default"],
-          _views_lang_greek_verb_greek_verb_paradigm_view_js__WEBPACK_IMPORTED_MODULE_23__["default"],
-          _views_lang_greek_verb_participle_greek_verb_participle_paradigm_view_js__WEBPACK_IMPORTED_MODULE_24__["default"]
-        ]
-      ]
-    ])
     this.inflectionData = inflectionData
+    this.homonym = inflectionData.homonym
     this.languageID = this.inflectionData.languageID
     this.locale = locale
-    this.matchingViews = []
+    this.matchingViewsMap = new Map()
 
-    if (this.views.has(this.languageID)) {
-      for (let view of this.views.get(this.languageID)) {
-        this.matchingViews.push(...view.getMatchingInstances(this.inflectionData, this.messages))
+    for (const lexeme of this.homonym.lexemes) {
+      for (const inflection of lexeme.inflections) {
+        const matchingInstances = this.constructor.views.reduce(
+          (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), [])
+        if (matchingInstances.length > 0) {
+          // There are any matching instances found
+          if (!this.matchingViewsMap.has(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
+            this.matchingViewsMap.set(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value, [])
+          }
+          let storedInstances = this.matchingViewsMap.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)
+          // Filter out instances that are already stored in a view set
+          let newInstances = matchingInstances.filter(i => !storedInstances.some(v => v.sameAs(i)))
+          if (newInstances.length > 0) { storedInstances.push(...newInstances) }
+        }
       }
     }
-    this.partsOfSpeech = Array.from(new Set(this.matchingViews.map(view => view.constructor.partOfSpeech)))
+  }
+  /**
+   * Returns a list of views available within a view set. Should be redefined in descendant classes.
+   * @return {View[]} A list of views available within the view set.
+   */
+  static get views () {
+    return []
+  }
+
+  get partsOfSpeech () {
+    return Array.from(this.matchingViewsMap.keys())
   }
 
   get hasMatchingViews () {
-    return this.matchingViews.length > 0
+    return this.matchingViewsMap.size > 0
   }
 
+  /**
+   * Returns all matching views available, or matching views available only for a particular part of speech.
+   * Views are sorted according to sorting rules defined for each part of speech.
+   * Each view might have linked views specified within a view class. Those view will be added after
+   * an original view
+   * @param {string | undefined} partOfSpeech - A part of speech for which views should be returned.
+   * If not specify, will result in views returned for all parts of speech available for ViewSet's inflection data.
+   * @return {View[]}
+   */
   getViews (partOfSpeech = undefined) {
     if (partOfSpeech) {
-      return this.matchingViews.filter(view => view.constructor.partOfSpeech === partOfSpeech)
+      // Return views for a particular part of speech
+      return this.matchingViewsMap.has(partOfSpeech) ? this.matchingViewsMap.get(partOfSpeech) : []
     } else {
-      return this.matchingViews
+      // Return all matching views
+      return Array.from(this.matchingViewsMap.values()).reduce((acc, views) => acc.concat(...views), [])
     }
   }
 
@@ -16748,18 +16602,21 @@ class View {
   static get inflectionType () {
   }
 
+  sameAs (view) {
+    return this.id === view.id
+  }
+
   /**
    * Determines wither this view can be used to display an inflection table of any data
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param inflection
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflectionData) {
-    if (alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].compareLanguages(View.languageID, inflectionData.languageID)) {
-      return inflectionData.partsOfSpeech.includes(View.partOfSpeech) && View.enabledForLexemes(inflectionData.homonym.lexemes)
-    }
+  static matchFilter (inflection, inflectionData) {
+    return (this.languageID === inflection.languageID && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech)
   }
 
   /**
@@ -16771,8 +16628,8 @@ class View {
    * @param {MessageBundle} messages
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
-  static getMatchingInstances (inflectionData, messages) {
-    if (this.matchFilter(inflectionData)) {
+  static getMatchingInstances (inflection, inflectionData, messages) {
+    if (this.matchFilter(inflection, inflectionData)) {
       return [new this(inflectionData, messages)]
     }
     return []
