@@ -604,8 +604,6 @@ class InflectionData {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InflectionSet; });
 /* harmony import */ var _inflections_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inflections.js */ "./lib/inflections.js");
-/* harmony import */ var _paradigm_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./paradigm.js */ "./lib/paradigm.js");
-
 
 
 /**
@@ -627,10 +625,31 @@ class InflectionSet {
 
   /**
    * Return a list of item types this set contains.
-   * @return {Function<Object>[]}
+   * @return {Function<Suffix> | Function<Form> | Function<Paradigm>}
    */
   get inflectionTypes () {
     return Array.from(this.types.keys())
+  }
+
+  /**
+   * Checks whether an inflection set has any items of certain type that matches an inflection.
+   * @param {Function<Suffix> | Function<Form> | Function<Paradigm>} itemType - A type of an item.
+   * @param {Inflection} inflection - An inflection to match.
+   * @return {boolean} True if there are matches, false otherwise
+   */
+  hasMatchingItems (itemType, inflection) {
+    return (this.types.has(itemType) && this.types.get(itemType).hasMatches(inflection))
+  }
+
+  /**
+   * Returns an array of items of certain type that matches an inflection.
+   * @param {Function<Suffix> | Function<Form> | Function<Paradigm>} itemType - A type of an item.
+   * @param {Inflection} inflection - An inflection to match.
+   * @return {Suffix[] | Form[] | Paradigm[] | []} Array of items of a particular type if any matches found.
+   * An empty array otherwise.
+   */
+  getMatchingItems (itemType, inflection) {
+    return this.hasMatchingItems(itemType, inflection) ? this.types.get(itemType).getMatches(inflection) : []
   }
 
   /**
@@ -680,15 +699,6 @@ class InflectionSet {
       this.types.set(classType, new _inflections_js__WEBPACK_IMPORTED_MODULE_0__["default"](classType))
     }
     this.types.get(classType).addFootnote(index, footnote)
-  }
-
-  getMatchingParadigms (inflection) {
-    console.log(`Matching paradigms`)
-    if (this.types.has(_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"])) {
-      const paradigms = this.types.get(_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"])
-      return paradigms.getMatches(inflection).map(o => o.paradigm)
-    }
-    return []
   }
 }
 
@@ -757,6 +767,16 @@ class Inflections {
   }
 
   /**
+   * Checks if an array of items has at least one element that matches an inflection.
+   *  A match is determined as a result of item's `match` function.
+   * @param {Inflection} inflection - An inflection to match against.
+   * @return {boolean} - True if there is at least one match, false otherwise
+   */
+  hasMatches (inflection) {
+    return this.items.some(i => i.matches(inflection))
+  }
+
+  /**
    * Returns an array of items that `matches` an inflection. A match is determined as a result of item's `match`
    * function. Returned value is determined by item's `match` function as well.
    * @param {Inflection} inflection - An inflection to match against.
@@ -764,12 +784,7 @@ class Inflections {
    * Its format is dependent on the `match` function implementation.
    */
   getMatches (inflection) {
-    let results = []
-    for (const item of this.items) {
-      let result = item.matches(inflection)
-      if (result) { results.push(result) }
-    }
-    return results
+    return this.hasMatches(inflection) ? this.items.filter(i => i.matches(inflection)) : []
   }
 
   /**
@@ -3119,10 +3134,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _suffix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./suffix.js */ "./lib/suffix.js");
 /* harmony import */ var _form_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./form.js */ "./lib/form.js");
-/* harmony import */ var _footnote_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./footnote.js */ "./lib/footnote.js");
-/* harmony import */ var _inflection_set_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./inflection-set.js */ "./lib/inflection-set.js");
-/* harmony import */ var _inflection_data_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./inflection-data.js */ "./lib/inflection-data.js");
-/* harmony import */ var _match_data_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./match-data.js */ "./lib/match-data.js");
+/* harmony import */ var _paradigm_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./paradigm.js */ "./lib/paradigm.js");
+/* harmony import */ var _footnote_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./footnote.js */ "./lib/footnote.js");
+/* harmony import */ var _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./inflection-set.js */ "./lib/inflection-set.js");
+/* harmony import */ var _inflection_data_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./inflection-data.js */ "./lib/inflection-data.js");
+/* harmony import */ var _match_data_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./match-data.js */ "./lib/match-data.js");
+
 
 
 
@@ -3180,7 +3197,7 @@ class LanguageDataset {
     }
 
     if (!this.pos.has(partOfSpeech)) {
-      this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_4__["default"](partOfSpeech))
+      this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech))
     }
 
     this.pos.get(partOfSpeech).addInflectionItem(item)
@@ -3188,7 +3205,7 @@ class LanguageDataset {
 
   addParadigms (partOfSpeech, paradigms) {
     if (!this.pos.has(partOfSpeech.value)) {
-      this.pos.set(partOfSpeech.value, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_4__["default"](partOfSpeech.value))
+      this.pos.set(partOfSpeech.value, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech.value))
     }
     this.pos.get(partOfSpeech.value).addInflectionItems(paradigms)
   }
@@ -3209,12 +3226,12 @@ class LanguageDataset {
       throw new Error('Footnote text data should not be empty.')
     }
 
-    let footnote = new _footnote_js__WEBPACK_IMPORTED_MODULE_3__["default"](index, text, partOfSpeech)
+    let footnote = new _footnote_js__WEBPACK_IMPORTED_MODULE_4__["default"](index, text, partOfSpeech)
 
     // this.footnotes.push(footnote)
 
     if (!this.pos.has(partOfSpeech)) {
-      this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_4__["default"](partOfSpeech))
+      this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech))
     }
     this.pos.get(partOfSpeech).addFootnote(classType, index, footnote)
   }
@@ -3265,11 +3282,17 @@ class LanguageDataset {
     return inflection
   } */
 
-  getInflectionData (homonym) {
-    // Add support for languages
-    let result = new _inflection_data_js__WEBPACK_IMPORTED_MODULE_5__["default"](homonym)
-    let inflections = {}
-
+  /**
+   * Build a map of inflections keyed by part of speech.
+   * Lexemes in homonym are sorted by a morph adapter, and we will rely on that sort order.
+   * An order of part of speech keys determines an order of parts of speech in the output.
+   * An order of inflections within a part of speech will be determined by an order of
+   * inflection table views within a ViewSet object.
+   * @param {Homonym} homonym - A homonym containing lexemes with inflections
+   * @return {Map<{string}, {Inflection[]}>} Maps on array of inflections to a part of speech
+   */
+  getGroupedInflections (homonym) {
+    let inflections = new Map()
     for (let lexeme of homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
         let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
@@ -3277,13 +3300,7 @@ class LanguageDataset {
         if (!partOfSpeech) {
           throw new Error('Part of speech data is missing in an inflection')
         }
-        /* if (!Array.isArray(partOfSpeech)) {
-          throw new Error('Part of speech data should be in an array format')
-        }
-        if (partOfSpeech.length === 0 && partOfSpeech.length > 1) {
-          throw new Error('Part of speech data should be an array with exactly one element')
-        }
-        partOfSpeech = partOfSpeech[0].value */
+
         if (!partOfSpeech.isSingle) {
           throw new Error('Part of speech data should have only one value')
         }
@@ -3311,96 +3328,104 @@ class LanguageDataset {
         // add the lemma to the inflection
         inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word, lexeme.lemma.word, lexeme.lemma.languageID)
 
-        // Group inflections by a part of speech
-        if (!inflections.hasOwnProperty(partOfSpeech)) {
-          inflections[partOfSpeech] = []
-        }
-        inflections[partOfSpeech].push(inflection)
-      }
-    }
-
-    // Scan for matches for all parts of speech separately
-    for (const partOfSpeech in inflections) {
-      let inflectionSet = new _inflection_set_js__WEBPACK_IMPORTED_MODULE_4__["default"](partOfSpeech)
-      if (inflections.hasOwnProperty(partOfSpeech)) {
-        let inflectionsGroup = inflections[partOfSpeech]
-        let sourceSet = this.pos.get(partOfSpeech)
-        if (!sourceSet) {
+        if (!this.pos.get(partOfSpeech)) {
           // There is no source data for this part of speech
           console.warn(`There is no source data for the following part of speech: ${partOfSpeech}`)
           continue
         }
 
-        let paradigms = []
-        let paradigmIDs = []
-        let paradigmBased = false
+        inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflection)
 
-        /*
+        if (!inflection.constraints.suffixBased && !inflection.constraints.paradigmBased) {
+          inflection.constraints.fullFormBased = this.hasMatchingForms(partOfSpeech, inflection)
+        }
+
+        if (!inflection.constraints.fullFormBased && !inflection.constraints.paradigmBased) {
+          // If it is not full form based, then probably it is suffix base
+          inflection.constraints.suffixBased = true
+        }
+
+        // Inflections are grouped by part of speech
+        if (!inflections.has(partOfSpeech)) { inflections.set(partOfSpeech, []) }
+        inflections.get(partOfSpeech).push(inflection)
+      }
+    }
+    return inflections
+  }
+
+  getInflectionData (homonym) {
+    // Add support for languages
+    console.log(`getInflectionData`)
+    let result = new _inflection_data_js__WEBPACK_IMPORTED_MODULE_6__["default"](homonym)
+    let inflections = this.getGroupedInflections(homonym)
+
+    // Scan for matches for all parts of speech separately
+    for (const [partOfSpeech, inflectionsGroup] of inflections.entries()) {
+      let inflectionSet = new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech)
+      let sourceSet = this.pos.get(partOfSpeech)
+      if (!sourceSet) {
+        // There is no source data for this part of speech
+        console.warn(`There is no source data for the following part of speech: ${partOfSpeech}`)
+        continue
+      }
+
+      /*
         There might be cases when we don't know beforehand if an inflection is form based.
         In this case, if `fullFormBased` constraint not set, we'll try to find matching forms within a source data.
         If any found, `fullFormBased` constraint will be set to true.
-         */
-        for (let inflection of inflectionsGroup) {
-          let matchingParadigms = sourceSet.getMatchingParadigms(inflection)
-          if (matchingParadigms.length > 0) {
-            // Make sure all paradigms are unique
-            for (const paradigm of matchingParadigms) {
-              if (!paradigmIDs.includes(paradigm.id)) {
-                paradigms.push(paradigm)
-                paradigmIDs.push(paradigm.id)
-              }
-            }
-            inflection.constraints.paradigmBased = true
-            paradigmBased = true
-          }
+      */
 
-          if (!inflection.constraints.suffixBased && !paradigmBased) {
-            inflection.constraints.fullFormBased = this.hasMatchingForms(partOfSpeech, inflection)
-          }
+      // If at least one inflection in a group has a constraint, we'll search for data based on that criteria
+      let suffixBased = inflectionsGroup.some(i => i.constraints.suffixBased)
+      let formBased = inflectionsGroup.some(i => i.constraints.fullFormBased)
+      let paradigmBased = inflectionsGroup.some(i => i.constraints.paradigmBased)
 
-          if (!inflection.constraints.fullFormBased && !paradigmBased) {
-            // If it is not full form based, then probably it is suffix base
-            inflection.constraints.suffixBased = true
-          }
-        }
-        if (paradigmBased) {
-          inflectionSet.addInflectionItems(paradigms)
-        }
-
-        // If at least one inflection in a group has a constraint, we'll search for data based on that criteria
-        let suffixBased = (inflectionsGroup.find(i => i.constraints.suffixBased) !== undefined)
-        let formBased = (inflectionsGroup.find(i => i.constraints.fullFormBased) !== undefined)
-
-        // Check for suffix matches
-        if (suffixBased) {
-          if (sourceSet.types.has(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"])) {
-            let items = sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]).items.reduce(this['reducer'].bind(this, inflectionsGroup), [])
-            if (items.length > 0) {
-              inflectionSet.addInflectionItems(items)
-            }
-          }
-        }
-
-        // If there is at least on full form based inflection, search for full form items
-        if (formBased) {
-          let items = sourceSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.reduce(this['reducer'].bind(this, inflectionsGroup), [])
+      // Check for suffix matches
+      if (suffixBased) {
+        if (sourceSet.types.has(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"])) {
+          let items = sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]).items.reduce(this['reducer'].bind(this, inflectionsGroup), [])
           if (items.length > 0) {
             inflectionSet.addInflectionItems(items)
           }
         }
+      }
 
-        if (inflectionSet.hasTypes) {
-          for (const inflectionType of inflectionSet.inflectionTypes) {
-            let footnotesSource = sourceSet.types.get(inflectionType).footnotesMap
-            const footnotesInUse = inflectionSet.types.get(inflectionType).footnotesInUse
-            for (let footnote of footnotesSource.values()) {
-              if (footnotesInUse.includes(footnote.index)) {
-                inflectionSet.addFootnote(inflectionType, footnote.index, footnote)
+      // If there is at least on full form based inflection, search for full form items
+      if (formBased) {
+        let items = sourceSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.reduce(this['reducer'].bind(this, inflectionsGroup), [])
+        if (items.length > 0) {
+          inflectionSet.addInflectionItems(items)
+        }
+      }
+
+      // Get paradigm matches
+      if (paradigmBased) {
+        let paradigmIDs = []
+        for (let inflection of inflectionsGroup) {
+          if (inflection.constraints.paradigmBased) {
+            let matchingParadigms = sourceSet.getMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflection)
+            // Make sure all paradigms are unique
+            for (const paradigm of matchingParadigms) {
+              if (!paradigmIDs.includes(paradigm.id)) {
+                inflectionSet.addInflectionItem(paradigm)
+                paradigmIDs.push(paradigm.id)
               }
             }
           }
-          result.addInflectionSet(inflectionSet)
         }
+      }
+
+      if (inflectionSet.hasTypes) {
+        for (const inflectionType of inflectionSet.inflectionTypes) {
+          let footnotesSource = sourceSet.types.get(inflectionType).footnotesMap
+          const footnotesInUse = inflectionSet.types.get(inflectionType).footnotesInUse
+          for (let footnote of footnotesSource.values()) {
+            if (footnotesInUse.includes(footnote.index)) {
+              inflectionSet.addFootnote(inflectionType, footnote.index, footnote)
+            }
+          }
+        }
+        result.addInflectionSet(inflectionSet)
       }
     }
     return result
@@ -3442,7 +3467,7 @@ class LanguageDataset {
      a fullFeature match is when one of inflections has all grammatical features fully matching those of a suffix
      */
     for (let inflection of inflections) {
-      let matchData = new _match_data_js__WEBPACK_IMPORTED_MODULE_6__["default"]() // Create a match profile
+      let matchData = new _match_data_js__WEBPACK_IMPORTED_MODULE_7__["default"]() // Create a match profile
       matchData.suffixMatch = inflection.compareWithWord(item.value)
 
       // Check for obligatory matches
@@ -3688,23 +3713,29 @@ class Morpheme {
   }
 
   /**
-   * Returns a list of values that are the same between a morpheme and a feature (an intersection).
-   * @param {Feature} feature
-   * @return {string[]}
+   * Returns a list of values that are the same between a morpheme and a comparisonFeature.
+   * Both morpheme and a comparisonFeature can have either single or multiple values.
+   * A match is found if morpheme has one or several values of a comparisonFeature.
+   * @param {Feature} comparisonFeature - A feature morpheme should be compared with.
+   * @return {string[]} A list of matching feature values
    */
-  matchingValues (feature) {
+  matchingValues (comparisonFeature) {
     let matches = []
 
-    if (feature && this.features.hasOwnProperty(feature.type)) {
-      const morphemeValue = this.features[feature.type]
+    if (comparisonFeature && this.features.hasOwnProperty(comparisonFeature.type)) {
+      const morphemeValue = this.features[comparisonFeature.type]
 
-      if (morphemeValue.value === feature.value) {
-        matches.push(feature.value)
-      } else if (feature.isMultiple) {
-        for (const featureValue of feature.values) {
+      if (morphemeValue.isMultiple || comparisonFeature.isMultiple) {
+        // Either morphemeValue or comparisonFeature have multiple values
+        for (const featureValue of comparisonFeature.values) {
           if (morphemeValue.values.includes(featureValue)) {
             matches.push(featureValue)
           }
+        }
+      } else {
+        // Both features have single values
+        if (morphemeValue.value === comparisonFeature.value) {
+          matches.push(comparisonFeature.value)
         }
       }
     }
@@ -13789,6 +13820,7 @@ __webpack_require__.r(__webpack_exports__);
 
 class LatinAdjectiveView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
   constructor (inflectionData, locale) {
+    console.log(`Latin adjective view constructor`)
     super(inflectionData, locale)
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
@@ -16051,6 +16083,7 @@ class Table {
    * @returns {Table} Reference to self for chaining.
    */
   construct (suffixes) {
+    console.log(`Construct table`)
     this.suffixes = suffixes
 
     this.tree = this.groupByFeature(suffixes)
