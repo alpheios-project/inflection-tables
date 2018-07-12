@@ -1,14 +1,17 @@
 import {Constants} from 'alpheios-data-models'
+import ViewSet from './view-set.js'
 import LatinViewSet from '../lang/latin/latin-view-set.js'
 import GreekViewSet from '../lang/greek/greek-view-set.js'
 
 export default class ViewSetFactory {
-  static create (inflectionData, locale) {
-    switch (inflectionData.languageID) {
+  static create (homonym, locale) {
+    switch (homonym.languageID) {
       case Constants.LANG_LATIN:
-        return new LatinViewSet(inflectionData, locale)
+        return new LatinViewSet(homonym, locale)
       case Constants.LANG_GREEK:
-        return new GreekViewSet(inflectionData, locale)
+        return new GreekViewSet(homonym, locale)
+      default:
+        return new ViewSet(homonym, locale)
     }
   }
 }

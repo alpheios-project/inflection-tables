@@ -39,6 +39,14 @@ export default class LatinView extends View {
     return Constants.LANG_LATIN
   }
 
+  static get consts () {
+    return {
+      genders: {
+        ORD_1ST_2ND: '1st 2nd'
+      }
+    }
+  }
+
   /*
     Creates and initializes an inflection table. Redefine this method in child objects in order to create
     an inflection table differently

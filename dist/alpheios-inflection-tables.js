@@ -3355,7 +3355,6 @@ class LanguageDataset {
 
   getInflectionData (homonym) {
     // Add support for languages
-    console.log(`getInflectionData`)
     let result = new _inflection_data_js__WEBPACK_IMPORTED_MODULE_6__["default"](homonym)
     let inflections = this.getGroupedInflections(homonym)
 
@@ -13820,7 +13819,6 @@ __webpack_require__.r(__webpack_exports__);
 
 class LatinAdjectiveView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
   constructor (inflectionData, locale) {
-    console.log(`Latin adjective view constructor`)
     super(inflectionData, locale)
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
@@ -13968,6 +13966,14 @@ class LatinView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
    */
   static get languageID () {
     return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_LATIN
+  }
+
+  static get consts () {
+    return {
+      genders: {
+        ORD_1ST_2ND: '1st 2nd'
+      }
+    }
   }
 
   /*
@@ -16083,7 +16089,6 @@ class Table {
    * @returns {Table} Reference to self for chaining.
    */
   construct (suffixes) {
-    console.log(`Construct table`)
     this.suffixes = suffixes
 
     this.tree = this.groupByFeature(suffixes)
@@ -16436,19 +16441,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewSetFactory; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lang/latin/latin-view-set.js */ "./views/lang/latin/latin-view-set.js");
-/* harmony import */ var _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../lang/greek/greek-view-set.js */ "./views/lang/greek/greek-view-set.js");
+/* harmony import */ var _view_set_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view-set.js */ "./views/lib/view-set.js");
+/* harmony import */ var _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../lang/latin/latin-view-set.js */ "./views/lang/latin/latin-view-set.js");
+/* harmony import */ var _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../lang/greek/greek-view-set.js */ "./views/lang/greek/greek-view-set.js");
+
 
 
 
 
 class ViewSetFactory {
-  static create (inflectionData, locale) {
-    switch (inflectionData.languageID) {
+  static create (homonym, locale) {
+    switch (homonym.languageID) {
       case alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_LATIN:
-        return new _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_1__["default"](inflectionData, locale)
+        return new _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_2__["default"](homonym, locale)
       case alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK:
-        return new _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_2__["default"](inflectionData, locale)
+        return new _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_3__["default"](homonym, locale)
+      default:
+        return new _view_set_js__WEBPACK_IMPORTED_MODULE_1__["default"](homonym, locale)
     }
   }
 }
@@ -16468,6 +16477,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ViewSet; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
+
 
 /**
  * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
@@ -16475,29 +16486,37 @@ __webpack_require__.r(__webpack_exports__);
  */
 class ViewSet {
   /**
-   * @param {InflectionData} inflectionData - Data about inflections we need to build views for
+   * @param {Homonym} homonym - Data about inflections we need to build views for
    * @param {string} locale - A locale's IETF language tag (ex. `en-US`)
    */
-  constructor (inflectionData, locale) {
-    this.inflectionData = inflectionData
-    this.homonym = inflectionData.homonym
-    this.languageID = this.inflectionData.languageID
+  constructor (homonym, locale) {
+    this.homonym = homonym
+    this.languageID = homonym.languageID
+
+    /**
+     * Whether inflections are enabled for the homonym's language
+     */
+    this.enabled = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].getLanguageModel(homonym.languageID).canInflect()
+    this.inflectionData = null
     this.locale = locale
     this.matchingViewsMap = new Map()
 
-    for (const lexeme of this.homonym.lexemes) {
-      for (const inflection of lexeme.inflections) {
-        const matchingInstances = this.constructor.views.reduce(
-          (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), [])
-        if (matchingInstances.length > 0) {
-          // There are any matching instances found
-          if (!this.matchingViewsMap.has(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
-            this.matchingViewsMap.set(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value, [])
+    if (this.enabled) {
+      this.inflectionData = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getInflectionData(this.homonym)
+      for (const lexeme of this.homonym.lexemes) {
+        for (const inflection of lexeme.inflections) {
+          const matchingInstances = this.constructor.views.reduce(
+            (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), [])
+          if (matchingInstances.length > 0) {
+            // There are any matching instances found
+            if (!this.matchingViewsMap.has(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
+              this.matchingViewsMap.set(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value, [])
+            }
+            let storedInstances = this.matchingViewsMap.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)
+            // Filter out instances that are already stored in a view set
+            let newInstances = matchingInstances.filter(i => !storedInstances.some(v => v.sameAs(i)))
+            if (newInstances.length > 0) { storedInstances.push(...newInstances) }
           }
-          let storedInstances = this.matchingViewsMap.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)
-          // Filter out instances that are already stored in a view set
-          let newInstances = matchingInstances.filter(i => !storedInstances.some(v => v.sameAs(i)))
-          if (newInstances.length > 0) { storedInstances.push(...newInstances) }
         }
       }
     }

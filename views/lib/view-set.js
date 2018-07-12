@@ -1,33 +1,42 @@
-import { Feature } from 'alpheios-data-models'
+import { Feature, LanguageModelFactory } from 'alpheios-data-models'
+import LanguageDatasetFactory from '../../lib/language-dataset-factory.js'
 /**
  * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
  * mast be created for each new inflection data piece.
  */
 export default class ViewSet {
   /**
-   * @param {InflectionData} inflectionData - Data about inflections we need to build views for
+   * @param {Homonym} homonym - Data about inflections we need to build views for
    * @param {string} locale - A locale's IETF language tag (ex. `en-US`)
    */
-  constructor (inflectionData, locale) {
-    this.inflectionData = inflectionData
-    this.homonym = inflectionData.homonym
-    this.languageID = this.inflectionData.languageID
+  constructor (homonym, locale) {
+    this.homonym = homonym
+    this.languageID = homonym.languageID
+
+    /**
+     * Whether inflections are enabled for the homonym's language
+     */
+    this.enabled = LanguageModelFactory.getLanguageModel(homonym.languageID).canInflect()
+    this.inflectionData = null
     this.locale = locale
     this.matchingViewsMap = new Map()
 
-    for (const lexeme of this.homonym.lexemes) {
-      for (const inflection of lexeme.inflections) {
-        const matchingInstances = this.constructor.views.reduce(
-          (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), [])
-        if (matchingInstances.length > 0) {
-          // There are any matching instances found
-          if (!this.matchingViewsMap.has(inflection[Feature.types.part].value)) {
-            this.matchingViewsMap.set(inflection[Feature.types.part].value, [])
+    if (this.enabled) {
+      this.inflectionData = LanguageDatasetFactory.getInflectionData(this.homonym)
+      for (const lexeme of this.homonym.lexemes) {
+        for (const inflection of lexeme.inflections) {
+          const matchingInstances = this.constructor.views.reduce(
+            (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), [])
+          if (matchingInstances.length > 0) {
+            // There are any matching instances found
+            if (!this.matchingViewsMap.has(inflection[Feature.types.part].value)) {
+              this.matchingViewsMap.set(inflection[Feature.types.part].value, [])
+            }
+            let storedInstances = this.matchingViewsMap.get(inflection[Feature.types.part].value)
+            // Filter out instances that are already stored in a view set
+            let newInstances = matchingInstances.filter(i => !storedInstances.some(v => v.sameAs(i)))
+            if (newInstances.length > 0) { storedInstances.push(...newInstances) }
           }
-          let storedInstances = this.matchingViewsMap.get(inflection[Feature.types.part].value)
-          // Filter out instances that are already stored in a view set
-          let newInstances = matchingInstances.filter(i => !storedInstances.some(v => v.sameAs(i)))
-          if (newInstances.length > 0) { storedInstances.push(...newInstances) }
         }
       }
     }
