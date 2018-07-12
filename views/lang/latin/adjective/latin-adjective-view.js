@@ -10,7 +10,7 @@ export default class LatinAdjectiveView extends LatinView {
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
-    this.partOfSpeech = LatinAdjectiveView.partOfSpeech
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.inflectionType = LanguageDataset.SUFFIX
 
     // Feature that are different from base class values
@@ -22,8 +22,8 @@ export default class LatinAdjectiveView extends LatinView {
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return Constants.POFS_ADJECTIVE
+  static get partsOfSpeech () {
+    return [Constants.POFS_ADJECTIVE]
   }
 
   static get inflectionType () {

@@ -38,7 +38,7 @@ export default class LatinVerbView extends LatinView {
     }
   }
 
-  static get partOfSpeech () {
-    return Constants.POFS_VERB
+  static get partsOfSpeech () {
+    return [Constants.POFS_VERB]
   }
 }

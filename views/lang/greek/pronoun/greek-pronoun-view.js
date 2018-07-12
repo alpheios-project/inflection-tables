@@ -69,8 +69,8 @@ export default class GreekPronounView extends GreekView {
     }
   }
 
-  static get partOfSpeech () {
-    return Constants.POFS_PRONOUN
+  static get partsOfSpeech () {
+    return [Constants.POFS_PRONOUN]
   }
 
   static get inflectionType () {
@@ -87,15 +87,15 @@ export default class GreekPronounView extends GreekView {
   }
 
   static getID (grammarClass) {
-    return `${grammarClass}${View.toTitleCase(GreekPronounView.partOfSpeech)}Declension`
+    return `${grammarClass}${View.toTitleCase(GreekPronounView.mainPartOfSpeech)}Declension`
   }
 
   static getName (grammarClass) {
-    return `${grammarClass} ${GreekPronounView.partOfSpeech} declension`
+    return `${grammarClass} ${GreekPronounView.mainPartOfSpeech} declension`
   }
 
   static getTitle (grammarClass) {
-    return View.toTitleCase(`${grammarClass} ${GreekPronounView.partOfSpeech} Declension`).trim()
+    return View.toTitleCase(`${grammarClass} ${GreekPronounView.mainPartOfSpeech} Declension`).trim()
   }
 
   /**
@@ -108,8 +108,8 @@ export default class GreekPronounView extends GreekView {
    * @return {boolean}
    */
   static matchFilter (inflection, inflectionData) {
-    if (this.languageID === inflection.languageID && inflection[Feature.types.part].value === this.partOfSpeech) {
-      let inflectionSet = inflectionData.pos.get(this.partOfSpeech)
+    if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value)) {
+      let inflectionSet = inflectionData.pos.get(inflection[Feature.types.part].value)
       if (inflectionSet.types.has(this.inflectionType)) {
         let inflections = inflectionSet.types.get(this.inflectionType)
         let found = inflections.items.find(form => {
@@ -127,11 +127,11 @@ export default class GreekPronounView extends GreekView {
     return false
   }
 
-  static getMorphemes (inflectionData) {
+  getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
-      .types.get(this.inflectionType).items
+      .types.get(this.constructor.inflectionType).items
       .filter(item => item.features.hasOwnProperty(Feature.types.grmClass) &&
-            item.features[Feature.types.grmClass].hasSomeValues(this.classes)
+            item.features[Feature.types.grmClass].hasSomeValues(this.constructor.classes)
       )
   }
 }

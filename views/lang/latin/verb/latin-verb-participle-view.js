@@ -7,7 +7,7 @@ import Table from '../../../lib/table'
 export default class LatinVerbParticipleView extends LatinView {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
-    this.partOfSpeech = LatinVerbParticipleView.partOfSpeech
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.id = 'verbParticiple'
     this.name = 'participle'
     this.title = 'Participle'
@@ -21,8 +21,8 @@ export default class LatinVerbParticipleView extends LatinView {
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return Constants.POFS_VERB_PARTICIPLE
+  static get partsOfSpeech () {
+    return [Constants.POFS_VERB_PARTICIPLE]
   }
 
   static get inflectionType () {

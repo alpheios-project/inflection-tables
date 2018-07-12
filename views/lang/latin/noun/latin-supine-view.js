@@ -7,7 +7,7 @@ import Table from '../../../lib/table'
 export default class LatinSupineView extends LatinView {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
-    this.partOfSpeech = LatinSupineView.partOfSpeech
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.id = 'verbSupine'
     this.name = 'supine'
     this.title = 'Supine'
@@ -24,8 +24,8 @@ export default class LatinSupineView extends LatinView {
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return Constants.POFS_SUPINE
+  static get partsOfSpeech () {
+    return [Constants.POFS_SUPINE]
   }
 
   static get inflectionType () {

@@ -43,7 +43,7 @@ export default class LatinImperativeView extends LatinVerbMoodView {
    */
   static matchFilter (inflection, inflectionData) {
     return (this.languageID === inflection.languageID &&
-      inflection[Feature.types.part].value === this.partOfSpeech &&
+      this.partsOfSpeech.includes(inflection[Feature.types.part].value) &&
       this.enabledForLexemes(inflectionData.homonym.lexemes))
   }
 

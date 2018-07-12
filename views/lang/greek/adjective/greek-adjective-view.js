@@ -8,7 +8,7 @@ export default class GreekAdjectiveView extends GreekView {
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
-    this.partOfSpeech = Constants.POFS_ADJECTIVE
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.inflectionType = Suffix
     const genderMasculine = Constants.GEND_MASCULINE
     const genderFeminine = Constants.GEND_FEMININE
@@ -26,8 +26,8 @@ export default class GreekAdjectiveView extends GreekView {
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return Constants.POFS_ADJECTIVE
+  static get partsOfSpeech () {
+    return [Constants.POFS_ADJECTIVE]
   }
 
   static get inflectionType () {

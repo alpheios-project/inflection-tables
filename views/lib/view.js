@@ -17,6 +17,8 @@ export default class View {
     this.inflectionData = inflectionData
     this.messages = L10n.getMessages(locale)
     this.pageHeader = {}
+    // A view can be rendered for different parts of speech. This is a part of speech this view currently uses
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
 
     // An HTML element where this view is rendered
     this.container = undefined
@@ -51,10 +53,24 @@ export default class View {
   }
 
   /**
-   * Defines a part of speech of a view. Should be redefined in child classes.
-   * @return {string | undefined}
+   * Defines one or several parts of speech of a view.
+   * These are parts of speech for which a view will be rendered.
+   * Should be redefined in child classes.
+   * @return {string[] | []} A list of part of speech names.
+   * An empty array if not defined.
    */
-  static get partOfSpeech () {
+  static get partsOfSpeech () {
+    return []
+  }
+
+  /**
+   * Returns a main part of speech of a view: a part of speech for which this view is defined.
+   * It is always the first view in parts of speech array. If no parts of speech defined,
+   * returns an empty string.
+   * @return {string} A main part of speech name. An empty string in not defined.
+   */
+  static get mainPartOfSpeech () {
+    return this.partsOfSpeech.length > 0 ? this.partsOfSpeech[0] : ''
   }
 
   /**
@@ -78,7 +94,7 @@ export default class View {
    * @return {boolean}
    */
   static matchFilter (inflection, inflectionData) {
-    return (this.languageID === inflection.languageID && inflection[Feature.types.part].value === this.partOfSpeech)
+    return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
   }
 
   /**
@@ -128,12 +144,12 @@ export default class View {
     this.table.messages = this.messages
     for (let lexeme of this.inflectionData.homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
-        if (inflection['part of speech'].values.includes(this.constructor.partOfSpeech)) {
+        if (inflection[Feature.types.part].values.includes(this.partOfSpeech)) {
           this.forms.add(inflection.form)
         }
       }
     }
-    this.table.construct(this.constructor.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
+    this.table.construct(this.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
     return this
   }
 
@@ -142,8 +158,8 @@ export default class View {
    * By default, it returns suffixes
    * @param {InflectionData} inflectionData
    */
-  static getMorphemes (inflectionData) {
-    return inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items
+  getMorphemes (inflectionData) {
+    return inflectionData.pos.get(this.partOfSpeech).types.get(this.constructor.inflectionType).items
   }
 
   /**
@@ -151,7 +167,7 @@ export default class View {
    * @param {InflectionData} inflectionData
    */
   getFootnotes (inflectionData) {
-    return inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
+    return inflectionData.pos.get(this.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
   }
 
   get wideViewNodes () {

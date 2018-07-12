@@ -11,7 +11,7 @@ export default class GreekNumeralView extends GreekView {
     this.id = 'numeralDeclension'
     this.name = 'numeral declension'
     this.title = 'Numeral declension'
-    this.partOfSpeech = Constants.POFS_NUMERAL
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.inflectionType = Form
 
     this.featureTypes = {}
@@ -67,8 +67,8 @@ export default class GreekNumeralView extends GreekView {
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return Constants.POFS_NUMERAL
+  static get partsOfSpeech () {
+    return [Constants.POFS_NUMERAL]
   }
 
   static get inflectionType () {
@@ -84,8 +84,8 @@ export default class GreekNumeralView extends GreekView {
     features.fullWidthRowTitles = [this.featureTypes.numbers]
   }
 
-  static getMorphemes (inflectionData) {
+  getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
-      .types.get(this.inflectionType).items
+      .types.get(this.constructor.inflectionType).items
   }
 }

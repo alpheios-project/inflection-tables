@@ -16,8 +16,8 @@ export default class LatinNounView extends LatinView {
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return Constants.POFS_NOUN
+  static get partsOfSpeech () {
+    return [Constants.POFS_NOUN]
   }
 
   static get inflectionType () {
