@@ -22,7 +22,7 @@ export default class LatinVerbParticipleView extends LatinView {
   }
 
   static get partsOfSpeech () {
-    return [Constants.POFS_VERB_PARTICIPLE]
+    return [Constants.POFS_VERB_PARTICIPLE, Constants.POFS_ADJECTIVE]
   }
 
   static get inflectionType () {
@@ -39,5 +39,12 @@ export default class LatinVerbParticipleView extends LatinView {
     features.rows = [this.language_features[Feature.types.tense]]
     features.columnRowTitles = [this.language_features[Feature.types.tense]]
     features.fullWidthRowTitles = []
+  }
+
+  static getMatchingInstances (inflection, inflectionData, messages) {
+    if (this.matchFilter(inflection, inflectionData)) {
+      return [new this(inflectionData, messages)]
+    }
+    return []
   }
 }

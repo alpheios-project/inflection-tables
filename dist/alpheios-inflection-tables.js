@@ -607,11 +607,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Stores inflections of different types {such as `Suffix`, `Form`, or `Paradigm`} in a `types` map. Items are grouped by type.
+ * Stores inflections data of different types {such as `Suffix`, `Form`, or `Paradigm`} in a `types` map. Items are grouped by type.
+ * May also store inflections that corresponds to stored inflection data.
  */
 class InflectionSet {
-  constructor (partOfSpeech) {
+  constructor (partOfSpeech, languageID) {
+    this.languageID = languageID
     this.partOfSpeech = partOfSpeech
+
+    // Stores inflections (i.e. a form of a word with grammatical features as returned by a morph analyzer
+    this.inflections = []
+
+    // Stores inflections data (suffixes, forms, and paradigms) for inflections
     this.types = new Map()
   }
 
@@ -625,7 +632,7 @@ class InflectionSet {
 
   /**
    * Return a list of item types this set contains.
-   * @return {Function<Suffix> | Function<Form> | Function<Paradigm>}
+   * @return {Function<Morpheme>[]}
    */
   get inflectionTypes () {
     return Array.from(this.types.keys())
@@ -662,27 +669,40 @@ class InflectionSet {
 
   /**
    * Adds an array of inflection items of the same type.
-   * @param {Suffix[] | Form[] | Paradigm[]} inflections
+   * @param {Suffix[] | Form[] | Paradigm[]} items
    */
-  addInflectionItems (inflections) {
-    let classType = inflections[0].constructor.ClassType
+  addInflectionItems (items) {
+    let classType = items[0].constructor.ClassType
 
     if (!this.types.has(classType)) {
       this.types.set(classType, new _inflections_js__WEBPACK_IMPORTED_MODULE_0__["default"](classType))
     }
 
-    this.types.get(classType).addItems(inflections)
+    this.types.get(classType).addItems(items)
   }
 
+  addInflectionSet (inflectionSet) {
+    if (this.languageID === inflectionSet.languageID && this.partOfSpeech === inflectionSet.partOfSpeech) {
+      this.inflections.push(...inflectionSet.inflections)
+      for (const items of this.types.values()) {
+        this.addInflectionItems(items)
+      }
+    } else {
+      console.warn(`Cannot add inflectionSet [languageID=${inflectionSet.languageID.toString()}, POFS=${inflectionSet.partOfSpeech}]` +
+        ` to [languageID=${this.languageID.toString()}, POFS=${this.partOfSpeech}]`)
+    }
+  }
+
+  // TODO: Remove if not used
   /**
    * Adds an `Inflections` group of certain type.
    * @param {Inflections} inflectionsObject
    */
-  addInflectionsObject (inflectionsObject) {
+  /* addInflectionsObject (inflectionsObject) {
     if (!inflectionsObject) {
       throw new Error(`Inflection items object must not be empty`)
     }
-    if (!(inflectionsObject instanceof _inflections_js__WEBPACK_IMPORTED_MODULE_0__["default"])) {
+    if (!(inflectionsObject instanceof Inflections)) {
       throw new Error(`Inflection items object must be of InflectionItems type`)
     }
 
@@ -692,7 +712,7 @@ class InflectionSet {
     }
 
     this.types.set(type, inflectionsObject)
-  }
+  } */
 
   addFootnote (classType, index, footnote) {
     if (!this.types.has(classType)) {
@@ -742,7 +762,7 @@ class Inflections {
 
   /**
    * Adds suffix of form items
-   * @param {Suffix[] | Form[]} items
+   * @param {Suffix[] | Form[] | Paradigm[]} items
    */
   addItems (items) {
     if (!items) {
@@ -754,16 +774,30 @@ class Inflections {
     if (items.length === 0) {
       throw new Error(`Inflection items array must not be empty`)
     }
-    this.items.push(...items)
+    // Store only new items, avoid duplicates
+    for (const item of items) {
+      if (!this.hasItem(item)) {
+        this.items.push(item)
+      }
+    }
   }
 
   /**
-   * Adds a singe footnote object
+   * Adds a singe footnote object. If a footonte with the same index exists, it will be rewritten.
    * @param {string} index - A footnote index
    * @param {Footnote} footnote - A footnote object
    */
   addFootnote (index, footnote) {
     this.footnotesMap.set(index, footnote)
+  }
+
+  /**
+   * Checks if item with the same ID is already stored in array of inflection data.
+   * @param {Suffix | Form | Paradigm} morpheme - An item to be checked against stored in inflection data.
+   * @return {boolean} True if this item is stored in inflection data, false otherwise.
+   */
+  hasItem (morpheme) {
+    return this.items.some(i => i.id === morpheme.id)
   }
 
   /**
@@ -3197,7 +3231,7 @@ class LanguageDataset {
     }
 
     if (!this.pos.has(partOfSpeech)) {
-      this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech))
+      this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech, this.languageID))
     }
 
     this.pos.get(partOfSpeech).addInflectionItem(item)
@@ -3205,7 +3239,7 @@ class LanguageDataset {
 
   addParadigms (partOfSpeech, paradigms) {
     if (!this.pos.has(partOfSpeech.value)) {
-      this.pos.set(partOfSpeech.value, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech.value))
+      this.pos.set(partOfSpeech.value, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech.value, this.languageID))
     }
     this.pos.get(partOfSpeech.value).addInflectionItems(paradigms)
   }
@@ -3231,7 +3265,7 @@ class LanguageDataset {
     // this.footnotes.push(footnote)
 
     if (!this.pos.has(partOfSpeech)) {
-      this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech))
+      this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech, this.languageID))
     }
     this.pos.get(partOfSpeech).addFootnote(classType, index, footnote)
   }
@@ -3277,10 +3311,58 @@ class LanguageDataset {
    * @param {Inflection} inflection - An inflection data object
    * @return {Inflection} A modified inflection data object
    */
-  /* setInflectionConstraints (inflection) {
-    inflection.constraints.optionalMatches = this.constructor.getOptionalMatches(inflection)
+  setInflectionData (inflection, lemma) {
+    let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
+
+    if (!partOfSpeech) {
+      throw new Error('Part of speech data is missing in an inflection')
+    }
+
+    if (!partOfSpeech.isSingle) {
+      throw new Error('Part of speech data should have only one value')
+    }
+    partOfSpeech = partOfSpeech.value
+
+    if (inflection.constraints.pronounClassRequired) {
+      /*
+      A `class` grammatical feature is an obligatory match for Greek pronouns. Class, however, is not present in
+      the Inflection object at the time we receive it from a morphological analyzer because a morphological analyzer
+      does not provide such data. To fix this, for pronouns we need to figure out what the `class` feature value is
+      by finding an exact pronoun form match in inflection data and obtaining a corresponding `class` value.
+      The value found will then be attached to an Inflection object.
+       */
+      // Get a class this inflection belongs to
+      let grmClasses = this.model.getPronounClasses(this.pos.get(partOfSpeech).types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items, inflection.form)
+      if (!grmClasses) {
+        console.warn(`Cannot determine a grammar class for a ${inflection.form} pronoun. 
+              Table construction will probably fail`)
+      } else {
+        // One or more values found
+        inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass] = grmClasses
+      }
+    }
+
+    // add the lemma to the inflection
+    inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word, lemma.word, lemma.languageID)
+
+    if (!this.pos.get(partOfSpeech)) {
+      // There is no source data for this part of speech
+      console.warn(`There is no source data for the following part of speech: ${partOfSpeech}`)
+      return inflection
+    }
+
+    inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflection)
+
+    if (!inflection.constraints.suffixBased && !inflection.constraints.paradigmBased) {
+      inflection.constraints.fullFormBased = this.hasMatchingForms(partOfSpeech, inflection)
+    }
+
+    if (!inflection.constraints.fullFormBased && !inflection.constraints.paradigmBased) {
+      // If it is not full form based, then probably it is suffix base
+      inflection.constraints.suffixBased = true
+    }
     return inflection
-  } */
+  }
 
   /**
    * Build a map of inflections keyed by part of speech.
@@ -3291,141 +3373,108 @@ class LanguageDataset {
    * @param {Homonym} homonym - A homonym containing lexemes with inflections
    * @return {Map<{string}, {Inflection[]}>} Maps on array of inflections to a part of speech
    */
-  getGroupedInflections (homonym) {
+  groupInflections (homonym) {
     let inflections = new Map()
     for (let lexeme of homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
-        let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
-
-        if (!partOfSpeech) {
-          throw new Error('Part of speech data is missing in an inflection')
-        }
-
-        if (!partOfSpeech.isSingle) {
-          throw new Error('Part of speech data should have only one value')
-        }
-        partOfSpeech = partOfSpeech.value
-
-        if (inflection.constraints.pronounClassRequired) {
-          /*
-          A `class` grammatical feature is an obligatory match for Greek pronouns. Class, however, is not present in
-          the Inflection object at the time we receive it from a morphological analyzer because a morphological analyzer
-          does not provide such data. To fix this, for pronouns we need to figure out what the `class` feature value is
-          by finding an exact pronoun form match in inflection data and obtaining a corresponding `class` value.
-          The value found will then be attached to an Inflection object.
-           */
-          // Get a class this inflection belongs to
-          let grmClasses = this.model.getPronounClasses(this.pos.get(partOfSpeech).types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items, inflection.form)
-          if (!grmClasses) {
-            console.warn(`Cannot determine a grammar class for a ${inflection.form} pronoun. 
-              Table construction will probably fail`)
-          } else {
-            // One or more values found
-            inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass] = grmClasses
-          }
-        }
-
-        // add the lemma to the inflection
-        inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word, lexeme.lemma.word, lexeme.lemma.languageID)
-
-        if (!this.pos.get(partOfSpeech)) {
-          // There is no source data for this part of speech
-          console.warn(`There is no source data for the following part of speech: ${partOfSpeech}`)
-          continue
-        }
-
-        inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflection)
-
-        if (!inflection.constraints.suffixBased && !inflection.constraints.paradigmBased) {
-          inflection.constraints.fullFormBased = this.hasMatchingForms(partOfSpeech, inflection)
-        }
-
-        if (!inflection.constraints.fullFormBased && !inflection.constraints.paradigmBased) {
-          // If it is not full form based, then probably it is suffix base
-          inflection.constraints.suffixBased = true
-        }
-
         // Inflections are grouped by part of speech
-        if (!inflections.has(partOfSpeech)) { inflections.set(partOfSpeech, []) }
-        inflections.get(partOfSpeech).push(inflection)
+        inflection = this.setInflectionData(inflection, lexeme.lemma)
+        let pofsValue = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value
+        if (!inflections.has(pofsValue)) { inflections.set(pofsValue, []) }
+        inflections.get(pofsValue).push(inflection)
       }
     }
     return inflections
   }
 
-  getInflectionData (homonym) {
-    // Add support for languages
-    let result = new _inflection_data_js__WEBPACK_IMPORTED_MODULE_6__["default"](homonym)
-    let inflections = this.getGroupedInflections(homonym)
+  /**
+   *
+   * @param pofsValue
+   * @param inflections
+   * @return {InflectionSet}
+   */
+  createInflectionSet (pofsValue, inflections) {
+    let inflectionSet = new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](pofsValue, this.languageID)
+    inflectionSet.inflections = inflections
 
-    // Scan for matches for all parts of speech separately
-    for (const [partOfSpeech, inflectionsGroup] of inflections.entries()) {
-      let inflectionSet = new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech)
-      let sourceSet = this.pos.get(partOfSpeech)
-      if (!sourceSet) {
-        // There is no source data for this part of speech
-        console.warn(`There is no source data for the following part of speech: ${partOfSpeech}`)
-        continue
-      }
+    let sourceSet = this.pos.get(pofsValue)
+    if (!sourceSet) {
+      // There is no source data for this part of speech
+      console.warn(`There is no source data for the following part of speech: ${pofsValue}`)
+      return inflectionSet
+    }
 
-      /*
-        There might be cases when we don't know beforehand if an inflection is form based.
-        In this case, if `fullFormBased` constraint not set, we'll try to find matching forms within a source data.
-        If any found, `fullFormBased` constraint will be set to true.
-      */
+    /*
+      There might be cases when we don't know beforehand if an inflection is form based.
+      In this case, if `fullFormBased` constraint not set, we'll try to find matching forms within a source data.
+      If any found, `fullFormBased` constraint will be set to true.
+    */
 
-      // If at least one inflection in a group has a constraint, we'll search for data based on that criteria
-      let suffixBased = inflectionsGroup.some(i => i.constraints.suffixBased)
-      let formBased = inflectionsGroup.some(i => i.constraints.fullFormBased)
-      let paradigmBased = inflectionsGroup.some(i => i.constraints.paradigmBased)
+    // If at least one inflection in a group has a constraint, we'll search for data based on that criteria
+    let suffixBased = inflections.some(i => i.constraints.suffixBased)
+    let formBased = inflections.some(i => i.constraints.fullFormBased)
+    let paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
-      // Check for suffix matches
-      if (suffixBased) {
-        if (sourceSet.types.has(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"])) {
-          let items = sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]).items.reduce(this['reducer'].bind(this, inflectionsGroup), [])
-          if (items.length > 0) {
-            inflectionSet.addInflectionItems(items)
-          }
-        }
-      }
-
-      // If there is at least on full form based inflection, search for full form items
-      if (formBased) {
-        let items = sourceSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.reduce(this['reducer'].bind(this, inflectionsGroup), [])
+    // Check for suffix matches
+    if (suffixBased) {
+      if (sourceSet.types.has(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"])) {
+        let items = sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]).items.reduce(this['reducer'].bind(this, inflections), [])
         if (items.length > 0) {
           inflectionSet.addInflectionItems(items)
         }
       }
+    }
 
-      // Get paradigm matches
-      if (paradigmBased) {
-        let paradigmIDs = []
-        for (let inflection of inflectionsGroup) {
-          if (inflection.constraints.paradigmBased) {
-            let matchingParadigms = sourceSet.getMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflection)
-            // Make sure all paradigms are unique
-            for (const paradigm of matchingParadigms) {
-              if (!paradigmIDs.includes(paradigm.id)) {
-                inflectionSet.addInflectionItem(paradigm)
-                paradigmIDs.push(paradigm.id)
-              }
+    // If there is at least on full form based inflection, search for full form items
+    if (formBased) {
+      let items = sourceSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.reduce(this['reducer'].bind(this, inflections), [])
+      if (items.length > 0) {
+        inflectionSet.addInflectionItems(items)
+      }
+    }
+
+    // Get paradigm matches
+    if (paradigmBased) {
+      let paradigmIDs = []
+      for (let inflection of inflections) {
+        if (inflection.constraints.paradigmBased) {
+          let matchingParadigms = sourceSet.getMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflection)
+          // Make sure all paradigms are unique
+          for (const paradigm of matchingParadigms) {
+            if (!paradigmIDs.includes(paradigm.id)) {
+              inflectionSet.addInflectionItem(paradigm)
+              paradigmIDs.push(paradigm.id)
             }
           }
         }
       }
+    }
 
-      if (inflectionSet.hasTypes) {
-        for (const inflectionType of inflectionSet.inflectionTypes) {
-          let footnotesSource = sourceSet.types.get(inflectionType).footnotesMap
-          const footnotesInUse = inflectionSet.types.get(inflectionType).footnotesInUse
-          for (let footnote of footnotesSource.values()) {
-            if (footnotesInUse.includes(footnote.index)) {
-              inflectionSet.addFootnote(inflectionType, footnote.index, footnote)
-            }
+    // Add footnotes
+    if (inflectionSet.hasTypes) {
+      for (const inflectionType of inflectionSet.inflectionTypes) {
+        let footnotesSource = sourceSet.types.get(inflectionType).footnotesMap
+        const footnotesInUse = inflectionSet.types.get(inflectionType).footnotesInUse
+        for (let footnote of footnotesSource.values()) {
+          if (footnotesInUse.includes(footnote.index)) {
+            inflectionSet.addFootnote(inflectionType, footnote.index, footnote)
           }
         }
-        result.addInflectionSet(inflectionSet)
       }
+    }
+
+    return inflectionSet
+  }
+
+  getInflectionData (homonym) {
+    // Add support for languages
+    let result = new _inflection_data_js__WEBPACK_IMPORTED_MODULE_6__["default"](homonym)
+    let inflections = this.groupInflections(homonym)
+
+    // Scan for matches for all parts of speech separately
+    for (const [pofsValue, inflectionsGroup] of inflections.entries()) {
+      let inflectionSet = this.createInflectionSet(pofsValue, inflectionsGroup)
+      result.addInflectionSet(inflectionSet)
     }
     return result
   }
@@ -12679,7 +12728,7 @@ class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adj
     this.id = 'adjectiveDeclensionSimplified'
     this.name = 'adjective declension simplified'
     this.title = 'Adjective declension (simplified)'
-    this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
     const genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
     const genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
@@ -12699,8 +12748,8 @@ class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adj
     this.table.suffixCellFilter = GreekAdjectiveSimplifiedView.suffixCellFilter
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE]
   }
 
   static get inflectionType () {
@@ -12744,7 +12793,7 @@ class GreekAdjectiveView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORT
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
-    this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
     const genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
     const genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
@@ -12762,8 +12811,8 @@ class GreekAdjectiveView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORT
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE]
   }
 
   static get inflectionType () {
@@ -12800,7 +12849,7 @@ class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["defa
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
 
-    this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.inflectionType = _lib_form_js__WEBPACK_IMPORTED_MODULE_1__["default"]
 
     this.id = 'articleDeclension'
@@ -12823,8 +12872,8 @@ class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["defa
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE]
   }
 
   static get inflectionType () {
@@ -12841,9 +12890,9 @@ class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["defa
     features.fullWidthRowTitles = [this.featureTypes.numbers]
   }
 
-  static getMorphemes (inflectionData) {
+  getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
-      .types.get(this.inflectionType).items
+      .types.get(this.constructor.inflectionType).items
   }
 }
 
@@ -13038,8 +13087,8 @@ class GreekNounSimplifiedView extends _greek_noun_view__WEBPACK_IMPORTED_MODULE_
     this.table.suffixCellFilter = GreekNounSimplifiedView.suffixCellFilter
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN]
   }
 
   static get inflectionType () {
@@ -13101,8 +13150,8 @@ class GreekNounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["default
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN]
   }
 
   static get inflectionType () {
@@ -13142,7 +13191,7 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     this.id = 'numeralDeclension'
     this.name = 'numeral declension'
     this.title = 'Numeral declension'
-    this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.inflectionType = _lib_form_js__WEBPACK_IMPORTED_MODULE_1__["default"]
 
     this.featureTypes = {}
@@ -13198,8 +13247,8 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL]
   }
 
   static get inflectionType () {
@@ -13215,9 +13264,9 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     features.fullWidthRowTitles = [this.featureTypes.numbers]
   }
 
-  static getMorphemes (inflectionData) {
+  getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
-      .types.get(this.inflectionType).items
+      .types.get(this.constructor.inflectionType).items
   }
 }
 
@@ -13552,8 +13601,8 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     }
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN]
   }
 
   static get inflectionType () {
@@ -13570,15 +13619,15 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
   }
 
   static getID (grammarClass) {
-    return `${grammarClass}${_lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(GreekPronounView.partOfSpeech)}Declension`
+    return `${grammarClass}${_lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(GreekPronounView.mainPartOfSpeech)}Declension`
   }
 
   static getName (grammarClass) {
-    return `${grammarClass} ${GreekPronounView.partOfSpeech} declension`
+    return `${grammarClass} ${GreekPronounView.mainPartOfSpeech} declension`
   }
 
   static getTitle (grammarClass) {
-    return _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(`${grammarClass} ${GreekPronounView.partOfSpeech} Declension`).trim()
+    return _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(`${grammarClass} ${GreekPronounView.mainPartOfSpeech} Declension`).trim()
   }
 
   /**
@@ -13591,8 +13640,8 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
    * @return {boolean}
    */
   static matchFilter (inflection, inflectionData) {
-    if (this.languageID === inflection.languageID && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech) {
-      let inflectionSet = inflectionData.pos.get(this.partOfSpeech)
+    if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
+      let inflectionSet = inflectionData.pos.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)
       if (inflectionSet.types.has(this.inflectionType)) {
         let inflections = inflectionSet.types.get(this.inflectionType)
         let found = inflections.items.find(form => {
@@ -13610,11 +13659,11 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     return false
   }
 
-  static getMorphemes (inflectionData) {
+  getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
-      .types.get(this.inflectionType).items
+      .types.get(this.constructor.inflectionType).items
       .filter(item => item.features.hasOwnProperty(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass) &&
-            item.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass].hasSomeValues(this.classes)
+            item.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass].hasSomeValues(this.constructor.classes)
       )
   }
 }
@@ -13639,8 +13688,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class GreekVerbParticipleParadigmView extends _verb_greek_verb_paradigm_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE]
   }
 }
 
@@ -13711,8 +13760,8 @@ class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__[
     this.creditsText = this.paradigm.creditsText
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB]
   }
 
   static get inflectionType () {
@@ -13729,15 +13778,15 @@ class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__[
   }
 
   static getID (grammarClass) {
-    return `${grammarClass}${_lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(GreekVerbParadigmView.partOfSpeech)}Paradigm`
+    return `${grammarClass}${_lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(GreekVerbParadigmView.mainPartOfSpeech)}Paradigm`
   }
 
   static getName (grammarClass) {
-    return `${grammarClass} ${GreekVerbParadigmView.partOfSpeech} paradigm`
+    return `${grammarClass} ${GreekVerbParadigmView.mainPartOfSpeech} paradigm`
   }
 
   static getTitle (grammarClass) {
-    return _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(`${grammarClass} ${GreekVerbParadigmView.partOfSpeech} Paradigm`).trim()
+    return _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(`${grammarClass} ${GreekVerbParadigmView.mainPartOfSpeech} Paradigm`).trim()
   }
 
   /**
@@ -13749,8 +13798,8 @@ class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__[
    * @return {boolean}
    */
   static matchFilter (inflection, inflectionData) {
-    if (this.languageID === inflection.languageID && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech) {
-      let inflectionSet = inflectionData.pos.get(this.partOfSpeech)
+    if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
+      let inflectionSet = inflectionData.pos.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)
       if (inflectionSet.types.has(this.inflectionType)) {
         return true
       }
@@ -13760,7 +13809,7 @@ class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__[
 
   static getMatchingInstances (inflection, inflectionData, messages) {
     if (this.matchFilter(inflection, inflectionData)) {
-      let paradigms = inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items
+      let paradigms = inflectionData.pos.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value).types.get(this.inflectionType).items
       return paradigms.map(paradigm => new this(paradigm, inflectionData, messages))
     }
     return []
@@ -13823,7 +13872,7 @@ class LatinAdjectiveView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_3__["de
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
-    this.partOfSpeech = LatinAdjectiveView.partOfSpeech
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.inflectionType = _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_2__["default"].SUFFIX
 
     // Feature that are different from base class values
@@ -13835,8 +13884,8 @@ class LatinAdjectiveView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_3__["de
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE]
   }
 
   static get inflectionType () {
@@ -14032,6 +14081,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../lib/suffix.js */ "./lib/suffix.js");
 /* harmony import */ var _latin_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../latin-view.js */ "./views/lang/latin/latin-view.js");
 /* harmony import */ var _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../lib/group-feature-type */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
+
 
 
 
@@ -14050,12 +14101,29 @@ class LatinNounView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN]
   }
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
+  }
+
+  static getStandardFormInflection (id) {
+    let sfi1 = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Inflection"]('standard form stem', LatinNounView.languageID, 'standard form suffix')
+    sfi1.addFeature(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN, LatinNounView.languageID))
+    let lfl1 = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Lemma"]('standard form word', LatinNounView.languageID)
+    let sflx1 = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Lexeme"](lfl1, [sfi1])
+    let sfh1 = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Homonym"]([sflx1], _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"])
+    return sfh1
+  }
+
+  static createStandardFormInstance (id) {
+    let homonym = this.getStandardFormInflection(id)
+    let dataset = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_4__["default"].getDataset(this.languageID)
+    let inflectionData = dataset.getInflectionData(homonym)
+    let view = new LatinNounView(inflectionData, `en-US`)
+    return view
   }
 }
 
@@ -14087,7 +14155,7 @@ __webpack_require__.r(__webpack_exports__);
 class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
-    this.partOfSpeech = LatinSupineView.partOfSpeech
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.id = 'verbSupine'
     this.name = 'supine'
     this.title = 'Supine'
@@ -14104,8 +14172,8 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE]
   }
 
   static get inflectionType () {
@@ -14299,7 +14367,7 @@ class LatinImperativeView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
    */
   static matchFilter (inflection, inflectionData) {
     return (this.languageID === inflection.languageID &&
-      inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech &&
+      this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value) &&
       this.enabledForLexemes(inflectionData.homonym.lexemes))
   }
 
@@ -14382,7 +14450,7 @@ class LatinInfinitiveView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
    */
   static matchFilter (inflection, inflectionData) {
     return (this.languageID === inflection.languageID &&
-      inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech &&
+      this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value) &&
       this.enabledForLexemes(inflectionData.homonym.lexemes))
   }
 
@@ -14568,7 +14636,7 @@ __webpack_require__.r(__webpack_exports__);
 class LatinVerbParticipleView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
   constructor (inflectionData, locale) {
     super(inflectionData, locale)
-    this.partOfSpeech = LatinVerbParticipleView.partOfSpeech
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.id = 'verbParticiple'
     this.name = 'participle'
     this.title = 'Participle'
@@ -14582,8 +14650,8 @@ class LatinVerbParticipleView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2_
     this.createTable()
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE]
   }
 
   static get inflectionType () {
@@ -14600,6 +14668,13 @@ class LatinVerbParticipleView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2_
     features.rows = [this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense]]
     features.columnRowTitles = [this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense]]
     features.fullWidthRowTitles = []
+  }
+
+  static getMatchingInstances (inflection, inflectionData, messages) {
+    if (this.matchFilter(inflection, inflectionData)) {
+      return [new this(inflectionData, messages)]
+    }
+    return []
   }
 }
 
@@ -14660,8 +14735,8 @@ class LatinVerbView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_1__["default
     }
   }
 
-  static get partOfSpeech () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB]
   }
 }
 
@@ -16478,6 +16553,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
+/* harmony import */ var _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lang/latin/noun/latin-noun-view.js */ "./views/lang/latin/noun/latin-noun-view.js");
+
 
 
 /**
@@ -16492,6 +16569,7 @@ class ViewSet {
   constructor (homonym, locale) {
     this.homonym = homonym
     this.languageID = homonym.languageID
+    console.log(`Viewset constructor`)
 
     /**
      * Whether inflections are enabled for the homonym's language
@@ -16501,12 +16579,16 @@ class ViewSet {
     this.locale = locale
     this.matchingViewsMap = new Map()
 
+    let nounSFView1 = _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].createStandardFormInstance('sf1')
+    console.log(nounSFView1)
+
     if (this.enabled) {
       this.inflectionData = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getInflectionData(this.homonym)
       for (const lexeme of this.homonym.lexemes) {
         for (const inflection of lexeme.inflections) {
-          const matchingInstances = this.constructor.views.reduce(
-            (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), [])
+          /* const matchingInstances = this.constructor.views.reduce(
+            (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), []) */
+          let matchingInstances = [nounSFView1]
           if (matchingInstances.length > 0) {
             // There are any matching instances found
             if (!this.matchingViewsMap.has(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
@@ -16607,6 +16689,8 @@ class View {
     this.inflectionData = inflectionData
     this.messages = _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_2__["default"].getMessages(locale)
     this.pageHeader = {}
+    // A view can be rendered for different parts of speech. This is a part of speech this view currently uses
+    this.partOfSpeech = this.constructor.mainPartOfSpeech
 
     // An HTML element where this view is rendered
     this.container = undefined
@@ -16641,10 +16725,24 @@ class View {
   }
 
   /**
-   * Defines a part of speech of a view. Should be redefined in child classes.
-   * @return {string | undefined}
+   * Defines one or several parts of speech of a view.
+   * These are parts of speech for which a view will be rendered.
+   * Should be redefined in child classes.
+   * @return {string[] | []} A list of part of speech names.
+   * An empty array if not defined.
    */
-  static get partOfSpeech () {
+  static get partsOfSpeech () {
+    return []
+  }
+
+  /**
+   * Returns a main part of speech of a view: a part of speech for which this view is defined.
+   * It is always the first view in parts of speech array. If no parts of speech defined,
+   * returns an empty string.
+   * @return {string} A main part of speech name. An empty string in not defined.
+   */
+  static get mainPartOfSpeech () {
+    return this.partsOfSpeech.length > 0 ? this.partsOfSpeech[0] : ''
   }
 
   /**
@@ -16668,7 +16766,7 @@ class View {
    * @return {boolean}
    */
   static matchFilter (inflection, inflectionData) {
-    return (this.languageID === inflection.languageID && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.partOfSpeech)
+    return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value))
   }
 
   /**
@@ -16718,12 +16816,12 @@ class View {
     this.table.messages = this.messages
     for (let lexeme of this.inflectionData.homonym.lexemes) {
       for (let inflection of lexeme.inflections) {
-        if (inflection['part of speech'].values.includes(this.constructor.partOfSpeech)) {
+        if (inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].values.includes(this.partOfSpeech)) {
           this.forms.add(inflection.form)
         }
       }
     }
-    this.table.construct(this.constructor.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
+    this.table.construct(this.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
     return this
   }
 
@@ -16732,8 +16830,8 @@ class View {
    * By default, it returns suffixes
    * @param {InflectionData} inflectionData
    */
-  static getMorphemes (inflectionData) {
-    return inflectionData.pos.get(this.partOfSpeech).types.get(this.inflectionType).items
+  getMorphemes (inflectionData) {
+    return inflectionData.pos.get(this.partOfSpeech).types.get(this.constructor.inflectionType).items
   }
 
   /**
@@ -16741,7 +16839,7 @@ class View {
    * @param {InflectionData} inflectionData
    */
   getFootnotes (inflectionData) {
-    return inflectionData.pos.get(this.constructor.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
+    return inflectionData.pos.get(this.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
   }
 
   get wideViewNodes () {
