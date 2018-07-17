@@ -66,7 +66,8 @@
     "moduleNameMapper": {
       "^vue$": "vue/dist/vue.common.js",
       "^@lib[/](.+)": "<rootDir>/lib/$1",
-      "^@views[/](.+)": "<rootDir>/views/$1"
+      "^@views[/](.+)": "<rootDir>/views/$1",
+      "^@tests[/](.+)": "<rootDir>/tests2/$1"
     },
     "moduleFileExtensions": [
       "js",
