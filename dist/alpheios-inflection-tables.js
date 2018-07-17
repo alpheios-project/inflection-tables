@@ -2415,24 +2415,14 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   static getOptionalMatchList (inflection) {
     let featureOptions = []
 
-    /*    const GEND_MASCULINE_FEMININE = 'masculine feminine'
-    const GEND_MASCULINE_FEMININE_NEUTER = 'masculine feminine neuter'
-    let wideGenders = new Feature(
-      Feature.types.gender,
-      [Constants.GEND_MASCULINE, Constants.GEND_FEMININE, GEND_MASCULINE_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
-      this.languageID
-    ) */
-
     if ([alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE].includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
       featureOptions = [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
-        // new GroupFeatureType(wideGenders, 'Gender'),
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number
       ]
     } else if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)) {
       featureOptions = [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
-        // new GroupFeatureType(wideGenders, 'Gender'),
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension
       ]
@@ -2449,7 +2439,6 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       ]
     }
 
-    // console.info('***************************featureOptions', featureOptions)
     return featureOptions.filter(f => inflection[f])
   }
 }

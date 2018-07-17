@@ -42,7 +42,7 @@ describe('greek-language-dataset.test.js', () => {
   afterAll(() => {
     jest.clearAllMocks()
   })
-  /*
+
   it('1 GreekLanguageDataset - constructor creates with features', () => {
     let GLD = new GreekLanguageDataset()
 
@@ -546,7 +546,7 @@ describe('greek-language-dataset.test.js', () => {
 
     expect(GreekLanguageDataset.getObligatoryMatchList(inflectionVerbParticiple)).toEqual([Feature.types.part])
   })
-*/
+
   it('20 GreekLanguageDataset - getOptionalMatchList returns different conditions for different parts of speech', () => {
     const GEND_MASCULINE_FEMININE = 'masculine feminine'
     const GEND_MASCULINE_FEMININE_NEUTER = 'masculine feminine neuter'
@@ -576,6 +576,51 @@ describe('greek-language-dataset.test.js', () => {
     inflectionAdjective.addFeature(new Feature(Feature.types.gender, 'masculine feminine', Constants.LANG_GREEK))
     inflectionAdjective.addFeature(new Feature(Feature.types.number, 'singular', Constants.LANG_GREEK))
 
-    expect(GreekLanguageDataset.getOptionalMatchList(inflectionAdjective)).toEqual([Feature.types.grmCase, Feature.types.gender, Feature.types.number, Feature.types.declension])
+    expect(GreekLanguageDataset.getOptionalMatchList(inflectionAdjective)).toEqual([Feature.types.grmCase, Feature.types.number, Feature.types.declension])
+
+    let inflectionPronoun = new Inflection('ξηρή', 'grc')
+    inflectionPronoun.addFeature(new Feature(Feature.types.part, Constants.POFS_PRONOUN, Constants.LANG_GREEK))
+    inflectionPronoun.addFeature(new Feature(Feature.types.grmCase, 'nominative', Constants.LANG_GREEK))
+    inflectionPronoun.addFeature(new Feature(Feature.types.declension, '1st', Constants.LANG_GREEK))
+    inflectionPronoun.addFeature(new Feature(Feature.types.dialect, 'epic Ionic', Constants.LANG_GREEK))
+    inflectionPronoun.addFeature(new Feature(Feature.types.fullForm, 'ξηρή', Constants.LANG_GREEK))
+    inflectionPronoun.addFeature(new Feature(Feature.types.gender, 'masculine feminine', Constants.LANG_GREEK))
+    inflectionPronoun.addFeature(new Feature(Feature.types.number, 'singular', Constants.LANG_GREEK))
+
+    expect(GreekLanguageDataset.getOptionalMatchList(inflectionPronoun)).toEqual([Feature.types.grmCase, Feature.types.number])
+
+    let inflectionArticle = new Inflection('ξηρή', 'grc')
+    inflectionArticle.addFeature(new Feature(Feature.types.part, Constants.POFS_ARTICLE, Constants.LANG_GREEK))
+    inflectionArticle.addFeature(new Feature(Feature.types.grmCase, 'nominative', Constants.LANG_GREEK))
+    inflectionArticle.addFeature(new Feature(Feature.types.declension, '1st', Constants.LANG_GREEK))
+    inflectionArticle.addFeature(new Feature(Feature.types.dialect, 'epic Ionic', Constants.LANG_GREEK))
+    inflectionArticle.addFeature(new Feature(Feature.types.fullForm, 'ξηρή', Constants.LANG_GREEK))
+    inflectionArticle.addFeature(new Feature(Feature.types.gender, 'masculine feminine', Constants.LANG_GREEK))
+    inflectionArticle.addFeature(new Feature(Feature.types.number, 'singular', Constants.LANG_GREEK))
+
+    expect(GreekLanguageDataset.getOptionalMatchList(inflectionArticle)).toEqual([Feature.types.grmCase, Feature.types.number])
+
+    let inflectionNumeral = new Inflection('ξηρή', 'grc')
+    inflectionNumeral.addFeature(new Feature(Feature.types.part, Constants.POFS_NUMERAL, Constants.LANG_GREEK))
+    inflectionNumeral.addFeature(new Feature(Feature.types.grmCase, 'nominative', Constants.LANG_GREEK))
+    inflectionNumeral.addFeature(new Feature(Feature.types.declension, '1st', Constants.LANG_GREEK))
+    inflectionNumeral.addFeature(new Feature(Feature.types.dialect, 'epic Ionic', Constants.LANG_GREEK))
+    inflectionNumeral.addFeature(new Feature(Feature.types.fullForm, 'ξηρή', Constants.LANG_GREEK))
+    inflectionNumeral.addFeature(new Feature(Feature.types.gender, 'masculine feminine', Constants.LANG_GREEK))
+    inflectionNumeral.addFeature(new Feature(Feature.types.number, 'singular', Constants.LANG_GREEK))
+
+    expect(GreekLanguageDataset.getOptionalMatchList(inflectionNumeral)).toEqual([Feature.types.grmCase, Feature.types.number])
+
+    let inflectionVerb = new Inflection('ξηρή', 'grc')
+    inflectionVerb.addFeature(new Feature(Feature.types.part, Constants.POFS_VERB, Constants.LANG_GREEK))
+    inflectionVerb.addFeature(new Feature(Feature.types.dialect, 'epic Ionic', Constants.LANG_GREEK))
+    inflectionVerb.addFeature(new Feature(Feature.types.fullForm, 'ξηρή', Constants.LANG_GREEK))
+    inflectionVerb.addFeature(new Feature(Feature.types.number, 'singular', Constants.LANG_GREEK))
+    inflectionVerb.addFeature(new Feature(Feature.types.voice, 'mediopassive', Constants.LANG_GREEK))
+    inflectionVerb.addFeature(new Feature(Feature.types.mood, 'indicative', Constants.LANG_GREEK))
+    inflectionVerb.addFeature(new Feature(Feature.types.tense, 'present', Constants.LANG_GREEK))
+    inflectionVerb.addFeature(new Feature(Feature.types.person, '2nd', Constants.LANG_GREEK))
+
+    expect(GreekLanguageDataset.getOptionalMatchList(inflectionVerb)).toEqual([Feature.types.number, Feature.types.voice, Feature.types.mood, Feature.types.tense, Feature.types.person])
   })
 })
