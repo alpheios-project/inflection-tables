@@ -3285,6 +3285,7 @@ class LanguageDataset {
   }
 
   static checkMatches (matchList, inflection, item) {
+    // console.info('********************************checkMatches', matchList, inflection, item)
     let matches = matchList.reduce((acc, f) => {
       if (inflection.hasOwnProperty(f) && item.features.hasOwnProperty(f) && item.featureMatch(inflection[f])) {
         acc.push(f)
@@ -3752,6 +3753,8 @@ class Morpheme {
     if (feature && this.features.hasOwnProperty(feature.type)) {
       const morphemeValue = this.features[feature.type]
 
+      /* console.info('********************matchingValues 1', morphemeValue.value, '-', feature.value)
+      console.info('********************matchingValues 2', feature.isMultiple, morphemeValue.values, '-', feature.values) */
       if (morphemeValue.value === feature.value) {
         matches.push(feature.value)
       } else if (feature.isMultiple) {
@@ -16860,6 +16863,8 @@ class ViewSet {
       }
     }
     this.partsOfSpeech = Array.from(new Set(this.matchingViews.map(view => view.constructor.partOfSpeech)))
+
+    console.info('*****************inflectionData', inflectionData)
   }
 
   get hasMatchingViews () {

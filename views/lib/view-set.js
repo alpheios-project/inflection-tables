@@ -88,6 +88,8 @@ export default class ViewSet {
       }
     }
     this.partsOfSpeech = Array.from(new Set(this.matchingViews.map(view => view.constructor.partOfSpeech)))
+
+    console.info('*****************inflectionData', inflectionData)
   }
 
   get hasMatchingViews () {
