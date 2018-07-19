@@ -3285,7 +3285,6 @@ class LanguageDataset {
   }
 
   static checkMatches (matchList, inflection, item) {
-    // console.info('********************************checkMatches', matchList, inflection, item)
     let matches = matchList.reduce((acc, f) => {
       if (inflection.hasOwnProperty(f) && item.features.hasOwnProperty(f) && item.featureMatch(inflection[f])) {
         acc.push(f)
@@ -3450,7 +3449,9 @@ class LanguageDataset {
         }
       }
     }
-
+    /*    console.info('****************************************************')
+    console.info('***************************getInflectionData homonym', homonym)
+    console.info('***************************getInflectionData result', result) */
     return result
   }
 
@@ -3481,6 +3482,7 @@ class LanguageDataset {
    * additional information about a match. if no matches found, returns null.
    */
   matcher (inflections, item) {
+    console.info('*********************matcher1', item)
     // Any of those features must match between an inflection and an ending
     let bestMatchData = null // information about the best match we would be able to find
 
@@ -3517,6 +3519,7 @@ class LanguageDataset {
         // There can be only one full match, no need to search any further
         item.match = matchData
 
+        console.info('*********************matcher2', item)
         return item
       }
       bestMatchData = this.bestMatch(bestMatchData, matchData)
@@ -3524,8 +3527,10 @@ class LanguageDataset {
     if (bestMatchData) {
       // There is some match found
       item.match = bestMatchData
+      console.info('*********************matcher3', item)
       return item
     }
+    console.info('*********************matcher4', null)
     return null
   }
 
