@@ -3449,9 +3449,6 @@ class LanguageDataset {
         }
       }
     }
-    /*    console.info('****************************************************')
-    console.info('***************************getInflectionData homonym', homonym)
-    console.info('***************************getInflectionData result', result) */
     return result
   }
 
@@ -3482,7 +3479,6 @@ class LanguageDataset {
    * additional information about a match. if no matches found, returns null.
    */
   matcher (inflections, item) {
-    console.info('*********************matcher1', item)
     // Any of those features must match between an inflection and an ending
     let bestMatchData = null // information about the best match we would be able to find
 
@@ -3499,7 +3495,6 @@ class LanguageDataset {
       // Check for obligatory matches
 
       const obligatoryMatches = this.constructor.getObligatoryMatches(inflection, item)
-
       if (obligatoryMatches.fullMatch) {
         matchData.matchedFeatures.push(...obligatoryMatches.matchedItems)
       } else {
@@ -3519,7 +3514,6 @@ class LanguageDataset {
         // There can be only one full match, no need to search any further
         item.match = matchData
 
-        console.info('*********************matcher2', item)
         return item
       }
       bestMatchData = this.bestMatch(bestMatchData, matchData)
@@ -3527,10 +3521,8 @@ class LanguageDataset {
     if (bestMatchData) {
       // There is some match found
       item.match = bestMatchData
-      console.info('*********************matcher3', item)
       return item
     }
-    console.info('*********************matcher4', null)
     return null
   }
 
@@ -3758,8 +3750,6 @@ class Morpheme {
     if (feature && this.features.hasOwnProperty(feature.type)) {
       const morphemeValue = this.features[feature.type]
 
-      /* console.info('********************matchingValues 1', morphemeValue.value, '-', feature.value)
-      console.info('********************matchingValues 2', feature.isMultiple, morphemeValue.values, '-', feature.values) */
       if (morphemeValue.value === feature.value) {
         matches.push(feature.value)
       } else if (feature.isMultiple) {
@@ -3806,6 +3796,7 @@ class Morpheme {
    */
   isInSameGroupWith (suffix) {
     let commonGroups = Morpheme.getCommonGroups([this, suffix])
+    // console.info('*******************commonGroups', commonGroups)
     if (commonGroups.length < 1) {
       // If elements do not have common groups in Suffix.featureGroups then they are not in the same group
       return false
@@ -3825,10 +3816,10 @@ class Morpheme {
     for (let feature of Object.keys(this.features)) {
       if (commonGroups.indexOf(feature) >= 0) {
         commonValues[feature].add(suffix.features[feature])
-
         // Do not compare common groups
         continue
       }
+
       result = result && this.features[feature] === suffix.features[feature]
       // If feature mismatch discovered, do not check any further
       if (!result) {
@@ -4065,6 +4056,7 @@ class Paradigm {
           match = false
         }
       }
+      console.info('***************************paradigm matches', this, inflection, match)
       return match ? {paradigm: this, rule: rule} : undefined
     }
   }
@@ -16868,8 +16860,6 @@ class ViewSet {
       }
     }
     this.partsOfSpeech = Array.from(new Set(this.matchingViews.map(view => view.constructor.partOfSpeech)))
-
-    console.info('*****************inflectionData', inflectionData)
   }
 
   get hasMatchingViews () {

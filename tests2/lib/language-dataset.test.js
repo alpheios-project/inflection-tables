@@ -49,10 +49,7 @@ describe('language-dataset.test.js', () => {
   })
 
   it('1 LanguageDataset - constructor throw Error if languageID is not defined', () => {
-    expect(function () {
-      let LD = new LanguageDataset()
-      console.log(LD)
-    }).toThrow(new Error('Language ID cannot be empty.'))
+    expect(() => new LanguageDataset()).toThrow(new Error('Language ID cannot be empty.'))
   })
 
   it('2 LanguageDataset - constructor creates with common features for current languageID', () => {
