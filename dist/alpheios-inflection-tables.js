@@ -515,6 +515,8 @@ class InflectionData {
    * @return {Suffix[] | Form[]}
    */
   getMorphemes (partOfSpeech, inflectionType) {
+    console.info('**************************getMorphemes1', partOfSpeech, inflectionType)
+    console.info('**************************getMorphemes2', this.pos.get(partOfSpeech))
     if (this.pos.has(partOfSpeech)) {
       let inflectionSet = this.pos.get(partOfSpeech)
       if (inflectionSet.types.has(inflectionType)) {
@@ -3449,6 +3451,7 @@ class LanguageDataset {
         }
       }
     }
+    console.info('***************************getInflectionData', result)
     return result
   }
 
@@ -4056,7 +4059,7 @@ class Paradigm {
           match = false
         }
       }
-      console.info('***************************paradigm matches', this, inflection, match)
+      // console.info('***************************paradigm matches', this, inflection, match)
       return match ? {paradigm: this, rule: rule} : undefined
     }
   }
