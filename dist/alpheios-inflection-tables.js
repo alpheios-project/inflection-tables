@@ -15105,9 +15105,9 @@ class Cell {
    * @param {Feature[]} features - A list of features this cell corresponds to.
    */
   constructor (suffixes, features) {
-    console.log('****************************cell suffixes', suffixes)
+    /*    console.log('****************************cell suffixes', suffixes)
     console.log('****************************cell features', features)
-    console.log('*****************************************', features)
+    console.log('*****************************************', features) */
     this.suffixes = suffixes
     if (!this.suffixes) {
       this.suffixes = []
@@ -15307,6 +15307,7 @@ class Column {
    * @param {HeaderCell} headerCell - A header cell of this column.
    */
   set headerCell (headerCell) {
+    console.info('*************************headerCell', headerCell)
     this._headerCell = headerCell
     headerCell.addColumn(this)
   }
