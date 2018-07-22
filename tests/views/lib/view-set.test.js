@@ -32,7 +32,7 @@ describe('view-set.test.js', () => {
     set: jest.fn()
   })
 
-  L10n.getMessages = jest.fn(() => L10nJSON.getMessages)
+  L10n.getMessages = jest.fn((locale) => L10nJSON.getMessages(locale))
 
   beforeAll(async () => {
     maAdapter = new AlpheiosTuftsAdapter()
