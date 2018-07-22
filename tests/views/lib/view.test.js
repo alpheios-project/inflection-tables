@@ -17,10 +17,10 @@ import MessageBundle from '@l10n/message-bundle.js'
 import Form from '@lib/form.js'
 
 describe('view.test.js', () => {
-/*  console.error = function () {}
+  console.error = function () {}
   console.log = function () {}
   console.warn = function () {}
-*/
+
   let maAdapter, testHomonym, testInflectionData
   let testHomonymFailed, testInflectionDataFailed
 
@@ -174,5 +174,9 @@ describe('view.test.js', () => {
 
   it('15 View - toTitleCase - capitalize every word in the string', () => {
     expect(View.toTitleCase('TEST this cAse')).toEqual('Test This Case')
+  })
+
+  it('16 View - enabledForLexemes - returns true by default', () => {
+    expect(View.enabledForLexemes()).toBeTruthy()
   })
 })

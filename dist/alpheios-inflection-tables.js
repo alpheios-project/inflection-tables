@@ -515,8 +515,6 @@ class InflectionData {
    * @return {Suffix[] | Form[]}
    */
   getMorphemes (partOfSpeech, inflectionType) {
-    console.info('**************************getMorphemes1', partOfSpeech, inflectionType)
-    console.info('**************************getMorphemes2', this.pos.get(partOfSpeech))
     if (this.pos.has(partOfSpeech)) {
       let inflectionSet = this.pos.get(partOfSpeech)
       if (inflectionSet.types.has(inflectionType)) {
@@ -685,7 +683,7 @@ class InflectionSet {
   }
 
   getMatchingParadigms (inflection) {
-    console.log(`Matching paradigms`)
+    // console.log(`Matching paradigms`)
     if (this.types.has(_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"])) {
       const paradigms = this.types.get(_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"])
       return paradigms.getMatches(inflection).map(o => o.paradigm)
@@ -3451,7 +3449,6 @@ class LanguageDataset {
         }
       }
     }
-    console.info('***************************getInflectionData', result)
     return result
   }
 
@@ -15108,6 +15105,9 @@ class Cell {
    * @param {Feature[]} features - A list of features this cell corresponds to.
    */
   constructor (suffixes, features) {
+    console.log('****************************cell suffixes', suffixes)
+    console.log('****************************cell features', features)
+    console.log('*****************************************', features)
     this.suffixes = suffixes
     if (!this.suffixes) {
       this.suffixes = []

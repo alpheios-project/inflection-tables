@@ -7,6 +7,9 @@ export default class Cell {
    * @param {Feature[]} features - A list of features this cell corresponds to.
    */
   constructor (suffixes, features) {
+    /*    console.log('****************************cell suffixes', suffixes)
+    console.log('****************************cell features', features)
+    console.log('*****************************************', features) */
     this.suffixes = suffixes
     if (!this.suffixes) {
       this.suffixes = []
