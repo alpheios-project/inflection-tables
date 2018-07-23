@@ -421,14 +421,14 @@ class Footnote {
   constructor (index, text, partOfSpeech) {
     this.index = index
     this.text = text
-    this[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.part] = partOfSpeech
+    this[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] = partOfSpeech
   }
 
   static readObject (jsonObject) {
     this.index = jsonObject.index
     this.text = jsonObject.text
-    this[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.part] = jsonObject[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.part]
-    return new Footnote(jsonObject.index, jsonObject.text, jsonObject[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.part])
+    this[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] = jsonObject[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
+    return new Footnote(jsonObject.index, jsonObject.text, jsonObject[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part])
   }
 }
 
@@ -539,55 +539,6 @@ class InflectionData {
     }
     return new Map()
   }
-
-  /**
-   * Retrieves all variants of feature values for a given part of speech.
-   * @param partOfSpeech
-   * @param featureName
-   */
-  /* getFeatureValues (partOfSpeech, featureName) {
-    let values = []
-    if (this.pos.has(partOfSpeech)) {
-      for (const item of this[partOfSpeech].suffixes) {
-        if (item.hasOwnProperty('features') && item.features.hasOwnProperty(featureName)) {
-          let value = item.features[featureName]
-          if (!values.includes(value)) {
-            values.push(value)
-          }
-        }
-      }
-    }
-    return values
-  } */
-
-  // Probably we won't need it any more
-  /* static readObject (jsonObject) {
-    // let homonym = Models.Homonym.readObject(jsonObject.homonym)
-
-    let lexicalData = new InflectionData()
-    lexicalData[Models.GrmFeature.types.part] = jsonObject[Models.Feature.types.part]
-
-    for (let part of lexicalData[Models.Feature.types.part]) {
-      let partData = jsonObject[part]
-      lexicalData[part] = {}
-
-      if (partData.suffixes) {
-        lexicalData[part].suffixes = []
-        for (let suffix of partData.suffixes) {
-          lexicalData[part].suffixes.push(Suffix.readObject(suffix))
-        }
-      }
-
-      if (partData.footnotes) {
-        lexicalData[part].footnotes = []
-        for (let footnote of partData.footnotes) {
-          lexicalData[part].footnotes.push(Footnote.readObject(footnote))
-        }
-      }
-    }
-
-    return lexicalData
-  } */
 }
 
 
@@ -681,6 +632,12 @@ class InflectionSet {
     this.types.get(classType).addItems(items)
   }
 
+  /**
+   * Adds an InflectionSet to the existing one. All inflections of a foreign inflection set
+   * will be added to the current one. Inflection data items (Suffixes, Forms, Paradigms) will
+   * be added only if they do not exist in the current InflectionSet.
+   * @param inflectionSet
+   */
   addInflectionSet (inflectionSet) {
     if (this.languageID === inflectionSet.languageID && this.partOfSpeech === inflectionSet.partOfSpeech) {
       this.inflections.push(...inflectionSet.inflections)
@@ -693,27 +650,12 @@ class InflectionSet {
     }
   }
 
-  // TODO: Remove if not used
   /**
-   * Adds an `Inflections` group of certain type.
-   * @param {Inflections} inflectionsObject
+   * Adds a footnote object to inflection data of a specific class type.
+   * @param {Suffix | Form | Paradigm} classType.
+   * @param {number} index - A footnote index.
+   * @param {Footnote} footnote - A Footnote object.
    */
-  /* addInflectionsObject (inflectionsObject) {
-    if (!inflectionsObject) {
-      throw new Error(`Inflection items object must not be empty`)
-    }
-    if (!(inflectionsObject instanceof Inflections)) {
-      throw new Error(`Inflection items object must be of InflectionItems type`)
-    }
-
-    const type = inflectionsObject.type
-    if (!type) {
-      throw new Error(`Inflection items must have a valid type`)
-    }
-
-    this.types.set(type, inflectionsObject)
-  } */
-
   addFootnote (classType, index, footnote) {
     if (!this.types.has(classType)) {
       this.types.set(classType, new _inflections_js__WEBPACK_IMPORTED_MODULE_0__["default"](classType))
@@ -827,7 +769,7 @@ class Inflections {
    */
   get footnotesInUse () {
     let set = new Set()
-    // Scan all selected suffixes to build a unique set of footnote indexes
+    // Scan all selected morphemes to build a unique set of footnote indexes
     for (const item of this.items) {
       if (item.hasOwnProperty(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote)) {
         // Footnote indexes are stored in an array
@@ -2017,7 +1959,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   }
 
   // For noun and adjectives
-  addSuffixes (partOfSpeech, data) {
+  addSuffixes (partOfSpeech, data, pofsFootnotes) {
     // An order of columns in a data CSV file
     const n = {
       suffix: 0,
@@ -2031,6 +1973,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     }
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
     let noSuffixValue = '-'
+    let footnotes = []
 
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -2055,6 +1998,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         // There can be multiple footnote indexes separated by spaces
         let indexes = item[n.footnote].split(' ')
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote).createFeatures(indexes))
+        footnotes = pofsFootnotes.filter(f => indexes.includes(f.index))
       }
 
       let extendedGreekData = new _lib_extended_greek_data__WEBPACK_IMPORTED_MODULE_2__["default"]()
@@ -2062,7 +2006,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       let extendedLangData = {
         [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData
       }
-      this.addInflection(partOfSpeech.value, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], suffixValue, features, extendedLangData)
+      this.addInflection(partOfSpeech.value, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], suffixValue, features, footnotes, extendedLangData)
     }
   }
 
@@ -2098,12 +2042,12 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData
       }
 
-      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], formValue, features, extendedLangData)
+      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], formValue, features, [], extendedLangData)
     }
   }
 
   // For numerals
-  addNumeralForms (partOfSpeech, data) {
+  addNumeralForms (partOfSpeech, data, pofsFootnotes) {
     // An order of columns in a data CSV file
     // this.numeralGroupingLemmas = ['εἱς - μία - ἑν (1)', 'δύο (2)', 'τρεῖς - τρία (3)', 'τέτταρες - τέτταρα (4)']
     this.numeralGroupingLemmas = []
@@ -2118,6 +2062,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       primary: 6,
       footnote: 7
     }
+    let footnotes = []
 
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -2146,6 +2091,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         // There can be multiple footnote indexes separated by spaces
         let indexes = item[n.footnote].split(' ')
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote).createFeatures(indexes))
+        footnotes = pofsFootnotes.filter(f => indexes.includes(f.index))
       }
 
       let extendedGreekData = new _lib_extended_greek_data__WEBPACK_IMPORTED_MODULE_2__["default"]()
@@ -2160,12 +2106,12 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         return aN - bN
       })
 
-      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], form, features, extendedLangData)
+      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], form, features, footnotes, extendedLangData)
     }
   }
 
   // For pronoun
-  addPronounForms (partOfSpeech, data) {
+  addPronounForms (partOfSpeech, data, pofsFootnotes) {
     this.pronounGroupingLemmas = new Map([
       ['demonstrative', ['ὅδε', 'οὗτος', 'ἐκεῖνος']]
     ])
@@ -2184,6 +2130,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       dialect: 9,
       footnote: 10
     }
+    let footnotes = []
 
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -2218,6 +2165,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         // There can be multiple footnote indexes separated by spaces
         let indexes = item[n.footnote].split(' ')
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote).createFeatures(indexes))
+        footnotes = pofsFootnotes.filter(f => indexes.includes(f.index))
       }
 
       let extendedGreekData = new _lib_extended_greek_data__WEBPACK_IMPORTED_MODULE_2__["default"]()
@@ -2225,7 +2173,7 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       let extendedLangData = {
         [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]: extendedGreekData
       }
-      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], form, features, extendedLangData)
+      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], form, features, footnotes, extendedLangData)
     }
   }
 
@@ -2360,10 +2308,13 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   }
 
   addFootnotes (partOfSpeech, classType, data) {
+    let footnotes = []
     // First row are headers
     for (let i = 1; i < data.length; i++) {
-      this.addFootnote(partOfSpeech.value, classType, data[i][0], data[i][1])
+      const footnote = this.addFootnote(partOfSpeech.value, classType, data[i][0], data[i][1])
+      footnotes.push(footnote)
     }
+    return footnotes
   }
 
   loadData () {
@@ -2371,21 +2322,22 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     let suffixes
     let forms
     let paradigms
+    let pofsFootnotes
     let footnotes
 
     // Nouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN)
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], pofsFootnotes.data)
     suffixes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6___default.a, {})
-    this.addSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotes.data)
+    this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Adjective
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], pofsFootnotes.data)
     suffixes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, {})
-    this.addSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotes.data)
+    this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Articles
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE)
@@ -2394,17 +2346,17 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 
     // Pronouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], pofsFootnotes.data)
     forms = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {})
-    this.addPronounForms(partOfSpeech, forms.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], footnotes.data)
+    this.addPronounForms(partOfSpeech, forms.data, footnotes)
 
     // Numerals
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL)
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_12___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], pofsFootnotes.data)
     forms = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11___default.a, {})
-    this.addNumeralForms(partOfSpeech, forms.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_85___default.a.parse(_data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_12___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], footnotes.data)
+    this.addNumeralForms(partOfSpeech, forms.data, footnotes)
 
     // Verbs
     // Paradigms
@@ -2723,7 +2675,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   }
 
   // For noun and adjectives
-  addSuffixes (partOfSpeech, data) {
+  addSuffixes (partOfSpeech, data, pofsFootnotes) {
     // An order of columns in a data CSV file
     const n = {
       suffix: 0,
@@ -2736,6 +2688,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     }
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
     let noSuffixValue = '-'
+    let footnotes = []
 
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -2756,13 +2709,14 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         // There can be multiple footnote indexes separated by spaces
         let indexes = item[n.footnote].split(' ')
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote).createFeatures(indexes))
+        footnotes = pofsFootnotes.filter(f => indexes.includes(f.index))
       }
-      this.addInflection(partOfSpeech.value, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], suffix, features)
+      this.addInflection(partOfSpeech.value, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], suffix, features, footnotes)
     }
   }
 
   // For pronouns
-  addPronounForms (partOfSpeech, data) {
+  addPronounForms (partOfSpeech, data, pofsFootnotes) {
     const n = {
       formSet: 0,
       headword: 1,
@@ -2774,6 +2728,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       form: 7,
       footnote: 8
     }
+    let footnotes = []
 
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -2806,15 +2761,17 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         // There can be multiple footnote indexes separated by spaces
         let indexes = item[n.footnote].split(' ')
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote).createFeatures(indexes))
+        footnotes = pofsFootnotes.filter(f => indexes.includes(f.index))
       }
-      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], form, features)
+      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], form, features, footnotes)
     }
   }
 
   // For verbs
-  addVerbSuffixes (partOfSpeech, data) {
+  addVerbSuffixes (partOfSpeech, data, pofsFootnotes) {
     // Some suffix values will mean a lack of suffix, they will be mapped to a null
     let noSuffixValue = '-'
+    let footnotes = []
 
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -2854,8 +2811,9 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         // There can be multiple footnote indexes separated by spaces
         let indexes = item[9].split(' ')
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote).createFeatures(indexes))
+        footnotes = pofsFootnotes.filter(f => indexes.includes(f.index))
       }
-      this.addInflection(partOfSpeech.value, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], suffix, features)
+      this.addInflection(partOfSpeech.value, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], suffix, features, footnotes)
     }
   }
 
@@ -2943,7 +2901,8 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   }
 
   // for Lemmas
-  addVerbForms (partOfSpeech, data) {
+  addVerbForms (partOfSpeech, data, pofsFootnotes) {
+    let footnotes = []
     // First row are headers
     for (let i = 1; i < data.length; i++) {
       const item = data[i]
@@ -2977,55 +2936,61 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         // There can be multiple footnote indexes separated by spaces
         let indexes = item[8].split(' ')
         features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote).createFeatures(indexes))
+        footnotes = pofsFootnotes.filter(f => indexes.includes(f.index))
       }
-      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], form, features)
+      this.addInflection(partOfSpeech.value, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], form, features, footnotes)
     }
   }
 
   addFootnotes (partOfSpeech, classType, data) {
+    let footnotes = []
     // First row are headers
     for (let i = 1; i < data.length; i++) {
-      this.addFootnote(partOfSpeech.value, classType, data[i][0], data[i][1])
+      const footnote = this.addFootnote(partOfSpeech.value, classType, data[i][0], data[i][1])
+      footnotes.push(footnote)
     }
+    return footnotes
   }
 
   loadData () {
     let partOfSpeech
     let suffixes
     let forms
+    let footnotesData
     let footnotes
 
     // Nouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN)
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotesData.data)
     suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4___default.a, {})
-    this.addSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotes.data)
+    this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Pronouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotesData.data)
     forms = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6___default.a, {})
-    this.addPronounForms(partOfSpeech, forms.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotes.data)
+    this.addPronounForms(partOfSpeech, forms.data, footnotes)
 
     // Adjectives
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotesData.data)
     suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, {})
-    this.addSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotes.data)
+    this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Verbs
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB)
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotesData.data)
     suffixes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {})
-    this.addVerbSuffixes(partOfSpeech, suffixes.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotes.data)
+    this.addVerbSuffixes(partOfSpeech, suffixes.data, footnotes)
+
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {})
+    footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotesData.data)
     forms = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12___default.a, {})
-    this.addVerbForms(partOfSpeech, forms.data)
-    footnotes = papaparse__WEBPACK_IMPORTED_MODULE_16___default.a.parse(_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {})
-    this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotes.data)
+    this.addVerbForms(partOfSpeech, forms.data, footnotes)
 
     // Verb Participles
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE)
@@ -3132,6 +3097,7 @@ class LanguageDatasetFactory {
 
   /**
    * Finds matching forms or suffixes for a homonym.
+   * @deprecated Will be removed when will have no usages
    * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
    * @return {InflectionData} A return value of an inflection query.
    */
@@ -3211,20 +3177,24 @@ class LanguageDataset {
    * @param {string} partOfSpeech - A part of speech this inflection belongs to.
    * @param {Function} ClassType - either Suffix, Form, or Paradigm
    * @param {string | null} itemValue - A text of an item. It is either a string or null if there is no suffix.
-   * @param {Feature[]} features.
+   * @param {Feature[]} features - An array of Feature objects.
+   * @param {Footnote[]} footnotes - Footnotes in an array.
    * @param {ExtendedLanguageData} extendedLangData
    */
-  addInflection (partOfSpeech, ClassType, itemValue, features, extendedLangData = undefined) {
+  addInflection (partOfSpeech, ClassType, itemValue, features, footnotes = [], extendedLangData = undefined) {
     let item = new ClassType(itemValue)
     item.extendedLangData = extendedLangData
 
     // Go through all features provided
     for (let feature of features) {
-      // If this is a footnote. Footnotes should go in a flat array
-      // because we don't need to split by them
+      /*
+      Footnotes are special because they are stored as both single or multi-value feature and
+      as an array of Footnote objects into a `footnote` prop (so they can be iterated over during table construction)
+       */
       if (feature.type === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote) {
         item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote] = item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote] || []
-        item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote].push(feature.value)
+        item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote].push(...feature.values)
+        item.footnotes = footnotes
       } else {
         item.features[feature.type] = feature
       }
@@ -3250,6 +3220,7 @@ class LanguageDataset {
    * @param {Function} classType - A class constructor of either a Suffix or a Form
    * @param {number} index - A footnote's index.
    * @param {string} text - A footnote's text.
+   * @return {Footnote} A footnote object that was added to the language dataset.
    */
   addFootnote (partOfSpeech, classType, index, text) {
     if (!index) {
@@ -3268,6 +3239,7 @@ class LanguageDataset {
       this.pos.set(partOfSpeech, new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](partOfSpeech, this.languageID))
     }
     this.pos.get(partOfSpeech).addFootnote(classType, index, footnote)
+    return footnote
   }
 
   /**
@@ -3309,9 +3281,20 @@ class LanguageDataset {
   /**
    * Sets inflection grammar properties based on inflection data
    * @param {Inflection} inflection - An inflection data object
+   * @param {Lemma} lemma
    * @return {Inflection} A modified inflection data object
    */
   setInflectionData (inflection, lemma) {
+    /*
+     Sets possible constraints by language model. It uses part of speech matching mostly.
+     However, language model cannot always determine those constraints reliably.
+     In that case it will return a list of all possible constraints and we would need
+     to verify with ones hold and which ones not. For example, verbs in Latin
+     can be both suffix based and full form based. A language model will return both
+     suffixBased and fullFormBased flags set to true and we will need to determine
+     which one of those makes sense for each particular verb.
+     */
+    inflection.constraints = this.model.getInflectionConstraints(inflection)
     let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
 
     if (!partOfSpeech) {
@@ -3351,12 +3334,34 @@ class LanguageDataset {
       return inflection
     }
 
+    // This cannot be determined by language model so we have to check it manually
     inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflection)
 
-    if (!inflection.constraints.suffixBased && !inflection.constraints.paradigmBased) {
-      inflection.constraints.fullFormBased = this.hasMatchingForms(partOfSpeech, inflection)
+    /*
+    Check if inflection if full form based if `fullFormBased` flag is set
+    (i.e. inflection model knows it can be full form based)
+    or if no other flags are set (we don't know what type of inflection it is and want to check all to figure out).
+     */
+    if (inflection.constraints.fullFormBased || !(inflection.constraints.suffixBased || inflection.constraints.paradigmBased)) {
+      /*
+      If we don't know what inflection is based upon, let's assume
+      this inflection is full form based and let's try to find matching forms.
+      For this, we need set a `fullFormBased` flag on inflection temporarily
+      and clear it if no matching forms are found (because it cannot be based on full forms then).
+      This flag is required for matcher to compare full forms, not suffixes.
+       */
+      inflection.constraints.fullFormBased = true
+      const hasMatchingForms = this.hasMatchingForms(partOfSpeech, inflection)
+      if (!hasMatchingForms) {
+        // This cannot be a full form based inflection
+        inflection.constraints.fullFormBased = false
+      }
     }
 
+    /*
+    If we did not figure out what type of inflection it is,
+    then it is probably suffix based as this type is more prevalent
+     */
     if (!inflection.constraints.fullFormBased && !inflection.constraints.paradigmBased) {
       // If it is not full form based, then probably it is suffix base
       inflection.constraints.suffixBased = true
@@ -3370,6 +3375,7 @@ class LanguageDataset {
    * An order of part of speech keys determines an order of parts of speech in the output.
    * An order of inflections within a part of speech will be determined by an order of
    * inflection table views within a ViewSet object.
+   * @deprecated Will be removed when will have no usages
    * @param {Homonym} homonym - A homonym containing lexemes with inflections
    * @return {Map<{string}, {Inflection[]}>} Maps on array of inflections to a part of speech
    */
@@ -3385,6 +3391,34 @@ class LanguageDataset {
       }
     }
     return inflections
+  }
+
+  /**
+   * In order to use morphemes with Vue.js, each morpheme in a table has to be unique.
+   * However, a if morpheme has a feature with multiple values, that same morpheme will be
+   * included into multiple inflection table cells.
+   * To avoid that, we need to replace a single morpheme with multiple values of a feature by
+   * multiple morphemes each having features with single value only.
+   * @param {Suffix[]|Form[]|Paradigm[]} morphemes - An array of morpheme that might have features with multiple values
+   * @return {Suffix[]|Form[]|Paradigm[]} An array of morphemes where all features have single values
+   */
+  static splitMultiValMorphems (morphemes) {
+    let result = []
+    for (const morpheme of morphemes) {
+      let multivalFeatures = []
+      for (const featureName of Object.keys(morpheme.features)) {
+        if (morpheme.features[featureName].isMultiple) {
+          multivalFeatures.push(morpheme.features[featureName])
+        }
+      }
+
+      if (multivalFeatures.length > 0) {
+        result.push(...morpheme.split(multivalFeatures))
+      } else {
+        result.push(morpheme)
+      }
+    }
+    return result
   }
 
   /**
@@ -3420,7 +3454,7 @@ class LanguageDataset {
       if (sourceSet.types.has(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"])) {
         let items = sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]).items.reduce(this['reducer'].bind(this, inflections), [])
         if (items.length > 0) {
-          inflectionSet.addInflectionItems(items)
+          inflectionSet.addInflectionItems(this.constructor.splitMultiValMorphems(items))
         }
       }
     }
@@ -3466,6 +3500,11 @@ class LanguageDataset {
     return inflectionSet
   }
 
+  /**
+   * @deprecated Will be removed when will have no usages
+   * @param homonym
+   * @return {InflectionData}
+   */
   getInflectionData (homonym) {
     // Add support for languages
     let result = new _inflection_data_js__WEBPACK_IMPORTED_MODULE_6__["default"](homonym)
@@ -3673,10 +3712,19 @@ class Morpheme {
      */
     this.extendedLangData = {}
     this.match = undefined
+
+    /**
+     * @type {Footnote[]}
+     */
+    this.footnotes = []
   }
 
   static get ClassType () {
     return this
+  }
+
+  get hasFootnotes () {
+    return Boolean(this.footnotes.length)
   }
 
   static readObject (jsonObject) {
@@ -3701,10 +3749,10 @@ class Morpheme {
       }
     }
 
-    if (jsonObject[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote]) {
-      suffix[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote] = []
-      for (let footnote of jsonObject[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote]) {
-        suffix[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote].push(footnote)
+    if (jsonObject[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote]) {
+      suffix[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote] = []
+      for (let footnote of jsonObject[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote]) {
+        suffix[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote].push(footnote)
       }
     }
 
@@ -3738,9 +3786,15 @@ class Morpheme {
       }
     }
 
-    if (this.hasOwnProperty(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote)) {
-      clone[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote] = this[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["GrmFeature"].types.footnote]
+    if (this[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote]) {
+      clone[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote] = this[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote]
     }
+
+    if (this.match) {
+      clone.match = this.match
+    }
+
+    clone.footnotes.push(...this.footnotes)
 
     for (const lang in this.extendedLangData) {
       if (this.extendedLangData.hasOwnProperty(lang)) {
@@ -3861,27 +3915,34 @@ class Morpheme {
   }
 
   /**
-   * Splits a suffix that has multiple values of one or more grammatical features into an array of Suffix objects
-   * with each Suffix object having only a single value of those grammatical features. Initial multiple values
+   * Splits a morpheme that has multiple values of one or more grammatical features into an array of Morpheme objects
+   * with each Morpheme object having only a single value of those grammatical features. Initial multiple values
    * are stored in a featureGroups[featureType] property as an array of values.
-   * @param {string} featureType - A type of a feature
-   * @param {GrmFeature[]} featureValues - Multiple grammatical feature values.
-   * @returns {Suffix[]} - An array of suffixes.
+   * @param {Feature[]} features - Multiple grammatical feature values.
+   * @param {number} level - Iteration level for recursive call tracking.
+   * @returns {Morpheme[]} - An array of morphemes.
    */
-  split (featureType, featureValues) {
-    let copy = this.clone()
-    let values = []
-    featureValues.forEach(element => values.push(element.value))
-    copy.features[featureType] = featureValues[0].value
-    copy.featureGroups[featureType] = values
-    let suffixItems = [copy]
-    for (let i = 1; i < featureValues.length; i++) {
-      copy = this.clone()
-      copy.features[featureType] = featureValues[i].value
-      copy.featureGroups[featureType] = values
-      suffixItems.push(copy)
+  split (features, level = 0) {
+    // TODO: Not tested for multiple features (as there were no such cases yet)
+    let morphemes = []
+    const currentFeature = features[level]
+    for (const value of currentFeature.values) {
+      if (level < features.length - 1) {
+        let splitted = this.splitByFeature(features, level + 1)
+        for (let morpheme of splitted) {
+          morpheme.features[currentFeature.type] = currentFeature.createFeature(value)
+          morpheme.featureGroups[currentFeature.type] = currentFeature.values
+          morphemes.push(morpheme)
+        }
+      } else {
+        // The last level
+        let copy = this.clone()
+        copy.features[currentFeature.type] = currentFeature.createFeature(value)
+        copy.featureGroups[currentFeature.type] = currentFeature.values
+        morphemes.push(copy)
+      }
     }
-    return suffixItems
+    return morphemes
   }
 
   /**
@@ -12723,13 +12784,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adjective_view__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'adjectiveDeclensionSimplified'
     this.name = 'adjective declension simplified'
     this.title = 'Adjective declension (simplified)'
     this.partOfSpeech = this.constructor.mainPartOfSpeech
-    this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
     const genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
     const genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
     const genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
@@ -12745,7 +12805,7 @@ class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adj
 
     this.createTable()
 
-    this.table.suffixCellFilter = GreekAdjectiveSimplifiedView.suffixCellFilter
+    this.table.morphemeCellFilter = GreekAdjectiveSimplifiedView.morphemeCellFilter
   }
 
   static get partsOfSpeech () {
@@ -12756,7 +12816,7 @@ class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adj
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
-  static suffixCellFilter (suffix) {
+  static morphemeCellFilter (suffix) {
     if (suffix.extendedLangData && suffix.extendedLangData[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]) {
       return suffix.extendedLangData[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC].primary
     } else {
@@ -12788,13 +12848,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class GreekAdjectiveView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
-    this.partOfSpeech = this.constructor.mainPartOfSpeech
-    this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
     const genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
     const genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
     const genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
@@ -12846,11 +12904,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
-
-    this.partOfSpeech = this.constructor.mainPartOfSpeech
-    this.inflectionType = _lib_form_js__WEBPACK_IMPORTED_MODULE_1__["default"]
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
 
     this.id = 'articleDeclension'
     this.name = 'article declension'
@@ -12860,14 +12915,14 @@ class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["defa
     this.featureTypes.numbers = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
       [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_SINGULAR, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_DUAL, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_PLURAL],
-      this.languageID
+      this.constructor.languageID
     )
 
     this.features = {
       numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.featureTypes.numbers, 'Number'),
-      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
-      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
-      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
+      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
+      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
+      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
     }
     this.createTable()
   }
@@ -12890,10 +12945,10 @@ class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["defa
     features.fullWidthRowTitles = [this.featureTypes.numbers]
   }
 
-  getMorphemes (inflectionData) {
+  /* getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
       .types.get(this.constructor.inflectionType).items
-  }
+  } */
 }
 
 
@@ -12979,33 +13034,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
-/* harmony import */ var _lib_table_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/table.js */ "./views/lib/table.js");
-/* harmony import */ var _lib_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/view.js */ "./views/lib/view.js");
-/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _lib_table_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/table.js */ "./views/lib/table.js");
+/* harmony import */ var _lib_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/view.js */ "./views/lib/view.js");
+/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+
+// import LanguageDatasetFactory from '../../../lib/language-dataset-factory.js'
 
 
 
 
-
-
-class GreekView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
-    this.languageID = GreekView.languageID
-    this.model = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].getLanguageModel(GreekView.languageID)
-    this.dataset = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDataset(GreekView.languageID)
+class GreekView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
 
     /*
     Default grammatical features of a View. It child views need to have different feature values, redefine
     those values in child objects.
      */
     this.features = {
-      numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), 'Number'),
-      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
-      declensions: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), 'Declension'),
-      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
-      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
+      numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), 'Number'),
+      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
+      declensions: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), 'Declension'),
+      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
+      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
     }
   }
 
@@ -13018,24 +13069,24 @@ class GreekView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
    * an inflection table differently.
    */
   createTable () {
-    this.table = new _lib_table_js__WEBPACK_IMPORTED_MODULE_2__["default"]([this.features.declensions, this.features.genders,
+    this.table = new _lib_table_js__WEBPACK_IMPORTED_MODULE_1__["default"]([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases])
 
     let features = this.table.features
     features.columns = [
-      this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension),
-      this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender),
-      this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type)
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension),
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender),
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type)
     ]
     features.rows = [
-      this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number),
-      this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number),
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)
     ]
     features.columnRowTitles = [
-      this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)
     ]
     features.fullWidthRowTitles = [
-      this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number)
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number)
     ]
   }
 }
@@ -13062,13 +13113,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class GreekNounSimplifiedView extends _greek_noun_view__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'nounDeclensionSimplified'
     this.name = 'noun declension simplified'
     this.title = 'Noun declension (simplified)'
     this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN
-    this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
     let genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
     let genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
     let genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
@@ -13084,7 +13134,7 @@ class GreekNounSimplifiedView extends _greek_noun_view__WEBPACK_IMPORTED_MODULE_
 
     this.createTable()
 
-    this.table.suffixCellFilter = GreekNounSimplifiedView.suffixCellFilter
+    this.table.morphemeCellFilter = GreekNounSimplifiedView.morphemeCellFilter
   }
 
   static get partsOfSpeech () {
@@ -13095,7 +13145,7 @@ class GreekNounSimplifiedView extends _greek_noun_view__WEBPACK_IMPORTED_MODULE_
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
-  static suffixCellFilter (suffix) {
+  static morphemeCellFilter (suffix) {
     if (suffix.extendedLangData && suffix.extendedLangData[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC]) {
       return suffix.extendedLangData[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].STR_LANG_CODE_GRC].primary
     } else {
@@ -13127,13 +13177,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class GreekNounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'nounDeclension'
     this.name = 'noun declension'
     this.title = 'Noun declension'
     this.partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN
-    this.inflectionType = _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
     let genderMasculine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE
     let genderFeminine = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE
     let genderNeuter = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER
@@ -13186,13 +13235,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'numeralDeclension'
     this.name = 'numeral declension'
     this.title = 'Numeral declension'
     this.partOfSpeech = this.constructor.mainPartOfSpeech
-    this.inflectionType = _lib_form_js__WEBPACK_IMPORTED_MODULE_1__["default"]
 
     this.featureTypes = {}
 
@@ -13202,13 +13250,13 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     this.featureTypes.numbers = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
       [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_SINGULAR, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_DUAL, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_PLURAL],
-      this.languageID
+      this.constructor.languageID
     )
 
     this.featureTypes.genders = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
       [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, GEND_MASCULINE_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
-      this.languageID
+      this.constructor.languageID
     )
 
     const lemmaValues = this.dataset.getNumeralGroupingLemmas()
@@ -13217,9 +13265,9 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     this.features = {
       lemmas: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.lemmas, 'Lemma'),
       genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.genders, 'Gender'),
-      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type'),
+      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type'),
       numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.numbers, 'Number'),
-      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case')
+      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case')
     }
 
     this.features.genders.getTitle = function getTitle (featureValue) {
@@ -13264,10 +13312,10 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     features.fullWidthRowTitles = [this.featureTypes.numbers]
   }
 
-  getMorphemes (inflectionData) {
+  /* getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
       .types.get(this.constructor.inflectionType).items
-  }
+  } */
 }
 
 
@@ -13296,8 +13344,8 @@ __webpack_require__.r(__webpack_exports__);
  * Produces a table grouped into columns by gender.
  */
 class GreekGenderPronounView extends _greek_pronoun_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
 
     /*
     Define tables and table features.
@@ -13355,11 +13403,11 @@ __webpack_require__.r(__webpack_exports__);
  * Used for demonstrative pronouns. Produces a table grouped into columns by lemma and gender
  */
 class GreekLemmaGenderPronounView extends _greek_pronoun_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale, GreekLemmaGenderPronounView.classes[0])
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale, GreekLemmaGenderPronounView.classes[0])
 
     // Add lemmas
-    const lemmaValues = this.dataset.getPronounGroupingLemmas(GreekLemmaGenderPronounView.classes[0])
+    const lemmaValues = this.constructor.dataset.getPronounGroupingLemmas(GreekLemmaGenderPronounView.classes[0])
     this.featureTypes.lemmas = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, lemmaValues, GreekLemmaGenderPronounView.languageID)
     this.features.lemmas = new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](this.featureTypes.lemmas, 'Lemma')
 
@@ -13412,8 +13460,8 @@ __webpack_require__.r(__webpack_exports__);
  * Used for reflexive pronouns. Produces a table grouped into columns by person and gender
  */
 class GreekPersonGenderPronounView extends _greek_pronoun_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale, GreekPersonGenderPronounView.classes[0])
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale, GreekPersonGenderPronounView.classes[0])
 
     // Add persons
     this.featureTypes.persons = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
@@ -13423,7 +13471,7 @@ class GreekPersonGenderPronounView extends _greek_pronoun_view_js__WEBPACK_IMPOR
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD
       ],
-      this.languageID)
+      this.constructor.languageID)
     this.features.persons = new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](this.featureTypes.persons, 'Person')
 
     /*
@@ -13475,8 +13523,8 @@ __webpack_require__.r(__webpack_exports__);
  * Used for personal pronouns. Produces a table grouped into columns by person
  */
 class GreekPersonPronounView extends _greek_pronoun_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale, GreekPersonPronounView.classes[0])
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale, GreekPersonPronounView.classes[0])
 
     // Add persons
     this.featureTypes.persons = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
@@ -13486,7 +13534,7 @@ class GreekPersonPronounView extends _greek_pronoun_view_js__WEBPACK_IMPORTED_MO
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD
       ],
-      this.languageID)
+      this.constructor.languageID)
     this.features.persons = new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](this.featureTypes.persons, 'Person')
 
     /*
@@ -13546,8 +13594,8 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
    * @param {string} locale
    * @param {string} grammarClass - For what pronoun class a view will be created
    */
-  constructor (inflectionData, locale, grammarClass = 'Greek') {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale, grammarClass = 'Greek') {
+    super(homonym, inflectionData, locale)
     this.id = GreekPronounView.getID(grammarClass)
     this.name = GreekPronounView.getName(grammarClass)
     this.title = GreekPronounView.getTitle(grammarClass)
@@ -13558,17 +13606,17 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     this.featureTypes.numbers = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
       [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_SINGULAR, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_DUAL, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].NUM_PLURAL],
-      this.languageID
+      this.constructor.languageID
     )
 
     this.featureTypes.genders = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
       [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, GEND_MASCULINE_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
-      this.languageID
+      this.constructor.languageID
     )
 
     // This is just a placeholder. Lemma values will be generated dynamically
-    this.featureTypes.lemmas = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, [], this.languageID)
+    this.featureTypes.lemmas = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, [], this.constructor.languageID)
 
     this.features = {
       numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"](this.featureTypes.numbers, 'Number'),
@@ -13630,20 +13678,21 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     return _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].toTitleCase(`${grammarClass} ${GreekPronounView.mainPartOfSpeech} Declension`).trim()
   }
 
+  // Select inflections that have a 'Form' type (form based) and find those whose grammar class matches a grammar class of the view
+
   /**
    * Determines wither this view can be used to display an inflection table of any data
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflection
+   * @param homonym
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflection, inflectionData) {
-    if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
-      let inflectionSet = inflectionData.pos.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)
-      if (inflectionSet.types.has(this.inflectionType)) {
-        let inflections = inflectionSet.types.get(this.inflectionType)
+  static matchFilter (homonym, inflectionData) {
+    if (this.languageID === homonym.languageID && homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)) {
+      if (inflectionData.types.has(this.inflectionType)) {
+        let inflections = inflectionData.types.get(this.inflectionType)
         let found = inflections.items.find(form => {
           let match = false
           for (const value of form.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass].values) {
@@ -13659,9 +13708,16 @@ class GreekPronounView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
     return false
   }
 
-  getMorphemes (inflectionData) {
-    return inflectionData.pos.get(this.partOfSpeech)
-      .types.get(this.constructor.inflectionType).items
+  static getMatchingInstances (homonym, messages) {
+    let inflectionData = this.getInflectionsData(homonym)
+    if (this.matchFilter(homonym, inflectionData)) {
+      return [new this(homonym, inflectionData, messages)]
+    }
+    return []
+  }
+
+  getMorphemes () {
+    return this.inflectionData.types.get(this.constructor.inflectionType).items
       .filter(item => item.features.hasOwnProperty(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass) &&
             item.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass].hasSomeValues(this.constructor.classes)
       )
@@ -13723,11 +13779,12 @@ __webpack_require__.r(__webpack_exports__);
 class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
   /**
    * @param {Paradigm} paradigm
+   * @param {Homonym} homonym
    * @param {InflectionData} inflectionData
    * @param {string} locale
    */
-  constructor (paradigm, inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (paradigm, homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = paradigm.id
     this.name = paradigm.title.toLowerCase()
     this.title = paradigm.title
@@ -13794,23 +13851,29 @@ class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__[
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param homonym
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflection, inflectionData) {
-    if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
-      let inflectionSet = inflectionData.pos.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)
+  static matchFilter (homonym, inflectionData) {
+    return (this.languageID === homonym.languageID &&
+      homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)) &&
+      inflectionData.types.has(this.inflectionType)
+
+    /* if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value)) {
+      let inflectionSet = inflectionData.pos.get(inflection[Feature.types.part].value)
       if (inflectionSet.types.has(this.inflectionType)) {
         return true
       }
     }
-    return false
+    return false */
   }
 
-  static getMatchingInstances (inflection, inflectionData, messages) {
-    if (this.matchFilter(inflection, inflectionData)) {
-      let paradigms = inflectionData.pos.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value).types.get(this.inflectionType).items
-      return paradigms.map(paradigm => new this(paradigm, inflectionData, messages))
+  static getMatchingInstances (homonym, messages) {
+    let inflectionData = this.getInflectionsData(homonym)
+    if (this.matchFilter(homonym, inflectionData)) {
+      let paradigms = inflectionData.types.get(this.inflectionType).items
+      return paradigms.map(paradigm => new this(paradigm, homonym, inflectionData, messages))
     }
     return []
   }
@@ -13857,31 +13920,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../lib/suffix.js */ "./lib/suffix.js");
-/* harmony import */ var _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../lib/language-dataset.js */ "./lib/language-dataset.js");
-/* harmony import */ var _latin_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../latin-view.js */ "./views/lang/latin/latin-view.js");
-/* harmony import */ var _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../lib/group-feature-type */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _latin_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../latin-view.js */ "./views/lang/latin/latin-view.js");
+/* harmony import */ var _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../lib/group-feature-type */ "./views/lib/group-feature-type.js");
 
 
 
 
 
-
-class LatinAdjectiveView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+class LatinAdjectiveView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
     this.partOfSpeech = this.constructor.mainPartOfSpeech
-    this.inflectionType = _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_2__["default"].SUFFIX
 
     // Feature that are different from base class values
-    this.features.declensions = new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_4__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension], 'Declension',
+    this.features.declensions = new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension], 'Declension',
       [ alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_1ST, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD ])
 
-    this.features.declensions.getTitle = _latin_view_js__WEBPACK_IMPORTED_MODULE_3__["default"].getDeclensionTitle
+    this.features.declensions.getTitle = _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].getDeclensionTitle
 
     this.createTable()
+  }
+
+  static get viewID () {
+    return 'latin_adjective_view'
   }
 
   static get partsOfSpeech () {
@@ -13920,6 +13984,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @views/lang/latin/verb/latin-verb-participle-view.js */ "./views/lang/latin/verb/latin-verb-participle-view.js");
 /* harmony import */ var _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @views/lang/latin/verb/latin-infinitive-view.js */ "./views/lang/latin/verb/latin-infinitive-view.js");
 
+/* eslint-disable */
 
 
 
@@ -13932,8 +13997,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
+/* eslint-enable */
 class LatinViewSet extends _lib_view_set_js__WEBPACK_IMPORTED_MODULE_0__["default"] {
   /**
    * Returns a list of views available within a view set.
@@ -13972,22 +14036,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LatinView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
-/* harmony import */ var _lib_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/view.js */ "./views/lib/view.js");
-/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
-/* harmony import */ var _lib_table_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/table.js */ "./views/lib/table.js");
+/* harmony import */ var _lib_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/view.js */ "./views/lib/view.js");
+/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
+/* harmony import */ var _lib_table_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/table.js */ "./views/lib/table.js");
 
 
 
 
 
-
-class LatinView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
-    this.model = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].getLanguageModel(LatinView.languageID)
-    this.dataset = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDataset(LatinView.languageID)
-    this.language_features = this.model.features
+class LatinView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
+    this.language_features = this.constructor.model.features
     // limit regular verb moods
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood] =
       new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
@@ -14000,11 +14060,11 @@ class LatinView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
         those values in child objects.
          */
     this.features = {
-      numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), 'Number'),
-      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
-      declensions: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), 'Declension'),
-      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
-      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"](this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
+      numbers: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), 'Number'),
+      cases: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase), 'Case'),
+      declensions: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), 'Declension'),
+      genders: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), 'Gender'),
+      types: new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type), 'Type')
     }
     this.features.declensions.getTitle = LatinView.getDeclensionTitle
   }
@@ -14030,13 +14090,18 @@ class LatinView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
     an inflection table differently
      */
   createTable () {
-    this.table = new _lib_table_js__WEBPACK_IMPORTED_MODULE_4__["default"]([this.features.declensions, this.features.genders,
+    this.table = new _lib_table_js__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
-    features.columns = [this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension), this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender), this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type)]
-    features.rows = [this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number), this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
-    features.columnRowTitles = [this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
-    features.fullWidthRowTitles = [this.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number)]
+    features.columns = [
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension),
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender),
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type)]
+    features.rows = [
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number),
+      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
+    features.columnRowTitles = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
+    features.fullWidthRowTitles = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number)]
   }
 
   /**
@@ -14081,17 +14146,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../lib/suffix.js */ "./lib/suffix.js");
 /* harmony import */ var _latin_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../latin-view.js */ "./views/lang/latin/latin-view.js");
 /* harmony import */ var _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../lib/group-feature-type */ "./views/lib/group-feature-type.js");
-/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
-
 
 
 
 
 
 class LatinNounView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
-    this.id = 'nounDeclension'
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
+    this.id = 'noun_declension'
     this.name = 'noun declension'
     this.title = 'Noun declension'
 
@@ -14101,29 +14164,16 @@ class LatinNounView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default
     this.createTable()
   }
 
+  static get viewID () {
+    return 'latin_noun_view'
+  }
+
   static get partsOfSpeech () {
     return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN]
   }
 
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
-  }
-
-  static getStandardFormInflection (id) {
-    let sfi1 = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Inflection"]('standard form stem', LatinNounView.languageID, 'standard form suffix')
-    sfi1.addFeature(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN, LatinNounView.languageID))
-    let lfl1 = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Lemma"]('standard form word', LatinNounView.languageID)
-    let sflx1 = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Lexeme"](lfl1, [sfi1])
-    let sfh1 = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Homonym"]([sflx1], _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"])
-    return sfh1
-  }
-
-  static createStandardFormInstance (id) {
-    let homonym = this.getStandardFormInflection(id)
-    let dataset = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_4__["default"].getDataset(this.languageID)
-    let inflectionData = dataset.getInflectionData(homonym)
-    let view = new LatinNounView(inflectionData, `en-US`)
-    return view
   }
 }
 
@@ -14153,23 +14203,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.id = 'verbSupine'
     this.name = 'supine'
     this.title = 'Supine'
     this.features.moods = new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](
-      new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].MOOD_SUPINE], this.model.languageID),
+      new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].MOOD_SUPINE], this.constructor.model.languageID),
       'Mood')
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
-      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].CASE_ACCUSATIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].CASE_ABLATIVE], this.model.languageID)
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].CASE_ACCUSATIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].CASE_ABLATIVE], this.constructor.model.languageID)
     this.features = {
       cases: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase], 'Case'),
       voices: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice], 'Voice'),
       conjugations: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation], 'Conjugation Stem')
     }
     this.createTable()
+  }
+
+  static get viewID () {
+    return 'latin_supine_view'
   }
 
   static get partsOfSpeech () {
@@ -14217,8 +14271,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinConjugationMoodVoiceView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'verbConjugationMoodVoice'
     this.name = 'conjugation-mood-voice'
     this.title = 'Verb Conjugation'
@@ -14273,8 +14327,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinConjugationVoiceMoodView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'verbConjugationVoiceMood'
     this.name = 'conjugation-voice-mood'
     this.title = 'Verb Conjugation'
@@ -14328,21 +14382,21 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinImperativeView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'verbImperative'
     this.name = 'imperative'
     this.title = 'Imperative'
     this.features.moods = new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](
-      new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].MOOD_IMPERATIVE], this.model.languageID),
+      new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].MOOD_IMPERATIVE], this.constructor.model.languageID),
       'Mood')
-    this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD], this.model.languageID)
+    this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD], this.constructor.model.languageID)
     this.features.persons = new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person], 'Person')
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
-      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PRESENT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE], this.model.languageID)
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PRESENT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE], this.constructor.model.languageID)
     this.features.tenses = new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tense')
     this.createTable()
-    this.table.suffixCellFilter = LatinImperativeView.suffixCellFilter
+    this.table.morphemeCellFilter = LatinImperativeView.morphemeCellFilter
   }
 
   createTable () {
@@ -14357,18 +14411,22 @@ class LatinImperativeView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
     features.fullWidthRowTitles = [this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense]]
   }
 
+  static get viewID () {
+    return 'latin_imperative_view'
+  }
+
   /**
    * Determines wither this view can be used to display an inflection table of any data
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
+   * @param homonym
    * @return {boolean}
    */
-  static matchFilter (inflection, inflectionData) {
-    return (this.languageID === inflection.languageID &&
-      this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value) &&
-      this.enabledForLexemes(inflectionData.homonym.lexemes))
+  static matchFilter (homonym) {
+    return (this.languageID === homonym.languageID &&
+      homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech) &&
+      this.enabledForLexemes(homonym.lexemes))
   }
 
   static enabledForLexemes (lexemes) {
@@ -14384,7 +14442,7 @@ class LatinImperativeView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
     return false
   }
 
-  static suffixCellFilter (suffix) {
+  static morphemeCellFilter (suffix) {
     return suffix.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood].values.includes(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].MOOD_IMPERATIVE)
   }
 }
@@ -14413,19 +14471,19 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinInfinitiveView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'verbInfinitive'
     this.name = 'infinitive'
     this.title = 'Infinitive'
     this.features.moods = new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](
-      new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].MOOD_INFINITIVE], this.model.languageID),
+      new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].MOOD_INFINITIVE], this.constructor.model.languageID),
       'Mood')
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
-      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PRESENT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PERFECT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE], this.model.languageID)
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PRESENT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PERFECT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE], this.constructor.model.languageID)
     this.features.tenses = new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tense')
     this.createTable()
-    this.table.suffixCellFilter = LatinInfinitiveView.suffixCellFilter
+    this.table.morphemeCellFilter = LatinInfinitiveView.morphemeCellFilter
   }
 
   createTable () {
@@ -14440,18 +14498,22 @@ class LatinInfinitiveView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
     features.fullWidthRowTitles = []
   }
 
+  static get viewID () {
+    return 'latin_infinitive_view'
+  }
+
   /**
    * Determines wither this view can be used to display an inflection table of any data
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflectionData
+   * @param homonym
    * @return {boolean}
    */
-  static matchFilter (inflection, inflectionData) {
-    return (this.languageID === inflection.languageID &&
-      this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value) &&
-      this.enabledForLexemes(inflectionData.homonym.lexemes))
+  static matchFilter (homonym) {
+    return (this.languageID === homonym.languageID &&
+      homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech) &&
+      this.enabledForLexemes(homonym.lexemes))
   }
 
   static enabledForLexemes (lexemes) {
@@ -14467,7 +14529,7 @@ class LatinInfinitiveView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
     return false
   }
 
-  static suffixCellFilter (suffix) {
+  static morphemeCellFilter (suffix) {
     return suffix.features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood].values.includes(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].MOOD_INFINITIVE)
   }
 }
@@ -14496,8 +14558,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinMoodConjugationVoiceView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'verbMoodConjugationVoice'
     this.name = 'mood-conjugation-voice'
     this.title = 'Verb Conjugation'
@@ -14544,8 +14606,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinMoodVoiceConjugationView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'verbMoodVoiceConjugation'
     this.name = 'mood-voice-conjugation'
     this.title = 'Verb Conjugation'
@@ -14592,8 +14654,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinVerbMoodView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, locale) {
+    super(homonym, locale)
     this.features = {
       tenses: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tenses'),
       numbers: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number], 'Number'),
@@ -14634,20 +14696,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinVerbParticipleView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.id = 'verbParticiple'
     this.name = 'participle'
     this.title = 'Participle'
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
-      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PRESENT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PERFECT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE], this.model.languageID)
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PRESENT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PERFECT, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE], this.constructor.model.languageID)
     this.features = {
       tenses: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tenses'),
       voices: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice], 'Voice'),
       conjugations: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_3__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation], 'Conjugation Stem')
     }
     this.createTable()
+  }
+
+  static get viewID () {
+    return 'latin_verb_participle_view'
   }
 
   static get partsOfSpeech () {
@@ -14668,13 +14734,6 @@ class LatinVerbParticipleView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2_
     features.rows = [this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense]]
     features.columnRowTitles = [this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense]]
     features.fullWidthRowTitles = []
-  }
-
-  static getMatchingInstances (inflection, inflectionData, messages) {
-    if (this.matchFilter(inflection, inflectionData)) {
-      return [new this(inflectionData, messages)]
-    }
-    return []
   }
 }
 
@@ -14700,8 +14759,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinVerbView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
 
     this.features = {
       tenses: new _lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense], 'Tenses'),
@@ -14764,8 +14823,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinVoiceConjugationMoodView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'verbVoiceConjugationMood'
     this.name = 'voice-conjugation-mood'
     this.title = 'Verb Conjugation'
@@ -14820,8 +14879,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class LatinVoiceMoodConjugationView extends _latin_verb_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'verbVoiceMoodConjugation'
     this.name = 'voice-mood-conjugation'
     this.title = 'Verb Conjugation'
@@ -14871,17 +14930,17 @@ __webpack_require__.r(__webpack_exports__);
 class Cell {
   /**
    * Creates a cell for an inflection table.
-   * @param {Suffix[]} suffixes - A list of suffixes that belongs to this cell.
+   * @param {Morpheme[]} morphemes - A list of morphemes that belongs to this cell.
    * @param {Feature[]} features - A list of features this cell corresponds to.
    */
-  constructor (suffixes, features) {
-    this.suffixes = suffixes
-    if (!this.suffixes) {
-      this.suffixes = []
+  constructor (morphemes, features) {
+    this.morphemes = morphemes
+    if (!this.morphemes) {
+      this.morphemes = []
     }
     this.features = features
-    this.empty = (this.suffixes.length === 0)
-    this.suffixMatches = !!this.suffixes.find(element => {
+    this.empty = (this.morphemes.length === 0)
+    this.suffixMatches = !!this.morphemes.find(element => {
       if (element.match && element.match.suffixMatch) {
         return element.match.suffixMatch
       }
@@ -14895,34 +14954,43 @@ class Cell {
     this.render()
   }
 
+  get isDataCell () {
+    return true
+  }
+
   /**
    * Renders an element's HTML representation.
    */
   render () {
     let element = document.createElement('div')
     element.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell)
-    for (let [index, suffix] of this.suffixes.entries()) {
-      // Render each suffix
+    for (let [index, morpheme] of this.morphemes.entries()) {
+      // Render each morpheme
       let suffixElement = document.createElement('span')
       suffixElement.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].suffix)
-      if (suffix.match && suffix.match.suffixMatch) {
+      if (morpheme.match && morpheme.match.suffixMatch) {
         suffixElement.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].suffixMatch)
       }
-      if (suffix.match && suffix.match.fullMatch) {
+      if (morpheme.match && morpheme.match.fullMatch) {
         suffixElement.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].suffixFullFeatureMatch)
       }
-      suffixElement.innerHTML = suffix.value ? suffix.value : '-'
+      suffixElement.innerHTML = morpheme.value || '-'
       element.appendChild(suffixElement)
 
-      if (suffix.footnote && suffix.footnote.length) {
+      if (morpheme.hasFootnotes) {
         let footnoteElement = document.createElement('a')
-        footnoteElement.innerHTML = `<sup>${suffix.footnote}</sup>`
-        footnoteElement.dataset.footnote = suffix.footnote
+        footnoteElement.innerHTML = `<sup>${morpheme.footnote}</sup>`
+        footnoteElement.dataset.footnote = morpheme.footnote
         element.appendChild(footnoteElement)
       }
-      if (index < this.suffixes.length - 1) {
+      if (index < this.morphemes.length - 1) {
         element.appendChild(document.createTextNode(', ')) // 00A0 is a non-breaking space
       }
+    }
+    this.value = element.innerHTML
+    this.classes = {
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight]: false
     }
     this.wNode = element
     this.nNode = element.cloneNode(true)
@@ -14989,6 +15057,7 @@ class Cell {
    */
   highlight () {
     if (!this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = true
       this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
       this.nNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
     }
@@ -14999,6 +15068,7 @@ class Cell {
    */
   clearHighlighting () {
     if (this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = false
       this.wNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
       this.nNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
     }
@@ -15539,6 +15609,12 @@ class HeaderCell {
     let element = document.createElement('div')
     element.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix + this.span)
     element.innerHTML = this.title
+    this.value = this.title
+    this.classes = {
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header]: true,
+      [`${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix}${this.span}`]: true
+    }
     this.wNode = element
     this.nNode = element.cloneNode(true)
   }
@@ -15580,6 +15656,8 @@ class HeaderCell {
     let currentWidthClass = _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix + this.span
     this.span += value
     let newWidthClass = _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix + this.span
+    this.classes[currentWidthClass] = false
+    this.classes[newWidthClass] = true
     this.wNode.classList.replace(currentWidthClass, newWidthClass)
     this.nNode.classList.replace(currentWidthClass, newWidthClass)
   }
@@ -15618,6 +15696,7 @@ class HeaderCell {
    */
   highlight () {
     if (!this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = true
       this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
       this.nNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
 
@@ -15632,6 +15711,7 @@ class HeaderCell {
    */
   clearHighlighting () {
     if (this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = false
       this.wNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
       this.nNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
 
@@ -15914,17 +15994,24 @@ class RowTitleCell {
   render () {
     // Generate HTML representation for a wide view node
     this.wNode = document.createElement('div')
-    this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell)
-    this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].rowTitleCell)
+    this.value = this.title
+    this.classes = {
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].rowTitleCell]: true
+    }
+    this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].rowTitleCell)
     if (this.feature.formsColumn) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header] = true
       this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header)
     }
     if (this.feature.hasFullWidthRowTitle) {
       // This cell is taking an entire row
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].fullWidth] = true
       this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].fullWidth)
     }
     if (this.feature.formsColumn && this.feature.groupFeatureList.titleColumnsQuantity > 1) {
-      this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix + this.feature.groupFeatureList.titleColumnsQuantity)
+      this.classes[`${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix}${this.feature.groupFeatureList.titleColumnsQuantity}`] = true
+      this.wNode.classList.add(`${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix}${this.feature.groupFeatureList.titleColumnsQuantity}`)
     }
     this.wNode.innerHTML = this.title
 
@@ -15964,6 +16051,21 @@ class RowTitleCell {
   }
 
   /**
+   * Same as `placeholder`, but generates a cell in Vue.js style
+   * @param {number} width - How many columns this cell should span
+   * @return {Object}
+   */
+  static placeholderCell (width = 1) {
+    return {
+      value: '', // This cell is empty
+      classes: {
+        [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
+        [`${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix}${width}`]: true
+      }
+    }
+  }
+
+  /**
    * Some table layouts require multiple title cells to be shown for a row. These could be, for example, a title
    * cell for a parent category that will follow a title cell for a category that defines a row. In such situation a
    * title cell will have a parent, which will represent a parent cell object.
@@ -15983,6 +16085,7 @@ class RowTitleCell {
    * Highlights this row title cell
    */
   highlight () {
+    this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = true
     this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
     for (let nNode of this.nNodes) {
       nNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
@@ -15993,6 +16096,7 @@ class RowTitleCell {
    * Removes highlighting from this row title cell
    */
   clearHighlighting () {
+    this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = false
     this.wNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
     for (let nNode of this.nNodes) {
       nNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
@@ -16152,21 +16256,21 @@ class Table {
     this.cells = [] // Will be populated by groupByFeature()
 
     /*
-    This is a special filter function that, if defined will do additional filtering of suffixes within a cell.
+    This is a special filter function that, if defined will do additional filtering of morhpemes within a cell.
      */
-    this.suffixCellFilter = undefined
+    this.morphemeCellFilter = undefined
   }
 
   /**
    * Creates a table tree and other data structures (columns, rows, headers).
    * This function is chainabe.
-   * @param {Suffix[]} suffixes - An array of suffixes to build table from.
+   * @param {Morpheme[]} morphemes - An array of morphemes to build table from.
    * @returns {Table} Reference to self for chaining.
    */
-  construct (suffixes) {
-    this.suffixes = suffixes
+  construct (morphemes) {
+    this.morphemes = morphemes
 
-    this.tree = this.groupByFeature(suffixes)
+    this.tree = this.groupByFeature(morphemes)
     this.headers = this.constructHeaders()
     this.columns = this.constructColumns()
     this.rows = this.constructRows()
@@ -16188,10 +16292,10 @@ class Table {
   }
 
   /**
-   * Returns a number of columns with suffix cells in a table.
-   * @returns {number} A number of columns with suffix cells in a table.
+   * Returns a number of columns with data (suffix or morpheme) cells in a table.
+   * @returns {number} A number of columns with data cells in a table.
    */
-  get suffixColumnQty () {
+  get dataColumnQty () {
     if (!this.columns) {
       throw new Error('Columns are not populated yet.')
     }
@@ -16210,10 +16314,10 @@ class Table {
   }
 
   /**
-   * Returns a number of rows with suffix cells in a table.
+   * Returns a number of rows with data (suffix or morpheme) cells in a table.
    * @returns {number} A number of rows with suffix cells.
    */
-  get suffixRowQty () {
+  get dataRowQty () {
     if (!this.columns) {
       throw new Error('Columns are not populated yet.')
     }
@@ -16221,18 +16325,18 @@ class Table {
   }
 
   /**
-   * Groups all suffixes into a tree according to their grammatical features. There are several levels in this tree.
+   * Groups all morphemes into a tree according to their grammatical features. There are several levels in this tree.
    * Each level corresponds to a one grouping feature. The order of items in GroupingFeatures List object
    * defines an order of those levels.
    * Nodes on each level are values of a grammatical feature that forms this level. An order of those values
    * is determined by the order of values within a GroupFeatureType object of each feature.
    * This is a recursive function.
-   * @param {Suffix[]} suffixes - Suffixes to be grouped.
-   * @param {GrmFeature[]} ancestorFeatures - A list of feature values on levels above the current.
+   * @param {Morpheme[]} morphemes - Suffixes to be grouped.
+   * @param {Feature[]} ancestorFeatures - A list of feature values on levels above the current.
    * @param {number} currentLevel - At what level in a tree we are now. Used to stop recursion.
-   * @returns {NodeGroup} A top level group of suffixes that contain subgroups all way down to the last group.
+   * @returns {NodeGroup} A top level group of morphemes that contain subgroups all way down to the last group.
    */
-  groupByFeature (suffixes, ancestorFeatures = [], currentLevel = 0) {
+  groupByFeature (morphemes, ancestorFeatures = [], currentLevel = 0) {
     let group = new _node_group__WEBPACK_IMPORTED_MODULE_6__["default"]()
     group.groupFeatureType = this.features.items[currentLevel]
     group.ancestorFeatures = ancestorFeatures.slice()
@@ -16247,25 +16351,25 @@ class Table {
 
       // Suffixes that are selected for current combination of feature values
 
-      let selectedSuffixes = suffixes.filter(s => s.featureMatch(featureValue))
+      let selectedMorphemes = morphemes.filter(s => s.featureMatch(featureValue))
 
       if (currentLevel < this.features.length - 1) {
         // Divide to further groups
-        let subGroup = this.groupByFeature(selectedSuffixes, ancestorFeatures, currentLevel + 1)
+        let subGroup = this.groupByFeature(selectedMorphemes, ancestorFeatures, currentLevel + 1)
         group.subgroups.push(subGroup)
         group.cells = group.cells.concat(subGroup.cells)
       } else {
-        // This is the last level. This represent a cell with suffixes
-        // Split result has a list of suffixes in a table cell. We need to combine items with same endings.
-        if (selectedSuffixes.length > 0) {
-          if (this.suffixCellFilter) {
-            selectedSuffixes = selectedSuffixes.filter(this.suffixCellFilter)
+        // This is the last level. This represent a cell with morphemes
+        // Split result has a list of morphemes in a table cell. We need to combine items with same endings.
+        if (selectedMorphemes.length > 0) {
+          if (this.morphemeCellFilter) {
+            selectedMorphemes = selectedMorphemes.filter(this.morphemeCellFilter)
           }
 
-          selectedSuffixes = _lib_suffix__WEBPACK_IMPORTED_MODULE_0__["default"].combine(selectedSuffixes)
+          selectedMorphemes = _lib_suffix__WEBPACK_IMPORTED_MODULE_0__["default"].combine(selectedMorphemes)
         }
 
-        let cell = new _cell__WEBPACK_IMPORTED_MODULE_1__["default"](selectedSuffixes, ancestorFeatures.slice())
+        let cell = new _cell__WEBPACK_IMPORTED_MODULE_1__["default"](selectedMorphemes, ancestorFeatures.slice())
         group.subgroups.push(cell)
         group.cells.push(cell)
         this.cells.push(cell)
@@ -16277,9 +16381,9 @@ class Table {
   }
 
   /**
-   * Create columns out of a suffixes organized into a tree.
+   * Create columns out of a morphemes organized into a tree.
    * This is a recursive function.
-   * @param {NodeGroup} tree - A tree of suffixes.
+   * @param {NodeGroup} tree - A tree of morphemes.
    * @param {Column[]} columns - An array of columns to be constructed.
    * @param {number} currentLevel - Current recursion level.
    * @returns {Array} An array of columns of suffix cells.
@@ -16331,7 +16435,7 @@ class Table {
   /**
    * Creates an array of header cell rows.
    * This is a recursive function.
-   * @param {NodeGroup} tree - A tree of suffixes.
+   * @param {NodeGroup} tree - A tree of morphemes.
    * @param {Row[]} headers - An array of rows with header cells.
    * @param {number} currentLevel - Current recursion level.
    * @returns {Array} A two-dimensional array of header cell rows.
@@ -16393,10 +16497,10 @@ class Table {
    */
   constructRows () {
     let rows = []
-    for (let rowIndex = 0; rowIndex < this.suffixRowQty; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < this.dataRowQty; rowIndex++) {
       rows[rowIndex] = new _row__WEBPACK_IMPORTED_MODULE_4__["default"]()
       rows[rowIndex].titleCell = this.columns[0].cells[rowIndex].titleCell
-      for (let columnIndex = 0; columnIndex < this.suffixColumnQty; columnIndex++) {
+      for (let columnIndex = 0; columnIndex < this.dataColumnQty; columnIndex++) {
         rows[rowIndex].add(this.columns[columnIndex].cells[rowIndex])
       }
     }
@@ -16457,7 +16561,7 @@ class Table {
   }
 
   /**
-   * Check for any matched suffixes
+   * Check for any matched morphemes
    */
   _hasAnyMatches () {
     let hasMatches = false
@@ -16473,7 +16577,7 @@ class Table {
   }
 
   /**
-   * Hide groups that have no suffix matches.
+   * Hide groups that have no morpheme matches.
    */
   hideNoSuffixGroups () {
     for (let headerCell of this.headers[0].cells) {
@@ -16526,14 +16630,23 @@ __webpack_require__.r(__webpack_exports__);
 
 class ViewSetFactory {
   static create (homonym, locale) {
-    switch (homonym.languageID) {
+    let Constructor = this.getConstructor(homonym.languageID)
+    return new Constructor(homonym, locale)
+  }
+
+  static getConstructor (languageID) {
+    switch (languageID) {
       case alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_LATIN:
-        return new _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_2__["default"](homonym, locale)
+        return _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_2__["default"]
       case alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK:
-        return new _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_3__["default"](homonym, locale)
+        return _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_3__["default"]
       default:
-        return new _view_set_js__WEBPACK_IMPORTED_MODULE_1__["default"](homonym, locale)
+        return _view_set_js__WEBPACK_IMPORTED_MODULE_1__["default"]
     }
+  }
+
+  static getStandardForm (languageID, viewID, formID, messages) {
+    return this.getConstructor(languageID).getStandardForm(viewID, formID, messages)
   }
 }
 
@@ -16553,7 +16666,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
-/* harmony import */ var _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lang/latin/noun/latin-noun-view.js */ "./views/lang/latin/noun/latin-noun-view.js");
 
 
 
@@ -16569,7 +16681,7 @@ class ViewSet {
   constructor (homonym, locale) {
     this.homonym = homonym
     this.languageID = homonym.languageID
-    console.log(`Viewset constructor`)
+    this.dataset = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDataset(homonym.languageID)
 
     /**
      * Whether inflections are enabled for the homonym's language
@@ -16577,31 +16689,33 @@ class ViewSet {
     this.enabled = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].getLanguageModel(homonym.languageID).canInflect()
     this.inflectionData = null
     this.locale = locale
+    this.matchingViews = []
     this.matchingViewsMap = new Map()
 
-    let nounSFView1 = _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].createStandardFormInstance('sf1')
-    console.log(nounSFView1)
-
     if (this.enabled) {
-      this.inflectionData = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getInflectionData(this.homonym)
-      for (const lexeme of this.homonym.lexemes) {
-        for (const inflection of lexeme.inflections) {
-          /* const matchingInstances = this.constructor.views.reduce(
-            (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), []) */
-          let matchingInstances = [nounSFView1]
-          if (matchingInstances.length > 0) {
-            // There are any matching instances found
-            if (!this.matchingViewsMap.has(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
-              this.matchingViewsMap.set(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value, [])
-            }
-            let storedInstances = this.matchingViewsMap.get(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)
-            // Filter out instances that are already stored in a view set
-            let newInstances = matchingInstances.filter(i => !storedInstances.some(v => v.sameAs(i)))
-            if (newInstances.length > 0) { storedInstances.push(...newInstances) }
-          }
+      // this.inflectionData = LanguageDatasetFactory.getInflectionData(this.homonym)
+
+      for (let lexeme of homonym.lexemes) {
+        for (let inflection of lexeme.inflections) {
+          // Inflections are grouped by part of speech
+          inflection = this.dataset.setInflectionData(inflection, lexeme.lemma)
         }
       }
+
+      // let view = new LatinNounView(homonym, locale)
+      // this.matchingViews = [view]
+      this.matchingViews.push(...this.constructor.views.reduce(
+        (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.messages)), []))
+      /* for (const lexeme of this.homonym.lexemes) {
+        // TODO: Can we handle combined data better?
+        for (const inflection of lexeme.inflections) {
+          matchingInstances.push(...this.constructor.views.reduce(
+            (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), []))
+        }
+      } */
+      this.updateMatchingViewsMap(this.matchingViews)
     }
+    this.matchingViews.forEach(v => v.render())
   }
   /**
    * Returns a list of views available within a view set. Should be redefined in descendant classes.
@@ -16617,6 +16731,20 @@ class ViewSet {
 
   get hasMatchingViews () {
     return this.matchingViewsMap.size > 0
+  }
+
+  updateMatchingViewsMap (views) {
+    for (const view of views) {
+      if (!this.matchingViewsMap.has(view.partOfSpeech)) {
+        this.matchingViewsMap.set(view.partOfSpeech, [])
+      }
+      let storedInstances = this.matchingViewsMap.get(view.partOfSpeech)
+      // Filter out instances that are already stored in a view set
+      const isNew = !storedInstances.find(v => v.sameAs(view))
+      if (isNew) {
+        storedInstances.push(view)
+      }
+    }
   }
 
   /**
@@ -16650,6 +16778,15 @@ class ViewSet {
       view.setLocale(locale)
     }
   }
+
+  static getViewByID (viewID) {
+    return this.views.find(v => v.viewID === viewID)
+  }
+
+  static getStandardForm (viewID, formID, messages) {
+    let view = this.getViewByID(viewID)
+    return view ? view.getStandardFormInstance(formID, messages) : null
+  }
 }
 
 
@@ -16667,8 +16804,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return View; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var uuid_v4__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! uuid/v4 */ "./node_modules/uuid/v4.js");
-/* harmony import */ var uuid_v4__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(uuid_v4__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
 /* harmony import */ var _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../l10n/l10n.js */ "./l10n/l10n.js");
 
 
@@ -16681,12 +16817,13 @@ class View {
   /**
    * Initializes a View object with options. There is at least one view per part of speech,
    * but there could be several views for the same part of speech that show different table representation of a view.
-   * @param {InflectionData} inflectionData - An inflection data object.
+   * @param {Homonym} homonym - A homonym
+   * @param {InflectionSet} inflectionSet - An inflection data object.
    * @param {string} locale - A locale for serving localized messages. If none provided, a default language will be used.
    */
-  constructor (inflectionData, locale = _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_2__["default"].defaultLocale) {
-    this.languageID = View.languageID
-    this.inflectionData = inflectionData
+  constructor (homonym, inflectionSet, locale = _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_2__["default"].defaultLocale) {
+    this.homonym = homonym
+    this.inflectionData = inflectionSet
     this.messages = _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_2__["default"].getMessages(locale)
     this.pageHeader = {}
     // A view can be rendered for different parts of speech. This is a part of speech this view currently uses
@@ -16696,7 +16833,10 @@ class View {
     this.container = undefined
 
     // Must be implemented in a descendant
-    this.id = uuid_v4__WEBPACK_IMPORTED_MODULE_1___default()() // A unique ID of a view instance. Can be used as a value in view selectors.
+
+    // A unique ID of a view instance. Can be used as a value in view selectors. Should consist of lowercase letters,
+    // numbers, and underscores only.
+    this.id = 'base_view'
     this.name = 'base view'
     this.title = 'Base View'
     this.hasComponentData = false // True if vue supports Vue.js components
@@ -16714,6 +16854,10 @@ class View {
      * @type {string}
      */
     this.creditsText = ''
+  }
+
+  static get viewID () {
+    return 'base_view'
   }
 
   /**
@@ -16746,8 +16890,20 @@ class View {
   }
 
   /**
+   * Returns a dataset for a view data
+   * @return {LanguageDataset}
+   */
+  static get dataset () {
+    return _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDataset(this.languageID)
+  }
+
+  static get model () {
+    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].getLanguageModel(this.languageID)
+  }
+
+  /**
    * Defines an inflection type (Suffix/Form) of a view. Should be redefined in child classes.
-   * @return {Function | undefined}
+   * @return {Suffix|Form|Paradigm|undefined}
    */
   static get inflectionType () {
   }
@@ -16759,14 +16915,15 @@ class View {
   /**
    * Determines wither this view can be used to display an inflection table of any data
    * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflection
-   * @param inflectionData
+   * By default a view can be used if a view has the same language as homonym
+   * and homonym's inflections has at least one with a part of speech that matches view
+   * @param homonym
    * @return {boolean}
    */
-  static matchFilter (inflection, inflectionData) {
-    return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value))
+  static matchFilter (homonym) {
+    // return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
+    // Disable multiple parts of speech for now
+    return (this.languageID === homonym.languageID && homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech))
   }
 
   /**
@@ -16774,13 +16931,14 @@ class View {
    * By default only one instance of the view is returned, by views can override this method
    * to return multiple views if necessary (e.g. paradigm view can return multiple instances of the view
    * with different data).
-   * @param {InflectionData} inflectionData
+   * @param {Inflection} homonym - An inflection for which matching instances to be found.
    * @param {MessageBundle} messages
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
-  static getMatchingInstances (inflection, inflectionData, messages) {
-    if (this.matchFilter(inflection, inflectionData)) {
-      return [new this(inflectionData, messages)]
+  static getMatchingInstances (homonym, messages) {
+    if (this.matchFilter(homonym)) {
+      let inflectionData = this.getInflectionsData(homonym)
+      return [new this(homonym, inflectionData, messages)]
     }
     return []
   }
@@ -16811,35 +16969,34 @@ class View {
    * `messages` provides a translation for view's texts.
    */
   render () {
-    this.footnotes = this.getFootnotes(this.inflectionData)
-    // Table is already created during a view construction
+    this.footnotes = this.getFootnotes()
     this.table.messages = this.messages
-    for (let lexeme of this.inflectionData.homonym.lexemes) {
-      for (let inflection of lexeme.inflections) {
-        if (inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].values.includes(this.partOfSpeech)) {
-          this.forms.add(inflection.form)
-        }
-      }
-    }
-    this.table.construct(this.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
+    this.morphemes = this.getMorphemes()
+    this.table.construct(this.morphemes).constructViews().addEventListeners()
+    this.table.wideView.render() // This is a compatibility code that is required to render HTML nodes
+    this.wideTable = this.table.wideView.renderTable()
     return this
+  }
+
+  static getInflectionsData (homonym) {
+    // Select inflections this view needs
+    let inflections = homonym.inflections.filter(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)
+    return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
   }
 
   /**
    * A compatibility function to get morphemes, either suffixes or forms, depending on the view type.
    * By default, it returns suffixes
-   * @param {InflectionData} inflectionData
    */
-  getMorphemes (inflectionData) {
-    return inflectionData.pos.get(this.partOfSpeech).types.get(this.constructor.inflectionType).items
+  getMorphemes () {
+    return this.inflectionData.types.get(this.constructor.inflectionType).items
   }
 
   /**
    * A compatibility function to get footnotes for either suffixes or forms, depending on the view type
-   * @param {InflectionData} inflectionData
    */
-  getFootnotes (inflectionData) {
-    return inflectionData.pos.get(this.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
+  getFootnotes () {
+    return this.inflectionData.types.get(this.constructor.inflectionType).footnotesMap
   }
 
   get wideViewNodes () {
@@ -16884,6 +17041,10 @@ class View {
     return this
   }
 
+  highlightRowAndColumn (cell) {
+    cell.highlightRowAndColumn()
+  }
+
   /**
    * A utility function to convert a string to a Sentence case.
    * @param {string} string - A source string.
@@ -16905,6 +17066,21 @@ class View {
       .split(' ')
       .map(word => word.length >= 1 ? `${word[0].toUpperCase()}${word.substr(1)}` : '')
       .join(' ')
+  }
+
+  static createStandardFormHomonym () {
+    let inflection = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Inflection"]('standard form stem', this.languageID, 'standard form suffix')
+    inflection.addFeature(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, this.mainPartOfSpeech, this.languageID))
+    let homonym = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Homonym"].createSimpleForm('standard form word', this.languageID, [inflection])
+    inflection = this.dataset.setInflectionData(inflection, homonym.lexemes[0].lemma)
+    return homonym
+  }
+
+  static getStandardFormInstance (formID, messages) {
+    let homonym = this.createStandardFormHomonym()
+    let inflectionData = this.getInflectionsData(homonym)
+    // TODO: Find the best way to pass messages (the last argument)
+    return new this(homonym, inflectionData, messages).render()
   }
 }
 
@@ -16988,10 +17164,57 @@ class WideView {
         this.nodes.appendChild(cell.wvNode)
       }
     }
-    this.nodes.style.gridTemplateColumns = 'repeat(' + (this.visibleColumnQty + this.titleColumnQty) + ', ' +
-      _styles_styles__WEBPACK_IMPORTED_MODULE_0__["wideView"].column.width + _styles_styles__WEBPACK_IMPORTED_MODULE_0__["wideView"].column.unit + ')'
+    this.nodes.style.gridTemplateColumns = this.style.gridTemplateColumns
 
     return this.nodes
+  }
+
+  /**
+   * Renders a table in a size suitable for Vue.js display
+   * @return {{rows: Array}}
+   */
+  renderTable () {
+    let table = {
+      rows: []
+    }
+
+    for (let row of this.headers) {
+      let cells = []
+      cells.push(row.titleCell)
+      for (let cell of row.cells) {
+        cells.push(cell)
+      }
+      table.rows.push({cells: cells})
+    }
+
+    for (let row of this.rows) {
+      let cells = []
+      let titleCells = row.titleCell.hierarchyList
+      if (titleCells.length < this.titleColumnQty) {
+        cells.push(_row_title_cell__WEBPACK_IMPORTED_MODULE_1__["default"].placeholderCell(this.titleColumnQty - titleCells.length))
+      }
+      for (let titleCell of titleCells) {
+        cells.push(titleCell)
+      }
+
+      for (let cell of row.cells) {
+        cells.push(cell)
+      }
+      table.rows.push({cells: cells})
+    }
+    table.style = this.style
+
+    return table
+  }
+
+  /**
+   * Inline styles object to use with Vue.js components
+   * @return {{gridTemplateColumns: string}}
+   */
+  get style () {
+    return {
+      gridTemplateColumns: `repeat(${this.visibleColumnQty + this.titleColumnQty}, ${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["wideView"].column.width}${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["wideView"].column.unit})`
+    }
   }
 }
 

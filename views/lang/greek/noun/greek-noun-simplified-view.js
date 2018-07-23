@@ -3,13 +3,12 @@ import Suffix from '../../../../lib/suffix.js'
 import GreekNounView from './greek-noun-view'
 
 export default class GreekNounSimplifiedView extends GreekNounView {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'nounDeclensionSimplified'
     this.name = 'noun declension simplified'
     this.title = 'Noun declension (simplified)'
     this.partOfSpeech = Constants.POFS_NOUN
-    this.inflectionType = Suffix
     let genderMasculine = Constants.GEND_MASCULINE
     let genderFeminine = Constants.GEND_FEMININE
     let genderNeuter = Constants.GEND_NEUTER
@@ -25,7 +24,7 @@ export default class GreekNounSimplifiedView extends GreekNounView {
 
     this.createTable()
 
-    this.table.suffixCellFilter = GreekNounSimplifiedView.suffixCellFilter
+    this.table.morphemeCellFilter = GreekNounSimplifiedView.morphemeCellFilter
   }
 
   static get partsOfSpeech () {
@@ -36,7 +35,7 @@ export default class GreekNounSimplifiedView extends GreekNounView {
     return Suffix
   }
 
-  static suffixCellFilter (suffix) {
+  static morphemeCellFilter (suffix) {
     if (suffix.extendedLangData && suffix.extendedLangData[Constants.STR_LANG_CODE_GRC]) {
       return suffix.extendedLangData[Constants.STR_LANG_CODE_GRC].primary
     } else {

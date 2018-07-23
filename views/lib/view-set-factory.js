@@ -5,13 +5,22 @@ import GreekViewSet from '../lang/greek/greek-view-set.js'
 
 export default class ViewSetFactory {
   static create (homonym, locale) {
-    switch (homonym.languageID) {
+    let Constructor = this.getConstructor(homonym.languageID)
+    return new Constructor(homonym, locale)
+  }
+
+  static getConstructor (languageID) {
+    switch (languageID) {
       case Constants.LANG_LATIN:
-        return new LatinViewSet(homonym, locale)
+        return LatinViewSet
       case Constants.LANG_GREEK:
-        return new GreekViewSet(homonym, locale)
+        return GreekViewSet
       default:
-        return new ViewSet(homonym, locale)
+        return ViewSet
     }
+  }
+
+  static getStandardForm (languageID, viewID, formID, messages) {
+    return this.getConstructor(languageID).getStandardForm(viewID, formID, messages)
   }
 }

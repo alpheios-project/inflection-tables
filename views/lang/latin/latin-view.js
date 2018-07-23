@@ -1,15 +1,12 @@
-import { Constants, LanguageModelFactory, Feature } from 'alpheios-data-models'
-import LanguageDatasetFactory from '../../../lib/language-dataset-factory.js'
+import { Constants, Feature } from 'alpheios-data-models'
 import View from '../../lib/view.js'
 import GroupFeatureType from '../../lib/group-feature-type.js'
 import Table from '../../lib/table.js'
 
 export default class LatinView extends View {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
-    this.model = LanguageModelFactory.getLanguageModel(LatinView.languageID)
-    this.dataset = LanguageDatasetFactory.getDataset(LatinView.languageID)
-    this.language_features = this.model.features
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
+    this.language_features = this.constructor.model.features
     // limit regular verb moods
     this.language_features[Feature.types.mood] =
       new Feature(Feature.types.mood,
@@ -22,11 +19,11 @@ export default class LatinView extends View {
         those values in child objects.
          */
     this.features = {
-      numbers: new GroupFeatureType(this.model.typeFeature(Feature.types.number), 'Number'),
-      cases: new GroupFeatureType(this.model.typeFeature(Feature.types.grmCase), 'Case'),
-      declensions: new GroupFeatureType(this.model.typeFeature(Feature.types.declension), 'Declension'),
-      genders: new GroupFeatureType(this.model.typeFeature(Feature.types.gender), 'Gender'),
-      types: new GroupFeatureType(this.model.typeFeature(Feature.types.type), 'Type')
+      numbers: new GroupFeatureType(this.constructor.model.typeFeature(Feature.types.number), 'Number'),
+      cases: new GroupFeatureType(this.constructor.model.typeFeature(Feature.types.grmCase), 'Case'),
+      declensions: new GroupFeatureType(this.constructor.model.typeFeature(Feature.types.declension), 'Declension'),
+      genders: new GroupFeatureType(this.constructor.model.typeFeature(Feature.types.gender), 'Gender'),
+      types: new GroupFeatureType(this.constructor.model.typeFeature(Feature.types.type), 'Type')
     }
     this.features.declensions.getTitle = LatinView.getDeclensionTitle
   }
@@ -55,10 +52,15 @@ export default class LatinView extends View {
     this.table = new Table([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases])
     let features = this.table.features
-    features.columns = [this.model.typeFeature(Feature.types.declension), this.model.typeFeature(Feature.types.gender), this.model.typeFeature(Feature.types.type)]
-    features.rows = [this.model.typeFeature(Feature.types.number), this.model.typeFeature(Feature.types.grmCase)]
-    features.columnRowTitles = [this.model.typeFeature(Feature.types.grmCase)]
-    features.fullWidthRowTitles = [this.model.typeFeature(Feature.types.number)]
+    features.columns = [
+      this.constructor.model.typeFeature(Feature.types.declension),
+      this.constructor.model.typeFeature(Feature.types.gender),
+      this.constructor.model.typeFeature(Feature.types.type)]
+    features.rows = [
+      this.constructor.model.typeFeature(Feature.types.number),
+      this.constructor.model.typeFeature(Feature.types.grmCase)]
+    features.columnRowTitles = [this.constructor.model.typeFeature(Feature.types.grmCase)]
+    features.fullWidthRowTitles = [this.constructor.model.typeFeature(Feature.types.number)]
   }
 
   /**

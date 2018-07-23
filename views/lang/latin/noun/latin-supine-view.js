@@ -5,23 +5,27 @@ import GroupFeatureType from '../../../lib/group-feature-type'
 import Table from '../../../lib/table'
 
 export default class LatinSupineView extends LatinView {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.partOfSpeech = this.constructor.mainPartOfSpeech
     this.id = 'verbSupine'
     this.name = 'supine'
     this.title = 'Supine'
     this.features.moods = new GroupFeatureType(
-      new Feature(Feature.types.mood, [Constants.MOOD_SUPINE], this.model.languageID),
+      new Feature(Feature.types.mood, [Constants.MOOD_SUPINE], this.constructor.model.languageID),
       'Mood')
     this.language_features[Feature.types.grmCase] = new Feature(Feature.types.grmCase,
-      [Constants.CASE_ACCUSATIVE, Constants.CASE_ABLATIVE], this.model.languageID)
+      [Constants.CASE_ACCUSATIVE, Constants.CASE_ABLATIVE], this.constructor.model.languageID)
     this.features = {
       cases: new GroupFeatureType(this.language_features[Feature.types.grmCase], 'Case'),
       voices: new GroupFeatureType(this.language_features[Feature.types.voice], 'Voice'),
       conjugations: new GroupFeatureType(this.language_features[Feature.types.conjugation], 'Conjugation Stem')
     }
     this.createTable()
+  }
+
+  static get viewID () {
+    return 'latin_supine_view'
   }
 
   static get partsOfSpeech () {

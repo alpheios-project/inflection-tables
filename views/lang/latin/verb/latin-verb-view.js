@@ -3,8 +3,8 @@ import LatinView from '../latin-view.js'
 import GroupFeatureType from '../../../lib/group-feature-type'
 
 export default class LatinVerbView extends LatinView {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
 
     this.features = {
       tenses: new GroupFeatureType(this.language_features[Feature.types.tense], 'Tenses'),

@@ -10,11 +10,12 @@ import GreekView from '../greek-view.js'
 export default class GreekVerbParadigmView extends GreekView {
   /**
    * @param {Paradigm} paradigm
+   * @param {Homonym} homonym
    * @param {InflectionData} inflectionData
    * @param {string} locale
    */
-  constructor (paradigm, inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (paradigm, homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = paradigm.id
     this.name = paradigm.title.toLowerCase()
     this.title = paradigm.title
@@ -81,23 +82,29 @@ export default class GreekVerbParadigmView extends GreekView {
    * within an `inflectionData` object.
    * By default a view can be used if a view and an inflection data piece have the same language,
    * the same part of speech, and the view is enabled for lexemes within an inflection data.
+   * @param homonym
    * @param inflectionData
    * @return {boolean}
    */
-  static matchFilter (inflection, inflectionData) {
-    if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value)) {
+  static matchFilter (homonym, inflectionData) {
+    return (this.languageID === homonym.languageID &&
+      homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech)) &&
+      inflectionData.types.has(this.inflectionType)
+
+    /* if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value)) {
       let inflectionSet = inflectionData.pos.get(inflection[Feature.types.part].value)
       if (inflectionSet.types.has(this.inflectionType)) {
         return true
       }
     }
-    return false
+    return false */
   }
 
-  static getMatchingInstances (inflection, inflectionData, messages) {
-    if (this.matchFilter(inflection, inflectionData)) {
-      let paradigms = inflectionData.pos.get(inflection[Feature.types.part].value).types.get(this.inflectionType).items
-      return paradigms.map(paradigm => new this(paradigm, inflectionData, messages))
+  static getMatchingInstances (homonym, messages) {
+    let inflectionData = this.getInflectionsData(homonym)
+    if (this.matchFilter(homonym, inflectionData)) {
+      let paradigms = inflectionData.types.get(this.inflectionType).items
+      return paradigms.map(paradigm => new this(paradigm, homonym, inflectionData, messages))
     }
     return []
   }

@@ -3,8 +3,8 @@ import { Constants, LatinLanguageModel, Feature } from 'alpheios-data-models'
 import MessageBundle from '../../../l10n/message-bundle.js'
 import MatchData from '../../../lib/match-data.js'
 import Suffix from '../../../lib/suffix.js'
-import InflectionData from '../../../lib/inflection-data.js'
-import Footnote from '../../../lib/footnote.js'
+// import InflectionData from '../../../lib/inflection-data.js'
+// import Footnote from '../../../lib/footnote.js'
 import { classNames as CLASS_NAMES, wideView as WIDE_VIEW } from '../../styles/styles.js'
 import Cell from '../cell.js'
 import GroupFeatureType from '../group-feature-type.js'
@@ -13,7 +13,7 @@ import HeaderCell from '../header-cell.js'
 import RowTitleCell from '../row-title-cell.js'
 import Row from '../row.js'
 import Column from '../column.js'
-import View from '../view.js'
+// import View from '../view.js'
 import WideView from '../wide-view.js'
 import NarrowView from '../narrow-view.js'
 import Table from '../table.js'
@@ -35,7 +35,8 @@ describe('Cell', () => {
     if (!cell.nNode.dataset) { cell.nNode.dataset = {} }
   })
 
-  test('Should be initialized properly.', () => {
+  // TODO: update this test
+  test.skip('Should be initialized properly.', () => {
     expect(cell).toEqual(expect.objectContaining({
       suffixes: suffixes,
       empty: false,
@@ -1002,9 +1003,9 @@ describe('Table', () => {
   Not testing construct() and constructViews() for now.
    */
 
-  test('suffixColumnQty() should return a number of columns.', () => {
+  test('dataColumnQty() should return a number of columns.', () => {
     table.columns = [new Column(), new Column()]
-    expect(table.suffixColumnQty).toBe(2)
+    expect(table.dataColumnQty).toBe(2)
     table.columns = []
   })
 
@@ -1012,10 +1013,10 @@ describe('Table', () => {
     expect(table.titleColumnQty).toBe(1)
   })
 
-  test('suffixRowQty() should return a number of rows with suffixes.', () => {
+  test('dataRowQty() should return a number of rows with suffixes.', () => {
     table.columns = [new Column()]
     table.columns[0].cells = [new Cell(), new Cell()]
-    expect(table.suffixRowQty).toBe(2)
+    expect(table.dataRowQty).toBe(2)
     table.columns = []
   })
 
@@ -1135,13 +1136,24 @@ describe('Table', () => {
 
 // TODO: Tests that rely on importing JSON are skipped for now because of difference in parsing between node.js and webpack imports
 describe('View', () => {
-  let partOfSpeech, featureOne, featureTwo, featureThree, features, messages, messageBundle,
-    footnotesList, inflectionData, view, word, title, latin
+  // let partOfSpeech
+  let featureOne
+  let featureTwo
+  let featureThree
+  // let features
+  // let messages
+  // let messageBundle
+  // let footnotesList
+  // let inflectionData
+  let view
+  // let word
+  // let title
+  let latin
 
   beforeAll(() => {
-    partOfSpeech = 'noun'
-    title = 'Test Title'
-    word = 'Test'
+    // partOfSpeech = 'noun'
+    // title = 'Test Title'
+    // word = 'Test'
     latin = new LatinLanguageModel()
 
     featureOne = new GroupFeatureType(latin.features[Feature.types.gender], 'Gender')
@@ -1155,9 +1167,9 @@ describe('View', () => {
     featureThree.formsRow = true
     featureThree.hasFullWidthRowTitle = true
 
-    features = [featureOne, featureTwo, featureThree]
+    // features = [featureOne, featureTwo, featureThree]
 
-    messages = {
+    /* messages = {
       Number: 'Number',
       Case: 'Case',
       Declension: 'Declension',
@@ -1167,9 +1179,9 @@ describe('View', () => {
       'Conjugation Stem': 'Conjugation Stem',
       Mood: 'Mood',
       Person: 'Person'
-    }
+    } */
 
-    messageBundle = new MessageBundle('en-US', messages)
+    /* messageBundle = new MessageBundle('en-US', messages)
 
     footnotesList = [new Footnote(1, 'FootnoteOne'), new Footnote(2, 'FootnoteTwo')]
     // footnotes = new t.View.Footnotes(footnotesList)
@@ -1189,7 +1201,7 @@ describe('View', () => {
     view.table = new Table(features)
     view.table.messages = messageBundle
     view.table.features.columns = [featureOne]
-    view.table.features.rows = [featureTwo, featureThree]
+    view.table.features.rows = [featureTwo, featureThree] */
   })
 
   /*

@@ -4,9 +4,9 @@ import LatinView from '../latin-view.js'
 import GroupFeatureType from '../../../lib/group-feature-type'
 
 export default class LatinNounView extends LatinView {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
-    this.id = 'nounDeclension'
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
+    this.id = 'noun_declension'
     this.name = 'noun declension'
     this.title = 'Noun declension'
 
@@ -14,6 +14,10 @@ export default class LatinNounView extends LatinView {
     this.features.genders = new GroupFeatureType(this.language_features[Feature.types.gender], 'Gender',
       [Constants.GEND_MASCULINE, Constants.GEND_FEMININE, Constants.GEND_NEUTER])
     this.createTable()
+  }
+
+  static get viewID () {
+    return 'latin_noun_view'
   }
 
   static get partsOfSpeech () {

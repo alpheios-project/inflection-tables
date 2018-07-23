@@ -1,5 +1,6 @@
-import { Feature, LanguageModelFactory } from 'alpheios-data-models'
+import { LanguageModelFactory } from 'alpheios-data-models'
 import LanguageDatasetFactory from '../../lib/language-dataset-factory.js'
+
 /**
  * A set of inflection table views that represent all possible forms of inflection data. A new ViewSet instance
  * mast be created for each new inflection data piece.
@@ -12,6 +13,7 @@ export default class ViewSet {
   constructor (homonym, locale) {
     this.homonym = homonym
     this.languageID = homonym.languageID
+    this.dataset = LanguageDatasetFactory.getDataset(homonym.languageID)
 
     /**
      * Whether inflections are enabled for the homonym's language
@@ -19,27 +21,33 @@ export default class ViewSet {
     this.enabled = LanguageModelFactory.getLanguageModel(homonym.languageID).canInflect()
     this.inflectionData = null
     this.locale = locale
+    this.matchingViews = []
     this.matchingViewsMap = new Map()
 
     if (this.enabled) {
-      this.inflectionData = LanguageDatasetFactory.getInflectionData(this.homonym)
-      for (const lexeme of this.homonym.lexemes) {
-        for (const inflection of lexeme.inflections) {
-          const matchingInstances = this.constructor.views.reduce(
-            (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), [])
-          if (matchingInstances.length > 0) {
-            // There are any matching instances found
-            if (!this.matchingViewsMap.has(inflection[Feature.types.part].value)) {
-              this.matchingViewsMap.set(inflection[Feature.types.part].value, [])
-            }
-            let storedInstances = this.matchingViewsMap.get(inflection[Feature.types.part].value)
-            // Filter out instances that are already stored in a view set
-            let newInstances = matchingInstances.filter(i => !storedInstances.some(v => v.sameAs(i)))
-            if (newInstances.length > 0) { storedInstances.push(...newInstances) }
-          }
+      // this.inflectionData = LanguageDatasetFactory.getInflectionData(this.homonym)
+
+      for (let lexeme of homonym.lexemes) {
+        for (let inflection of lexeme.inflections) {
+          // Inflections are grouped by part of speech
+          inflection = this.dataset.setInflectionData(inflection, lexeme.lemma)
         }
       }
+
+      // let view = new LatinNounView(homonym, locale)
+      // this.matchingViews = [view]
+      this.matchingViews.push(...this.constructor.views.reduce(
+        (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.messages)), []))
+      /* for (const lexeme of this.homonym.lexemes) {
+        // TODO: Can we handle combined data better?
+        for (const inflection of lexeme.inflections) {
+          matchingInstances.push(...this.constructor.views.reduce(
+            (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), []))
+        }
+      } */
+      this.updateMatchingViewsMap(this.matchingViews)
     }
+    this.matchingViews.forEach(v => v.render())
   }
   /**
    * Returns a list of views available within a view set. Should be redefined in descendant classes.
@@ -55,6 +63,20 @@ export default class ViewSet {
 
   get hasMatchingViews () {
     return this.matchingViewsMap.size > 0
+  }
+
+  updateMatchingViewsMap (views) {
+    for (const view of views) {
+      if (!this.matchingViewsMap.has(view.partOfSpeech)) {
+        this.matchingViewsMap.set(view.partOfSpeech, [])
+      }
+      let storedInstances = this.matchingViewsMap.get(view.partOfSpeech)
+      // Filter out instances that are already stored in a view set
+      const isNew = !storedInstances.find(v => v.sameAs(view))
+      if (isNew) {
+        storedInstances.push(view)
+      }
+    }
   }
 
   /**
@@ -87,5 +109,14 @@ export default class ViewSet {
     for (let view of this.matchingViews) {
       view.setLocale(locale)
     }
+  }
+
+  static getViewByID (viewID) {
+    return this.views.find(v => v.viewID === viewID)
+  }
+
+  static getStandardForm (viewID, formID, messages) {
+    let view = this.getViewByID(viewID)
+    return view ? view.getStandardFormInstance(formID, messages) : null
   }
 }

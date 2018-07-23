@@ -1,5 +1,5 @@
-import { Feature } from 'alpheios-data-models'
-import uuidv4 from 'uuid/v4'
+import { Feature, Inflection, Homonym, LanguageModelFactory } from 'alpheios-data-models'
+import LDF from '../../lib/language-dataset-factory.js'
 import L10n from '../../l10n/l10n.js'
 
 /**
@@ -9,12 +9,13 @@ export default class View {
   /**
    * Initializes a View object with options. There is at least one view per part of speech,
    * but there could be several views for the same part of speech that show different table representation of a view.
-   * @param {InflectionData} inflectionData - An inflection data object.
+   * @param {Homonym} homonym - A homonym
+   * @param {InflectionSet} inflectionSet - An inflection data object.
    * @param {string} locale - A locale for serving localized messages. If none provided, a default language will be used.
    */
-  constructor (inflectionData, locale = L10n.defaultLocale) {
-    this.languageID = View.languageID
-    this.inflectionData = inflectionData
+  constructor (homonym, inflectionSet, locale = L10n.defaultLocale) {
+    this.homonym = homonym
+    this.inflectionData = inflectionSet
     this.messages = L10n.getMessages(locale)
     this.pageHeader = {}
     // A view can be rendered for different parts of speech. This is a part of speech this view currently uses
@@ -24,7 +25,10 @@ export default class View {
     this.container = undefined
 
     // Must be implemented in a descendant
-    this.id = uuidv4() // A unique ID of a view instance. Can be used as a value in view selectors.
+
+    // A unique ID of a view instance. Can be used as a value in view selectors. Should consist of lowercase letters,
+    // numbers, and underscores only.
+    this.id = 'base_view'
     this.name = 'base view'
     this.title = 'Base View'
     this.hasComponentData = false // True if vue supports Vue.js components
@@ -42,6 +46,10 @@ export default class View {
      * @type {string}
      */
     this.creditsText = ''
+  }
+
+  static get viewID () {
+    return 'base_view'
   }
 
   /**
@@ -74,8 +82,20 @@ export default class View {
   }
 
   /**
+   * Returns a dataset for a view data
+   * @return {LanguageDataset}
+   */
+  static get dataset () {
+    return LDF.getDataset(this.languageID)
+  }
+
+  static get model () {
+    return LanguageModelFactory.getLanguageModel(this.languageID)
+  }
+
+  /**
    * Defines an inflection type (Suffix/Form) of a view. Should be redefined in child classes.
-   * @return {Function | undefined}
+   * @return {Suffix|Form|Paradigm|undefined}
    */
   static get inflectionType () {
   }
@@ -87,14 +107,15 @@ export default class View {
   /**
    * Determines wither this view can be used to display an inflection table of any data
    * within an `inflectionData` object.
-   * By default a view can be used if a view and an inflection data piece have the same language,
-   * the same part of speech, and the view is enabled for lexemes within an inflection data.
-   * @param inflection
-   * @param inflectionData
+   * By default a view can be used if a view has the same language as homonym
+   * and homonym's inflections has at least one with a part of speech that matches view
+   * @param homonym
    * @return {boolean}
    */
-  static matchFilter (inflection, inflectionData) {
-    return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
+  static matchFilter (homonym) {
+    // return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
+    // Disable multiple parts of speech for now
+    return (this.languageID === homonym.languageID && homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech))
   }
 
   /**
@@ -102,13 +123,14 @@ export default class View {
    * By default only one instance of the view is returned, by views can override this method
    * to return multiple views if necessary (e.g. paradigm view can return multiple instances of the view
    * with different data).
-   * @param {InflectionData} inflectionData
+   * @param {Inflection} homonym - An inflection for which matching instances to be found.
    * @param {MessageBundle} messages
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
-  static getMatchingInstances (inflection, inflectionData, messages) {
-    if (this.matchFilter(inflection, inflectionData)) {
-      return [new this(inflectionData, messages)]
+  static getMatchingInstances (homonym, messages) {
+    if (this.matchFilter(homonym)) {
+      let inflectionData = this.getInflectionsData(homonym)
+      return [new this(homonym, inflectionData, messages)]
     }
     return []
   }
@@ -139,35 +161,34 @@ export default class View {
    * `messages` provides a translation for view's texts.
    */
   render () {
-    this.footnotes = this.getFootnotes(this.inflectionData)
-    // Table is already created during a view construction
+    this.footnotes = this.getFootnotes()
     this.table.messages = this.messages
-    for (let lexeme of this.inflectionData.homonym.lexemes) {
-      for (let inflection of lexeme.inflections) {
-        if (inflection[Feature.types.part].values.includes(this.partOfSpeech)) {
-          this.forms.add(inflection.form)
-        }
-      }
-    }
-    this.table.construct(this.getMorphemes(this.inflectionData)).constructViews().addEventListeners()
+    this.morphemes = this.getMorphemes()
+    this.table.construct(this.morphemes).constructViews().addEventListeners()
+    this.table.wideView.render() // This is a compatibility code that is required to render HTML nodes
+    this.wideTable = this.table.wideView.renderTable()
     return this
+  }
+
+  static getInflectionsData (homonym) {
+    // Select inflections this view needs
+    let inflections = homonym.inflections.filter(i => i[Feature.types.part].value === this.mainPartOfSpeech)
+    return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
   }
 
   /**
    * A compatibility function to get morphemes, either suffixes or forms, depending on the view type.
    * By default, it returns suffixes
-   * @param {InflectionData} inflectionData
    */
-  getMorphemes (inflectionData) {
-    return inflectionData.pos.get(this.partOfSpeech).types.get(this.constructor.inflectionType).items
+  getMorphemes () {
+    return this.inflectionData.types.get(this.constructor.inflectionType).items
   }
 
   /**
    * A compatibility function to get footnotes for either suffixes or forms, depending on the view type
-   * @param {InflectionData} inflectionData
    */
-  getFootnotes (inflectionData) {
-    return inflectionData.pos.get(this.partOfSpeech).types.get(this.constructor.inflectionType).footnotesMap
+  getFootnotes () {
+    return this.inflectionData.types.get(this.constructor.inflectionType).footnotesMap
   }
 
   get wideViewNodes () {
@@ -212,6 +233,10 @@ export default class View {
     return this
   }
 
+  highlightRowAndColumn (cell) {
+    cell.highlightRowAndColumn()
+  }
+
   /**
    * A utility function to convert a string to a Sentence case.
    * @param {string} string - A source string.
@@ -233,5 +258,20 @@ export default class View {
       .split(' ')
       .map(word => word.length >= 1 ? `${word[0].toUpperCase()}${word.substr(1)}` : '')
       .join(' ')
+  }
+
+  static createStandardFormHomonym () {
+    let inflection = new Inflection('standard form stem', this.languageID, 'standard form suffix')
+    inflection.addFeature(new Feature(Feature.types.part, this.mainPartOfSpeech, this.languageID))
+    let homonym = Homonym.createSimpleForm('standard form word', this.languageID, [inflection])
+    inflection = this.dataset.setInflectionData(inflection, homonym.lexemes[0].lemma)
+    return homonym
+  }
+
+  static getStandardFormInstance (formID, messages) {
+    let homonym = this.createStandardFormHomonym()
+    let inflectionData = this.getInflectionsData(homonym)
+    // TODO: Find the best way to pass messages (the last argument)
+    return new this(homonym, inflectionData, messages).render()
   }
 }

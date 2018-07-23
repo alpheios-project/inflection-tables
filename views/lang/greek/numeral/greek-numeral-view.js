@@ -6,13 +6,12 @@ import GreekView from '../greek-view.js'
 import GroupFeatureType from '../../../lib/group-feature-type.js'
 
 export default class GreekNumeralView extends GreekView {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'numeralDeclension'
     this.name = 'numeral declension'
     this.title = 'Numeral declension'
     this.partOfSpeech = this.constructor.mainPartOfSpeech
-    this.inflectionType = Form
 
     this.featureTypes = {}
 
@@ -22,13 +21,13 @@ export default class GreekNumeralView extends GreekView {
     this.featureTypes.numbers = new Feature(
       Feature.types.number,
       [Constants.NUM_SINGULAR, Constants.NUM_DUAL, Constants.NUM_PLURAL],
-      this.languageID
+      this.constructor.languageID
     )
 
     this.featureTypes.genders = new Feature(
       Feature.types.gender,
       [Constants.GEND_MASCULINE, Constants.GEND_FEMININE, GEND_MASCULINE_FEMININE, Constants.GEND_NEUTER, GEND_MASCULINE_FEMININE_NEUTER],
-      this.languageID
+      this.constructor.languageID
     )
 
     const lemmaValues = this.dataset.getNumeralGroupingLemmas()
@@ -37,9 +36,9 @@ export default class GreekNumeralView extends GreekView {
     this.features = {
       lemmas: new GroupFeatureType(this.featureTypes.lemmas, 'Lemma'),
       genders: new GroupFeatureType(this.featureTypes.genders, 'Gender'),
-      types: new GroupFeatureType(this.model.typeFeature(Feature.types.type), 'Type'),
+      types: new GroupFeatureType(this.constructor.model.typeFeature(Feature.types.type), 'Type'),
       numbers: new GroupFeatureType(this.featureTypes.numbers, 'Number'),
-      cases: new GroupFeatureType(this.model.typeFeature(Feature.types.grmCase), 'Case')
+      cases: new GroupFeatureType(this.constructor.model.typeFeature(Feature.types.grmCase), 'Case')
     }
 
     this.features.genders.getTitle = function getTitle (featureValue) {
@@ -84,8 +83,8 @@ export default class GreekNumeralView extends GreekView {
     features.fullWidthRowTitles = [this.featureTypes.numbers]
   }
 
-  getMorphemes (inflectionData) {
+  /* getMorphemes (inflectionData) {
     return inflectionData.pos.get(this.partOfSpeech)
       .types.get(this.constructor.inflectionType).items
-  }
+  } */
 }

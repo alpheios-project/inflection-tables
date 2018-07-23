@@ -3,13 +3,11 @@ import Suffix from '@lib/suffix.js'
 import GreekView from '@views/lang/greek/greek-view.js'
 
 export default class GreekAdjectiveView extends GreekView {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
     this.id = 'adjectiveDeclension'
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
-    this.partOfSpeech = this.constructor.mainPartOfSpeech
-    this.inflectionType = Suffix
     const genderMasculine = Constants.GEND_MASCULINE
     const genderFeminine = Constants.GEND_FEMININE
     const genderNeuter = Constants.GEND_NEUTER
