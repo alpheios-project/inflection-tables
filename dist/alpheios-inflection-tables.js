@@ -15594,7 +15594,6 @@ class GroupFeatureType extends alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__
    * Use this parameter to redefine a default sort order for a type.
    */
   constructor (feature, titleMessageID, order = feature.values) {
-    console.info('*********************GroupFeatureType', titleMessageID, feature)
     super(feature.type, order, feature.languageID)
 
     this.groupTitle = titleMessageID
@@ -16134,6 +16133,7 @@ class RowTitleCell {
    * and will have its own title cells, we need to create a copy of a title cell for each such group.
    */
   constructor (title, groupingFeature, nvGroupQty) {
+    console.log('*******************RowTitleCell', title, groupingFeature, nvGroupQty)
     this.parent = undefined
     this.title = title
     this.feature = groupingFeature
