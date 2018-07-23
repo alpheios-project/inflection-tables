@@ -15307,7 +15307,6 @@ class Column {
    * @param {HeaderCell} headerCell - A header cell of this column.
    */
   set headerCell (headerCell) {
-    console.info('*************************headerCell', headerCell)
     this._headerCell = headerCell
     headerCell.addColumn(this)
   }
@@ -15595,6 +15594,7 @@ class GroupFeatureType extends alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__
    * Use this parameter to redefine a default sort order for a type.
    */
   constructor (feature, titleMessageID, order = feature.values) {
+    console.info('*********************GroupFeatureType', titleMessageID, feature)
     super(feature.type, order, feature.languageID)
 
     this.groupTitle = titleMessageID

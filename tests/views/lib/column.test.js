@@ -27,6 +27,7 @@ describe('column.test.js', () => {
   console.warn = function () {}
 
   let maAdapter, testHomonym, testInflectionData, testMorphemes, testFeatures, testCells
+  let testGroupingFeature, testGroupFeatureType, testHeaderCell
 
   const testLocale = 'en-US'
 
@@ -59,6 +60,10 @@ describe('column.test.js', () => {
     testCells.push(new Cell([testMorphemes[10]], testFeatures))
     testCells.push(new Cell([testMorphemes[13]], testFeatures))
     testCells.push(new Cell([testMorphemes[8]], testFeatures))
+
+    testGroupingFeature = new Feature(Feature.types.gender, 'masculine', Constants.LANG_GREEK)
+    testGroupFeatureType = new GroupFeatureType(testGroupingFeature, 'Gender')
+    testHeaderCell = new HeaderCell('masculine', testGroupFeatureType)
   })
 
   beforeEach(() => {
@@ -82,18 +87,111 @@ describe('column.test.js', () => {
     expect(column.suffixMatches).toBeFalsy()
     expect(testCells.every(cell => cell.column !== undefined)).toBeTruthy()
   })
-/*
-  it('2 Column - headerCell sets _headerCell and column for headerCell', () => {
+
+  it('2 Column - constructor creates column even if cells are not defined', () => {
+    let column = new Column()
+    expect(column.cells.length).toEqual(0)
+  })
+
+  it('3 Column - headerCell sets _headerCell and column for headerCell', () => {
     let column = new Column(testCells)
 
-    let testGroupingFeature = new Feature(Feature.types.type, 'regular', Constants.LANG_GREEK)
+    testHeaderCell.addColumn = jest.fn()
 
-    let testGroupFeatureType = new GroupFeatureType(testGroupingFeature, 'type')
-    let testHeaderCell = new HeaderCell('type', testGroupFeatureType)
-
-    console.info('***********testHeaderCell', testHeaderCell)
     column.headerCell = testHeaderCell
-    expect(column._headerCell.title).toEqual('type')
-    expect(testHeaderCell.column).toBeDefined()
-  }) */
+    expect(column._headerCell.title).toEqual('masculine')
+    expect(testHeaderCell.addColumn).toHaveBeenCalled()
+  })
+
+  it('4 Column - length returns count of cells', () => {
+    let column = new Column(testCells)
+    expect(column.length).toEqual(4)
+  })
+
+  it('5 Column - hide method makes hidden the column and each cells and headerCell', () => {
+    let column = new Column(testCells)
+    testCells.forEach(cell => { cell.hide = jest.fn() })
+
+    testHeaderCell.columnStateChange = jest.fn()
+    column.headerCell = testHeaderCell
+
+    expect(column.hidden).toBeFalsy()
+
+    column.hide()
+    expect(column.hidden).toBeTruthy()
+    testCells.forEach(cell => { expect(cell.hide).toHaveBeenCalled() })
+    expect(testHeaderCell.columnStateChange).toHaveBeenCalled()
+  })
+
+  it('6 Column - hide method does nothing if column is alredy hidden', () => {
+    let column = new Column(testCells)
+    column.hide()
+
+    testCells.forEach(cell => { cell.hide = jest.fn() })
+    testHeaderCell.columnStateChange = jest.fn()
+    column.headerCell = testHeaderCell
+
+    column.hide()
+    testCells.forEach(cell => { expect(cell.hide).not.toHaveBeenCalled() })
+    expect(testHeaderCell.columnStateChange).not.toHaveBeenCalled()
+  })
+
+  it('7 Column - show method makes shown the column and each cells and headerCell', () => {
+    let column = new Column(testCells)
+    column.headerCell = testHeaderCell
+    column.hide()
+
+    testCells.forEach(cell => { cell.show = jest.fn() })
+    testHeaderCell.columnStateChange = jest.fn()
+
+    expect(column.hidden).toBeTruthy()
+
+    column.show()
+
+    expect(column.hidden).toBeFalsy()
+    testCells.forEach(cell => { expect(cell.show).toHaveBeenCalled() })
+    expect(testHeaderCell.columnStateChange).toHaveBeenCalled()
+  })
+
+  it('8 Column - show method does nothing if the column is already shown', () => {
+    let column = new Column(testCells)
+    column.headerCell = testHeaderCell
+    column.show()
+
+    testCells.forEach(cell => { cell.show = jest.fn() })
+    testHeaderCell.columnStateChange = jest.fn()
+
+    column.show()
+
+    testCells.forEach(cell => { expect(cell.show).not.toHaveBeenCalled() })
+    expect(testHeaderCell.columnStateChange).not.toHaveBeenCalled()
+  })
+
+  it('9 Column - highlight method highlights each cells and headerCell', () => {
+    let column = new Column(testCells)
+    column.headerCell = testHeaderCell
+
+    testCells.forEach(cell => { cell.highlight = jest.fn() })
+    testHeaderCell.highlight = jest.fn()
+
+    column.highlight()
+
+    testCells.forEach(cell => { expect(cell.highlight).toHaveBeenCalled() })
+    expect(testHeaderCell.highlight).toHaveBeenCalled()
+  })
+
+  it('10 Column - clearHighlighting method executes clearHighlighting for each cells and headerCell', () => {
+    let column = new Column(testCells)
+    column.headerCell = testHeaderCell
+
+    column.highlight()
+
+    testCells.forEach(cell => { cell.clearHighlighting = jest.fn() })
+    testHeaderCell.clearHighlighting = jest.fn()
+
+    column.clearHighlighting()
+
+    testCells.forEach(cell => { expect(cell.clearHighlighting).toHaveBeenCalled() })
+    expect(testHeaderCell.clearHighlighting).toHaveBeenCalled()
+  })
 })
