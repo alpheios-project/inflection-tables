@@ -16133,7 +16133,6 @@ class RowTitleCell {
    * and will have its own title cells, we need to create a copy of a title cell for each such group.
    */
   constructor (title, groupingFeature, nvGroupQty) {
-    console.log('*******************RowTitleCell', title, groupingFeature, nvGroupQty)
     this.parent = undefined
     this.title = title
     this.feature = groupingFeature
