@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import 'whatwg-fetch'
 import ViewSet from '@views/lib/view-set.js'
-
+import ViewSetFactory from '@views/lib/view-set-factory.js'
 import LanguageDatasetFactory from '@lib/language-dataset-factory.js'
 import { AlpheiosTuftsAdapter } from 'alpheios-morph-client'
 import { Constants } from 'alpheios-data-models'
@@ -52,8 +52,7 @@ describe('view-set.test.js', () => {
   })
 
   it('1 ViewSet - constructor creates viewSet with default values', () => {
-    console.info('*******************testHomonym', testHomonym)
-    let VS = new ViewSet(testHomonym, testLocale)
+    let VS = ViewSetFactory.create(testHomonym, testLocale)
 
     expect(VS.homonym.targetWord).toEqual('ἐμαυτοῦ')
     expect(VS.languageID).toEqual(Constants.LANG_GREEK)
@@ -62,34 +61,34 @@ describe('view-set.test.js', () => {
     expect(VS.partsOfSpeech.length).toBeGreaterThan(0)
   })
 
-  it.skip('2 ViewSet - hasMatchingViews returns true if inflectionData has views from matching views', () => {
-    let VS = new ViewSet(testHomonym, testLocale)
+  it('2 ViewSet - hasMatchingViews returns true if inflectionData has views from matching views', () => {
+    let VS = ViewSetFactory.create(testHomonym, testLocale)
     expect(VS.hasMatchingViews).toBeTruthy()
   })
 
-  it.skip('3 ViewSet - hasMatchingViews returns false if inflectionData has no views from matching views', () => {
-    let VS = new ViewSet(testHomonymFailed, testLocale)
+  it('3 ViewSet - hasMatchingViews returns false if inflectionData has no views from matching views', () => {
+    let VS = ViewSetFactory.create(testHomonymFailed, testLocale)
     expect(VS.hasMatchingViews).toBeFalsy()
   })
 
-  it.skip('4 ViewSet - getViews returns all views for the part of speech from attributes', () => {
-    let VS = new ViewSet(testHomonym, testLocale)
+  it('4 ViewSet - getViews returns all views for the part of speech from attributes', () => {
+    let VS = ViewSetFactory.create(testHomonym, testLocale)
 
     expect(VS.getViews('pronoun').length).toEqual(1)
     expect(VS.getViews('adjective').length).toEqual(0)
     expect(VS.getViews().length).toEqual(1)
   })
 
-  it.skip('5 ViewSet - updateMessages executes updateMessages for all matchingViews', () => {
-    let VS = new ViewSet(testHomonym, testLocale)
+  it('5 ViewSet - updateMessages executes updateMessages for all matchingViews', () => {
+    let VS = ViewSetFactory.create(testHomonym, testLocale)
     VS.getViews()[0].updateMessages = jest.fn()
 
     VS.updateMessages('foomessages')
     expect(VS.getViews()[0].updateMessages).toHaveBeenCalledWith('foomessages')
   })
 
-  it.skip('6 ViewSet - setLocale executes setLocale for all matchingViews', () => {
-    let VS = new ViewSet(testHomonym, testLocale)
+  it('6 ViewSet - setLocale executes setLocale for all matchingViews', () => {
+    let VS = ViewSetFactory.create(testHomonym, testLocale)
     VS.getViews()[0].setLocale = jest.fn()
 
     VS.setLocale('foolocale')

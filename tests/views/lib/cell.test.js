@@ -65,7 +65,7 @@ describe('cell.test.js', () => {
 
   it('1 Cell - constructor creates Cell with values from attributes and executes render', () => {
     let cell = new Cell(testMorphemes, testFeatures)
-    expect(cell.suffixes.length).toEqual(1)
+    expect(cell.morphemes.length).toEqual(1)
     expect(cell.features.length).toEqual(5)
     expect(cell.empty).toBeFalsy()
     expect(cell.suffixMatches).toBeTruthy()
@@ -75,7 +75,7 @@ describe('cell.test.js', () => {
 
   it('2 Cell - constructor saves empty array if suffixes are not defined', () => {
     let cell = new Cell(null, testFeatures)
-    expect(cell.suffixes.length).toEqual(0)
+    expect(cell.morphemes.length).toEqual(0)
   })
 
   it('3 Cell - index method sets index wNode and nNode', () => {
