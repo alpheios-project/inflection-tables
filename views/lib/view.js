@@ -115,6 +115,8 @@ export default class View {
   static matchFilter (homonym) {
     // return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
     // Disable multiple parts of speech for now
+    console.info('*******************1', this.languageID, homonym.languageID)
+    console.info('*******************2', this.mainPartOfSpeech, homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech))
     return (this.languageID === homonym.languageID && homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech))
   }
 

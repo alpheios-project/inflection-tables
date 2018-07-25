@@ -3344,7 +3344,7 @@ class LanguageDataset {
      suffixBased and fullFormBased flags set to true and we will need to determine
      which one of those makes sense for each particular verb.
      */
-    inflection.constraints = this.model.getInflectionConstraints(inflection)
+
     let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
 
     if (!partOfSpeech) {
@@ -3355,6 +3355,8 @@ class LanguageDataset {
       throw new Error('Part of speech data should have only one value')
     }
     partOfSpeech = partOfSpeech.value
+
+    inflection.constraints = this.model.getInflectionConstraints(inflection)
 
     if (inflection.constraints.pronounClassRequired) {
       /*
@@ -3623,6 +3625,7 @@ class LanguageDataset {
 
       matchData.matchedFeatures.push(...optionalMatches.matchedItems)
 
+      console.info('****************matchData', matchData)
       if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
         // This is a full match
         matchData.fullMatch = true
@@ -4106,12 +4109,21 @@ __webpack_require__.r(__webpack_exports__);
 
 class Paradigm {
   constructor (languageID, partOfSpeech, paradigm) {
+    // console.info('*********************paradigm', paradigm)
     this.id = uuid_v4__WEBPACK_IMPORTED_MODULE_0___default()()
     this.paradigmID = paradigm.ID
     this.languageID = languageID
     this.partOfSpeech = partOfSpeech
     this.title = paradigm.title
-    this.table = paradigm.table
+
+    // this.table = paradigm.table
+    this.table = { rows: [] }
+    paradigm.table.rows.forEach(row => {
+      let newRow = { cells: [] }
+      row.cells.forEach(cell => { newRow.cells.push(Object.assign({}, cell)) })
+      this.table.rows.push(newRow)
+    })
+
     this.hasCredits = !!paradigm.credits
     this.creditsText = paradigm.credits ? paradigm.credits : ''
     this.subTables = paradigm.subTables
