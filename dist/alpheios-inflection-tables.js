@@ -3625,7 +3625,6 @@ class LanguageDataset {
 
       matchData.matchedFeatures.push(...optionalMatches.matchedItems)
 
-      console.info('****************matchData', matchData)
       if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
         // This is a full match
         matchData.fullMatch = true
@@ -13409,7 +13408,7 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__["defa
       this.constructor.languageID
     )
 
-    const lemmaValues = this.dataset.getNumeralGroupingLemmas()
+    const lemmaValues = this.constructor.dataset.getNumeralGroupingLemmas()
     this.featureTypes.lemmas = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, lemmaValues, GreekNumeralView.languageID)
 
     this.features = {
@@ -14821,7 +14820,7 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
     this.title = 'Verb Conjugation (Irregular)'
 
     const inflectionsWords = inflectionData.homonym.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
-    const lemma = this.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
+    const lemma = this.constructor.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
     this.additionalTitle = lemma.word + ', ' + lemma.principalParts
 
@@ -17005,6 +17004,8 @@ class ViewSet {
       // this.matchingViews = [view]
       this.matchingViews.push(...this.constructor.views.reduce(
         (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.messages)), []))
+
+      console.info('****************this.matchingViews', this.matchingViews)
       /* for (const lexeme of this.homonym.lexemes) {
         // TODO: Can we handle combined data better?
         for (const inflection of lexeme.inflections) {
@@ -17222,6 +17223,8 @@ class View {
   static matchFilter (homonym) {
     // return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
     // Disable multiple parts of speech for now
+    console.info('*******************1', this.languageID, homonym.languageID)
+    console.info('*******************2', this.mainPartOfSpeech, homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech))
     return (this.languageID === homonym.languageID && homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech))
   }
 
