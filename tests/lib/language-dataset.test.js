@@ -86,7 +86,7 @@ describe('language-dataset.test.js', () => {
     expect(LD.pos.get('adjective').constructor.name).toEqual('InflectionSet')
     expect(LD.pos.get('adjective').partOfSpeech).toEqual('adjective')
     expect(Array.from(LD.pos.get('adjective').types.keys())).toEqual([Suffix])
-    expect(LD.pos.get('adjective').types.get(Suffix).constructor.name).toEqual('Inflections')
+    expect(LD.pos.get('adjective').types.get(Suffix).constructor.name).toEqual('InflectionList')
   })
 
   it('4 LanguageDataset - addParadigms adds Paradigm to LanguageDataset.pos', () => {
@@ -112,7 +112,7 @@ describe('language-dataset.test.js', () => {
     expect(LD.pos.get('verb').constructor.name).toEqual('InflectionSet')
     expect(LD.pos.get('verb').partOfSpeech).toEqual('verb')
     expect(Array.from(LD.pos.get('verb').types.keys())).toEqual([Paradigm])
-    expect(LD.pos.get('verb').types.get(Paradigm).constructor.name).toEqual('Inflections')
+    expect(LD.pos.get('verb').types.get(Paradigm).constructor.name).toEqual('ParadigmInflectionList')
   })
 
   it('5 LanguageDataset - addFootnote checks arguments - index and text are required', () => {
