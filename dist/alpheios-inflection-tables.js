@@ -544,147 +544,21 @@ class InflectionData {
 
 /***/ }),
 
-/***/ "./lib/inflection-set.js":
-/*!*******************************!*\
-  !*** ./lib/inflection-set.js ***!
-  \*******************************/
+/***/ "./lib/inflection-list.js":
+/*!********************************!*\
+  !*** ./lib/inflection-list.js ***!
+  \********************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InflectionSet; });
-/* harmony import */ var _inflections_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inflections.js */ "./lib/inflections.js");
-
-
-/**
- * Stores inflections data of different types {such as `Suffix`, `Form`, or `Paradigm`} in a `types` map. Items are grouped by type.
- * May also store inflections that corresponds to stored inflection data.
- */
-class InflectionSet {
-  constructor (partOfSpeech, languageID) {
-    this.languageID = languageID
-    this.partOfSpeech = partOfSpeech
-
-    // Stores inflections (i.e. a form of a word with grammatical features as returned by a morph analyzer
-    this.inflections = []
-
-    // Stores inflections data (suffixes, forms, and paradigms) for inflections
-    this.types = new Map()
-  }
-
-  /**
-   * Checks if an `InflectionSet` has any types stored. If it does not, it means that an `InflectionSet` is empty.
-   * @return {boolean}
-   */
-  get hasTypes () {
-    return this.types.size !== 0
-  }
-
-  /**
-   * Return a list of item types this set contains.
-   * @return {Function<Morpheme>[]}
-   */
-  get inflectionTypes () {
-    return Array.from(this.types.keys())
-  }
-
-  /**
-   * Checks whether an inflection set has any items of certain type that matches an inflection.
-   * @param {Function<Suffix> | Function<Form> | Function<Paradigm>} itemType - A type of an item.
-   * @param {Inflection} inflection - An inflection to match.
-   * @return {boolean} True if there are matches, false otherwise
-   */
-  hasMatchingItems (itemType, inflection) {
-    return (this.types.has(itemType) && this.types.get(itemType).hasMatches(inflection))
-  }
-
-  /**
-   * Returns an array of items of certain type that matches an inflection.
-   * @param {Function<Suffix> | Function<Form> | Function<Paradigm>} itemType - A type of an item.
-   * @param {Inflection} inflection - An inflection to match.
-   * @return {Suffix[] | Form[] | Paradigm[] | []} Array of items of a particular type if any matches found.
-   * An empty array otherwise.
-   */
-  getMatchingItems (itemType, inflection) {
-    return this.hasMatchingItems(itemType, inflection) ? this.types.get(itemType).getMatches(inflection) : []
-  }
-
-  /**
-   * Adds a single inflection item to the set
-   * @param {Suffix | Form | Paradigm} inflection
-   */
-  addInflectionItem (inflection) {
-    this.addInflectionItems([inflection])
-  }
-
-  /**
-   * Adds an array of inflection items of the same type.
-   * @param {Suffix[] | Form[] | Paradigm[]} items
-   */
-  addInflectionItems (items) {
-    let classType = items[0].constructor.ClassType
-
-    if (!this.types.has(classType)) {
-      this.types.set(classType, new _inflections_js__WEBPACK_IMPORTED_MODULE_0__["default"](classType))
-    }
-
-    this.types.get(classType).addItems(items)
-  }
-
-  /**
-   * Adds an InflectionSet to the existing one. All inflections of a foreign inflection set
-   * will be added to the current one. Inflection data items (Suffixes, Forms, Paradigms) will
-   * be added only if they do not exist in the current InflectionSet.
-   * @param inflectionSet
-   */
-  addInflectionSet (inflectionSet) {
-    if (this.languageID === inflectionSet.languageID && this.partOfSpeech === inflectionSet.partOfSpeech) {
-      this.inflections.push(...inflectionSet.inflections)
-      for (const items of this.types.values()) {
-        this.addInflectionItems(items)
-      }
-    } else {
-      console.warn(`Cannot add inflectionSet [languageID=${inflectionSet.languageID.toString()}, POFS=${inflectionSet.partOfSpeech}]` +
-        ` to [languageID=${this.languageID.toString()}, POFS=${this.partOfSpeech}]`)
-    }
-  }
-
-  /**
-   * Adds a footnote object to inflection data of a specific class type.
-   * @param {Suffix | Form | Paradigm} classType.
-   * @param {number} index - A footnote index.
-   * @param {Footnote} footnote - A Footnote object.
-   */
-  addFootnote (classType, index, footnote) {
-    if (!this.types.has(classType)) {
-      this.types.set(classType, new _inflections_js__WEBPACK_IMPORTED_MODULE_0__["default"](classType))
-    }
-    this.types.get(classType).addFootnote(index, footnote)
-  }
-}
-
-
-/***/ }),
-
-/***/ "./lib/inflections.js":
-/*!****************************!*\
-  !*** ./lib/inflections.js ***!
-  \****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Inflections; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InflectionList; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
 
-// import LanguageDataset from './language-dataset.js'
-// import Form from './form.js'
-// import Suffix from './suffix.js'
 
-class Inflections {
+class InflectionList {
   constructor (type) {
     this.type = type
     this.items = [] // Suffixes or forms
@@ -745,22 +619,22 @@ class Inflections {
   /**
    * Checks if an array of items has at least one element that matches an inflection.
    *  A match is determined as a result of item's `match` function.
-   * @param {Inflection} inflection - An inflection to match against.
+   * @param {Inflection[]} inflections - One or several inflection to match against.
    * @return {boolean} - True if there is at least one match, false otherwise
    */
-  hasMatches (inflection) {
-    return this.items.some(i => i.matches(inflection))
+  hasMatches (inflections) {
+    return this.items.some(i => i.matches(inflections))
   }
 
   /**
    * Returns an array of items that `matches` an inflection. A match is determined as a result of item's `match`
    * function. Returned value is determined by item's `match` function as well.
-   * @param {Inflection} inflection - An inflection to match against.
-   * @return {Object[]} An array of objects. Each object is returned by a `match` function of an individual item.
+   * @param {Inflection[]} inflections - An inflection to match against.
+   * @return {Suffix[]|Form[]|Paradigm[]} An array of objects. Each object is returned by a `match` function of an individual item.
    * Its format is dependent on the `match` function implementation.
    */
-  getMatches (inflection) {
-    return this.hasMatches(inflection) ? this.items.filter(i => i.matches(inflection)) : []
+  getMatches (inflections) {
+    return this.items.filter(i => i.matches(inflections))
   }
 
   /**
@@ -779,6 +653,130 @@ class Inflections {
       }
     }
     return Array.from(set).sort((a, b) => parseInt(a) - parseInt(b))
+  }
+}
+
+
+/***/ }),
+
+/***/ "./lib/inflection-set.js":
+/*!*******************************!*\
+  !*** ./lib/inflection-set.js ***!
+  \*******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return InflectionSet; });
+/* harmony import */ var _inflection_list_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inflection-list.js */ "./lib/inflection-list.js");
+
+
+/**
+ * Stores inflections data of different types {such as `Suffix`, `Form`, or `Paradigm`} in a `types` map. Items are grouped by type.
+ * May also store inflections that corresponds to stored inflection data.
+ */
+class InflectionSet {
+  constructor (partOfSpeech, languageID) {
+    this.languageID = languageID
+    this.partOfSpeech = partOfSpeech
+
+    // Stores inflections (i.e. a form of a word with grammatical features as returned by a morph analyzer
+    this.inflections = []
+
+    // Stores inflections data (suffixes, forms, and paradigms) for inflections
+    this.types = new Map()
+  }
+
+  /**
+   * Checks if an `InflectionSet` has any types stored. If it does not, it means that an `InflectionSet` is empty.
+   * @return {boolean}
+   */
+  get hasTypes () {
+    return this.types.size !== 0
+  }
+
+  /**
+   * Return a list of item types this set contains.
+   * @return {Function<Morpheme>[]}
+   */
+  get inflectionTypes () {
+    return Array.from(this.types.keys())
+  }
+
+  /**
+   * Checks whether an inflection set has any items of certain type that matches an inflection.
+   * @param {Function<Suffix> | Function<Form> | Function<Paradigm>} itemType - A type of an item.
+   * @param {Inflection[]} inflections - One or several inflections to match.
+   * @return {boolean} True if there are matches, false otherwise
+   */
+  hasMatchingItems (itemType, inflections) {
+    return (this.types.has(itemType) && this.types.get(itemType).hasMatches(inflections))
+  }
+
+  /**
+   * Returns an array of items of certain type that matches an inflection.
+   * @param {Function<Suffix> | Function<Form> | Function<Paradigm>} itemType - A type of an item.
+   * @param {Inflection[]} inflections - One or several inflections to match.
+   * @return {Suffix[] | Form[] | Paradigm[] | []} Array of items of a particular type if any matches found.
+   * An empty array otherwise.
+   */
+  getMatchingItems (itemType, inflections) {
+    return this.types.has(itemType) ? this.types.get(itemType).getMatches(inflections) : []
+  }
+
+  /**
+   * Adds a single inflection item to the set
+   * @param {Suffix | Form | Paradigm} inflection
+   */
+  addInflectionItem (inflection) {
+    this.addInflectionItems([inflection])
+  }
+
+  /**
+   * Adds an array of inflection items of the same type.
+   * @param {Suffix[] | Form[] | Paradigm[]} items
+   */
+  addInflectionItems (items) {
+    // We assume all inflection items have the same type
+    let classType = items[0].constructor
+
+    if (!this.types.has(classType)) {
+      this.types.set(classType, classType.createList())
+    }
+
+    this.types.get(classType).addItems(items)
+  }
+
+  /**
+   * Adds an InflectionSet to the existing one. All inflections of a foreign inflection set
+   * will be added to the current one. Inflection data items (Suffixes, Forms, Paradigms) will
+   * be added only if they do not exist in the current InflectionSet.
+   * @param inflectionSet
+   */
+  addInflectionSet (inflectionSet) {
+    if (this.languageID === inflectionSet.languageID && this.partOfSpeech === inflectionSet.partOfSpeech) {
+      this.inflections.push(...inflectionSet.inflections)
+      for (const items of this.types.values()) {
+        this.addInflectionItems(items)
+      }
+    } else {
+      console.warn(`Cannot add inflectionSet [languageID=${inflectionSet.languageID.toString()}, POFS=${inflectionSet.partOfSpeech}]` +
+        ` to [languageID=${this.languageID.toString()}, POFS=${this.partOfSpeech}]`)
+    }
+  }
+
+  /**
+   * Adds a footnote object to inflection data of a specific class type.
+   * @param {Suffix | Form | Paradigm} classType.
+   * @param {number} index - A footnote index.
+   * @param {Footnote} footnote - A Footnote object.
+   */
+  addFootnote (classType, index, footnote) {
+    if (!this.types.has(classType)) {
+      this.types.set(classType, new _inflection_list_js__WEBPACK_IMPORTED_MODULE_0__["default"](classType))
+    }
+    this.types.get(classType).addFootnote(index, footnote)
   }
 }
 
@@ -3521,19 +3519,8 @@ class LanguageDataset {
 
     // Get paradigm matches
     if (paradigmBased) {
-      let paradigmIDs = []
-      for (let inflection of inflections) {
-        if (inflection.constraints.paradigmBased) {
-          let matchingParadigms = sourceSet.getMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflection)
-          // Make sure all paradigms are unique
-          for (const paradigm of matchingParadigms) {
-            if (!paradigmIDs.includes(paradigm.id)) {
-              inflectionSet.addInflectionItem(paradigm)
-              paradigmIDs.push(paradigm.id)
-            }
-          }
-        }
-      }
+      let paradigms = sourceSet.getMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_3__["default"], inflections)
+      inflectionSet.addInflectionItems(paradigms)
     }
 
     // Add footnotes
@@ -3733,10 +3720,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Morpheme; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _match_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./match-data */ "./lib/match-data.js");
-/* harmony import */ var _extended_language_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./extended-language-data */ "./lib/extended-language-data.js");
-/* harmony import */ var uuid_v4__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! uuid/v4 */ "./node_modules/uuid/v4.js");
-/* harmony import */ var uuid_v4__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(uuid_v4__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _inflection_list_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./inflection-list.js */ "./lib/inflection-list.js");
+/* harmony import */ var _match_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./match-data */ "./lib/match-data.js");
+/* harmony import */ var _extended_language_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./extended-language-data */ "./lib/extended-language-data.js");
+/* harmony import */ var uuid_v4__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! uuid/v4 */ "./node_modules/uuid/v4.js");
+/* harmony import */ var uuid_v4__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(uuid_v4__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -3757,7 +3746,7 @@ class Morpheme {
     if (morphemeValue === undefined) {
       throw new Error('Morpheme value should not be empty.')
     }
-    this.id = uuid_v4__WEBPACK_IMPORTED_MODULE_3___default()()
+    this.id = uuid_v4__WEBPACK_IMPORTED_MODULE_4___default()()
     this.value = morphemeValue
     this.features = {}
     this.featureGroups = {}
@@ -3777,8 +3766,12 @@ class Morpheme {
     this.footnotes = []
   }
 
-  static get ClassType () {
-    return this
+  /**
+   * Creates a list of items of the same type as self
+   * @return {InflectionList}
+   */
+  static createList () {
+    return new _inflection_list_js__WEBPACK_IMPORTED_MODULE_1__["default"](this)
   }
 
   get hasFootnotes () {
@@ -3815,12 +3808,12 @@ class Morpheme {
     }
 
     if (jsonObject.match) {
-      suffix.match = _match_data__WEBPACK_IMPORTED_MODULE_1__["default"].readObject(jsonObject.match)
+      suffix.match = _match_data__WEBPACK_IMPORTED_MODULE_2__["default"].readObject(jsonObject.match)
     }
 
     for (const lang in jsonObject.extendedLangData) {
       if (jsonObject.extendedLangData.hasOwnProperty(lang)) {
-        suffix.extendedLangData[lang] = _extended_language_data__WEBPACK_IMPORTED_MODULE_2__["default"].readObject(jsonObject.extendedLangData[lang])
+        suffix.extendedLangData[lang] = _extended_language_data__WEBPACK_IMPORTED_MODULE_3__["default"].readObject(jsonObject.extendedLangData[lang])
       }
     }
     return suffix
@@ -3832,7 +3825,7 @@ class Morpheme {
    */
   clone () {
     // TODO: do all-feature two-level cloning
-    let clone = new this.constructor.ClassType(this.value)
+    let clone = new this.constructor(this.value)
     for (const key in this.features) {
       if (this.features.hasOwnProperty(key)) {
         clone.features[key] = this.features[key]
@@ -4065,6 +4058,81 @@ class Morpheme {
 
 /***/ }),
 
+/***/ "./lib/paradigm-inflection-list.js":
+/*!*****************************************!*\
+  !*** ./lib/paradigm-inflection-list.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ParadigmInflectionList; });
+/* harmony import */ var _inflection_list_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inflection-list.js */ "./lib/inflection-list.js");
+
+
+class ParadigmInflectionList extends _inflection_list_js__WEBPACK_IMPORTED_MODULE_0__["default"] {
+  /**
+   * Checks if an array of items has at least one element that matches an inflection.
+   *  A match is determined as a result of item's `match` function.
+   * @param {Inflection|Inflection[]} inflections - One or several inflection to match against.
+   * @return {boolean} - True if there is at least one match, false otherwise
+   */
+  hasMatches (inflections) {
+    if (!Array.isArray(inflections)) {
+      inflections = [inflections]
+    }
+    for (const inflection of inflections) {
+      if (this.items.some(i => i.matchingRules(inflection).length > 0)) {
+        // There is at least one matching rule
+        return true
+      }
+    }
+    return false
+  }
+
+  /**
+   * Returns an array of paradigms that `matches` an array of inflections.
+   * A match is determined by the paradigm's `match` function.
+   * Returned value is determined by item's `match` function as well.
+   * @param {Inflection[]} inflections - One or several inflections to match against paradigms.
+   * @return {Paradigm[]|[]} An array of paradigms that matches inflections. Only those paradigms are returned
+   * whose matching rules have the highest `matchOrder`. If no matches found, an empty array will be returned.
+   */
+  getMatches (inflections) {
+    // Select only those inflections that are paradigm based
+    inflections = inflections.filter(i => i.constraints && i.constraints.paradigmBased)
+    let matchingParadigm = []
+    // Get all matching paradigms for all inflections
+    let highestMatchOrder = Number.MIN_SAFE_INTEGER
+    for (const inflection of inflections) {
+      for (const paradigm of this.items) {
+        const matchingRules = paradigm.matchingRules(inflection)
+        if (matchingRules.length > 0) {
+          // There is one or several matching rules for this paradigm
+          const rulesMatchOrder = matchingRules.reduce((acc, rule) => rule.matchOrder > acc ? rule.matchOrder : acc, Number.MIN_SAFE_INTEGER)
+          if (rulesMatchOrder > highestMatchOrder) {
+            // This is the matching rule with the highers order. Scrap all previous matches and store this one
+            matchingParadigm = [paradigm]
+            highestMatchOrder = rulesMatchOrder
+          } else if (rulesMatchOrder === highestMatchOrder) {
+            // Rule with the same matchOrder as we already have stored.
+
+            // Check if there is the same paradigm in matches already
+            if (!matchingParadigm.find(p => p.id === paradigm.id)) {
+              matchingParadigm.push(paradigm)
+            }
+          }
+        }
+      }
+    }
+    return matchingParadigm
+  }
+}
+
+
+/***/ }),
+
 /***/ "./lib/paradigm-rule.js":
 /*!******************************!*\
   !*** ./lib/paradigm-rule.js ***!
@@ -4081,6 +4149,29 @@ class ParadigmRule {
     this.features = features
     this.lemma = lemma
     this.morphFlags = morphFlags
+  }
+
+  /**
+   * Checks if given inflection matches the rule.
+   * In order for rule to be considered a match, an inflection should have all features with values equal to those
+   * listed within a rule. If rule has a lemma, it should match a `word` property of an inflection
+   * (this property contains a target word).
+   * @param {Inflection} inflection
+   * @return {boolean}
+   */
+  matches (inflection) {
+    let match = true
+    for (const feature of this.features) {
+      match = match && inflection.hasOwnProperty(feature.type) && feature.value === inflection[feature.type].value
+      if (!match) {
+        return false
+      }
+    }
+    if (match && this.lemma) {
+      // If there is lemma present in the rule, check that it will match the target word
+      match = match && inflection.word && inflection.word.value === this.lemma.word
+    }
+    return match
   }
 }
 
@@ -4102,13 +4193,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _paradigm_rule_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./paradigm-rule.js */ "./lib/paradigm-rule.js");
+/* harmony import */ var _paradigm_inflection_list_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./paradigm-inflection-list.js */ "./lib/paradigm-inflection-list.js");
+
 
 
 
 
 class Paradigm {
   constructor (languageID, partOfSpeech, paradigm) {
-    // console.info('*********************paradigm', paradigm)
     this.id = uuid_v4__WEBPACK_IMPORTED_MODULE_0___default()()
     this.paradigmID = paradigm.ID
     this.languageID = languageID
@@ -4128,7 +4220,7 @@ class Paradigm {
     this.subTables = paradigm.subTables
     this.rules = []
 
-    // Convert strin feature values to Feature objects for later comparison
+    // Convert string feature values to Feature objects for later comparison
     for (let row of this.table.rows) {
       for (let cell of row.cells) {
         if (cell.role === 'data') {
@@ -4157,8 +4249,12 @@ class Paradigm {
     this._suppParadigms = new Map()
   }
 
-  static get ClassType () {
-    return this
+  /**
+   * Creates a list of items of the same type as self
+   * @return {ParadigmInflectionList}
+   */
+  static createList () {
+    return new _paradigm_inflection_list_js__WEBPACK_IMPORTED_MODULE_3__["default"](this)
   }
 
   addRule (matchOrder, features, lemma, morphFlags) {
@@ -4215,23 +4311,12 @@ class Paradigm {
   }
 
   /**
-   * Checks wither an inflection matches any single rules within a `rules` array. Rules within a Paradigm
-   * are sorted according to the match order, highest first. This is an order an array of rules will be iterated by.
-   * In order for rule to be a match, an inflection should have all features with values equal to those
-   * listed within a rule.
-   * If rule is a match, an object with a paradigm and a rule that matched is returned.
+   * Returns an array of rules that matches an inflection or an empty array if not matching rules found.
    * @param {Inflection} inflection.
-   * @return {Object | undefined} An object with a paradigm and a matching rule if there is a match
-   * or false otherwise.
+   * @return {ParadigmRule[] | []} Array of matching rules or an empty array if no matches found.
    */
-  matches (inflection) {
-    for (const rule of this.rules) {
-      let match = true
-      for (const feature of rule.features) {
-        match = match && inflection.hasOwnProperty(feature.type) && feature.value === inflection[feature.type].value
-      }
-      return match ? {paradigm: this, rule: rule} : undefined
-    }
+  matchingRules (inflection) {
+    return this.rules.filter(r => r.matches(inflection))
   }
 }
 
