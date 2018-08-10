@@ -10,10 +10,10 @@ export default class LatinVerbIrregularView extends LatinView {
     super(inflectionData, locale)
 
     this.id = 'verbConjugationIrregular'
-    this.name = 'verb-irregular'
+    this.name = 'irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
-    const inflectionsWords = inflectionData.homonym.inflections.map(item => item[Feature.types.word].value)
+    const inflectionsWords = inflectionData.inflections.map(item => item[Feature.types.word].value)
     const lemma = this.constructor.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
     this.additionalTitle = lemma.word + ', ' + lemma.principalParts
@@ -21,7 +21,7 @@ export default class LatinVerbIrregularView extends LatinView {
     this.language_features[Feature.types.hdwd] = new Feature(Feature.types.hdwd, [lemma.word], LatinVerbIrregularView.languageID)
 
     this.language_features[Feature.types.voice] = new Feature(Feature.types.voice,
-      [Constants.VOICE_ACTIVE, Constants.VOICE_PASSIVE, '-'], this.model.languageID)
+      [Constants.VOICE_ACTIVE, Constants.VOICE_PASSIVE, '-'], LatinVerbIrregularView.languageID)
 
     this.features = {
       lemmas: new GroupFeatureType(this.language_features[Feature.types.hdwd], 'Lemma'),

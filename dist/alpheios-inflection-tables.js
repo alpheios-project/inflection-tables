@@ -3416,6 +3416,9 @@ class LanguageDataset {
       // If it is not full form based, then probably it is suffix base
       inflection.constraints.suffixBased = true
     }
+
+    inflection.constraints.irregularVerb = this.checkIrregularVerb(inflection)
+
     return inflection
   }
 
@@ -3779,7 +3782,7 @@ class Morpheme {
   }
 
   static readObject (jsonObject) {
-    let suffix = new this.ClassType(jsonObject.value)
+    let suffix = new this(jsonObject.value)
 
     if (jsonObject.features) {
       for (let key in jsonObject.features) {
@@ -4144,6 +4147,12 @@ class ParadigmInflectionList extends _inflection_list_js__WEBPACK_IMPORTED_MODUL
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ParadigmRule; });
 class ParadigmRule {
+  /**
+   * @param {number} matchOrder
+   * @param {Feature[]} features
+   * @param {Lemma} lemma
+   * @param morphFlags
+   */
   constructor (matchOrder, features, lemma, morphFlags) {
     this.matchOrder = matchOrder
     this.features = features
@@ -4257,6 +4266,13 @@ class Paradigm {
     return new _paradigm_inflection_list_js__WEBPACK_IMPORTED_MODULE_3__["default"](this)
   }
 
+  /**
+   * Adds a rule to the paradigm.
+   * @param {number} matchOrder
+   * @param {Feature[]} features
+   * @param {Lemma} lemma
+   * @param morphFlags
+   */
   addRule (matchOrder, features, lemma, morphFlags) {
     this.rules.push(new _paradigm_rule_js__WEBPACK_IMPORTED_MODULE_2__["default"](matchOrder, features, lemma, morphFlags))
   }
@@ -14901,10 +14917,10 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
     super(inflectionData, locale)
 
     this.id = 'verbConjugationIrregular'
-    this.name = 'verb-irregular'
+    this.name = 'irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
-    const inflectionsWords = inflectionData.homonym.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
+    const inflectionsWords = inflectionData.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
     const lemma = this.constructor.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
     this.additionalTitle = lemma.word + ', ' + lemma.principalParts
@@ -14912,7 +14928,7 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, [lemma.word], LatinVerbIrregularView.languageID)
 
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
-      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_ACTIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_PASSIVE, '-'], this.model.languageID)
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_ACTIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_PASSIVE, '-'], LatinVerbIrregularView.languageID)
 
     this.features = {
       lemmas: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd], 'Lemma'),
@@ -17087,6 +17103,7 @@ class ViewSet {
 
       // let view = new LatinNounView(homonym, locale)
       // this.matchingViews = [view]
+
       this.matchingViews.push(...this.constructor.views.reduce(
         (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.messages)), []))
 
@@ -17097,6 +17114,7 @@ class ViewSet {
             (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), []))
         }
       } */
+
       this.updateMatchingViewsMap(this.matchingViews)
     }
     this.matchingViews.forEach(v => v.render())
@@ -17123,8 +17141,10 @@ class ViewSet {
         this.matchingViewsMap.set(view.partOfSpeech, [])
       }
       let storedInstances = this.matchingViewsMap.get(view.partOfSpeech)
+
       // Filter out instances that are already stored in a view set
       const isNew = !storedInstances.find(v => v.sameAs(view))
+
       if (isNew) {
         storedInstances.push(view)
       }

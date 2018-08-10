@@ -36,6 +36,7 @@ export default class ViewSet {
 
       // let view = new LatinNounView(homonym, locale)
       // this.matchingViews = [view]
+
       this.matchingViews.push(...this.constructor.views.reduce(
         (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.messages)), []))
 
@@ -46,6 +47,7 @@ export default class ViewSet {
             (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), []))
         }
       } */
+
       this.updateMatchingViewsMap(this.matchingViews)
     }
     this.matchingViews.forEach(v => v.render())
@@ -72,8 +74,10 @@ export default class ViewSet {
         this.matchingViewsMap.set(view.partOfSpeech, [])
       }
       let storedInstances = this.matchingViewsMap.get(view.partOfSpeech)
+
       // Filter out instances that are already stored in a view set
       const isNew = !storedInstances.find(v => v.sameAs(view))
+
       if (isNew) {
         storedInstances.push(view)
       }
