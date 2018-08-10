@@ -56,6 +56,9 @@ export default class LatinVerbIrregularView extends LatinView {
   }
 
   static matchFilter (homonym) {
+    console.info('*********************************LatinVerbIrregularView matchFilter 1 ', this.languageID === homonym.languageID)
+    console.info('*********************************LatinVerbIrregularView matchFilter 2 ', homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech))
+    console.info('*********************************LatinVerbIrregularView matchFilter 3 ', this.enabledForLexemes(homonym.lexemes))
     return (this.languageID === homonym.languageID &&
       homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech) &&
       this.enabledForLexemes(homonym.lexemes))
@@ -63,6 +66,7 @@ export default class LatinVerbIrregularView extends LatinView {
 
   static enabledForLexemes (lexemes) {
     // default is true
+    console.info('*************enabledForLexemes', lexemes)
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
         if (inflection.constraints && inflection.constraints.irregularVerb) {

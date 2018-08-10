@@ -3779,7 +3779,7 @@ class Morpheme {
   }
 
   static readObject (jsonObject) {
-    let suffix = new this.ClassType(jsonObject.value)
+    let suffix = new this(jsonObject.value)
 
     if (jsonObject.features) {
       for (let key in jsonObject.features) {
@@ -4144,6 +4144,12 @@ class ParadigmInflectionList extends _inflection_list_js__WEBPACK_IMPORTED_MODUL
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ParadigmRule; });
 class ParadigmRule {
+  /**
+   * @param {number} matchOrder
+   * @param {Feature[]} features
+   * @param {Lemma} lemma
+   * @param morphFlags
+   */
   constructor (matchOrder, features, lemma, morphFlags) {
     this.matchOrder = matchOrder
     this.features = features
@@ -4257,6 +4263,13 @@ class Paradigm {
     return new _paradigm_inflection_list_js__WEBPACK_IMPORTED_MODULE_3__["default"](this)
   }
 
+  /**
+   * Adds a rule to the paradigm.
+   * @param {number} matchOrder
+   * @param {Feature[]} features
+   * @param {Lemma} lemma
+   * @param morphFlags
+   */
   addRule (matchOrder, features, lemma, morphFlags) {
     this.rules.push(new _paradigm_rule_js__WEBPACK_IMPORTED_MODULE_2__["default"](matchOrder, features, lemma, morphFlags))
   }
@@ -14947,6 +14960,9 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
   }
 
   static matchFilter (homonym) {
+    console.info('*********************************LatinVerbIrregularView matchFilter 1 ', this.languageID === homonym.languageID)
+    console.info('*********************************LatinVerbIrregularView matchFilter 2 ', homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech))
+    console.info('*********************************LatinVerbIrregularView matchFilter 3 ', this.enabledForLexemes(homonym.lexemes))
     return (this.languageID === homonym.languageID &&
       homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech) &&
       this.enabledForLexemes(homonym.lexemes))
@@ -14954,6 +14970,7 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
 
   static enabledForLexemes (lexemes) {
     // default is true
+    console.info('*************enabledForLexemes', lexemes)
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
         if (inflection.constraints && inflection.constraints.irregularVerb) {
@@ -17087,6 +17104,9 @@ class ViewSet {
 
       // let view = new LatinNounView(homonym, locale)
       // this.matchingViews = [view]
+
+      console.info('******************this.matchingViews1', this.constructor.views, this.matchingViews)
+
       this.matchingViews.push(...this.constructor.views.reduce(
         (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.messages)), []))
 
@@ -17097,6 +17117,8 @@ class ViewSet {
             (acc, view) => acc.concat(...view.getMatchingInstances(inflection, this.inflectionData, this.messages)), []))
         }
       } */
+
+      console.info('******************this.matchingViews2', this.matchingViews)
       this.updateMatchingViewsMap(this.matchingViews)
     }
     this.matchingViews.forEach(v => v.render())
@@ -17118,13 +17140,20 @@ class ViewSet {
   }
 
   updateMatchingViewsMap (views) {
+    console.info('******************updateMatchingViewsMap', this.matchingViewsMap, views)
+
     for (const view of views) {
       if (!this.matchingViewsMap.has(view.partOfSpeech)) {
         this.matchingViewsMap.set(view.partOfSpeech, [])
       }
+      console.info('******************updateMatchingViewsMap', view, this.matchingViewsMap)
       let storedInstances = this.matchingViewsMap.get(view.partOfSpeech)
+
+      console.info('******************updateMatchingViewsMap storedInstances', view, storedInstances)
       // Filter out instances that are already stored in a view set
       const isNew = !storedInstances.find(v => v.sameAs(view))
+
+      console.info('******************updateMatchingViewsMap isNew', view, isNew)
       if (isNew) {
         storedInstances.push(view)
       }
@@ -17320,6 +17349,7 @@ class View {
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
   static getMatchingInstances (homonym, messages) {
+    console.info('*******************getMatchingInstances', this.constructor.name, this.matchFilter(homonym))
     if (this.matchFilter(homonym)) {
       let inflectionData = this.getInflectionsData(homonym)
       return [new this(homonym, inflectionData, messages)]

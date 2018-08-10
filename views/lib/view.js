@@ -128,6 +128,7 @@ export default class View {
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
   static getMatchingInstances (homonym, messages) {
+    console.info('*******************getMatchingInstances', this.constructor.name, this.matchFilter(homonym))
     if (this.matchFilter(homonym)) {
       let inflectionData = this.getInflectionsData(homonym)
       return [new this(homonym, inflectionData, messages)]
