@@ -3416,6 +3416,9 @@ class LanguageDataset {
       // If it is not full form based, then probably it is suffix base
       inflection.constraints.suffixBased = true
     }
+
+    inflection.constraints.irregularVerb = this.checkIrregularVerb(inflection)
+
     return inflection
   }
 
@@ -14914,10 +14917,10 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
     super(inflectionData, locale)
 
     this.id = 'verbConjugationIrregular'
-    this.name = 'verb-irregular'
+    this.name = 'irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
-    const inflectionsWords = inflectionData.homonym.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
+    const inflectionsWords = inflectionData.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
     const lemma = this.constructor.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
     this.additionalTitle = lemma.word + ', ' + lemma.principalParts
@@ -14925,7 +14928,7 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, [lemma.word], LatinVerbIrregularView.languageID)
 
     this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
-      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_ACTIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_PASSIVE, '-'], this.model.languageID)
+      [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_ACTIVE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].VOICE_PASSIVE, '-'], LatinVerbIrregularView.languageID)
 
     this.features = {
       lemmas: new _views_lib_group_feature_type__WEBPACK_IMPORTED_MODULE_2__["default"](this.language_features[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd], 'Lemma'),
@@ -14960,9 +14963,6 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
   }
 
   static matchFilter (homonym) {
-    console.info('*********************************LatinVerbIrregularView matchFilter 1 ', this.languageID === homonym.languageID)
-    console.info('*********************************LatinVerbIrregularView matchFilter 2 ', homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech))
-    console.info('*********************************LatinVerbIrregularView matchFilter 3 ', this.enabledForLexemes(homonym.lexemes))
     return (this.languageID === homonym.languageID &&
       homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech) &&
       this.enabledForLexemes(homonym.lexemes))
@@ -14970,7 +14970,6 @@ class LatinVerbIrregularView extends _views_lang_latin_latin_view_js__WEBPACK_IM
 
   static enabledForLexemes (lexemes) {
     // default is true
-    console.info('*************enabledForLexemes', lexemes)
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
         if (inflection.constraints && inflection.constraints.irregularVerb) {
@@ -17105,8 +17104,6 @@ class ViewSet {
       // let view = new LatinNounView(homonym, locale)
       // this.matchingViews = [view]
 
-      console.info('******************this.matchingViews1', this.constructor.views, this.matchingViews)
-
       this.matchingViews.push(...this.constructor.views.reduce(
         (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.messages)), []))
 
@@ -17118,7 +17115,6 @@ class ViewSet {
         }
       } */
 
-      console.info('******************this.matchingViews2', this.matchingViews)
       this.updateMatchingViewsMap(this.matchingViews)
     }
     this.matchingViews.forEach(v => v.render())
@@ -17140,20 +17136,15 @@ class ViewSet {
   }
 
   updateMatchingViewsMap (views) {
-    console.info('******************updateMatchingViewsMap', this.matchingViewsMap, views)
-
     for (const view of views) {
       if (!this.matchingViewsMap.has(view.partOfSpeech)) {
         this.matchingViewsMap.set(view.partOfSpeech, [])
       }
-      console.info('******************updateMatchingViewsMap', view, this.matchingViewsMap)
       let storedInstances = this.matchingViewsMap.get(view.partOfSpeech)
 
-      console.info('******************updateMatchingViewsMap storedInstances', view, storedInstances)
       // Filter out instances that are already stored in a view set
       const isNew = !storedInstances.find(v => v.sameAs(view))
 
-      console.info('******************updateMatchingViewsMap isNew', view, isNew)
       if (isNew) {
         storedInstances.push(view)
       }
@@ -17349,7 +17340,6 @@ class View {
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
   static getMatchingInstances (homonym, messages) {
-    console.info('*******************getMatchingInstances', this.constructor.name, this.matchFilter(homonym))
     if (this.matchFilter(homonym)) {
       let inflectionData = this.getInflectionsData(homonym)
       return [new this(homonym, inflectionData, messages)]
