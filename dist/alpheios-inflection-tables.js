@@ -15449,9 +15449,21 @@ class LatinVerbParticipleIrregularView extends _views_lang_latin_verb_latin_verb
   }
 
   static matchFilter (homonym) {
-    return (this.languageID === homonym.languageID &&
+    return Boolean(
+      this.languageID === homonym.languageID &&
       homonym.inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech) &&
       this.enabledForLexemes(homonym.lexemes))
+  }
+
+  static enabledForLexemes (lexemes) {
+    for (let lexeme of lexemes) {
+      for (let inflection of lexeme.inflections) {
+        if (inflection.constraints && inflection.constraints.irregularVerb) {
+          return true
+        }
+      }
+    }
+    return false
   }
 }
 
