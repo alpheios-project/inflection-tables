@@ -2987,6 +2987,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       }
 
       let features = [partOfSpeech]
+      // Ending,Conjugation,Voice,Mood,Tense,Number,Person,Case,Type,Footnote
       let columns = [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
@@ -3007,11 +3008,6 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         }
       })
 
-      let grammartype = item[7]
-      // Type information can be empty if no ending is provided
-      if (grammartype) {
-        features.push(this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type).createFromImporter(grammartype))
-      }
       this.addInflectionData(partOfSpeech.value, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], suffix, features)
     }
   }
@@ -4072,7 +4068,7 @@ class Morpheme {
         // At least one value should be the same
         for (const cfValue of comparisonFeature.values) {
           if (morphemeValue.values.includes(cfValue)) {
-            matches.push(comparisonFeature.value)
+            matches.push(cfValue)
           }
         }
       } else {
@@ -17534,7 +17530,7 @@ class ViewSet {
       // let view = new LatinNounView(homonym, locale)
       // this.matchingViews = [view]
       this.matchingViews.push(...this.constructor.views.reduce(
-        (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.messages)), []))
+        (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym, this.locale)), []))
 
       /* for (const lexeme of this.homonym.lexemes) {
         // TODO: Can we handle combined data better?
@@ -17765,13 +17761,13 @@ class View {
    * to return multiple views if necessary (e.g. paradigm view can return multiple instances of the view
    * with different data).
    * @param {Inflection} homonym - An inflection for which matching instances to be found.
-   * @param {MessageBundle} messages
+   * @param {string} locale
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
-  static getMatchingInstances (homonym, messages) {
+  static getMatchingInstances (homonym, locale) {
     if (this.matchFilter(homonym)) {
       let inflectionData = this.getInflectionsData(homonym)
-      return [new this(homonym, inflectionData, messages)]
+      return [new this(homonym, inflectionData, locale)]
     }
     return []
   }
