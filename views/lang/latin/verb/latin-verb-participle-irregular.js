@@ -1,10 +1,11 @@
 import { Constants, Feature } from 'alpheios-data-models'
 import LatinVerbIrregularView from '@views/lang/latin/verb/latin-verb-irregular.js'
 import Form from '@lib/form.js'
+import Table from '@views/lib/table'
 
 export default class LatinVerbParticipleIrregularView extends LatinVerbIrregularView {
-  constructor (inflectionData, locale) {
-    super(inflectionData, locale)
+  constructor (homonym, inflectionData, locale) {
+    super(homonym, inflectionData, locale)
 
     this.id = 'verbParticipleConjugationIrregular'
     this.name = 'verb-participle-irregular'
@@ -23,9 +24,30 @@ export default class LatinVerbParticipleIrregularView extends LatinVerbIrregular
     return Form
   }
 
+  createTable () {
+    this.table = new Table([this.features.voices, this.features.tenses])
+    let features = this.table.features
+    features.columns = [ this.features.voices ]
+    features.rows = [this.features.tenses]
+    features.columnRowTitles = [this.features.tenses]
+    features.fullWidthRowTitles = []
+  }
+
   static matchFilter (homonym) {
-    return (this.languageID === homonym.languageID &&
+    return Boolean(
+      this.languageID === homonym.languageID &&
       homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech) &&
       this.enabledForLexemes(homonym.lexemes))
+  }
+
+  static enabledForLexemes (lexemes) {
+    for (let lexeme of lexemes) {
+      for (let inflection of lexeme.inflections) {
+        if (inflection.constraints && inflection.constraints.irregularVerb) {
+          return true
+        }
+      }
+    }
+    return false
   }
 }

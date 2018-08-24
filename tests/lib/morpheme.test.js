@@ -140,7 +140,7 @@ describe('morpheme.test.js', () => {
     expect(morpheme.matchingValues(featureForCompareSuccessSingle)).toEqual([ 'numeral' ])
 
     let featureForCompareSuccessMultiple = new Feature(Feature.types.part, ['numeral', 'verb'], Constants.LANG_GREEK)
-    expect(morpheme.matchingValues(featureForCompareSuccessMultiple)).toEqual([ 'numeral' ])
+    expect(morpheme.matchingValues(featureForCompareSuccessMultiple, Morpheme.comparisonTypes.PARTIAL)).toEqual([ 'numeral' ])
   })
 
   it('7 Morpheme - getCommonGroups - compares features in featureGroups', () => {
