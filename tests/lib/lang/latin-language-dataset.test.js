@@ -73,6 +73,7 @@ describe('greek-language-dataset.test.js', () => {
     // check import using the first row
     let itemRow = suffixes.data[suffixes.data.length - 1]
     let suffixValue = itemRow[0]
+    if (!suffixValue) { suffixValue = null } // This matches the current logic in `getSuffixes()` of `LatinLanguageDataset`
 
     let features = [partOfSpeech,
       LLD.features.get(Feature.types.number).createFromImporter(itemRow[1]),
