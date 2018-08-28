@@ -2615,7 +2615,7 @@ module.exports = "Lemma,PrincipalParts,Form,Voice,Mood,Tense,Number,Person,Footn
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Ending,Conjugation,Voice,Mood,Tense,Number,Person,Case,Type,Footnote\nātum,1st,active,,,,,accusative,regular,\nitum,2nd,active,,,,,accusative,regular,\ntum,3rd,active,,,,,accusative,regular,\nītum,4th,active,,,,,accusative,regular,\nātū,1st,active,,,,,ablative,regular,\nitū,2nd,active,,,,,ablative,regular,\ntū,3rd,active,,,,,ablative,regular,\nītū,4th,active,,,,,ablative,regular,\n,1st,passive,,,,,accusative,,\n,2nd,passive,,,,,accusative,,\n,3rd,passive,,,,,accusative,,\n,4th,passive,,,,,accusative,,\n,1st,passive,,,,,ablative,,\n,2nd,passive,,,,,ablative,,\n,3rd,passive,,,,,ablative,,\n,4th,passive,,,,,ablative,,"
+module.exports = "Ending,Conjugation,Case,Footnote\num,1st,accusative,\num,2nd,accusative,\num,3rd,accusative,\num,4th,accusative,\nū,1st,ablative,\nū,2nd,ablative,\nū,3rd,ablative,\nū,4th,ablative,\n"
 
 /***/ }),
 
@@ -2990,13 +2990,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       // Ending,Conjugation,Voice,Mood,Tense,Number,Person,Case,Type,Footnote
       let columns = [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.case,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.case
       ]
       columns.forEach((c, j) => {
         try {
@@ -14764,7 +14758,6 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
 
     this.features = {
       cases: this.features.cases,
-      voices: this.features.voices,
       conjugations: this.features.conjugations
     }
     this.createTable()
@@ -14783,11 +14776,10 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
   }
 
   createTable () {
-    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.voices, this.features.conjugations,
+    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.conjugations,
       this.features.cases])
     let features = this.table.features
     features.columns = [
-      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice),
       this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation)
     ]
     features.rows = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
