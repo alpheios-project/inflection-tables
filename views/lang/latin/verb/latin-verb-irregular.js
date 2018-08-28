@@ -41,6 +41,8 @@ export default class LatinVerbIrregularView extends LatinVerbIrregularVoiceView 
    * @return {boolean} - True if this view shall be displayed for an inflection, false otherwise.
    */
   static enabledForInflection (inflection) {
+    console.log(`Checking for an irregular verb`)
+
     return Boolean(
       inflection[Feature.types.part].value === this.mainPartOfSpeech &&
       inflection.constraints &&

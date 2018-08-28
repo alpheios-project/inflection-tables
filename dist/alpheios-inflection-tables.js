@@ -15370,6 +15370,8 @@ class LatinVerbIrregularView extends _views_lang_latin_verb_latin_verb_irregular
    * @return {boolean} - True if this view shall be displayed for an inflection, false otherwise.
    */
   static enabledForInflection (inflection) {
+    console.log(`Checking for an irregular verb`)
+
     return Boolean(
       inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech &&
       inflection.constraints &&
