@@ -14246,7 +14246,7 @@ class GreekVerbParadigmView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_3__[
     this.id = paradigm.id
     this.name = paradigm.title.toLowerCase()
     this.title = paradigm.title
-    this.hasComponentData = true
+    this.hasPrerenderedTables = true
     this.paradigm = paradigm
     this.featureTypes = {}
 
@@ -15763,7 +15763,8 @@ class Cell {
     this.value = element.innerHTML
     this.classes = {
       [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
-      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight]: false
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight]: false,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden]: false
     }
     this.wNode = element
     this.nNode = element.cloneNode(true)
@@ -15810,6 +15811,7 @@ class Cell {
    */
   hide () {
     if (!this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden] = true
       this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
       this.nNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
     }
@@ -15820,6 +15822,7 @@ class Cell {
    */
   show () {
     if (this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden] = false
       this.wNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
       this.nNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
     }
@@ -16528,204 +16531,6 @@ class HeaderCell {
 
 /***/ }),
 
-/***/ "./views/lib/narrow-view-group.js":
-/*!****************************************!*\
-  !*** ./views/lib/narrow-view-group.js ***!
-  \****************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return NarrowViewGroup; });
-/* harmony import */ var _styles_styles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../styles/styles */ "./views/styles/styles.js");
-/* harmony import */ var _row__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./row */ "./views/lib/row.js");
-/* harmony import */ var _row_title_cell__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./row-title-cell */ "./views/lib/row-title-cell.js");
-
-
-
-
-/**
- * Represents a group within a narrow view. A narrow view is split into separate sub tables
- * by values of a first grammatical feature that forms columns. Then each sub table would contain
- * a suffixes that belong to that grammatical feature value only. Each sub table becomes a
- * separated object and can be reflown on devices with narrow screens.
- */
-class NarrowViewGroup {
-  // TODO: Review constructor parameters
-
-  /**
-   * Initializes a narrow view group. Please note that column, rows, and headers are those of a whole table,
-   * not of this particular group. NarrowViewGroup constructor will use this data to build
-   * the corresponding objects of the group itself.
-   * @param {number} index - An index of this group within a groups array, starting from zero.
-   * @param {Row[]} headers - Table headers.
-   * @param {Row[]} rows - Table rows.
-   * @param {number} titleColumnQty - Number of title columns in a table.
-   */
-  constructor (index, headers, rows, titleColumnQty) {
-    this.index = index
-    this.columns = headers[0].cells[index].columns
-    this.groupSize = this.columns.length
-    let columnsStartIndex = this.columns[0].index
-    let columnsEndIndex = this.columns[this.columns.length - 1].index
-
-    this.rows = []
-    for (let row of rows) {
-      this.rows.push(row.slice(columnsStartIndex, columnsEndIndex + 1))
-    }
-    this.headers = []
-    /**
-     * Since we group by the first column feature, there will be a single feature in a first header row,
-     * its children in the second row, children of its children in a third row and so on.
-     */
-    for (let [headerIndex, headerRow] of headers.entries()) {
-      let row = new _row__WEBPACK_IMPORTED_MODULE_1__["default"]()
-      row.titleCell = headerRow.titleCell
-      if (headerIndex === 0) {
-        row.cells.push(headerRow.cells[index])
-      } else {
-        for (let headerCell of this.headers[headerIndex - 1].cells) {
-          row.cells = row.cells.concat(headerCell.children)
-        }
-      }
-      this.headers.push(row)
-    }
-    this.titleColumnQty = titleColumnQty
-
-    this.nodes = document.createElement('div')
-    this.nodes.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].inflectionTable, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].narrowView)
-  }
-
-  /**
-   * Calculates a number of visible columns in this view.
-   * @returns {number} A number of visible columns.
-   */
-  get visibleColumnQty () {
-    let qty = 0
-    for (let column of this.columns) {
-      if (!column.hidden) {
-        qty++
-      }
-    }
-    return qty
-  }
-
-  /**
-   * Renders an HTML representation of a narrow view group.
-   */
-  render () {
-    this.nodes.innerHTML = ''
-
-    if (this.visibleColumnQty) {
-      // This group is visible
-      for (let headerRow of this.headers) {
-        this.nodes.appendChild(headerRow.titleCell.getNvNode(this.index))
-        for (let headerCell of headerRow.cells) {
-          this.nodes.appendChild(headerCell.nvNode)
-        }
-      }
-
-      for (let row of this.rows) {
-        let titleCells = row.titleCell.hierarchyList
-        if (titleCells.length < this.titleColumnQty) {
-          this.nodes.appendChild(_row_title_cell__WEBPACK_IMPORTED_MODULE_2__["default"].placeholder(this.titleColumnQty - titleCells.length))
-        }
-        for (let titleCell of titleCells) {
-          this.nodes.appendChild(titleCell.getNvNode(this.index))
-        }
-
-        for (let cell of row.cells) {
-          this.nodes.appendChild(cell.nvNode)
-        }
-      }
-      this.nodes.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
-      this.nodes.style.gridTemplateColumns = 'repeat(' + (this.visibleColumnQty + this.titleColumnQty) + ', ' +
-        _styles_styles__WEBPACK_IMPORTED_MODULE_0__["narrowView"].column.width + _styles_styles__WEBPACK_IMPORTED_MODULE_0__["narrowView"].column.unit + ')'
-      this.nodes.style.width = (this.visibleColumnQty + this.titleColumnQty) * _styles_styles__WEBPACK_IMPORTED_MODULE_0__["narrowView"].column.width +
-        _styles_styles__WEBPACK_IMPORTED_MODULE_0__["narrowView"].column.unit
-    } else {
-      // This group is hidden
-      this.nodes.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
-    }
-  }
-}
-
-
-/***/ }),
-
-/***/ "./views/lib/narrow-view.js":
-/*!**********************************!*\
-  !*** ./views/lib/narrow-view.js ***!
-  \**********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return NarrowView; });
-/* harmony import */ var _styles_styles__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../styles/styles */ "./views/styles/styles.js");
-/* harmony import */ var _narrow_view_group__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./narrow-view-group */ "./views/lib/narrow-view-group.js");
-
-
-
-/**
- * A representation of a table that is shown on narrow screens (mobile devices).
- */
-class NarrowView {
-  /**
-   * Initializes a narrow view.
-   * @param {number} groupQty - A number of visible groups (sub tables) within a narrow view.
-   * @param {Column[]} columns - Table columns.
-   * @param {Row[]} rows - Table rows.
-   * @param {Row[]} headers - Table headers.
-   * @param {number} titleColumnQty - Number of title columns in a table.
-   */
-  constructor (groupQty, columns, rows, headers, titleColumnQty) {
-    this.columns = columns
-    this.rows = rows
-    this.headers = headers
-    this.titleColumnQty = titleColumnQty
-    this.groups = []
-    this.groupQty = groupQty
-    this.groupSize = 0
-    if (groupQty) {
-      this.groupSize = this.columns.length / groupQty
-    }
-
-    this.nodes = document.createElement('div')
-    this.nodes.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].narrowViewsContainer)
-
-    for (let [index, headerCell] of this.headers[0].cells.entries()) {
-      this.createGroup(index, headerCell)
-    }
-  }
-
-  /**
-   * Creates a group within a table.
-   * @returns {NarrowViewGroup} A newly created group.
-   */
-  createGroup (index, headerCell) {
-    let group = new _narrow_view_group__WEBPACK_IMPORTED_MODULE_1__["default"](index, this.headers, this.rows, this.titleColumnQty)
-    this.nodes.appendChild(group.nodes)
-    this.groups.push(group)
-  }
-
-  /**
-   * Generates an HTML representation of a view.
-   * @returns {HTMLElement} - HTML representation of a view.
-   */
-  render () {
-    for (let group of this.groups) {
-      group.render()
-    }
-    return this.nodes
-  }
-}
-
-
-/***/ }),
-
 /***/ "./views/lib/node-group.js":
 /*!*********************************!*\
   !*** ./views/lib/node-group.js ***!
@@ -17050,10 +16855,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _row__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./row */ "./views/lib/row.js");
 /* harmony import */ var _group_feature_list__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./group-feature-list */ "./views/lib/group-feature-list.js");
 /* harmony import */ var _node_group__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./node-group */ "./views/lib/node-group.js");
-/* harmony import */ var _narrow_view__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./narrow-view */ "./views/lib/narrow-view.js");
-/* harmony import */ var _wide_view__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./wide-view */ "./views/lib/wide-view.js");
-
-
 
 
 
@@ -17071,7 +16872,6 @@ class Table {
    */
   constructor (features) {
     this.features = new _group_feature_list__WEBPACK_IMPORTED_MODULE_4__["default"](features)
-    this.emptyColumnsHidden = false
     this.cells = [] // Will be populated by groupByFeature()
 
     /*
@@ -17084,29 +16884,36 @@ class Table {
    * Creates a table tree and other data structures (columns, rows, headers).
    * This function is chainabe.
    * @param {Morpheme[]} morphemes - An array of morphemes to build table from.
+   * @param {Object} options - Table's options
    * @returns {Table} Reference to self for chaining.
    */
-  construct (morphemes) {
+  construct (morphemes, options = {
+    emptyColumnsHidden: true,
+    noSuffixMatchesHidden: true
+  }) {
     this.morphemes = morphemes
 
     this.tree = this.groupByFeature(morphemes)
     this.headers = this.constructHeaders()
     this.columns = this.constructColumns()
     this.rows = this.constructRows()
-    this.emptyColumnsHidden = false
+    this.options = options
     this.canCollapse = this._hasAnyMatches()
-    return this
-  }
+    if (!this.canCollapse) {
+      // If table cannot be collapsed or expanded it should always be shown in full form
+      this.options.noSuffixMatchesHidden = false
+    }
 
-  /**
-   * Builds wide and narrow views of the table.
-   * This function is chainabe.
-   * @returns {Table} Reference to self for chaining.
-   */
-  constructViews () {
-    this.wideView = new _wide_view__WEBPACK_IMPORTED_MODULE_7__["default"](this.columns, this.rows, this.headers, this.titleColumnQty)
-    this.narrowView = new _narrow_view__WEBPACK_IMPORTED_MODULE_6__["default"](
-      this.features.firstColumnFeature.size, this.columns, this.rows, this.headers, this.titleColumnQty)
+    if (this.options.emptyColumnsHidden) {
+      this.hideEmptyColumns()
+    } else {
+      this.showEmptyColumns()
+    }
+    if (this.options.noSuffixMatchesHidden) {
+      this.hideNoSuffixMatchesGroups()
+    } else {
+      this.showNoSuffixMatchesGroups()
+    }
     return this
   }
 
@@ -17382,7 +17189,7 @@ class Table {
         column.hide()
       }
     }
-    this.emptyColumnsHidden = true
+    this.options.emptyColumnsHidden = true
   }
 
   /**
@@ -17394,7 +17201,7 @@ class Table {
         column.show()
       }
     }
-    this.emptyColumnsHidden = false
+    this.options.emptyColumnsHidden = false
   }
 
   /**
@@ -17416,7 +17223,7 @@ class Table {
   /**
    * Hide groups that have no morpheme matches.
    */
-  hideNoSuffixGroups () {
+  hideNoSuffixMatchesGroups () {
     for (let headerCell of this.headers[0].cells) {
       let matches = !!headerCell.columns.find(column => column.suffixMatches)
       if (!matches) {
@@ -17425,20 +17232,20 @@ class Table {
         }
       }
     }
-    this.suffixMatchesHidden = true
+    this.options.noSuffixMatchesHidden = true
   }
 
   /**
    * Show groups that have no suffix matches.
    */
-  showNoSuffixGroups () {
+  showNoSuffixMatchesGroups () {
     for (let column of this.columns) {
       column.show()
     }
-    if (this.emptyColumnsHidden) {
+    if (this.options.emptyColumnsHidden) {
       this.hideEmptyColumns()
     }
-    this.suffixMatchesHidden = false
+    this.options.noSuffixMatchesHidden = false
   }
 }
 
@@ -17553,7 +17360,6 @@ class ViewSet {
       } */
       this.updateMatchingViewsMap(this.matchingViews)
     }
-    this.matchingViews.forEach(v => v.render())
   }
   /**
    * Returns a list of views available within a view set. Should be redefined in descendant classes.
@@ -17644,6 +17450,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
 /* harmony import */ var _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../l10n/l10n.js */ "./l10n/l10n.js");
+/* harmony import */ var _wide_view__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./wide-view */ "./views/lib/wide-view.js");
+
 
 
 
@@ -17677,10 +17485,12 @@ class View {
     this.id = 'base_view'
     this.name = 'base view'
     this.title = 'Base View'
-    this.hasComponentData = false // True if vue supports Vue.js components
+    this.hasPrerenderedTables = false // Indicates whether this view has a pre-rendered table, such as in case with Greek paradigms
 
     this.forms = new Set()
-    this.table = {}
+    this.table = {
+      options: {}
+    }
 
     /**
      * Whether this view has any credits
@@ -17692,6 +17502,34 @@ class View {
      * @type {string}
      */
     this.creditsText = ''
+
+    this.initialized = false
+  }
+
+  /**
+   * Performs an initialization of a table object that represents tables structures
+   * (stored within a Table object): cells and morphemes that are grouped into tree, rows, columns,
+   * and are related to each other in some other ways.
+   * Creates an instance of WideView class which represents a wide form of an inflection table
+   * (the one that is shown to desktop users)
+   * This should be done after constructor initialization is complete to let descendant-specific code
+   * complete its specific tasks before table structures are initialized. This is done only once for each view.
+   * @param {Object} options - Render options related to whether some columns of an inflection table
+   *                           should be hidden.
+   */
+  initialize (options = {
+    emptyColumnsHidden: true,
+    noSuffixMatchesHidden: true
+  }) {
+    this.footnotes = this.getFootnotes()
+    this.table.messages = this.messages
+    this.morphemes = this.getMorphemes()
+
+    // TODO: do not construct table if constructed already
+    this.table.construct(this.morphemes, options)
+    this.wideView = new _wide_view__WEBPACK_IMPORTED_MODULE_3__["default"](this.table)
+    this.initialized = true
+    return this
   }
 
   static get viewID () {
@@ -17806,16 +17644,30 @@ class View {
   }
 
   /**
-   * Converts an InflectionData, returned from an inflection tables library, into an HTML representation of an inflection table.
-   * `messages` provides a translation for view's texts.
+   * Whether this inflection table can be expanded or collapsed.
+   * It usually can't if it has no suffix no matches.
+   * In this cause, a full table will always be shown.
+   * @return {boolean}
    */
-  render () {
-    this.footnotes = this.getFootnotes()
-    this.table.messages = this.messages
-    this.morphemes = this.getMorphemes()
-    this.table.construct(this.morphemes).constructViews().addEventListeners()
-    this.table.wideView.render() // This is a compatibility code that is required to render HTML nodes
-    this.wideTable = this.table.wideView.renderTable()
+  get canCollapse () {
+    return !this.hasPrerenderedTables && this.table.canCollapse
+  }
+
+  /**
+   * Initializes table structures for the first time, if necessary
+   * (initialization is fulfilled once only, see `initialize()` method description for more details)
+   * and renders rows and columns of a wide view that represents
+   * a form of an inflection table shown to desktop users.
+   * @param {Object} options - Render options
+   */
+  render (options = {
+    emptyColumnsHidden: true,
+    noSuffixMatchesHidden: true
+  }) {
+    if (!this.initialized) {
+      this.initialize(options)
+    }
+    this.wideView.render()
     return this
   }
 
@@ -17844,46 +17696,44 @@ class View {
       : new Map()
   }
 
-  get wideViewNodes () {
-    return this.table.wideView.render()
-  }
-
-  get narrowViewNodes () {
-    return this.table.narrowView.render()
-  }
-
   /**
-   * Hides all empty columns of the view.
+   * Hide or show column groups with no morphemes depending on the `value`.
+   * @param {boolean} value - Whether to hide or show column groups with no morphemes.
+   *                  true - hide groups with no morphemes in them;
+   *                  false - show groups with no morphemes in them.
    */
-  hideEmptyColumns () {
-    this.table.hideEmptyColumns()
-    return this
-  }
-
-  /**
-   * Displays all previously hidden columns.
-   */
-  showEmptyColumns () {
-    this.table.showEmptyColumns()
-    return this
-  }
-
-  /**
-   * Hides groups (formed by first column feature) that have no suffix matches.
-   */
-  hideNoSuffixGroups () {
-    if (this.table.canCollapse) {
-      this.table.hideNoSuffixGroups()
+  emptyColumnsHidden (value) {
+    // Pre-rendered tables cannot collapse and expand
+    if (!this.hasPrerenderedTables && this.table.options.emptyColumnsHidden !== value) {
+      // If settings were actually changed
+      if (value) {
+        this.table.hideEmptyColumns()
+      } else {
+        this.table.showEmptyColumns()
+      }
+      this.wideView.render()
     }
-    return this
   }
 
   /**
-   * Displays previously hidden groups with no suffix matches.
+   * Hide or show column groups with no morpheme matches depending on the `value`.
+   * @param {boolean} value - Whether to hide or show groups with not suffix matches.
+   *                  true - hide groups with no suffix matches;
+   *                  false - show groups with no suffix matches.
    */
-  showNoSuffixGroups () {
-    this.table.showNoSuffixGroups()
-    return this
+  noSuffixMatchesGroupsHidden (value) {
+    // Pre-rendered tables cannot collapse and expand
+    if (!this.hasPrerenderedTables && this.table.options.noSuffixMatchesHidden !== value) {
+      // If settings were actually changed
+      if (value) {
+        if (this.table.canCollapse) {
+          this.table.hideNoSuffixMatchesGroups()
+        }
+      } else {
+        this.table.showNoSuffixMatchesGroups()
+      }
+      this.wideView.render()
+    }
   }
 
   highlightRowAndColumn (cell) {
@@ -17953,18 +17803,14 @@ __webpack_require__.r(__webpack_exports__);
 class WideView {
   /**
    * Initializes a wide view.
-   * @param {Column[]} columns - Table columns.
-   * @param {Row[]} rows - Table rows.
-   * @param {Row[]} headers - Table headers.
-   * @param {number} titleColumnQty - Number of title columns in a table.
+   * @param {Table} table - An inflection table object.
    */
-  constructor (columns, rows, headers, titleColumnQty) {
-    this.columns = columns
-    this.rows = rows
-    this.headers = headers
-    this.titleColumnQty = titleColumnQty
-    this.nodes = document.createElement('div')
-    this.nodes.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].inflectionTable, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].wideView)
+  constructor (table) {
+    this.table = table
+    this.rows = [] // To store rows of view's inflection table
+
+    // Wither this view is collapsed in a UI component
+    this.collapsed = false
   }
 
   /**
@@ -17973,7 +17819,7 @@ class WideView {
    */
   get visibleColumnQty () {
     let qty = 0
-    for (let column of this.columns) {
+    for (let column of this.table.columns) {
       if (!column.hidden) {
         qty++
       }
@@ -17982,60 +17828,24 @@ class WideView {
   }
 
   /**
-   * Renders an HTML representation of a wide table view.
-   * @returns {HTMLElement} A rendered HTML Element.
-   */
-  render () {
-    // Remove any previously inserted nodes
-    this.nodes.innerHTML = ''
-
-    for (let row of this.headers) {
-      this.nodes.appendChild(row.titleCell.wvNode)
-      for (let cell of row.cells) {
-        this.nodes.appendChild(cell.wvNode)
-      }
-    }
-
-    for (let row of this.rows) {
-      let titleCells = row.titleCell.hierarchyList
-      if (titleCells.length < this.titleColumnQty) {
-        this.nodes.appendChild(_row_title_cell__WEBPACK_IMPORTED_MODULE_1__["default"].placeholder(this.titleColumnQty - titleCells.length))
-      }
-      for (let titleCell of titleCells) {
-        this.nodes.appendChild(titleCell.wvNode)
-      }
-
-      for (let cell of row.cells) {
-        this.nodes.appendChild(cell.wvNode)
-      }
-    }
-    this.nodes.style.gridTemplateColumns = this.style.gridTemplateColumns
-
-    return this.nodes
-  }
-
-  /**
    * Renders a table in a size suitable for Vue.js display
    * @return {{rows: Array}}
    */
-  renderTable () {
-    let table = {
-      rows: []
-    }
-
-    for (let row of this.headers) {
+  render () {
+    this.rows = []
+    for (let row of this.table.headers) {
       let cells = []
       cells.push(row.titleCell)
       for (let cell of row.cells) {
         cells.push(cell)
       }
-      table.rows.push({cells: cells})
+      this.rows.push({cells: cells})
     }
 
-    for (let row of this.rows) {
+    for (let row of this.table.rows) {
       let cells = []
       let titleCells = row.titleCell.hierarchyList
-      if (titleCells.length < this.titleColumnQty) {
+      if (titleCells.length < this.table.titleColumnQty) {
         cells.push(_row_title_cell__WEBPACK_IMPORTED_MODULE_1__["default"].placeholderCell(this.titleColumnQty - titleCells.length))
       }
       for (let titleCell of titleCells) {
@@ -18045,11 +17855,8 @@ class WideView {
       for (let cell of row.cells) {
         cells.push(cell)
       }
-      table.rows.push({cells: cells})
+      this.rows.push({cells: cells})
     }
-    table.style = this.style
-
-    return table
   }
 
   /**
@@ -18058,7 +17865,7 @@ class WideView {
    */
   get style () {
     return {
-      gridTemplateColumns: `repeat(${this.visibleColumnQty + this.titleColumnQty}, ${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["wideView"].column.width}${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["wideView"].column.unit})`
+      gridTemplateColumns: `repeat(${this.visibleColumnQty + this.table.titleColumnQty}, ${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["wideView"].column.width}${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["wideView"].column.unit})`
     }
   }
 }
