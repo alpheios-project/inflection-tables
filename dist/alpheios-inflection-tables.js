@@ -3150,10 +3150,24 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   }
 
   checkIrregularVerb (inflection) {
-    if ([alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE].includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value) && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word]) {
+    if (
+      inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB &&
+      inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation] &&
+      inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation].value === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TYPE_IRREGULAR
+    ) {
+      // This is an irregular verb that was identified by a morphological analyzer
+      return true
+    } else if ([alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE].includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value) && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word]) {
       return this.verbsIrregularLemmas.filter(item => item.word === inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value).length > 0
     }
     return false
+  }
+
+  isUnimplemented (inflection) {
+    return Boolean(
+      this.checkIrregularVerb(inflection) &&
+      !this.verbsIrregularLemmas.some(item => item.word === inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
+    )
   }
 
   static getObligatoryMatchList (inflection) {
@@ -3338,6 +3352,10 @@ class LanguageDataset {
     this.footnotes = [] // Footnotes
   }
 
+  isUnimplemented (inflection) {
+    return false
+  }
+
   /**
    * Each grammatical feature can be either a single or an array of Feature objects. The latter is the case when
    * an ending can belong to several grammatical features at once (i.e. belong to both 'masculine' and
@@ -3497,6 +3515,9 @@ class LanguageDataset {
     }
     partOfSpeech = partOfSpeech.value
 
+    // add the lemma to the inflection before setting inflection constraints
+    inflection.addFeature(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word, lemma.word, lemma.languageID))
+
     inflection.constraints = this.model.getInflectionConstraints(inflection)
 
     if (inflection.constraints.pronounClassRequired) {
@@ -3518,10 +3539,10 @@ class LanguageDataset {
       }
     }
 
-    // add the lemma to the inflection
-    inflection.addFeature(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word, lemma.word, lemma.languageID))
     // Check if this is an irregular word after a `word` feature is added
     inflection.constraints.irregularVerb = this.checkIrregularVerb(inflection)
+    inflection.constraints.unimplemented = this.isUnimplemented(inflection)
+    console.log(`Constraints are: `, inflection.constraints)
 
     if (!this.pos.get(partOfSpeech)) {
       // There is no source data for this part of speech
@@ -15371,6 +15392,9 @@ class LatinVerbIrregularView extends _views_lang_latin_verb_latin_verb_irregular
    */
   static enabledForInflection (inflection) {
     console.log(`Checking for an irregular verb`)
+    if (inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation] && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation].value === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TYPE_IRREGULAR) {
+      console.log('This is an irregular word')
+    }
 
     return Boolean(
       inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech &&

@@ -1,4 +1,4 @@
-import { Feature } from 'alpheios-data-models'
+import { Constants, Feature } from 'alpheios-data-models'
 import LatinVerbIrregularVoiceView from '@views/lang/latin/verb/latin-verb-irregular-voice.js'
 import Table from '@views/lib/table'
 
@@ -41,7 +41,10 @@ export default class LatinVerbIrregularView extends LatinVerbIrregularVoiceView 
    * @return {boolean} - True if this view shall be displayed for an inflection, false otherwise.
    */
   static enabledForInflection (inflection) {
-    console.log(`Checking for an irregular verb`)
+    if (inflection[Feature.types.conjugation] && inflection[Feature.types.conjugation].value === Constants.TYPE_IRREGULAR) {
+      // This is an irregular verb identified by a morphological analyzer. It sets conjugation value to TYPE_IRREGULAR
+      return true
+    }
 
     return Boolean(
       inflection[Feature.types.part].value === this.mainPartOfSpeech &&
