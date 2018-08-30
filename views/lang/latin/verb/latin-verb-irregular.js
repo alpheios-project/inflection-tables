@@ -16,7 +16,9 @@ export default class LatinVerbIrregularView extends LatinVerbIrregularVoiceView 
     this.name = 'verb-irregular'
     this.title = 'Verb Conjugation (Irregular, Voice)'
 
-    this.createTable()
+    if (this.isImplemented) { // isImplemented is set by a parent view
+      this.createTable()
+    }
   }
 
   static get viewID () {

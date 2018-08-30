@@ -2771,6 +2771,10 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense).getImporter()
       .map('future_perfect', alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE_PERFECT)
 
+    /**
+     * Contains a list of irregular verb lemmas for which we have data.
+     * @type {Array}
+     */
     this.verbsIrregularLemmas = []
   }
 
@@ -3163,6 +3167,12 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     return false
   }
 
+  /**
+   * Checks whether we implemented (i.e. have word data) a particular word (stored in inflection.word).
+   * Currently checks for unimplemented irregular verbs only.
+   * @param {Inflection} inflection - An inflection we need to check
+   * @return {boolean} - True if verb is not implemented yet, false otherwise
+   */
   isUnimplemented (inflection) {
     return Boolean(
       this.checkIrregularVerb(inflection) &&
@@ -3352,6 +3362,11 @@ class LanguageDataset {
     this.footnotes = [] // Footnotes
   }
 
+  /**
+   * Checks wither is have data on a certain word (stored in inflection.word) or not.
+   * @param {Inflection} inflection - An inflection that needs to be checked.
+   * @return {boolean} True if word is not supported, false otherwise
+   */
   isUnimplemented (inflection) {
     return false
   }
@@ -3541,8 +3556,7 @@ class LanguageDataset {
 
     // Check if this is an irregular word after a `word` feature is added
     inflection.constraints.irregularVerb = this.checkIrregularVerb(inflection)
-    inflection.constraints.unimplemented = this.isUnimplemented(inflection)
-    console.log(`Constraints are: `, inflection.constraints)
+    inflection.constraints.implemented = !this.isUnimplemented(inflection)
 
     if (!this.pos.get(partOfSpeech)) {
       // There is no source data for this part of speech
@@ -15261,12 +15275,17 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
     this.name = 'verb-irregular-voice'
     this.title = 'Verb Conjugation (Irregular)'
 
-    const inflectionsWords = this.homonym.inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
-    const lemma = this.constructor.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
+    // Some irregular verbs can be unimplemented and shall be skipped
+    const inflections = this.homonym.inflections.filter(item => item.constraints.implemented)
+    this.isImplemented = inflections.length > 0
+    if (this.isImplemented) {
+      const inflectionsWords = inflections.map(item => item[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
+      const lemma = this.constructor.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
 
-    this.additionalTitle = lemma.word + ', ' + lemma.principalParts
+      this.additionalTitle = lemma.word + ', ' + lemma.principalParts
 
-    this.createTable()
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15307,6 +15326,7 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
    * @return {boolean} - True if this view shall be displayed for an inflection, false otherwise.
    */
   static enabledForInflection (inflection) {
+    console.log(`enabled check`)
     return Boolean(
       inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech &&
       inflection.constraints &&
@@ -15366,7 +15386,9 @@ class LatinVerbIrregularView extends _views_lang_latin_verb_latin_verb_irregular
     this.name = 'verb-irregular'
     this.title = 'Verb Conjugation (Irregular, Voice)'
 
-    this.createTable()
+    if (this.isImplemented) { // isImplemented is set by a parent view
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15391,9 +15413,9 @@ class LatinVerbIrregularView extends _views_lang_latin_verb_latin_verb_irregular
    * @return {boolean} - True if this view shall be displayed for an inflection, false otherwise.
    */
   static enabledForInflection (inflection) {
-    console.log(`Checking for an irregular verb`)
     if (inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation] && inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation].value === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TYPE_IRREGULAR) {
-      console.log('This is an irregular word')
+      // This is an irregular verb identified by a morphological analyzer. It sets conjugation value to TYPE_IRREGULAR
+      return true
     }
 
     return Boolean(
@@ -17511,6 +17533,7 @@ class View {
     this.id = 'base_view'
     this.name = 'base view'
     this.title = 'Base View'
+    this.isImplemented = true // Whether this view is implemented or not. Unimplemented views serves as placeholders.
     this.hasPrerenderedTables = false // Indicates whether this view has a pre-rendered table, such as in case with Greek paradigms
 
     this.forms = new Set()

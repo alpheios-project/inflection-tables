@@ -32,6 +32,7 @@ export default class View {
     this.id = 'base_view'
     this.name = 'base view'
     this.title = 'Base View'
+    this.isImplemented = true // Whether this view is implemented or not. Unimplemented views serves as placeholders.
     this.hasPrerenderedTables = false // Indicates whether this view has a pre-rendered table, such as in case with Greek paradigms
 
     this.forms = new Set()
