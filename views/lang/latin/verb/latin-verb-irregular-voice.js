@@ -1,5 +1,6 @@
 import { Constants, Feature } from 'alpheios-data-models'
 import LatinView from '@views/lang/latin/latin-view.js'
+import LatinVerbParicipleIrregularView from '@views/lang/latin/verb/latin-verb-participle-irregular.js'
 import Form from '@lib/form.js'
 import Table from '@views/lib/table'
 
@@ -84,5 +85,20 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
         i.constraints && i.constraints.irregularVerb
     )
     return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
+  }
+
+  createLinkedViews (homonym) {
+    // participles
+    // Select inflections that are for irregular verbs and replace POS to participle
+    // Create a homonym with a single word and a single inflection
+    // Add to inflections new ones with
+
+    let verbInflections = homonym.inflections.filter(infl => infl[Feature.types.part].value === this.constructor.mainPartOfSpeech)
+    let LinkedViewConstructor = LatinVerbParicipleIrregularView
+    for (let infl of verbInflections) {
+      infl[Feature.types.part] = infl[Feature.types.part].createFeature(LinkedViewConstructor.mainPartOfSpeech)
+    }
+    let inflectionData = this.dataset.createInflectionSet(this.mainPartOfSpeech, verbInflections)
+    let view = new this(homonym, inflectionData, locale)
   }
 }

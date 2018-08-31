@@ -51,6 +51,13 @@ export default class View {
     this.creditsText = ''
 
     this.initialized = false
+
+    /**
+     * An array of views that should be shown below the current view by the UI component.
+     * It is view's responsibility to create and initialize them.
+     * @type {View[]}
+     */
+    this.linkedViews = []
   }
 
   /**
