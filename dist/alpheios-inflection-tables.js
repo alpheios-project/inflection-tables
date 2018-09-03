@@ -2615,7 +2615,7 @@ module.exports = "Lemma,PrincipalParts,Form,Voice,Mood,Tense,Number,Person,Footn
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Ending,Conjugation,Case,Footnote\num,1st,accusative,\num,2nd,accusative,\num,3rd,accusative,\num,4th,accusative,\nū,1st,ablative,\nū,2nd,ablative,\nū,3rd,ablative,\nū,4th,ablative,\n"
+module.exports = "Ending,Conjugation,Case,Footnote\num,1st 2nd 3rd 4th irregular,accusative,\nū,1st 2nd 3rd 4th irregular,ablative,\n"
 
 /***/ }),
 
@@ -2767,6 +2767,8 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       .map(this.constructor.constants.ORD_1ST_2ND, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_1ST, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND])
     this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender).getImporter()
       .map(this.constructor.constants.GEND_MASCULINE_FEMININE, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE])
+    this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation).getImporter()
+      .map(this.constructor.constants.CONJ_ANY, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_1ST, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_4TH, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TYPE_IRREGULAR])
 
     this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense).getImporter()
       .map('future_perfect', alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE_PERFECT)
@@ -2781,7 +2783,9 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   static get constants () {
     return {
       ORD_1ST_2ND: '1st 2nd',
-      GEND_MASCULINE_FEMININE: 'masculine feminine'
+      GEND_MASCULINE_FEMININE: 'masculine feminine',
+      CONJ_ANY: '1st 2nd 3rd 4th irregular'
+
     }
   }
 
@@ -14743,6 +14747,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../lib/suffix.js */ "./lib/suffix.js");
 /* harmony import */ var _latin_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../latin-view.js */ "./views/lang/latin/latin-view.js");
 /* harmony import */ var _lib_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../lib/table */ "./views/lib/table.js");
+/* harmony import */ var _lib_morpheme_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../lib/morpheme.js */ "./lib/morpheme.js");
+
 
 
 
@@ -14760,6 +14766,10 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
       cases: this.features.cases,
       conjugations: this.features.conjugations
     }
+    this.features.conjugations.addFeature(_latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].datasetConsts.CONJ_ANY, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_1ST, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_4TH, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TYPE_IRREGULAR])
+    this.features.conjugations.comparisonType = _lib_morpheme_js__WEBPACK_IMPORTED_MODULE_4__["default"].comparisonTypes.PARTIAL
+    this.features.conjugations.getTitle = () => { return '' }
+    this.features.conjugations.getOrderedFeatures = this.constructor.getOrderedConjugations
     this.createTable()
   }
 
@@ -14785,6 +14795,12 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
     features.rows = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
     features.columnRowTitles = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
     features.fullWidthRowTitles = []
+  }
+
+  static getOrderedConjugations (ancestorFeatures) {
+    return [
+      this.featureMap.get(_latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].datasetConsts.CONJ_ANY)
+    ]
   }
 }
 
