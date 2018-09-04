@@ -15326,7 +15326,6 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
    * @return {boolean} - True if this view shall be displayed for an inflection, false otherwise.
    */
   static enabledForInflection (inflection) {
-    console.log(`enabled check`)
     return Boolean(
       inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech &&
       inflection.constraints &&
