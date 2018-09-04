@@ -51,6 +51,13 @@ export default class View {
     this.creditsText = ''
 
     this.initialized = false
+
+    /**
+     * An array of views that should be shown below the current view by the UI component.
+     * It is view's responsibility to create and initialize them.
+     * @type {View[]}
+     */
+    this.linkedViews = []
   }
 
   /**
@@ -134,6 +141,14 @@ export default class View {
   static get inflectionType () {
   }
 
+  /**
+   * Checks wither an inflection table has any data.
+   * @return {boolean} True if table has no inflection data, false otherwise.
+   */
+  get isEmpty () {
+    return this.table.rows.length === 0
+  }
+
   sameAs (view) {
     return this.id === view.id
   }
@@ -215,6 +230,11 @@ export default class View {
       this.initialize(options)
     }
     this.wideView.render()
+
+    // Render linked views (if any)
+    for (const view of this.linkedViews) {
+      view.render()
+    }
     return this
   }
 
@@ -323,5 +343,14 @@ export default class View {
     let inflectionData = this.getInflectionsData(homonym)
     // TODO: Find the best way to pass messages (the last argument)
     return new this(homonym, inflectionData, messages).render()
+  }
+
+  /**
+   * Checks whether an inflection data can be used to construct a view.
+   * @param {InflectionSet} inflectionData - A set of inflection data.
+   * @return {boolean} - True if data can be used for a view, false otherwise.
+   */
+  static isValidForView (inflectionData) {
+    return (inflectionData.types.has(this.inflectionType) && inflectionData.types.get(this.inflectionType).items.length > 0)
   }
 }

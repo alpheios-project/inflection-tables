@@ -1,15 +1,16 @@
 import { Constants, Feature } from 'alpheios-data-models'
-import LatinVerbIrregularView from '@views/lang/latin/verb/latin-verb-irregular.js'
-import Form from '@lib/form.js'
+import LatinVerbIrregularBaseView from '@views/lang/latin/verb/irregular/latin-verb-irregular-base-view.js'
 import Table from '@views/lib/table'
 
-export default class LatinVerbParticipleIrregularView extends LatinVerbIrregularView {
+export default class LatinVerbParticipleIrregularView extends LatinVerbIrregularBaseView {
   constructor (homonym, inflectionData, locale) {
     super(homonym, inflectionData, locale)
 
     this.id = 'verbParticipleConjugationIrregular'
     this.name = 'verb-participle-irregular'
     this.title = 'Verb Participle Conjugation (Irregular)'
+
+    this.createTable()
   }
 
   static get viewID () {
@@ -18,10 +19,6 @@ export default class LatinVerbParticipleIrregularView extends LatinVerbIrregular
 
   static get partsOfSpeech () {
     return [Constants.POFS_VERB_PARTICIPLE]
-  }
-
-  static get inflectionType () {
-    return Form
   }
 
   createTable () {
