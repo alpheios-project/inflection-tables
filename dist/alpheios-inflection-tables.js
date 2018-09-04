@@ -2615,7 +2615,7 @@ module.exports = "Lemma,PrincipalParts,Form,Case,Footnote\nfero,ferre_tuli_latus
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Ending,Conjugation,Case,Footnote\num,1st 2nd 3rd 4th irregular,accusative,\nū,1st 2nd 3rd 4th irregular,ablative,\n"
+module.exports = "Ending,Case,Footnote\num,accusative,\nū,ablative,\n"
 
 /***/ }),
 
@@ -2993,7 +2993,6 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       let features = [partOfSpeech]
       // Ending,Conjugation,Voice,Mood,Tense,Number,Person,Case,Type,Footnote
       let columns = [
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.case
       ]
       columns.forEach((c, j) => {
@@ -14797,8 +14796,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../lib/suffix.js */ "./lib/suffix.js");
 /* harmony import */ var _latin_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../latin-view.js */ "./views/lang/latin/latin-view.js");
 /* harmony import */ var _lib_table__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../lib/table */ "./views/lib/table.js");
-/* harmony import */ var _lib_morpheme_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../lib/morpheme.js */ "./lib/morpheme.js");
-
 
 
 
@@ -14813,13 +14810,8 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
     this.title = 'Supine'
 
     this.features = {
-      cases: this.features.cases,
-      conjugations: this.features.conjugations
+      cases: this.features.cases
     }
-    this.features.conjugations.addFeature(_latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].datasetConsts.CONJ_ANY, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_1ST, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_4TH, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TYPE_IRREGULAR])
-    this.features.conjugations.comparisonType = _lib_morpheme_js__WEBPACK_IMPORTED_MODULE_4__["default"].comparisonTypes.PARTIAL
-    this.features.conjugations.getTitle = () => { return '' }
-    this.features.conjugations.getOrderedFeatures = this.constructor.getOrderedConjugations
     this.createTable()
   }
 
@@ -14836,21 +14828,12 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
   }
 
   createTable () {
-    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.conjugations,
-      this.features.cases])
+    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.cases])
     let features = this.table.features
-    features.columns = [
-      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation)
-    ]
-    features.rows = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
-    features.columnRowTitles = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
+    features.columns = []
+    features.rows = [this.features.cases]
+    features.columnRowTitles = [this.features.cases]
     features.fullWidthRowTitles = []
-  }
-
-  static getOrderedConjugations (ancestorFeatures) {
-    return [
-      this.featureMap.get(_latin_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].datasetConsts.CONJ_ANY)
-    ]
   }
 }
 
