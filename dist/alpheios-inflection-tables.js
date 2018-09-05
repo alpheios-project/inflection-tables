@@ -3171,12 +3171,15 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
    * Checks whether we implemented (i.e. have word data) a particular word (stored in inflection.word).
    * Currently checks for unimplemented irregular verbs only.
    * @param {Inflection} inflection - An inflection we need to check
-   * @return {boolean} - True if verb is not implemented yet, false otherwise
+   * @return {boolean} - True if verb is implemented yet, false otherwise
    */
-  isUnimplemented (inflection) {
+  isImplemented (inflection) {
+    /*
+    Identifies words that are not implemented. Currently those are irregular verbs that are not in our data CSV files.
+     */
     return Boolean(
-      this.checkIrregularVerb(inflection) &&
-      !this.verbsIrregularLemmas.some(item => item.word === inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
+      !this.checkIrregularVerb(inflection) ||
+      this.verbsIrregularLemmas.some(item => item.word === inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
     )
   }
 
@@ -3363,12 +3366,12 @@ class LanguageDataset {
   }
 
   /**
-   * Checks wither is have data on a certain word (stored in inflection.word) or not.
+   * Checks weather a language dataset has data on a certain word (stored in inflection.word) or not.
    * @param {Inflection} inflection - An inflection that needs to be checked.
-   * @return {boolean} True if word is not supported, false otherwise
+   * @return {boolean} True if word is supported, false otherwise
    */
-  isUnimplemented (inflection) {
-    return false
+  isImplemented (inflection) {
+    return true
   }
 
   /**
@@ -3556,7 +3559,7 @@ class LanguageDataset {
 
     // Check if this is an irregular word after a `word` feature is added
     inflection.constraints.irregularVerb = this.checkIrregularVerb(inflection)
-    inflection.constraints.implemented = !this.isUnimplemented(inflection)
+    inflection.constraints.implemented = this.isImplemented(inflection)
 
     if (!this.pos.get(partOfSpeech)) {
       // There is no source data for this part of speech
@@ -17689,6 +17692,16 @@ class View {
       this.messages = _l10n_l10n_js__WEBPACK_IMPORTED_MODULE_2__["default"].getMessages(locale)
     }
     return this
+  }
+
+  /**
+   * Checks whether this view can be and needs to be rendered (i.e. construct inflection table structures).
+   * Views that don't need to be rendered are the ones that are not implemented and the ones tha have
+   * tables already pre-rendered (i.e. Greek paradigm tables that are stored in JSON files).
+   * @return {boolean}
+   */
+  get isRenderable () {
+    return this.isImplemented && !this.hasPrerenderedTables
   }
 
   /**

@@ -192,6 +192,16 @@ export default class View {
   }
 
   /**
+   * Checks whether this view can be and needs to be rendered (i.e. construct inflection table structures).
+   * Views that don't need to be rendered are the ones that are not implemented and the ones tha have
+   * tables already pre-rendered (i.e. Greek paradigm tables that are stored in JSON files).
+   * @return {boolean}
+   */
+  get isRenderable () {
+    return this.isImplemented && !this.hasPrerenderedTables
+  }
+
+  /**
    * Whether this inflection table can be expanded or collapsed.
    * It usually can't if it has no suffix no matches.
    * In this cause, a full table will always be shown.
