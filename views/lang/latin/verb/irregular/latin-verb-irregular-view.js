@@ -59,7 +59,7 @@ export default class LatinVerbIrregularView extends LatinVerbIrregularBaseView {
     return Boolean(
       inflection[Feature.types.part].value === this.mainPartOfSpeech &&
       inflection.constraints &&
-      inflection.constraints.irregularVerb &&
+      inflection.constraints.irregular &&
       inflection.word &&
       !this.voiceEnabledHdwds.includes(inflection.word.value) // Must NOT match headwords for irregular verb voice table
     )

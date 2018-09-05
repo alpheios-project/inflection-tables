@@ -15316,6 +15316,21 @@ class LatinVerbSupineIrregularView extends _views_lang_latin_verb_irregular_lati
     }
     return false
   }
+
+  /**
+   * Gets inflection data for a homonym. For this view we need to use irregular verb inflections only.
+   * @param {Homonym} homonym - A homonym for which inflection data needs to be retrieved
+   * @return {InflectionSet} Resulting inflection set.
+   */
+  static getInflectionsData (homonym) {
+    console.log(`supine get inflection data`)
+    // Select only those inflections that are required for this view
+    let inflections = homonym.inflections.filter(
+      i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech &&
+        i.constraints && i.constraints.irregularVerb
+    )
+    return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
+  }
 }
 
 

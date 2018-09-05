@@ -40,7 +40,7 @@ export default class LatinVerbParticipleIrregularView extends LatinVerbIrregular
   static enabledForLexemes (lexemes) {
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
-        if (inflection.constraints && inflection.constraints.irregularVerb) {
+        if (inflection.constraints && inflection.constraints.irregular) {
           return true
         }
       }

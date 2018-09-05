@@ -40,11 +40,26 @@ export default class LatinVerbSupineIrregularView extends LatinVerbIrregularBase
   static enabledForLexemes (lexemes) {
     for (let lexeme of lexemes) {
       for (let inflection of lexeme.inflections) {
-        if (inflection.constraints && inflection.constraints.irregularVerb) {
+        if (inflection.constraints && inflection.constraints.irregular) {
           return true
         }
       }
     }
     return false
+  }
+
+  /**
+   * Gets inflection data for a homonym. For this view we need to use irregular verb inflections only.
+   * @param {Homonym} homonym - A homonym for which inflection data needs to be retrieved
+   * @return {InflectionSet} Resulting inflection set.
+   */
+  static getInflectionsData (homonym) {
+    console.log(`supine get inflection data`)
+    // Select only those inflections that are required for this view
+    let inflections = homonym.inflections.filter(
+      i => i[Feature.types.part].value === this.mainPartOfSpeech &&
+        i.constraints && i.constraints.irregular
+    )
+    return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
   }
 }

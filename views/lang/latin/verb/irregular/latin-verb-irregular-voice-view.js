@@ -46,7 +46,7 @@ export default class LatinVerbIrregularVoiceView extends LatinVerbIrregularView 
     return Boolean(
       inflection[Feature.types.part].value === this.mainPartOfSpeech &&
       inflection.constraints &&
-      inflection.constraints.irregularVerb && // Must be an irregular verb
+      inflection.constraints.irregular && // Must be an irregular verb
       inflection.word &&
       this.voiceEnabledHdwds.includes(inflection.word.value) // Must match headwords for irregular verb voice table
     )

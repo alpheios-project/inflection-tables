@@ -56,7 +56,7 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
     // Select only those inflections that are required for this view
     let inflections = homonym.inflections.filter(
       i => i[Feature.types.part].value === this.mainPartOfSpeech &&
-        i.constraints && i.constraints.irregularVerb
+        i.constraints && i.constraints.irregular
     )
     return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
   }
