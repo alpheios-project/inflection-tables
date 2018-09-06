@@ -29,6 +29,10 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
     return Form
   }
 
+  static get voiceEnabledHdwds () {
+    return ['fero']
+  }
+
   createTable () {
     this.table = new Table([this.features.voices, this.features.moods, this.features.tenses, this.features.numbers, this.features.persons])
     let features = this.table.features
@@ -59,5 +63,40 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
         i.constraints && i.constraints.irregular
     )
     return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
+  }
+
+  /**
+   * Creates an array of linked table views: views, that will be shown below the main table view.
+   * @return {View[]} - An array of linked views or an empty array if no linked views can be created.
+   */
+  createLinkedViews () {
+    let views = []
+    let inflections = this.homonym.inflections.filter(infl => infl[Feature.types.part].value === this.constructor.mainPartOfSpeech)
+    for (let Constructor of this.constructor.linkedViewConstructors) {
+      for (let infl of inflections) {
+        infl[Feature.types.part] = infl[Feature.types.part].createFeature(Constructor.mainPartOfSpeech)
+      }
+      let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, inflections)
+      if (Constructor.isValidForView(inflectionData)) {
+        let view = new Constructor(this.homonym, inflectionData, this.locale)
+        for (let infl of inflections) {
+          infl[Feature.types.part] = infl[Feature.types.part].createFeature(this.constructor.mainPartOfSpeech)
+        }
+        views.push(view)
+      }
+    }
+    this.linkedViews = views
+    return views
+  }
+
+  // See base view for description
+  static getMatchingInstances (homonym, locale) {
+    if (this.matchFilter(homonym)) {
+      let inflectionData = this.getInflectionsData(homonym)
+      let view = new this(homonym, inflectionData, locale)
+      view.createLinkedViews()
+      return [view]
+    }
+    return []
   }
 }

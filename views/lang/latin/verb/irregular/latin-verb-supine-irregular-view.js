@@ -1,5 +1,7 @@
 import { Constants, Feature } from 'alpheios-data-models'
 import LatinVerbIrregularBaseView from '@views/lang/latin/verb/irregular/latin-verb-irregular-base-view.js'
+import LatinVerbIrregularView from '@views/lang/latin/verb/irregular/latin-verb-irregular-view.js'
+import LatinVerbParticipleIrregularView from '@views/lang/latin/verb/irregular/latin-verb-participle-irregular-view.js'
 import Table from '@views/lib/table'
 
 export default class LatinVerbSupineIrregularView extends LatinVerbIrregularBaseView {
@@ -54,12 +56,19 @@ export default class LatinVerbSupineIrregularView extends LatinVerbIrregularBase
    * @return {InflectionSet} Resulting inflection set.
    */
   static getInflectionsData (homonym) {
-    console.log(`supine get inflection data`)
     // Select only those inflections that are required for this view
     let inflections = homonym.inflections.filter(
       i => i[Feature.types.part].value === this.mainPartOfSpeech &&
         i.constraints && i.constraints.irregular
     )
     return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
+  }
+
+  /**
+   * A list of constructors of linked views.
+   * @return {View[]}
+   */
+  static get linkedViewConstructors () {
+    return [LatinVerbIrregularView, LatinVerbParticipleIrregularView]
   }
 }

@@ -2,7 +2,6 @@ import { Feature } from 'alpheios-data-models'
 import LatinVerbIrregularBaseView from '@views/lang/latin/verb/irregular/latin-verb-irregular-base-view.js'
 import LatinVerbParicipleIrregularView from '@views/lang/latin/verb/irregular/latin-verb-participle-irregular-view.js'
 import LatinVerbSupineIrregularView from '@views/lang/latin/verb/irregular/latin-verb-supine-irregular-view.js'
-import LatinVerbGerundiveIrregularView from '@views/lang/latin/verb/irregular/latin-verb-gerundive-irregular-view.js'
 import Table from '@views/lib/table'
 
 /**
@@ -20,15 +19,10 @@ export default class LatinVerbIrregularView extends LatinVerbIrregularBaseView {
     this.title = 'Verb Conjugation (Irregular, Voice)'
 
     this.createTable()
-    this.linkedViews = this.constructor.createLinkedViews(homonym, locale)
   }
 
   static get viewID () {
     return 'latin_verb_irregular_view'
-  }
-
-  static get voiceEnabledHdwds () {
-    return ['fero']
   }
 
   createTable () {
@@ -66,28 +60,10 @@ export default class LatinVerbIrregularView extends LatinVerbIrregularBaseView {
   }
 
   /**
-   * Creates an array of linked views: views, that will be shown below the main table (view).
-   * @param {Homonym} homonym - A homonym for which linked views will be created.
-   * @param {string} locale
-   * @return {View[]} - An array of linked views or an empty array if no linked views can be created.
+   * A list of constructors of linked views.
+   * @return {View[]}
    */
-  static createLinkedViews (homonym, locale) {
-    let views = []
-    let linkedViewConstructors = [LatinVerbParicipleIrregularView, LatinVerbSupineIrregularView, LatinVerbGerundiveIrregularView]
-    let inflections = homonym.inflections.filter(infl => infl[Feature.types.part].value === this.mainPartOfSpeech)
-    for (let Constructor of linkedViewConstructors) {
-      for (let infl of inflections) {
-        infl[Feature.types.part] = infl[Feature.types.part].createFeature(Constructor.mainPartOfSpeech)
-      }
-      let inflectionData = this.dataset.createInflectionSet(Constructor.mainPartOfSpeech, inflections)
-      if (Constructor.isValidForView(inflectionData)) {
-        let view = new Constructor(homonym, inflectionData, locale)
-        for (let infl of inflections) {
-          infl[Feature.types.part] = infl[Feature.types.part].createFeature(this.mainPartOfSpeech)
-        }
-        views.push(view)
-      }
-    }
-    return views
+  static get linkedViewConstructors () {
+    return [LatinVerbParicipleIrregularView, LatinVerbSupineIrregularView]
   }
 }

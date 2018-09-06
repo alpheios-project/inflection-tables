@@ -147,7 +147,7 @@ export default class View {
    * @return {boolean} True if table has no inflection data, false otherwise.
    */
   get isEmpty () {
-    return this.table.rows.length === 0
+    return !this.table || !this.table.rows || this.table.rows.length === 0
   }
 
   sameAs (view) {
