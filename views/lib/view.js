@@ -159,13 +159,14 @@ export default class View {
    * within an `inflectionData` object.
    * By default a view can be used if a view has the same language as homonym
    * and homonym's inflections has at least one with a part of speech that matches view
-   * @param homonym
+   * @param {symbol} languageID - A language ID of an inflection data
+   * @param {Inflection[]} inflections - An array of inflections
    * @return {boolean}
    */
-  static matchFilter (homonym) {
+  static matchFilter (languageID, inflections) {
     // return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
     // Disable multiple parts of speech for now
-    return (this.languageID === homonym.languageID && homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech))
+    return (this.languageID === languageID && inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech))
   }
 
   /**
@@ -178,7 +179,7 @@ export default class View {
    * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
    */
   static getMatchingInstances (homonym, locale) {
-    if (this.matchFilter(homonym)) {
+    if (this.matchFilter(homonym.languageID, homonym.inflections)) {
       let inflectionData = this.getInflectionsData(homonym)
       return [new this(homonym, inflectionData, locale)]
     }
@@ -186,11 +187,11 @@ export default class View {
   }
 
   /**
-   * test to see if a view is enabled for a specific set of lexemes
-   * @param {Lexeme[]} lexemes
+   * test to see if a view is enabled for a specific inflection
+   * @param {Inflection[]} inflection
    * @return {boolean} true if the view should be shown false if not
    */
-  static enabledForLexemes (lexemes) {
+  static enabledForInflection (inflection) {
     // default returns true
     return true
   }
@@ -354,14 +355,5 @@ export default class View {
     let inflectionData = this.getInflectionsData(homonym)
     // TODO: Find the best way to pass messages (the last argument)
     return new this(homonym, inflectionData, messages).render()
-  }
-
-  /**
-   * Checks whether an inflection data can be used to construct a view.
-   * @param {InflectionSet} inflectionData - A set of inflection data.
-   * @return {boolean} - True if data can be used for a view, false otherwise.
-   */
-  static isValidForView (inflectionData) {
-    return (inflectionData.types.has(this.inflectionType) && inflectionData.types.get(this.inflectionType).items.length > 0)
   }
 }

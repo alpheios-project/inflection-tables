@@ -44,11 +44,18 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
 
   /**
    * Will always return false because this view serves as base class and is never created directly.
-   * @param {Homonym} homonym
+   * @param {symbol} languageID
+   * @param {Inflection[]} inflections
    * @return {boolean} Always returns false
    */
-  static matchFilter (homonym) {
+  static matchFilter (languageID, inflections) {
     return false
+  }
+
+  static enabledForInflection (inflection) {
+    return inflection[Feature.types.part].value === this.mainPartOfSpeech &&
+      inflection.constraints &&
+      inflection.constraints.irregular
   }
 
   /**
@@ -77,7 +84,7 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
         infl[Feature.types.part] = infl[Feature.types.part].createFeature(Constructor.mainPartOfSpeech)
       }
       let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, inflections)
-      if (Constructor.isValidForView(inflectionData)) {
+      if (Constructor.matchFilter(this.homonym.languageID, inflections)) {
         let view = new Constructor(this.homonym, inflectionData, this.locale)
         for (let infl of inflections) {
           infl[Feature.types.part] = infl[Feature.types.part].createFeature(this.constructor.mainPartOfSpeech)
@@ -91,7 +98,7 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
 
   // See base view for description
   static getMatchingInstances (homonym, locale) {
-    if (this.matchFilter(homonym)) {
+    if (this.matchFilter(homonym.languageID, homonym.inflections)) {
       let inflectionData = this.getInflectionsData(homonym)
       let view = new this(homonym, inflectionData, locale)
       view.createLinkedViews()

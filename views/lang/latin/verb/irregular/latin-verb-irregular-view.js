@@ -16,9 +16,14 @@ export default class LatinVerbIrregularView extends LatinVerbIrregularBaseView {
 
     this.id = 'verbConjugationIrregular'
     this.name = 'verb-irregular'
-    this.title = 'Verb Conjugation (Irregular, Voice)'
+    this.title = 'Verb Conjugation (Irregular)'
 
-    this.createTable()
+    // Some irregular verbs can be unimplemented and shall be skipped
+    const inflections = this.homonym.inflections.filter(item => item.constraints.implemented)
+    this.isImplemented = inflections.length > 0
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -34,10 +39,9 @@ export default class LatinVerbIrregularView extends LatinVerbIrregularBaseView {
     features.fullWidthRowTitles = [this.features.tenses]
   }
 
-  static matchFilter (homonym) {
+  static matchFilter (languageID, inflections) {
     return Boolean(
-      this.languageID === homonym.languageID &&
-      homonym.inflections.some(i => this.enabledForInflection(i))
+      this.languageID === languageID && inflections.some(i => this.enabledForInflection(i))
     )
   }
 

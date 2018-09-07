@@ -1,4 +1,4 @@
-import { Constants, Feature } from 'alpheios-data-models'
+import { Constants } from 'alpheios-data-models'
 import LatinVerbIrregularBaseView from '@views/lang/latin/verb/irregular/latin-verb-irregular-base-view.js'
 import LatinVerbIrregularView from '@views/lang/latin/verb/irregular/latin-verb-irregular-view.js'
 import LatinVerbIrregularVoiceView from '@views/lang/latin/verb/irregular/latin-verb-irregular-voice-view.js'
@@ -33,22 +33,10 @@ export default class LatinVerbParticipleIrregularView extends LatinVerbIrregular
     features.fullWidthRowTitles = []
   }
 
-  static matchFilter (homonym) {
+  static matchFilter (languageID, inflections) {
     return Boolean(
-      this.languageID === homonym.languageID &&
-      homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech) &&
-      this.enabledForLexemes(homonym.lexemes))
-  }
-
-  static enabledForLexemes (lexemes) {
-    for (let lexeme of lexemes) {
-      for (let inflection of lexeme.inflections) {
-        if (inflection.constraints && inflection.constraints.irregular) {
-          return true
-        }
-      }
-    }
-    return false
+      this.languageID === languageID &&
+      inflections.some(i => this.enabledForInflection(i)))
   }
 
   /**
