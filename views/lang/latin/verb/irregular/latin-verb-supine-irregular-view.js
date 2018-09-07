@@ -1,6 +1,7 @@
 import { Constants, Feature } from 'alpheios-data-models'
 import LatinVerbIrregularBaseView from '@views/lang/latin/verb/irregular/latin-verb-irregular-base-view.js'
 import LatinVerbIrregularView from '@views/lang/latin/verb/irregular/latin-verb-irregular-view.js'
+import LatinVerbIrregularVoiceView from '@views/lang/latin/verb/irregular/latin-verb-irregular-voice-view.js'
 import LatinVerbParticipleIrregularView from '@views/lang/latin/verb/irregular/latin-verb-participle-irregular-view.js'
 import Table from '@views/lib/table'
 
@@ -57,6 +58,27 @@ export default class LatinVerbSupineIrregularView extends LatinVerbIrregularBase
    * @return {View[]}
    */
   static get linkedViewConstructors () {
-    return [LatinVerbIrregularView, LatinVerbParticipleIrregularView]
+    return [LatinVerbIrregularView, LatinVerbIrregularVoiceView, LatinVerbParticipleIrregularView]
+  }
+
+  // TODO: Remove after testing
+  createLinkedViews () {
+    let views = []
+    let inflections = this.homonym.inflections.filter(infl => infl[Feature.types.part].value === this.constructor.mainPartOfSpeech)
+    for (let Constructor of this.constructor.linkedViewConstructors) {
+      for (let infl of inflections) {
+        infl[Feature.types.part] = infl[Feature.types.part].createFeature(Constructor.mainPartOfSpeech)
+      }
+      let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, inflections)
+      if (Constructor.matchFilter(this.homonym.languageID, inflections)) {
+        let view = new Constructor(this.homonym, inflectionData, this.locale)
+        for (let infl of inflections) {
+          infl[Feature.types.part] = infl[Feature.types.part].createFeature(this.constructor.mainPartOfSpeech)
+        }
+        views.push(view)
+      }
+    }
+    this.linkedViews = views
+    return views
   }
 }
