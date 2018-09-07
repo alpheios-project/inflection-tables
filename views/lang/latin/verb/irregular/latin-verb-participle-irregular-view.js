@@ -1,5 +1,8 @@
-import { Constants, Feature } from 'alpheios-data-models'
+import { Constants } from 'alpheios-data-models'
 import LatinVerbIrregularBaseView from '@views/lang/latin/verb/irregular/latin-verb-irregular-base-view.js'
+import LatinVerbIrregularView from '@views/lang/latin/verb/irregular/latin-verb-irregular-view.js'
+import LatinVerbIrregularVoiceView from '@views/lang/latin/verb/irregular/latin-verb-irregular-voice-view.js'
+import LatinVerbSupineIrregularView from '@views/lang/latin/verb/irregular/latin-verb-supine-irregular-view.js'
 import Table from '@views/lib/table'
 
 export default class LatinVerbParticipleIrregularView extends LatinVerbIrregularBaseView {
@@ -30,21 +33,17 @@ export default class LatinVerbParticipleIrregularView extends LatinVerbIrregular
     features.fullWidthRowTitles = []
   }
 
-  static matchFilter (homonym) {
+  static matchFilter (languageID, inflections) {
     return Boolean(
-      this.languageID === homonym.languageID &&
-      homonym.inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech) &&
-      this.enabledForLexemes(homonym.lexemes))
+      this.languageID === languageID &&
+      inflections.some(i => this.enabledForInflection(i)))
   }
 
-  static enabledForLexemes (lexemes) {
-    for (let lexeme of lexemes) {
-      for (let inflection of lexeme.inflections) {
-        if (inflection.constraints && inflection.constraints.irregularVerb) {
-          return true
-        }
-      }
-    }
-    return false
+  /**
+   * A list of constructors of linked views.
+   * @return {View[]}
+   */
+  static get linkedViewConstructors () {
+    return [LatinVerbIrregularView, LatinVerbIrregularVoiceView, LatinVerbSupineIrregularView]
   }
 }

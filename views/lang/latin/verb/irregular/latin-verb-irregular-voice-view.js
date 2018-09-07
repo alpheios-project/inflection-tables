@@ -1,5 +1,7 @@
 import { Feature } from 'alpheios-data-models'
-import LatinVerbIrregularView from '@views/lang/latin/verb/irregular/latin-verb-irregular-view.js'
+import LatinVerbIrregularBaseView from '@views/lang/latin/verb/irregular/latin-verb-irregular-base-view.js'
+import LatinVerbParicipleIrregularView from '@views/lang/latin/verb/irregular/latin-verb-participle-irregular-view.js'
+import LatinVerbSupineIrregularView from '@views/lang/latin/verb/irregular/latin-verb-supine-irregular-view.js'
 import Table from '@views/lib/table'
 
 /**
@@ -8,20 +10,22 @@ import Table from '@views/lib/table'
  * The only way to distinguish between them the two is to analyze a headword
  * which is stored in a `word` feature of an inflection.
  */
-export default class LatinVerbIrregularVoiceView extends LatinVerbIrregularView {
+export default class LatinVerbIrregularVoiceView extends LatinVerbIrregularBaseView {
   constructor (homonym, inflectionData, locale) {
     super(homonym, inflectionData, locale)
 
     this.id = 'verbConjugationIrregularVoice'
     this.name = 'verb-irregular-voice'
-    this.title = 'Verb Conjugation (Irregular)'
+    this.title = 'Verb Conjugation (Irregular, with Voice Data)'
 
-    const inflectionsWords = this.homonym.inflections.map(item => item[Feature.types.word].value)
-    const lemma = this.constructor.dataset.verbsIrregularLemmas.filter(item => inflectionsWords.indexOf(item.word) > -1)[0]
-
-    this.additionalTitle = lemma.word + ', ' + lemma.principalParts
-
-    this.createTable()
+    // Some irregular verbs can be unimplemented and shall be skipped
+    const inflections = this.homonym.inflections.filter(item => item.constraints.implemented)
+    this.isImplemented = inflections.length > 0
+    if (this.isImplemented) {
+      let lemmas = this.constructor.dataset.getMatchingIrregularLemmas(inflections)
+      this.additionalTitle = lemmas.length > 0 ? `${lemmas[0].word}, ${lemmas[0].principalParts}` : ``
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -37,6 +41,12 @@ export default class LatinVerbIrregularVoiceView extends LatinVerbIrregularView 
     features.fullWidthRowTitles = [this.features.tenses]
   }
 
+  static matchFilter (languageID, inflections) {
+    return Boolean(
+      this.languageID === languageID && inflections.some(i => this.enabledForInflection(i))
+    )
+  }
+
   /**
    * Checks whether this view shall be displayed for an inflection given.
    * @param {Inflection} inflection - Inflection that is checked on matching this view.
@@ -46,9 +56,17 @@ export default class LatinVerbIrregularVoiceView extends LatinVerbIrregularView 
     return Boolean(
       inflection[Feature.types.part].value === this.mainPartOfSpeech &&
       inflection.constraints &&
-      inflection.constraints.irregularVerb && // Must be an irregular verb
+      inflection.constraints.irregular && // Must be an irregular verb
       inflection.word &&
       this.voiceEnabledHdwds.includes(inflection.word.value) // Must match headwords for irregular verb voice table
     )
+  }
+
+  /**
+   * A list of constructors of linked views.
+   * @return {View[]}
+   */
+  static get linkedViewConstructors () {
+    return [LatinVerbParicipleIrregularView, LatinVerbSupineIrregularView]
   }
 }

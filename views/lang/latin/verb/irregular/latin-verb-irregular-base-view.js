@@ -29,6 +29,10 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
     return Form
   }
 
+  static get voiceEnabledHdwds () {
+    return ['fero']
+  }
+
   createTable () {
     this.table = new Table([this.features.voices, this.features.moods, this.features.tenses, this.features.numbers, this.features.persons])
     let features = this.table.features
@@ -40,11 +44,18 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
 
   /**
    * Will always return false because this view serves as base class and is never created directly.
-   * @param {Homonym} homonym
+   * @param {symbol} languageID
+   * @param {Inflection[]} inflections
    * @return {boolean} Always returns false
    */
-  static matchFilter (homonym) {
+  static matchFilter (languageID, inflections) {
     return false
+  }
+
+  static enabledForInflection (inflection) {
+    return inflection[Feature.types.part].value === this.mainPartOfSpeech &&
+      inflection.constraints &&
+      inflection.constraints.irregular
   }
 
   /**
@@ -56,8 +67,43 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
     // Select only those inflections that are required for this view
     let inflections = homonym.inflections.filter(
       i => i[Feature.types.part].value === this.mainPartOfSpeech &&
-        i.constraints && i.constraints.irregularVerb
+        i.constraints && i.constraints.irregular
     )
     return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections)
+  }
+
+  /**
+   * Creates an array of linked table views: views, that will be shown below the main table view.
+   * @return {View[]} - An array of linked views or an empty array if no linked views can be created.
+   */
+  createLinkedViews () {
+    let views = []
+    let inflections = this.homonym.inflections.filter(infl => infl[Feature.types.part].value === this.constructor.mainPartOfSpeech)
+    for (let Constructor of this.constructor.linkedViewConstructors) {
+      for (let infl of inflections) {
+        infl[Feature.types.part] = infl[Feature.types.part].createFeature(Constructor.mainPartOfSpeech)
+      }
+      let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, inflections)
+      if (Constructor.matchFilter(this.homonym.languageID, inflections)) {
+        let view = new Constructor(this.homonym, inflectionData, this.locale)
+        for (let infl of inflections) {
+          infl[Feature.types.part] = infl[Feature.types.part].createFeature(this.constructor.mainPartOfSpeech)
+        }
+        views.push(view)
+      }
+    }
+    this.linkedViews = views
+    return views
+  }
+
+  // See base view for description
+  static getMatchingInstances (homonym, locale) {
+    if (this.matchFilter(homonym.languageID, homonym.inflections)) {
+      let inflectionData = this.getInflectionsData(homonym)
+      let view = new this(homonym, inflectionData, locale)
+      view.createLinkedViews()
+      return [view]
+    }
+    return []
   }
 }
