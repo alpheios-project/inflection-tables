@@ -2615,7 +2615,7 @@ module.exports = "Lemma,PrincipalParts,Form,Case,Footnote\nfero,ferre_tuli_latus
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Ending,Conjugation,Case,Footnote\num,1st,accusative,\num,2nd,accusative,\num,3rd,accusative,\num,4th,accusative,\nū,1st,ablative,\nū,2nd,ablative,\nū,3rd,ablative,\nū,4th,ablative,\n"
+module.exports = "Ending,Case,Footnote\num,accusative,\nū,ablative,\n"
 
 /***/ }),
 
@@ -2793,6 +2793,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       IRREG_POFS: [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_GERUNDIVE],
       ORD_1ST_2ND: '1st 2nd',
       GEND_MASCULINE_FEMININE: 'masculine feminine'
+
     }
   }
 
@@ -3000,7 +3001,6 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       let features = [partOfSpeech]
       // Ending,Conjugation,Voice,Mood,Tense,Number,Person,Case,Type,Footnote
       let columns = [
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.case
       ]
       columns.forEach((c, j) => {
@@ -14924,8 +14924,7 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
     this.title = 'Supine'
 
     this.features = {
-      cases: this.features.cases,
-      conjugations: this.features.conjugations
+      cases: this.features.cases
     }
     this.createTable()
   }
@@ -14943,14 +14942,11 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
   }
 
   createTable () {
-    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.conjugations,
-      this.features.cases])
+    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.cases])
     let features = this.table.features
-    features.columns = [
-      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation)
-    ]
-    features.rows = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
-    features.columnRowTitles = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
+    features.columns = []
+    features.rows = [this.features.cases]
+    features.columnRowTitles = [this.features.cases]
     features.fullWidthRowTitles = []
   }
 }
