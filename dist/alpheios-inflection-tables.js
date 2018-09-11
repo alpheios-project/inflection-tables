@@ -2767,8 +2767,6 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       .map(this.constructor.constants.ORD_1ST_2ND, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_1ST, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND])
     this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender).getImporter()
       .map(this.constructor.constants.GEND_MASCULINE_FEMININE, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE])
-    this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation).getImporter()
-      .map(this.constructor.constants.CONJ_ANY, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_1ST, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_2ND, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_3RD, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].ORD_4TH, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TYPE_IRREGULAR])
 
     this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense).getImporter()
       .map('future_perfect', alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE_PERFECT)
@@ -2794,8 +2792,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       // Parts of speech that could have irregular forms
       IRREG_POFS: [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_GERUNDIVE],
       ORD_1ST_2ND: '1st 2nd',
-      GEND_MASCULINE_FEMININE: 'masculine feminine',
-      CONJ_ANY: '1st 2nd 3rd 4th irregular'
+      GEND_MASCULINE_FEMININE: 'masculine feminine'
 
     }
   }
