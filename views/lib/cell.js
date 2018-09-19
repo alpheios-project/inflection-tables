@@ -60,9 +60,12 @@ export default class Cell {
         element.appendChild(document.createTextNode(', ')) // 00A0 is a non-breaking space
       }
     }
+    const morphologyMatch = this.morphemes.length > 0 && this.morphemes.every(m => m.match && m.match.morphologyMatch)
+
     this.value = element.innerHTML
     this.classes = {
       [Styles.classNames.cell]: true,
+      [Styles.classNames.morphologyMatch]: morphologyMatch,
       [Styles.classNames.highlight]: false,
       [Styles.classNames.hidden]: false
     }

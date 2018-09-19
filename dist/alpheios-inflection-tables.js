@@ -2465,6 +2465,43 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 
     return featureOptions.filter(f => inflection[f])
   }
+
+  /**
+   * Returns a list of features that should be the same for the morphology match.
+   * @param {Inflection} inflection - An inflection for which a list needs to be built.
+   * @return {string[]} An array of feature names.
+   */
+  static getMorphologyMatchList (inflection) {
+    let featureOptions = []
+
+    if ([alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE].includes(inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value)) {
+      featureOptions = [
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number
+      ]
+    } else if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)) {
+      featureOptions = [
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension
+      ]
+    } else {
+      featureOptions = [
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person
+      ]
+    }
+
+    return featureOptions.filter(f => inflection[f])
+  }
 }
 
 
@@ -2543,7 +2580,7 @@ module.exports = "Ending,Number,Case,Declension,Gender,Type,Footnote\r\na,singul
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Index,Text\r\n1,Old forms.\r\n2,Alternate forms.\r\n3,\"The original forms of ferrem and ferre are fer-sēm and fer-se, respectively.\"\r\n4,Gerundive (Future Passive Participle)\r\n5,singular\r\n6,\"The verbs nōlō and malō are compounds of volo. They therefore attach nō- or mā- to the beginning of each verb, in place of vo- or vu-. Exceptions to this are found in the present tense: nōlō nōlumus mālō mālumus nōn vīs nōn vultis māvīs māvultis nōn vult nōlunt māvult mālunt In addition, nōlō is the only verb of the three that has present and future tense imperative forms of the verb: nōlī, nōlīte, and nōlītō, nōlītōte, respectively.\"\r\n7,An earlier form.\r\n8,\"The perfect passive participle ending will change according to its subject's gender, number and case. Endings shown here are the masculine, feminine and neuter nominative singular.\"\r\n9,A passive form of the verb that is used impersonally is itum est.\r\n10,\"While the perfect form of this verb is regular, ii usually contracts to i when it is followed by an s. Thus, īstī, īstis and īsse\"\r\n11,It is rare that the “v” appear as a form.\r\n12,Used by early writers."
+module.exports = "Index,Text\r\n1,Old forms.\r\n2,Alternate forms.\r\n3,\"The original forms of ferrem and ferre are fer-sēm and fer-se, respectively.\"\r\n4,Gerundive (Future Passive Participle)\r\n5,singular\r\n6,\"The verbs nōlō and malō are compounds of volo. They therefore attach nō- or mā- to the beginning of each verb, in place of vo- or vu-. Exceptions to this are found in the present tense: nōlō nōlumus mālō mālumus nōn vīs nōn vultis māvīs māvultis nōn vult nōlunt māvult mālunt In addition, nōlō is the only verb of the three that has present and future tense imperative forms of the verb: nōlī, nōlīte, and nōlītō, nōlītōte, respectively.\"\r\n7,An earlier form.\r\n8,\"The perfect passive participle ending will change according to its subject's gender, number and case. Endings shown here are the masculine, feminine and neuter nominative singular.\"\r\n9,A passive form of the verb that is used impersonally is itum est.\r\n10,\"While the perfect form of this verb is regular, ii usually contracts to i when it is followed by an s. Thus, īstī, īstis and īsse\"\r\n11,It is rare that the “v” appear as a form.\r\n12,Used by early writers.\r\n13,Genitive"
 
 /***/ }),
 
@@ -2554,7 +2591,7 @@ module.exports = "Index,Text\r\n1,Old forms.\r\n2,Alternate forms.\r\n3,\"The or
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Lemma,PrincipalParts,Form,Voice,Mood,Tense,Number,Person,Footnote\r\nsum,esse_fui_futurus,futūrus,active,,future,,,\r\nsum,esse_fui_futurus,-a,active,,future,,,\r\nsum,esse_fui_futurus,-um,active,,future,,,\r\nfero,ferre_tuli_latus,ferēns,active,,present,,,\r\nfero,ferre_tuli_latus,-entis,active,,present,,,\r\nfero,ferre_tuli_latus,latūrus,active,,future,,,\r\nfero,ferre_tuli_latus,ferundus,passive,,future,,,4\r\nfero,ferre_tuli_latus,\"lātus, -ta, -tum\",passive,,perfect,,,8\r\nvolo,velle_volui_-,volēns,active,,present,,,\r\nvolo,velle_volui_-,-entis,active,,present,,,\r\neo,ire_ivi(ii)_itus,iēns,active,,present,,,\r\neo,ire_ivi(ii)_itus,euntis,active,,present,,,\r\neo,ire_ivi(ii)_itus,itūrus,active,,future,,,\r\neo,ire_ivi(ii)_itus,eundum,passive,,future,,,4\r\npossum,posse_potui_-,potēns,active,,present,,,"
+module.exports = "Lemma,PrincipalParts,Form,Voice,Mood,Tense,Number,Person,Footnote\r\nsum,esse_fui_futurus,futūrus,active,,future,,,\r\nsum,esse_fui_futurus,-a,active,,future,,,\r\nsum,esse_fui_futurus,-um,active,,future,,,\r\nfero,ferre_tuli_latus,ferēns,active,,present,,,\r\nfero,ferre_tuli_latus,-entis,active,,present,,,\r\nfero,ferre_tuli_latus,latūrus,active,,future,,,\r\nfero,ferre_tuli_latus,ferundus,passive,,future,,,4\r\nfero,ferre_tuli_latus,\"lātus, -ta, -tum\",passive,,perfect,,,8\r\nvolo,velle_volui_-,volēns,active,,present,,,\r\nvolo,velle_volui_-,-entis,active,,present,,,\r\neo,ire_ivi(ii)_itus,iēns,active,,present,,,\r\neo,ire_ivi(ii)_itus,euntis,active,,present,,,13\r\neo,ire_ivi(ii)_itus,itūrus,active,,future,,,\r\neo,ire_ivi(ii)_itus,eundum,passive,,future,,,4\r\npossum,posse_potui_-,potēns,active,,present,,,"
 
 /***/ }),
 
@@ -2620,7 +2657,7 @@ module.exports = "Lemma,PrincipalParts,Form,Case,Footnote\r\nfero,ferre_tuli_lat
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Ending,Conjugation,Case,Footnote\r\num,1st,accusative,\r\num,2nd,accusative,\r\num,3rd,accusative,\r\num,4th,accusative,\r\nū,1st,ablative,\r\nū,2nd,ablative,\r\nū,3rd,ablative,\r\nū,4th,ablative,\r\n"
+module.exports = "Ending,Case,Footnote\r\num,accusative,\r\nū,ablative,\r\n"
 
 /***/ }),
 
@@ -2798,6 +2835,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       IRREG_POFS: [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_GERUNDIVE],
       ORD_1ST_2ND: '1st 2nd',
       GEND_MASCULINE_FEMININE: 'masculine feminine'
+
     }
   }
 
@@ -3005,7 +3043,6 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       let features = [partOfSpeech]
       // Ending,Conjugation,Voice,Mood,Tense,Number,Person,Case,Type,Footnote
       let columns = [
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.case
       ]
       columns.forEach((c, j) => {
@@ -3133,64 +3170,64 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 
     // Nouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN)
-    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5___default.a, {skipEmptyLines: true})
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_5___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotesData.data)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4___default.a, {skipEmptyLines: true})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_4___default.a, { skipEmptyLines: true })
     this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Pronouns
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
-    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {skipEmptyLines: true})
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotesData.data)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6___default.a, {skipEmptyLines: true})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_6___default.a, { skipEmptyLines: true })
     this.addPronounForms(partOfSpeech, forms.data, footnotes)
 
     // Adjectives
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)
-    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {skipEmptyLines: true})
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotesData.data)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, {skipEmptyLines: true})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, { skipEmptyLines: true })
     this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Verbs
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB)
-    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11___default.a, {skipEmptyLines: true})
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_verb_footnotes_csv__WEBPACK_IMPORTED_MODULE_11___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"], footnotesData.data)
 
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {skipEmptyLines: true})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_verb_suffixes_csv__WEBPACK_IMPORTED_MODULE_10___default.a, { skipEmptyLines: true })
     this.addVerbSuffixes(partOfSpeech, suffixes.data, footnotes)
 
-    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {skipEmptyLines: true})
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_verb_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_13___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotesData.data)
 
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12___default.a, {skipEmptyLines: true})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_verb_forms_csv__WEBPACK_IMPORTED_MODULE_12___default.a, { skipEmptyLines: true })
     this.addVerbForms(partOfSpeech, forms.data, footnotes)
 
     // Verb Participles
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, {skipEmptyLines: true})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_participle_suffixes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, { skipEmptyLines: true })
     this.addVerbParticipleSuffixes(partOfSpeech, suffixes.data)
 
-    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_participle_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_16___default.a, {skipEmptyLines: true})
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_participle_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_16___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotesData.data)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_participle_forms_csv__WEBPACK_IMPORTED_MODULE_15___default.a, {skipEmptyLines: true})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_participle_forms_csv__WEBPACK_IMPORTED_MODULE_15___default.a, { skipEmptyLines: true })
     this.addVerbForms(partOfSpeech, forms.data, footnotes)
 
     // Verb Supine
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_17___default.a, {skipEmptyLines: true})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_supine_suffixes_csv__WEBPACK_IMPORTED_MODULE_17___default.a, { skipEmptyLines: true })
     this.addVerbSupineSuffixes(partOfSpeech, suffixes.data)
 
-    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_supine_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_19___default.a, {skipEmptyLines: true})
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_supine_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_19___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotesData.data)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_supine_forms_csv__WEBPACK_IMPORTED_MODULE_18___default.a, {skipEmptyLines: true})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_supine_forms_csv__WEBPACK_IMPORTED_MODULE_18___default.a, { skipEmptyLines: true })
     this.addSupineGerundiveForms(partOfSpeech, forms.data, footnotes)
 
     // Gerundive
     partOfSpeech = this.features.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_GERUNDIVE)
-    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_gerundive_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_21___default.a, {skipEmptyLines: true})
+    footnotesData = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_gerundive_form_footnotes_csv__WEBPACK_IMPORTED_MODULE_21___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_3__["default"], footnotesData.data)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_gerundive_forms_csv__WEBPACK_IMPORTED_MODULE_20___default.a, {skipEmptyLines: true})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_22___default.a.parse(_lib_lang_latin_data_gerundive_forms_csv__WEBPACK_IMPORTED_MODULE_20___default.a, { skipEmptyLines: true })
     this.addSupineGerundiveForms(partOfSpeech, forms.data, footnotes)
 
     this.dataLoaded = true
@@ -3247,7 +3284,10 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   }
 
   static getObligatoryMatchList (inflection) {
-    if (inflection.constraints.irregular || alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE || alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_GERUNDIVE) {
+    if (inflection.constraints.irregular ||
+      inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_SUPINE) ||
+      inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_GERUNDIVE)
+    ) {
       return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word]
     } else if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB)) {
       return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
@@ -3260,6 +3300,38 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
   }
 
   static getOptionalMatchList (inflection) {
+    const featureOptions = [
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person,
+      alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation
+    ]
+
+    if (inflection.constraints.irregular) {
+      return [
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.voice,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation
+      ]
+    } else {
+      return featureOptions.filter(f => inflection[f])
+    }
+  }
+
+  /**
+   * Returns a list of features that should be the same for the morphology match.
+   * @param {Inflection} inflection - An inflection for which a list needs to be built.
+   * @return {string[]} An array of feature names.
+   */
+  static getMorphologyMatchList (inflection) {
     const featureOptions = [
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
       alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension,
@@ -3536,6 +3608,10 @@ class LanguageDataset {
     return this.checkMatches(this.getOptionalMatchList(inflection), inflection, item, comparisonType)
   }
 
+  static getMorphologyMatches (inflection, item, comparisonType = _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.EXACT) {
+    return this.checkMatches(this.getMorphologyMatchList(inflection), inflection, item, comparisonType)
+  }
+
   /**
    * Checks if values of features from `featureList` are the same between an inflection
    * and a morpheme. If item does not have a feature from `featureList`, such feature
@@ -3610,9 +3686,9 @@ class LanguageDataset {
       The value found will then be attached to an Inflection object.
        */
       // Get a class this inflection belongs to
-      let grmClasses = this.model.getPronounClasses(this.pos.get(partOfSpeech).types.get(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items, inflection.form)
+      let grmClasses = this.model.getPronounClasses(this.pos.get(partOfSpeech).types.get(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items, inflection.getForm())
       if (!grmClasses) {
-        console.warn(`Cannot determine a grammar class for a ${inflection.form} pronoun. 
+        console.warn(`Cannot determine a grammar class for a ${inflection.form} pronoun.
               Table construction will probably fail`)
       } else {
         // One or more values found
@@ -3837,13 +3913,13 @@ class LanguageDataset {
    * @param {Inflection[]} inflections - an array of inflection objects to be matched against a suffix.
    * @param {Suffix} item - a suffix to be matched with inflections.
    * @param {Object} options - An options object that may contain the following properties:
-   *        showMatches - whether to display form or suffix matches. Default: true
+   *        findMatches - whether to find form or suffix matches. Default: true
    * @returns {Suffix | null} if a match is found, returns a suffix object modified with some
    * additional information about a match. if no matches found, returns null.
    */
   matcher (inflections, item, options = {}) {
-    if (!options.hasOwnProperty('showMatches')) {
-      options.showMatches = true // Default value
+    if (!options.hasOwnProperty('findMatches')) {
+      options.findMatches = true // Default value
     }
     // Any of those features must match between an inflection and an ending
     let bestMatchData = null // information about the best match we would be able to find
@@ -3856,8 +3932,7 @@ class LanguageDataset {
 
     for (let inflection of inflections) {
       let matchData = new _match_data_js__WEBPACK_IMPORTED_MODULE_8__["default"]() // Create a match profile
-      matchData.showMatches = options.showMatches
-      matchData.suffixMatch = inflection.compareWithWordDependsOnType(item.value, item.constructor.name)
+      matchData.suffixMatch = inflection.smartWordCompare(item.value, item.constructor.name, { fuzzySuffix: true })
 
       // Check for obligatory matches
       const obligatoryMatches = this.constructor.getObligatoryMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
@@ -3868,15 +3943,25 @@ class LanguageDataset {
         break
       }
 
+      /*
+      Check for optional matches. Use `All_VALUES` matching algorithm
+      as multiple values in inflection and morpheme can go in different order.
+       */
       const optionalMatches = this.constructor.getOptionalMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
 
       matchData.matchedFeatures.push(...optionalMatches.matchedItems)
+
+      const morphologyMatches = this.constructor.getMorphologyMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
+      matchData.morphologyMatch = morphologyMatches.fullMatch
+
       if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
         // This is a full match
         matchData.fullMatch = true
 
         // There can be only one full match, no need to search any further
-        item.match = matchData
+        if (options.findMatches) {
+          item.match = matchData
+        }
 
         return item
       }
@@ -3884,7 +3969,9 @@ class LanguageDataset {
     }
     if (bestMatchData) {
       // There is some match found
-      item.match = bestMatchData
+      if (options.findMatches) {
+        item.match = bestMatchData
+      }
       return item
     }
     return null
@@ -3955,6 +4042,7 @@ class MatchData {
     this.suffixMatch = false // Whether two suffixes are the same.
     this.formMatch = false // Whether two forms of the word are the same
     this.fullMatch = false // Whether two suffixes and all grammatical features, including part of speech, are the same.
+    this.morphologyMatch = false // Whether all morphological features are the same
     this.matchedFeatures = [] // How many features matches each other.
   }
 
@@ -15008,8 +15096,7 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
     this.title = 'Supine'
 
     this.features = {
-      cases: this.features.cases,
-      conjugations: this.features.conjugations
+      cases: this.features.cases
     }
     this.createTable()
   }
@@ -15027,14 +15114,11 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
   }
 
   createTable () {
-    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.conjugations,
-      this.features.cases])
+    this.table = new _lib_table__WEBPACK_IMPORTED_MODULE_3__["default"]([this.features.cases])
     let features = this.table.features
-    features.columns = [
-      this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.conjugation)
-    ]
-    features.rows = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
-    features.columnRowTitles = [this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase)]
+    features.columns = []
+    features.rows = [this.features.cases]
+    features.columnRowTitles = [this.features.cases]
     features.fullWidthRowTitles = []
   }
 }
@@ -15623,6 +15707,10 @@ class LatinConjugationVoiceMoodView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.createTable()
   }
 
+  static get viewID () {
+    return 'latin_conjugation_voice_mood_view'
+  }
+
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
@@ -15841,6 +15929,10 @@ class LatinMoodConjugationVoiceView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.createTable()
   }
 
+  static get viewID () {
+    return 'latin_mood_conjugation_voice_view'
+  }
+
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
@@ -15898,6 +15990,10 @@ class LatinMoodVoiceConjugationView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.title = 'Verb Conjugation'
 
     this.createTable()
+  }
+
+  static get viewID () {
+    return 'latin_mood_voice_conjugation_view'
   }
 
   static get inflectionType () {
@@ -16074,6 +16170,10 @@ class LatinVoiceConjugationMoodView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.createTable()
   }
 
+  static get viewID () {
+    return 'latin_voice_conjugation_mood_view'
+  }
+
   static get inflectionType () {
     return _lib_suffix_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
@@ -16131,6 +16231,10 @@ class LatinVoiceMoodConjugationView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.title = 'Verb Conjugation'
 
     this.createTable()
+  }
+
+  static get viewID () {
+    return 'latin_voice_mood_conjugation_view'
   }
 
   static get inflectionType () {
@@ -16235,9 +16339,12 @@ class Cell {
         element.appendChild(document.createTextNode(', ')) // 00A0 is a non-breaking space
       }
     }
+    const morphologyMatch = this.morphemes.length > 0 && this.morphemes.every(m => m.match && m.match.morphologyMatch)
+
     this.value = element.innerHTML
     this.classes = {
       [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].morphologyMatch]: morphologyMatch,
       [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight]: false,
       [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden]: false
     }
@@ -18421,7 +18528,7 @@ class View {
 
   static getStandardFormInstance (options, locale = 'en-US') {
     let homonym = this.createStandardFormHomonym(options)
-    let inflectionData = this.getInflectionsData(homonym, { showMatches: false })
+    let inflectionData = this.getInflectionsData(homonym, { findMatches: false })
     // Standard form tables should have no suffix matches columns visible
     let view = new this(homonym, inflectionData, locale)
     if (options.title) {
@@ -18491,7 +18598,7 @@ class WideView {
       for (let cell of row.cells) {
         cells.push(cell)
       }
-      this.rows.push({cells: cells})
+      this.rows.push({ cells: cells })
     }
 
     for (let row of this.table.rows) {
@@ -18507,7 +18614,7 @@ class WideView {
       for (let cell of row.cells) {
         cells.push(cell)
       }
-      this.rows.push({cells: cells})
+      this.rows.push({ cells: cells })
     }
   }
 
@@ -18546,6 +18653,7 @@ let classNames = {
   fullWidth: 'infl-cell--fw',
   header: 'infl-cell--hdr',
   highlight: 'infl-cell--hl',
+  morphologyMatch: 'infl-cell--morph-match',
   hidden: 'hidden',
   suffix: 'infl-suff',
   suffixMatch: 'infl-suff--suffix-match',
