@@ -3708,9 +3708,9 @@ class LanguageDataset {
       The value found will then be attached to an Inflection object.
        */
       // Get a class this inflection belongs to
-      let grmClasses = this.model.getPronounClasses(this.pos.get(partOfSpeech).types.get(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items, inflection.form)
+      let grmClasses = this.model.getPronounClasses(this.pos.get(partOfSpeech).types.get(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items, inflection.getForm())
       if (!grmClasses) {
-        console.warn(`Cannot determine a grammar class for a ${inflection.form} pronoun. 
+        console.warn(`Cannot determine a grammar class for a ${inflection.form} pronoun.
               Table construction will probably fail`)
       } else {
         // One or more values found
@@ -3945,7 +3945,7 @@ class LanguageDataset {
 
     for (let inflection of inflections) {
       let matchData = new _match_data_js__WEBPACK_IMPORTED_MODULE_8__["default"]() // Create a match profile
-      matchData.suffixMatch = inflection.compareWithWordDependsOnType(item.value, item.constructor.name)
+      matchData.suffixMatch = inflection.smartWordCompare(item.value, item.constructor.name, { fuzzySuffix: true })
 
       // Check for obligatory matches
       const obligatoryMatches = this.constructor.getObligatoryMatches(inflection, item)
