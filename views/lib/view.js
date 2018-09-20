@@ -307,7 +307,6 @@ export default class View {
       } else {
         this.table.showEmptyColumns()
       }
-      this.wideView.render()
     }
     return this
   }
@@ -333,7 +332,6 @@ export default class View {
       } else {
         this.table.showNoSuffixMatchesGroups()
       }
-      this.wideView.render()
     }
     return this
   }
@@ -386,6 +384,7 @@ export default class View {
     if (options.title) {
       view.setTitle(options.title)
     }
-    return view.render().noSuffixMatchesGroupsHidden(false)
+    view.render().noSuffixMatchesGroupsHidden(false)
+    return view
   }
 }

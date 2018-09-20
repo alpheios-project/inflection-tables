@@ -16299,75 +16299,25 @@ class Cell {
         return element.match.suffixMatch
       }
     })
+    this.morphologyMatch = this.morphemes.length > 0 && this.morphemes.every(m => m.match && m.match.morphologyMatch)
 
     this.column = undefined // A column this cell belongs to
     this.row = undefined // A row this cell belongs to
 
     this._index = undefined
+    this.hidden = false
+    this.highlighted = false
 
-    this.render()
+    this.classes = {
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].morphologyMatch]: this.morphologyMatch,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight]: false,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden]: false
+    }
   }
 
   get isDataCell () {
     return true
-  }
-
-  /**
-   * Renders an element's HTML representation.
-   */
-  render () {
-    let element = document.createElement('div')
-    element.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell)
-    for (let [index, morpheme] of this.morphemes.entries()) {
-      // Render each morpheme
-      let suffixElement = document.createElement('span')
-      suffixElement.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].suffix)
-      if (morpheme.match && morpheme.match.suffixMatch) {
-        suffixElement.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].suffixMatch)
-      }
-      if (morpheme.match && morpheme.match.fullMatch) {
-        suffixElement.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].suffixFullFeatureMatch)
-      }
-      suffixElement.innerHTML = morpheme.value || '-'
-      element.appendChild(suffixElement)
-
-      if (morpheme.hasFootnotes) {
-        let footnoteElement = document.createElement('a')
-        footnoteElement.innerHTML = `<sup>${morpheme.footnote}</sup>`
-        footnoteElement.dataset.footnote = morpheme.footnote
-        element.appendChild(footnoteElement)
-      }
-      if (index < this.morphemes.length - 1) {
-        element.appendChild(document.createTextNode(', ')) // 00A0 is a non-breaking space
-      }
-    }
-    const morphologyMatch = this.morphemes.length > 0 && this.morphemes.every(m => m.match && m.match.morphologyMatch)
-
-    this.value = element.innerHTML
-    this.classes = {
-      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
-      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].morphologyMatch]: morphologyMatch,
-      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight]: false,
-      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden]: false
-    }
-    this.wNode = element
-    this.nNode = element.cloneNode(true)
-  }
-
-  /**
-   * Returns an HTML element for a wide view.
-   * @returns {HTMLElement}
-   */
-  get wvNode () {
-    return this.wNode
-  }
-
-  /**
-   * Returns an HTML element for a narrow view.
-   * @returns {HTMLElement}
-   */
-  get nvNode () {
-    return this.nNode
   }
 
   /**
@@ -16376,28 +16326,15 @@ class Cell {
    */
   set index (index) {
     this._index = index
-    this.wNode.dataset.index = this._index
-    this.nNode.dataset.index = this._index
-  }
-
-  /**
-   * A proxy for adding an event listener for both wide and narrow view HTML elements.
-   * @param {string} type - Listener type.
-   * @param {EventListener} listener - Event listener function.
-   */
-  addEventListener (type, listener) {
-    this.wNode.addEventListener(type, listener)
-    this.nNode.addEventListener(type, listener)
   }
 
   /**
    * Hides an element.
    */
   hide () {
-    if (!this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)) {
+    if (!this.hidden) {
       this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden] = true
-      this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
-      this.nNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
+      this.hidden = true
     }
   }
 
@@ -16405,10 +16342,9 @@ class Cell {
    * Shows a previously hidden element.
    */
   show () {
-    if (this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)) {
+    if (this.hidden) {
       this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden] = false
-      this.wNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
-      this.nNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].hidden)
+      this.hidden = false
     }
   }
 
@@ -16416,10 +16352,9 @@ class Cell {
    * Highlights a cell with color.
    */
   highlight () {
-    if (!this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)) {
+    if (!this.highlighted) {
       this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = true
-      this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
-      this.nNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
+      this.highlighted = true
     }
   }
 
@@ -16427,10 +16362,9 @@ class Cell {
    * Removes highlighting from a previously highlighted cell.
    */
   clearHighlighting () {
-    if (this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)) {
+    if (this.highlighted) {
       this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = false
-      this.wNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
-      this.nNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
+      this.highlighted = false
     }
   }
 
@@ -17072,40 +17006,12 @@ class HeaderCell {
     this.children = []
     this.columns = []
 
-    this.render()
-  }
-
-  /**
-   * Renders an element's HTML representation.
-   */
-  render () {
-    let element = document.createElement('div')
-    element.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix + this.span)
-    element.innerHTML = this.title
     this.value = this.title
     this.classes = {
       [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
       [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header]: true,
       [`${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix}${this.span}`]: true
     }
-    this.wNode = element
-    this.nNode = element.cloneNode(true)
-  }
-
-  /**
-   * Returns an HTML element for a wide view
-   * @returns {HTMLElement} HTML element for a wide view's cell.
-   */
-  get wvNode () {
-    return this.wNode
-  }
-
-  /**
-   * Returns an HTML element for a narrow view
-   * @returns {HTMLElement} HTML element for a narrow view's cell.
-   */
-  get nvNode () {
-    return this.nNode
   }
 
   /**
@@ -17131,8 +17037,6 @@ class HeaderCell {
     let newWidthClass = _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix + this.span
     this.classes[currentWidthClass] = false
     this.classes[newWidthClass] = true
-    this.wNode.classList.replace(currentWidthClass, newWidthClass)
-    this.nNode.classList.replace(currentWidthClass, newWidthClass)
   }
 
   /**
@@ -17168,11 +17072,9 @@ class HeaderCell {
    * Highlights a header cell, its parent and children
    */
   highlight () {
-    if (!this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)) {
+    if (!this.highlighted) {
       this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = true
-      this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
-      this.nNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
-
+      this.highlighted = true
       if (this.parent) {
         this.parent.highlight()
       }
@@ -17183,11 +17085,9 @@ class HeaderCell {
    * Removes highlighting from a header cell, its parent and children
    */
   clearHighlighting () {
-    if (this.wNode.classList.contains(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)) {
+    if (this.highlighted) {
       this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = false
-      this.wNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
-      this.nNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
-
+      this.highlighted = false
       if (this.parent) {
         this.parent.clearHighlighting()
       }
@@ -17260,69 +17160,17 @@ class RowTitleCell {
     this.feature = groupingFeature
     this.nvGroupQty = nvGroupQty
 
-    this.render()
-  }
-
-  /**
-   * Renders an element's HTML representation.
-   */
-  render () {
-    // Generate HTML representation for a wide view node
-    this.wNode = document.createElement('div')
     this.value = this.title
     this.classes = {
       [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell]: true,
-      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].rowTitleCell]: true
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].rowTitleCell]: true,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header]: this.feature.formsColumn,
+      [_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].fullWidth]: this.feature.hasFullWidthRowTitle
     }
-    this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].rowTitleCell)
-    if (this.feature.formsColumn) {
-      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header] = true
-      this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].header)
-    }
-    if (this.feature.hasFullWidthRowTitle) {
-      // This cell is taking an entire row
-      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].fullWidth] = true
-      this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].fullWidth)
-    }
+
     if (this.feature.formsColumn && this.feature.groupFeatureList.titleColumnsQuantity > 1) {
       this.classes[`${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix}${this.feature.groupFeatureList.titleColumnsQuantity}`] = true
-      this.wNode.classList.add(`${_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix}${this.feature.groupFeatureList.titleColumnsQuantity}`)
     }
-    this.wNode.innerHTML = this.title
-
-    // Copy HTML representation to all narrow view nodes (each narrow view group has its own node)
-    this.nNodes = [] // Narrow nodes, one for each group
-    for (let i = 0; i < this.nvGroupQty; i++) {
-      this.nNodes.push(this.wNode.cloneNode(true))
-    }
-  }
-
-  /**
-   * Returns an HTML element for a wide view
-   * @returns {HTMLElement} HTML element for a wide view's cell.
-   */
-  get wvNode () {
-    return this.wNode
-  }
-
-  /**
-   * Returns an array HTML element for narrow view groups
-   * @returns {HTMLElement[]} Array of HTML elements for narrow view group's cells.
-   */
-  getNvNode (index) {
-    return this.nNodes[index]
-  }
-
-  /**
-   * Generates an empty cell placeholder of a certain width. Useful for situation when empty title cells need to be
-   * inserted into a table structure (i.e. when title cells occupy multiple columns.
-   * @param {number} width - A number of columns placeholder cell will occupy.
-   * @returns {HTMLElement} HTML element of a placeholder cell.
-   */
-  static placeholder (width = 1) {
-    let placeholder = document.createElement('div')
-    placeholder.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].cell, _styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].widthPrefix + width)
-    return placeholder
   }
 
   /**
@@ -17330,7 +17178,13 @@ class RowTitleCell {
    * @param {number} width - How many columns this cell should span
    * @return {Object}
    */
-  static placeholderCell (width = 1) {
+  /**
+  * Generates an empty cell placeholder of a certain width. Useful for situation when empty title cells need to be
+  * inserted into a table structure (i.e. when title cells occupy multiple columns).
+  * @param {number} width - A number of columns placeholder cell will occupy.
+  * @returns {Object}
+   */
+  static placeholder (width = 1) {
     return {
       value: '', // This cell is empty
       classes: {
@@ -17360,10 +17214,9 @@ class RowTitleCell {
    * Highlights this row title cell
    */
   highlight () {
-    this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = true
-    this.wNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
-    for (let nNode of this.nNodes) {
-      nNode.classList.add(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
+    if (!this.highlighted) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = true
+      this.highlighted = true
     }
   }
 
@@ -17371,10 +17224,9 @@ class RowTitleCell {
    * Removes highlighting from this row title cell
    */
   clearHighlighting () {
-    this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = false
-    this.wNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
-    for (let nNode of this.nNodes) {
-      nNode.classList.remove(_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight)
+    if (this.highlighted) {
+      this.classes[_styles_styles__WEBPACK_IMPORTED_MODULE_0__["classNames"].highlight] = false
+      this.highlighted = false
     }
   }
 }
@@ -17837,34 +17689,6 @@ class Table {
       }
     }
     return filtered
-  }
-
-  /**
-   * Adds event listeners to each cell object.
-   */
-  addEventListeners () {
-    for (let cell of this.cells) {
-      cell.addEventListener('mouseenter', this.highlightRowAndColumn.bind(this))
-      cell.addEventListener('mouseleave', this.clearRowAndColumnHighlighting.bind(this))
-    }
-  }
-
-  /**
-   * Highlights a row and a column this cell is in.
-   * @param {Event} event - An event that triggers this function.
-   */
-  highlightRowAndColumn (event) {
-    let index = event.currentTarget.dataset.index
-    this.cells[index].highlightRowAndColumn()
-  }
-
-  /**
-   * Removes highlighting from row and a column this cell is in.
-   * @param {Event} event - An event that triggers this function.
-   */
-  clearRowAndColumnHighlighting (event) {
-    let index = event.currentTarget.dataset.index
-    this.cells[index].clearRowAndColumnHighlighting()
   }
 
   /**
@@ -18457,7 +18281,6 @@ class View {
       } else {
         this.table.showEmptyColumns()
       }
-      this.wideView.render()
     }
     return this
   }
@@ -18483,7 +18306,6 @@ class View {
       } else {
         this.table.showNoSuffixMatchesGroups()
       }
-      this.wideView.render()
     }
     return this
   }
@@ -18536,7 +18358,8 @@ class View {
     if (options.title) {
       view.setTitle(options.title)
     }
-    return view.render().noSuffixMatchesGroupsHidden(false)
+    view.render().noSuffixMatchesGroupsHidden(false)
+    return view
   }
 }
 
@@ -18607,7 +18430,7 @@ class WideView {
       let cells = []
       let titleCells = row.titleCell.hierarchyList
       if (titleCells.length < this.table.titleColumnQty) {
-        cells.push(_row_title_cell__WEBPACK_IMPORTED_MODULE_1__["default"].placeholderCell(this.titleColumnQty - titleCells.length))
+        cells.push(_row_title_cell__WEBPACK_IMPORTED_MODULE_1__["default"].placeholder(this.titleColumnQty - titleCells.length))
       }
       for (let titleCell of titleCells) {
         cells.push(titleCell)
