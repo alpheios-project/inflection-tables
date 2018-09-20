@@ -14466,7 +14466,7 @@ class GreekPronounView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
   static getMatchingInstances (homonym, messages) {
     let inflectionData = this.getInflectionsData(homonym)
     if (this.matchFilter(homonym.languageID, homonym.inflections, inflectionData)) {
-      return [new this(homonym, inflectionData, messages)]
+      return [new this(homonym, inflectionData, messages).render()]
     }
     return []
   }
@@ -15246,7 +15246,7 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
       let inflectionData = this.getInflectionsData(homonym)
       let view = new this(homonym, inflectionData, locale)
       view.createLinkedViews()
-      return [view]
+      return [view.render()]
     }
     return []
   }
