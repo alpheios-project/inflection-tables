@@ -2478,7 +2478,9 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       featureOptions = [
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender,
-        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person
+
       ]
     } else if (inflection.hasFeatureValue(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)) {
       featureOptions = [
