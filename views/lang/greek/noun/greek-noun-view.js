@@ -14,7 +14,9 @@ export default class GreekNounView extends GreekView {
     this.features.genders.comparisonType = Morpheme.comparisonTypes.ALL_VALUES
     this.features.genders.getOrderedValues = this.constructor.getOrderedGenders
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -38,8 +40,8 @@ export default class GreekNounView extends GreekView {
       ]
     } else {
       return [
-        this.featureMap.get(Constants.GEND_MASCULINE),
         this.featureMap.get(Constants.GEND_FEMININE),
+        this.featureMap.get(Constants.GEND_MASCULINE),
         this.featureMap.get(Constants.GEND_NEUTER)
       ]
     }

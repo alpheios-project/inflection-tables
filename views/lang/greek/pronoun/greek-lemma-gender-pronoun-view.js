@@ -19,7 +19,9 @@ export default class GreekLemmaGenderPronounView extends GreekPronounView {
     this.features.lemmas = new GroupFeatureType(Feature.types.hdwd, this.constructor.languageID, 'Lemma',
       this.constructor.dataset.getPronounGroupingLemmaFeatures(GreekLemmaGenderPronounView.classes[0]))
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -50,8 +52,8 @@ export default class GreekLemmaGenderPronounView extends GreekPronounView {
 
   static getOrderedGenders () {
     return [
-      this.featureMap.get(Constants.GEND_MASCULINE),
       this.featureMap.get(Constants.GEND_FEMININE),
+      this.featureMap.get(Constants.GEND_MASCULINE),
       this.featureMap.get(Constants.GEND_NEUTER),
       this.featureMap.get(GreekPronounView.datasetConsts.GEND_MASCULINE_FEMININE_NEUTER)
     ]

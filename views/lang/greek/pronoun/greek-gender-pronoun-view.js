@@ -16,7 +16,9 @@ export default class GreekGenderPronounView extends GreekPronounView {
     }
     super(homonym, inflectionData, locale, grammarClass[0])
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -54,8 +56,8 @@ export default class GreekGenderPronounView extends GreekPronounView {
 
   static getOrderedGenders () {
     return [
-      this.featureMap.get(Constants.GEND_MASCULINE),
       this.featureMap.get(Constants.GEND_FEMININE),
+      this.featureMap.get(Constants.GEND_MASCULINE),
       this.featureMap.get(GreekView.datasetConsts.GEND_MASCULINE_FEMININE),
       this.featureMap.get(Constants.GEND_NEUTER),
       this.featureMap.get(GreekView.datasetConsts.GEND_MASCULINE_FEMININE_NEUTER)
