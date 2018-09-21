@@ -171,23 +171,6 @@ export default class View {
   }
 
   /**
-   * Finds out what views match inflection data and return initialized instances of those views.
-   * By default only one instance of the view is returned, by views can override this method
-   * to return multiple views if necessary (e.g. paradigm view can return multiple instances of the view
-   * with different data).
-   * @param {Inflection} homonym - An inflection for which matching instances to be found.
-   * @param {string} locale
-   * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
-   */
-  static getMatchingInstances (homonym, locale) {
-    if (this.matchFilter(homonym.languageID, homonym.inflections)) {
-      let inflectionData = this.getInflectionsData(homonym)
-      return [new this(homonym, inflectionData, locale).render()]
-    }
-    return []
-  }
-
-  /**
    * test to see if a view is enabled for a specific inflection
    * @param {Inflection[]} inflection
    * @return {boolean} true if the view should be shown false if not
@@ -195,6 +178,15 @@ export default class View {
   static enabledForInflection (inflection) {
     // default returns true
     return true
+  }
+
+  /**
+   * Return inflection that this view will use to retrieve inflection data.
+   * @param {Inflection[]} inflections
+   * @return {Inflection[]}
+   */
+  static getRelatedInflections (inflections) {
+    return inflections.filter(i => i[Feature.types.part].value === this.mainPartOfSpeech)
   }
 
   get locale () {
@@ -241,7 +233,6 @@ export default class View {
       this.table.messages = this.messages
       this.morphemes = this.getMorphemes()
 
-      // TODO: do not construct table if constructed already
       this.table.construct(this.morphemes, options)
       this.wideView = new WideView(this.table)
       this.wideView.render()
@@ -250,7 +241,6 @@ export default class View {
       for (const view of this.linkedViews) {
         view.render()
       }
-
       this.isRendered = true
     }
     return this
@@ -258,8 +248,7 @@ export default class View {
 
   static getInflectionsData (homonym, options) {
     // Select inflections this view needs
-    let inflections = homonym.inflections.filter(i => i[Feature.types.part].value === this.mainPartOfSpeech)
-    return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections, options)
+    return this.dataset.createInflectionSet(this.mainPartOfSpeech, this.getRelatedInflections(homonym.inflections), options)
   }
 
   /**
@@ -354,6 +343,24 @@ export default class View {
       .split(' ')
       .map(word => word.length >= 1 ? `${word[0].toUpperCase()}${word.substr(1)}` : '')
       .join(' ')
+  }
+
+  /**
+   * Finds out what views match inflection data and return initialized instances of those views.
+   * By default only one instance of the view is returned, by views can override this method
+   * to return multiple views if necessary (e.g. paradigm view can return multiple instances of the view
+   * with different data).
+   * @param {Inflection} homonym - An inflection for which matching instances to be found.
+   * @param {string} locale
+   * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
+   */
+  static getMatchingInstances (homonym, locale) {
+    if (this.matchFilter(homonym.languageID, homonym.inflections)) {
+      let inflectionData = this.getInflectionsData(homonym)
+      let view = new this(homonym, inflectionData, locale)
+      return [view]
+    }
+    return []
   }
 
   static createStandardFormHomonym (options) {

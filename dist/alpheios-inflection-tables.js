@@ -3592,7 +3592,7 @@ class LanguageDataset {
    *   {boolean} matchResult - True if all obligatory matches are fulfilled, false otherwise.
    */
   static getObligatoryMatches (inflection, item, comparisonType = _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.EXACT) {
-    return this.checkMatches(this.getObligatoryMatchList(inflection), inflection, item, comparisonType)
+    return this.checkMatches(inflection.matchFeatures.obligatory, inflection, item, comparisonType)
   }
 
   /**
@@ -3605,11 +3605,11 @@ class LanguageDataset {
    *   {boolean} matchResult - True if all obligatory matches are fulfilled, false otherwise.
    */
   static getOptionalMatches (inflection, item, comparisonType = _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.EXACT) {
-    return this.checkMatches(this.getOptionalMatchList(inflection), inflection, item, comparisonType)
+    return this.checkMatches(inflection.matchFeatures.optional, inflection, item, comparisonType)
   }
 
   static getMorphologyMatches (inflection, item, comparisonType = _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.EXACT) {
-    return this.checkMatches(this.getMorphologyMatchList(inflection), inflection, item, comparisonType)
+    return this.checkMatches(inflection.matchFeatures.morphology, inflection, item, comparisonType)
   }
 
   /**
@@ -3712,6 +3712,13 @@ class LanguageDataset {
 
     // This cannot be determined by language model so we have to check it manually
     inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(_paradigm_js__WEBPACK_IMPORTED_MODULE_4__["default"], inflection)
+
+    // Set match features data
+    inflection.matchFeatures = {
+      obligatory: this.constructor.getObligatoryMatchList(inflection),
+      optional: this.constructor.getOptionalMatchList(inflection),
+      morphology: this.constructor.getMorphologyMatchList(inflection)
+    }
 
     /*
     Check if inflection if full form based if `fullFormBased` flag is set
@@ -3932,7 +3939,9 @@ class LanguageDataset {
 
     for (let inflection of inflections) {
       let matchData = new _match_data_js__WEBPACK_IMPORTED_MODULE_8__["default"]() // Create a match profile
-      matchData.suffixMatch = inflection.smartWordCompare(item.value, item.constructor.name, { fuzzySuffix: true })
+      if (options.findMatches) {
+        matchData.suffixMatch = inflection.smartWordCompare(item.value, item.constructor.name, { fuzzySuffix: true })
+      }
 
       // Check for obligatory matches
       const obligatoryMatches = this.constructor.getObligatoryMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
@@ -3948,11 +3957,12 @@ class LanguageDataset {
       as multiple values in inflection and morpheme can go in different order.
        */
       const optionalMatches = this.constructor.getOptionalMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
-
       matchData.matchedFeatures.push(...optionalMatches.matchedItems)
 
-      const morphologyMatches = this.constructor.getMorphologyMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
-      matchData.morphologyMatch = morphologyMatches.fullMatch
+      if (options.findMatches) {
+        const morphologyMatches = this.constructor.getMorphologyMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
+        matchData.morphologyMatch = morphologyMatches.fullMatch
+      }
 
       if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
         // This is a full match
@@ -3967,6 +3977,7 @@ class LanguageDataset {
       }
       bestMatchData = this.bestMatch(bestMatchData, matchData)
     }
+
     if (bestMatchData) {
       // There is some match found
       if (options.findMatches) {
@@ -18193,23 +18204,6 @@ class View {
   }
 
   /**
-   * Finds out what views match inflection data and return initialized instances of those views.
-   * By default only one instance of the view is returned, by views can override this method
-   * to return multiple views if necessary (e.g. paradigm view can return multiple instances of the view
-   * with different data).
-   * @param {Inflection} homonym - An inflection for which matching instances to be found.
-   * @param {string} locale
-   * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
-   */
-  static getMatchingInstances (homonym, locale) {
-    if (this.matchFilter(homonym.languageID, homonym.inflections)) {
-      let inflectionData = this.getInflectionsData(homonym)
-      return [new this(homonym, inflectionData, locale).render()]
-    }
-    return []
-  }
-
-  /**
    * test to see if a view is enabled for a specific inflection
    * @param {Inflection[]} inflection
    * @return {boolean} true if the view should be shown false if not
@@ -18217,6 +18211,15 @@ class View {
   static enabledForInflection (inflection) {
     // default returns true
     return true
+  }
+
+  /**
+   * Return inflection that this view will use to retrieve inflection data.
+   * @param {Inflection[]} inflections
+   * @return {Inflection[]}
+   */
+  static getRelatedInflections (inflections) {
+    return inflections.filter(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)
   }
 
   get locale () {
@@ -18263,7 +18266,6 @@ class View {
       this.table.messages = this.messages
       this.morphemes = this.getMorphemes()
 
-      // TODO: do not construct table if constructed already
       this.table.construct(this.morphemes, options)
       this.wideView = new _wide_view__WEBPACK_IMPORTED_MODULE_3__["default"](this.table)
       this.wideView.render()
@@ -18272,7 +18274,6 @@ class View {
       for (const view of this.linkedViews) {
         view.render()
       }
-
       this.isRendered = true
     }
     return this
@@ -18280,8 +18281,7 @@ class View {
 
   static getInflectionsData (homonym, options) {
     // Select inflections this view needs
-    let inflections = homonym.inflections.filter(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)
-    return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections, options)
+    return this.dataset.createInflectionSet(this.mainPartOfSpeech, this.getRelatedInflections(homonym.inflections), options)
   }
 
   /**
@@ -18376,6 +18376,24 @@ class View {
       .split(' ')
       .map(word => word.length >= 1 ? `${word[0].toUpperCase()}${word.substr(1)}` : '')
       .join(' ')
+  }
+
+  /**
+   * Finds out what views match inflection data and return initialized instances of those views.
+   * By default only one instance of the view is returned, by views can override this method
+   * to return multiple views if necessary (e.g. paradigm view can return multiple instances of the view
+   * with different data).
+   * @param {Inflection} homonym - An inflection for which matching instances to be found.
+   * @param {string} locale
+   * @return {View[] | []} Array of view instances or an empty array if view instance does not match inflection data.
+   */
+  static getMatchingInstances (homonym, locale) {
+    if (this.matchFilter(homonym.languageID, homonym.inflections)) {
+      let inflectionData = this.getInflectionsData(homonym)
+      let view = new this(homonym, inflectionData, locale)
+      return [view]
+    }
+    return []
   }
 
   static createStandardFormHomonym (options) {
