@@ -33,8 +33,17 @@ export default class View {
     this.id = 'base_view'
     this.name = 'base view'
     this.title = 'Base View'
-    this.isImplemented = true // Whether this view is implemented or not. Unimplemented views serves as placeholders.
-    this.hasPrerenderedTables = false // Indicates whether this view has a pre-rendered table, such as in case with Greek paradigms
+
+    // Indicates whether this view has a pre-rendered table, such as in case with Greek paradigms
+    this.hasPrerenderedTables = this.constructor.hasPrerenderedTables
+
+    if (!this.constructor.hasPrerenderedTables) {
+      this.inflections = this.homonym.inflections.filter(item => item.constraints.implemented)
+      // Whether this view is implemented or not. Unimplemented views serves as placeholders.
+      this.isImplemented = this.inflections.length > 0
+    } else {
+      this.isImplemented = true
+    }
 
     this.forms = new Set()
     this.table = {
@@ -52,40 +61,14 @@ export default class View {
      */
     this.creditsText = ''
 
-    this.initialized = false
-
     /**
      * An array of views that should be shown below the current view by the UI component.
      * It is view's responsibility to create and initialize them.
      * @type {View[]}
      */
     this.linkedViews = []
-  }
 
-  /**
-   * Performs an initialization of a table object that represents tables structures
-   * (stored within a Table object): cells and morphemes that are grouped into tree, rows, columns,
-   * and are related to each other in some other ways.
-   * Creates an instance of WideView class which represents a wide form of an inflection table
-   * (the one that is shown to desktop users)
-   * This should be done after constructor initialization is complete to let descendant-specific code
-   * complete its specific tasks before table structures are initialized. This is done only once for each view.
-   * @param {Object} options - Render options related to whether some columns of an inflection table
-   *                           should be hidden.
-   */
-  initialize (options = {
-    emptyColumnsHidden: true,
-    noSuffixMatchesHidden: true
-  }) {
-    this.footnotes = this.getFootnotes()
-    this.table.messages = this.messages
-    this.morphemes = this.getMorphemes()
-
-    // TODO: do not construct table if constructed already
-    this.table.construct(this.morphemes, options)
-    this.wideView = new WideView(this.table)
-    this.initialized = true
-    return this
+    this.isRendered = false
   }
 
   static get viewID () {
@@ -141,6 +124,11 @@ export default class View {
    * @return {Suffix|Form|Paradigm|undefined}
    */
   static get inflectionType () {
+  }
+
+  static get hasPrerenderedTables () {
+    // Usually views do not have pre-rendered tables
+    return false
   }
 
   /**
@@ -241,24 +229,29 @@ export default class View {
   }
 
   /**
-   * Initializes table structures for the first time, if necessary
-   * (initialization is fulfilled once only, see `initialize()` method description for more details)
-   * and renders rows and columns of a wide view that represents
-   * a form of an inflection table shown to desktop users.
+   * Renders an inflection table view. Done once per view.
    * @param {Object} options - Render options
    */
   render (options = {
     emptyColumnsHidden: true,
     noSuffixMatchesHidden: true
   }) {
-    if (!this.initialized) {
-      this.initialize(options)
-    }
-    this.wideView.render()
+    if (!this.isRendered && this.isRenderable) {
+      this.footnotes = this.getFootnotes()
+      this.table.messages = this.messages
+      this.morphemes = this.getMorphemes()
 
-    // Render linked views (if any)
-    for (const view of this.linkedViews) {
-      view.render()
+      // TODO: do not construct table if constructed already
+      this.table.construct(this.morphemes, options)
+      this.wideView = new WideView(this.table)
+      this.wideView.render()
+
+      // Render linked views (if any)
+      for (const view of this.linkedViews) {
+        view.render()
+      }
+
+      this.isRendered = true
     }
     return this
   }
@@ -384,7 +377,6 @@ export default class View {
     if (options.title) {
       view.setTitle(options.title)
     }
-    view.render().noSuffixMatchesGroupsHidden(false)
     return view
   }
 }

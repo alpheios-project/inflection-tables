@@ -13433,9 +13433,10 @@ class GreekAdjectiveSimplifiedView extends _views_lang_greek_adjective_greek_adj
     this.name = 'adjective declension simplified'
     this.title = 'Adjective declension (simplified)'
 
-    this.createTable()
-
-    this.table.morphemeCellFilter = GreekAdjectiveSimplifiedView.morphemeCellFilter
+    if (this.isImplemented) {
+      this.createTable()
+      this.table.morphemeCellFilter = GreekAdjectiveSimplifiedView.morphemeCellFilter
+    }
   }
 
   static get viewID () {
@@ -13488,7 +13489,9 @@ class GreekAdjectiveView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORT
     this.name = 'adjective declension'
     this.title = 'Adjective declension'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -13557,7 +13560,9 @@ class GreekArticleView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_2__["defa
     this.name = 'article declension'
     this.title = 'Article Declension'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -13834,9 +13839,10 @@ class GreekNounSimplifiedView extends _greek_noun_view__WEBPACK_IMPORTED_MODULE_
     this.features.genders.comparisonType = _lib_morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.ALL_VALUES
     this.features.genders.getOrderedValues = _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_3__["default"].getOrderedGenders
 
-    this.createTable()
-
-    this.table.morphemeCellFilter = GreekNounSimplifiedView.morphemeCellFilter
+    if (this.isImplemented) {
+      this.createTable()
+      this.table.morphemeCellFilter = GreekNounSimplifiedView.morphemeCellFilter
+    }
   }
 
   static get viewID () {
@@ -13895,7 +13901,9 @@ class GreekNounView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MO
     this.features.genders.comparisonType = _lib_morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.ALL_VALUES
     this.features.genders.getOrderedValues = this.constructor.getOrderedGenders
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -13971,7 +13979,10 @@ class GreekNumeralView extends _greek_view_js__WEBPACK_IMPORTED_MODULE_4__["defa
     this.features.genders.getTitle = this.constructor.getGenderTitle
     this.features.genders.filter = this.constructor.genderFilter
     this.features.genders.comparisonType = _lib_morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL
-    this.createTable()
+
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -14080,7 +14091,9 @@ class GreekGenderPronounView extends _greek_pronoun_view_js__WEBPACK_IMPORTED_MO
   constructor (homonym, inflectionData, locale) {
     super(homonym, inflectionData, locale, _greek_pronoun_view_js__WEBPACK_IMPORTED_MODULE_2__["default"].getClassFromInflection(inflectionData.inflections))
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -14166,7 +14179,9 @@ class GreekLemmaGenderPronounView extends _greek_pronoun_view_js__WEBPACK_IMPORT
     this.features.lemmas = new _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_2__["default"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, this.constructor.languageID, 'Lemma',
       this.constructor.dataset.getPronounGroupingLemmaFeatures(GreekLemmaGenderPronounView.classes[0]))
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -14233,7 +14248,9 @@ class GreekPersonGenderPronounView extends _greek_pronoun_view_js__WEBPACK_IMPOR
   constructor (homonym, inflectionData, locale) {
     super(homonym, inflectionData, locale, GreekPersonGenderPronounView.classes[0])
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -14299,7 +14316,9 @@ class GreekPersonPronounView extends _greek_pronoun_view_js__WEBPACK_IMPORTED_MO
   constructor (homonym, inflectionData, locale) {
     super(homonym, inflectionData, locale, GreekPersonPronounView.classes[0])
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -14558,7 +14577,6 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     this.id = paradigm.id
     this.name = paradigm.title.toLowerCase()
     this.title = paradigm.title
-    this.hasPrerenderedTables = true
     this.paradigm = paradigm
     this.featureTypes = {}
 
@@ -14600,6 +14618,9 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     return _lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"]
   }
 
+  static get hasPrerenderedTables () {
+    return true
+  }
   /**
    * What classes of pronouns this view should be used with.
    * Should be defined in descendants.
@@ -14726,7 +14747,9 @@ class LatinAdjectiveView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["de
     this.features.genders.getOrderedFeatures = this.constructor.getOrderedGenders
     this.features.genders.getTitle = this.constructor.getGenderTitle
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15032,7 +15055,9 @@ class LatinNounView extends _views_lang_latin_latin_view_js__WEBPACK_IMPORTED_MO
     this.features.genders.getTitle = this.constructor.getGenderTitle
     this.features.genders.comparisonType = _lib_morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.ALL_VALUES
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15098,7 +15123,10 @@ class LatinSupineView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2__["defau
     this.features = {
       cases: this.features.cases
     }
-    this.createTable()
+
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15291,9 +15319,6 @@ class LatinVerbIrregularView extends _views_lang_latin_verb_irregular_latin_verb
     this.name = 'verb-irregular'
     this.title = 'Verb Conjugation (Irregular)'
 
-    // Some irregular verbs can be unimplemented and shall be skipped
-    const inflections = this.homonym.inflections.filter(item => item.constraints.implemented)
-    this.isImplemented = inflections.length > 0
     if (this.isImplemented) {
       this.createTable()
     }
@@ -15472,7 +15497,9 @@ class LatinVerbParticipleIrregularView extends _views_lang_latin_verb_irregular_
     this.name = 'verb-participle-irregular'
     this.title = 'Verb Participle Conjugation (Irregular)'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15542,7 +15569,9 @@ class LatinVerbSupineIrregularView extends _views_lang_latin_verb_irregular_lati
     this.name = 'verb-supine-irregular'
     this.title = 'Verb Supine Conjugation (Irregular)'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15643,7 +15672,9 @@ class LatinConjugationMoodVoiceView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.name = 'conjugation-mood-voice'
     this.title = 'Verb Conjugation'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15706,7 +15737,9 @@ class LatinConjugationVoiceMoodView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.name = 'conjugation-voice-mood'
     this.title = 'Verb Conjugation'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15768,8 +15801,10 @@ class LatinImperativeView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
     this.name = 'imperative'
     this.title = 'Imperative'
 
-    this.createTable()
-    this.table.morphemeCellFilter = LatinImperativeView.morphemeCellFilter
+    if (this.isImplemented) {
+      this.createTable()
+      this.table.morphemeCellFilter = LatinImperativeView.morphemeCellFilter
+    }
   }
 
   createTable () {
@@ -15851,8 +15886,10 @@ class LatinInfinitiveView extends _latin_verb_mood_view_js__WEBPACK_IMPORTED_MOD
     this.name = 'infinitive'
     this.title = 'Infinitive'
 
-    this.createTable()
-    this.table.morphemeCellFilter = LatinInfinitiveView.morphemeCellFilter
+    if (this.isImplemented) {
+      this.createTable()
+      this.table.morphemeCellFilter = LatinInfinitiveView.morphemeCellFilter
+    }
   }
 
   createTable () {
@@ -15928,7 +15965,9 @@ class LatinMoodConjugationVoiceView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.name = 'mood-conjugation-voice'
     this.title = 'Verb Conjugation'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -15991,7 +16030,9 @@ class LatinMoodVoiceConjugationView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.name = 'mood-voice-conjugation'
     this.title = 'Verb Conjugation'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -16086,7 +16127,10 @@ class LatinVerbParticipleView extends _latin_view_js__WEBPACK_IMPORTED_MODULE_2_
       this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_PERFECT),
       this.constructor.model.typeFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE)
     ])
-    this.createTable()
+
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -16169,7 +16213,9 @@ class LatinVoiceConjugationMoodView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.name = 'voice-conjugation-mood'
     this.title = 'Verb Conjugation'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -16232,7 +16278,9 @@ class LatinVoiceMoodConjugationView extends _latin_verb_view_js__WEBPACK_IMPORTE
     this.name = 'voice-mood-conjugation'
     this.title = 'Verb Conjugation'
 
-    this.createTable()
+    if (this.isImplemented) {
+      this.createTable()
+    }
   }
 
   static get viewID () {
@@ -18007,8 +18055,17 @@ class View {
     this.id = 'base_view'
     this.name = 'base view'
     this.title = 'Base View'
-    this.isImplemented = true // Whether this view is implemented or not. Unimplemented views serves as placeholders.
-    this.hasPrerenderedTables = false // Indicates whether this view has a pre-rendered table, such as in case with Greek paradigms
+
+    // Indicates whether this view has a pre-rendered table, such as in case with Greek paradigms
+    this.hasPrerenderedTables = this.constructor.hasPrerenderedTables
+
+    if (!this.constructor.hasPrerenderedTables) {
+      this.inflections = this.homonym.inflections.filter(item => item.constraints.implemented)
+      // Whether this view is implemented or not. Unimplemented views serves as placeholders.
+      this.isImplemented = this.inflections.length > 0
+    } else {
+      this.isImplemented = true
+    }
 
     this.forms = new Set()
     this.table = {
@@ -18026,40 +18083,14 @@ class View {
      */
     this.creditsText = ''
 
-    this.initialized = false
-
     /**
      * An array of views that should be shown below the current view by the UI component.
      * It is view's responsibility to create and initialize them.
      * @type {View[]}
      */
     this.linkedViews = []
-  }
 
-  /**
-   * Performs an initialization of a table object that represents tables structures
-   * (stored within a Table object): cells and morphemes that are grouped into tree, rows, columns,
-   * and are related to each other in some other ways.
-   * Creates an instance of WideView class which represents a wide form of an inflection table
-   * (the one that is shown to desktop users)
-   * This should be done after constructor initialization is complete to let descendant-specific code
-   * complete its specific tasks before table structures are initialized. This is done only once for each view.
-   * @param {Object} options - Render options related to whether some columns of an inflection table
-   *                           should be hidden.
-   */
-  initialize (options = {
-    emptyColumnsHidden: true,
-    noSuffixMatchesHidden: true
-  }) {
-    this.footnotes = this.getFootnotes()
-    this.table.messages = this.messages
-    this.morphemes = this.getMorphemes()
-
-    // TODO: do not construct table if constructed already
-    this.table.construct(this.morphemes, options)
-    this.wideView = new _wide_view__WEBPACK_IMPORTED_MODULE_3__["default"](this.table)
-    this.initialized = true
-    return this
+    this.isRendered = false
   }
 
   static get viewID () {
@@ -18115,6 +18146,11 @@ class View {
    * @return {Suffix|Form|Paradigm|undefined}
    */
   static get inflectionType () {
+  }
+
+  static get hasPrerenderedTables () {
+    // Usually views do not have pre-rendered tables
+    return false
   }
 
   /**
@@ -18215,24 +18251,29 @@ class View {
   }
 
   /**
-   * Initializes table structures for the first time, if necessary
-   * (initialization is fulfilled once only, see `initialize()` method description for more details)
-   * and renders rows and columns of a wide view that represents
-   * a form of an inflection table shown to desktop users.
+   * Renders an inflection table view. Done once per view.
    * @param {Object} options - Render options
    */
   render (options = {
     emptyColumnsHidden: true,
     noSuffixMatchesHidden: true
   }) {
-    if (!this.initialized) {
-      this.initialize(options)
-    }
-    this.wideView.render()
+    if (!this.isRendered && this.isRenderable) {
+      this.footnotes = this.getFootnotes()
+      this.table.messages = this.messages
+      this.morphemes = this.getMorphemes()
 
-    // Render linked views (if any)
-    for (const view of this.linkedViews) {
-      view.render()
+      // TODO: do not construct table if constructed already
+      this.table.construct(this.morphemes, options)
+      this.wideView = new _wide_view__WEBPACK_IMPORTED_MODULE_3__["default"](this.table)
+      this.wideView.render()
+
+      // Render linked views (if any)
+      for (const view of this.linkedViews) {
+        view.render()
+      }
+
+      this.isRendered = true
     }
     return this
   }
@@ -18358,7 +18399,6 @@ class View {
     if (options.title) {
       view.setTitle(options.title)
     }
-    view.render().noSuffixMatchesGroupsHidden(false)
     return view
   }
 }
