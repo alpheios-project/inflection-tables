@@ -4,5 +4,6 @@ import LatinDataSet from './lib/lang/latin/latin-language-dataset.js'
 import GreekDataSet from './lib/lang/greek/greek-language-dataset.js'
 import L10n from './l10n/l10n.js'
 import ViewSetFactory from './views/lib/view-set-factory.js'
+import WideView from './views/lib/wide-view.js'
 
-export { InflectionData, LanguageDatasetFactory, LatinDataSet, GreekDataSet, L10n, ViewSetFactory }
+export { InflectionData, LanguageDatasetFactory, LatinDataSet, GreekDataSet, L10n, ViewSetFactory, WideView }
