@@ -15288,6 +15288,7 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
    * @return {View[]} - An array of linked views or an empty array if no linked views can be created.
    */
   createLinkedViews () {
+    console.log(`create linked views`)
     let views = []
     let inflections = this.homonym.inflections.filter(infl => infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.constructor.mainPartOfSpeech)
     for (let Constructor of this.constructor.linkedViewConstructors) {
@@ -15299,7 +15300,7 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
         linkedViewInflections.push(clone)
       }
       let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, linkedViewInflections)
-      if (Constructor.matchFilter(this.homonym.languageID, inflections)) {
+      if (Constructor.matchFilter(this.homonym.languageID, linkedViewInflections)) {
         let view = new Constructor(this.homonym, inflectionData, this.locale)
         for (let infl of inflections) {
           infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] = infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].createFeature(this.constructor.mainPartOfSpeech)
