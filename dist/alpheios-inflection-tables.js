@@ -3349,6 +3349,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 
     if (inflection.constraints.irregular) {
       return [
+        alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.mood,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense,
         alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number,
@@ -3738,6 +3739,7 @@ class LanguageDataset {
         This flag is required for matcher to compare full forms, not suffixes.
          */
         inflection.constraints.fullFormBased = true
+        // TODO: This is done for almost every word and it does scan across many items. Need to optimize
         const hasMatchingForms = this.hasMatchingForms(partOfSpeech, inflection)
         if (hasMatchingForms) {
           // inflection.constraints.suffixBased = false // Enable this to not show regular tables for form-based words
@@ -3908,7 +3910,7 @@ class LanguageDataset {
       let inflectionSet = this.pos.get(partOfSpeech)
 
       if (inflectionSet.types.has(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"])) {
-        return inflectionSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items.find(item => this.matcher([inflection], item)) !== undefined
+        return inflectionSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items.find(item => this.matcher([inflection], item, { findMatches: false })) !== undefined
       }
     }
     return false
