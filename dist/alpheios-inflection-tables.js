@@ -3676,6 +3676,7 @@ class LanguageDataset {
     partOfSpeech = partOfSpeech.value
 
     // add the lemma to the inflection before setting inflection constraints
+    inflection.lemma = lemma
     inflection.addFeature(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word, lemma.word, lemma.languageID))
 
     inflection.constraints = this.model.getInflectionConstraints(inflection)
@@ -3811,10 +3812,11 @@ class LanguageDataset {
   }
 
   /**
-   *
-   * @param pofsValue
-   * @param inflections
-   * @return {InflectionSet}
+   * Creates an inflection set filled with inflection data.
+   * @param {string} pofsValue - A part of speech of the inflection set.
+   * @param {Inflection[]} inflections - An array of inflections.
+   * @param {Object} options - Matcher options, see `matcher()` for more details.
+   * @return {InflectionSet} Constructed inflection set.
    */
   createInflectionSet (pofsValue, inflections, options) {
     let inflectionSet = new _inflection_set_js__WEBPACK_IMPORTED_MODULE_6__["default"](pofsValue, this.languageID)
@@ -3929,13 +3931,18 @@ class LanguageDataset {
    * @param {Inflection[]} inflections - an array of inflection objects to be matched against a suffix.
    * @param {Suffix} item - a suffix to be matched with inflections.
    * @param {Object} options - An options object that may contain the following properties:
-   *        findMatches - whether to find form or suffix matches. Default: true
+   *        findMatches - whether to find form, suffix, and morphology matches. Default: true
+   *        findMorphologyMatches - whether to find morphology matches. If set, overrides values set by `findMatches`
    * @returns {Suffix | null} if a match is found, returns a suffix object modified with some
    * additional information about a match. if no matches found, returns null.
    */
   matcher (inflections, item, options = {}) {
     if (!options.hasOwnProperty('findMatches')) {
       options.findMatches = true // Default value
+    }
+    if (!options.hasOwnProperty('findMorphologyMatches')) {
+      // If not specified explicitly, will be controlled by `findMatches` value
+      options.findMorphologyMatches = options.findMatches // Default value
     }
     // Any of those features must match between an inflection and an ending
     let bestMatchData = null // information about the best match we would be able to find
@@ -3968,9 +3975,11 @@ class LanguageDataset {
       const optionalMatches = this.constructor.getOptionalMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
       matchData.matchedFeatures.push(...optionalMatches.matchedItems)
 
-      if (options.findMatches) {
+      if (options.findMorphologyMatches) {
         const morphologyMatches = this.constructor.getMorphologyMatches(inflection, item, _morpheme_js__WEBPACK_IMPORTED_MODULE_1__["default"].comparisonTypes.PARTIAL)
         matchData.morphologyMatch = morphologyMatches.fullMatch
+      } else {
+        matchData.morphologyMatch = false
       }
 
       if (matchData.suffixMatch && obligatoryMatches.fullMatch && optionalMatches.fullMatch) {
@@ -15288,7 +15297,6 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
    * @return {View[]} - An array of linked views or an empty array if no linked views can be created.
    */
   createLinkedViews () {
-    console.log(`create linked views`)
     let views = []
     let inflections = this.homonym.inflections.filter(infl => infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.constructor.mainPartOfSpeech)
     for (let Constructor of this.constructor.linkedViewConstructors) {
@@ -15296,10 +15304,10 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
       for (let infl of inflections) {
         let clone = infl.clone()
         clone[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] = clone[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].createFeature(Constructor.mainPartOfSpeech)
-        clone = this.constructor.dataset.setInflectionData(clone, this.homonym.lexemes[0].lemma)
+        clone = this.constructor.dataset.setInflectionData(clone, infl.lemma)
         linkedViewInflections.push(clone)
       }
-      let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, linkedViewInflections)
+      let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, linkedViewInflections, { findMorphologyMatches: false })
       if (Constructor.matchFilter(this.homonym.languageID, linkedViewInflections)) {
         let view = new Constructor(this.homonym, inflectionData, this.locale)
         for (let infl of inflections) {
@@ -15662,27 +15670,6 @@ class LatinVerbSupineIrregularView extends _views_lang_latin_verb_irregular_lati
    */
   static get linkedViewConstructors () {
     return [_views_lang_latin_verb_irregular_latin_verb_irregular_view_js__WEBPACK_IMPORTED_MODULE_2__["default"], _views_lang_latin_verb_irregular_latin_verb_irregular_voice_view_js__WEBPACK_IMPORTED_MODULE_3__["default"], _views_lang_latin_verb_irregular_latin_verb_participle_irregular_view_js__WEBPACK_IMPORTED_MODULE_4__["default"]]
-  }
-
-  // TODO: Remove after testing
-  createLinkedViews () {
-    let views = []
-    let inflections = this.homonym.inflections.filter(infl => infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.constructor.mainPartOfSpeech)
-    for (let Constructor of this.constructor.linkedViewConstructors) {
-      for (let infl of inflections) {
-        infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] = infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].createFeature(Constructor.mainPartOfSpeech)
-      }
-      let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, inflections)
-      if (Constructor.matchFilter(this.homonym.languageID, inflections)) {
-        let view = new Constructor(this.homonym, inflectionData, this.locale)
-        for (let infl of inflections) {
-          infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] = infl[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].createFeature(this.constructor.mainPartOfSpeech)
-        }
-        views.push(view)
-      }
-    }
-    this.linkedViews = views
-    return views
   }
 }
 

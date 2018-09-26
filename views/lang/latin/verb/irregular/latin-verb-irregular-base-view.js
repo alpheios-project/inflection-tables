@@ -78,7 +78,6 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
    * @return {View[]} - An array of linked views or an empty array if no linked views can be created.
    */
   createLinkedViews () {
-    console.log(`create linked views`)
     let views = []
     let inflections = this.homonym.inflections.filter(infl => infl[Feature.types.part].value === this.constructor.mainPartOfSpeech)
     for (let Constructor of this.constructor.linkedViewConstructors) {
@@ -86,10 +85,10 @@ export default class LatinVerbIrregularVoiceView extends LatinView {
       for (let infl of inflections) {
         let clone = infl.clone()
         clone[Feature.types.part] = clone[Feature.types.part].createFeature(Constructor.mainPartOfSpeech)
-        clone = this.constructor.dataset.setInflectionData(clone, this.homonym.lexemes[0].lemma)
+        clone = this.constructor.dataset.setInflectionData(clone, infl.lemma)
         linkedViewInflections.push(clone)
       }
-      let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, linkedViewInflections)
+      let inflectionData = this.constructor.dataset.createInflectionSet(Constructor.mainPartOfSpeech, linkedViewInflections, { findMorphologyMatches: false })
       if (Constructor.matchFilter(this.homonym.languageID, linkedViewInflections)) {
         let view = new Constructor(this.homonym, inflectionData, this.locale)
         for (let infl of inflections) {
