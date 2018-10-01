@@ -14899,12 +14899,8 @@ class LatinViewSet extends _lib_view_set_js__WEBPACK_IMPORTED_MODULE_0__["defaul
     return [
       _views_lang_latin_noun_latin_noun_view_js__WEBPACK_IMPORTED_MODULE_1__["default"],
       _views_lang_latin_adjective_latin_adjective_view_js__WEBPACK_IMPORTED_MODULE_2__["default"],
-      _views_lang_latin_verb_latin_voice_conjugation_mood_view_js__WEBPACK_IMPORTED_MODULE_3__["default"],
-      _views_lang_latin_verb_latin_voice_mood_conjugation_view_js__WEBPACK_IMPORTED_MODULE_4__["default"],
-      _views_lang_latin_verb_latin_conjugation_voice_mood_view_js__WEBPACK_IMPORTED_MODULE_5__["default"],
-      _views_lang_latin_verb_latin_conjugation_mood_voice_view_js__WEBPACK_IMPORTED_MODULE_6__["default"],
-      _views_lang_latin_verb_latin_mood_voice_conjugation_view_js__WEBPACK_IMPORTED_MODULE_7__["default"],
-      _views_lang_latin_verb_latin_mood_conjugation_voice_view_js__WEBPACK_IMPORTED_MODULE_8__["default"],
+      _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_13__["default"],
+      _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_10__["default"],
       _views_lang_latin_verb_latin_infinitive_view_js__WEBPACK_IMPORTED_MODULE_16__["default"],
       _views_lang_latin_verb_latin_imperative_view_js__WEBPACK_IMPORTED_MODULE_9__["default"],
       _views_lang_latin_verb_irregular_latin_verb_irregular_view_js__WEBPACK_IMPORTED_MODULE_11__["default"],
@@ -14912,8 +14908,12 @@ class LatinViewSet extends _lib_view_set_js__WEBPACK_IMPORTED_MODULE_0__["defaul
       _views_lang_latin_verb_irregular_latin_verb_participle_irregular_view_js__WEBPACK_IMPORTED_MODULE_14__["default"],
       _views_lang_latin_verb_irregular_latin_verb_supine_irregular_view_js__WEBPACK_IMPORTED_MODULE_15__["default"],
       //      LatinVerbGerundiveIrregularView, // Gerundive table is eliminated for now as per discussion in https://github.com/alpheios-project/inflection-tables/issues/76
-      _views_lang_latin_noun_latin_supine_view_js__WEBPACK_IMPORTED_MODULE_10__["default"],
-      _views_lang_latin_verb_latin_verb_participle_view_js__WEBPACK_IMPORTED_MODULE_13__["default"]
+      _views_lang_latin_verb_latin_voice_conjugation_mood_view_js__WEBPACK_IMPORTED_MODULE_3__["default"],
+      _views_lang_latin_verb_latin_voice_mood_conjugation_view_js__WEBPACK_IMPORTED_MODULE_4__["default"],
+      _views_lang_latin_verb_latin_conjugation_voice_mood_view_js__WEBPACK_IMPORTED_MODULE_5__["default"],
+      _views_lang_latin_verb_latin_conjugation_mood_voice_view_js__WEBPACK_IMPORTED_MODULE_6__["default"],
+      _views_lang_latin_verb_latin_mood_voice_conjugation_view_js__WEBPACK_IMPORTED_MODULE_7__["default"],
+      _views_lang_latin_verb_latin_mood_conjugation_voice_view_js__WEBPACK_IMPORTED_MODULE_8__["default"]
     ]
   }
 }
