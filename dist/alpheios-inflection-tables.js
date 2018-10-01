@@ -868,7 +868,7 @@ module.exports = "Form,Headword,Number,Case,Gender,Type,Primary,Footnote\nδύο
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "Index,Text\n1,enclitic,\n2,not enclitic,\n3,enclitic,\n4,The reflexive pronouns are formed by compounding the stems of the personal pronouns with the oblique cases of αὐτός,\n5,The possessive pronouns, formed from the stems of the personal pronouns, are declined like ἀγαθός, ἄξιος (see Smyth 287),\n"
+module.exports = "Index,Text\n1,enclitic\n2,not enclitic\n3,enclitic\n4,The reflexive pronouns are formed by compounding the stems of the personal pronouns with the oblique cases of αὐτός\n5,The possessive pronouns, formed from the stems of the personal pronouns, are declined like ἀγαθός, ἄξιος (see Smyth 287)\n"
 
 /***/ }),
 
