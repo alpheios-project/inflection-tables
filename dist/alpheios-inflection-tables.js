@@ -2336,35 +2336,35 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 
     // Nouns
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN)
-    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, {})
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_7___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], pofsFootnotes.data)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_6___default.a, { skipEmptyLines: true })
     this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Adjective
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)
-    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, {})
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_9___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], pofsFootnotes.data)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, {})
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_8___default.a, { skipEmptyLines: true })
     this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Articles
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10___default.a, {})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_10___default.a, { skipEmptyLines: true })
     this.addArticleForms(partOfSpeech, forms.data)
 
     // Pronouns
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
-    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, {})
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_14___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], pofsFootnotes.data)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13___default.a, {})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_13___default.a, { skipEmptyLines: true })
     this.addPronounForms(partOfSpeech, forms.data, footnotes)
 
     // Numerals
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL)
-    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_12___default.a, {})
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_12___default.a, { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], pofsFootnotes.data)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11___default.a, {})
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_11___default.a, { skipEmptyLines: true })
     this.addNumeralForms(partOfSpeech, forms.data, footnotes)
 
     // Verbs
@@ -2376,16 +2376,16 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB)
     paradigms = this.setParadigmData(
       partOfSpeech, verbParadigmTables,
-      papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_verb_paradigm_rules_csv__WEBPACK_IMPORTED_MODULE_68___default.a, {}).data, verbAndParticipleParadigmTables)
+      papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_verb_paradigm_rules_csv__WEBPACK_IMPORTED_MODULE_68___default.a, { skipEmptyLines: true }).data, verbAndParticipleParadigmTables)
     this.addParadigms(partOfSpeech, paradigms)
-    this.addFootnotes(partOfSpeech, _lib_paradigm_js__WEBPACK_IMPORTED_MODULE_5__["default"], papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_verb_paradigm_footnotes_csv__WEBPACK_IMPORTED_MODULE_69___default.a, {}).data)
+    this.addFootnotes(partOfSpeech, _lib_paradigm_js__WEBPACK_IMPORTED_MODULE_5__["default"], papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_verb_paradigm_footnotes_csv__WEBPACK_IMPORTED_MODULE_69___default.a, { skipEmptyLines: true }).data)
 
     // Verb Participles
     // Paradigms
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_VERB_PARTICIPLE)
     paradigms = this.setParadigmData(
       partOfSpeech, verbParticipleParadigmTables,
-      papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_verb_participle_paradigm_rules_csv__WEBPACK_IMPORTED_MODULE_83___default.a, {}).data, verbAndParticipleParadigmTables)
+      papaparse__WEBPACK_IMPORTED_MODULE_84___default.a.parse(_lib_lang_greek_data_verb_participle_paradigm_rules_csv__WEBPACK_IMPORTED_MODULE_83___default.a, { skipEmptyLines: true }).data, verbAndParticipleParadigmTables)
     this.addParadigms(partOfSpeech, paradigms)
 
     this.dataLoaded = true
