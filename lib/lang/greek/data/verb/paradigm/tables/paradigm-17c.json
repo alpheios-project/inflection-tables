@@ -1,0 +1,505 @@
+{
+    "ID": "verbpdgm17c",
+    "partOfSpeech": "verb",
+    "title": "Athematic Perfects - δέδια (in addition to forms from δέδοικα)",
+    "credits": "Verb paradigm tables derived from <a href=\"http://ucbclassics.dreamhosters.com/ancgreek/\">Ancient Greek Tutorials<\/a>, by Donald J. Mastronarde, Berkeley Language Center of the University of California, Berkeley.<br>©1999-2005 The Regents of the University of California.",
+    "table": {"rows": [
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "mood": "indicative",
+                "value": "indicative"
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "mood": "subjunctive",
+                "value": "subjunctive (rare)"
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "mood": "optative",
+                "value": "optative"
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "mood": "imperative",
+                "value": "imperative"
+            },
+            {
+                "role": "label",
+                "tense": "pluperfect",
+                "mood": "indicative",
+                "value": "pluperfect indicative"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "number": "singular",
+                "value": "1st"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "1st",
+                "mood": "indicative",
+                "value": "δέδια"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "1st",
+                "mood": "subjunctive",
+                "value": "δεδίω"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "1st",
+                "mood": "optative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "1st",
+                "mood": "imperative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "pluperfect",
+                "number": "singular",
+                "person": "1st",
+                "mood": "indicative",
+                "value": "ἐδεδίειν"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "number": "singular",
+                "value": "2nd"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "2nd",
+                "mood": "indicative",
+                "value": "δέδιας"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "2nd",
+                "mood": "subjunctive",
+                "value": "δεδίῃς"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "2nd",
+                "mood": "optative",
+                "value": "not found"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "2nd",
+                "mood": "imperative",
+                "value": "δέδιθι"
+            },
+            {
+                "role": "data",
+                "tense": "pluperfect",
+                "number": "singular",
+                "person": "2nd",
+                "mood": "indicative",
+                "value": "ἐδεδίεις"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "number": "singular",
+                "value": "3rd"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "3rd",
+                "mood": "indicative",
+                "value": "δέδιε(ν)"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "3rd",
+                "mood": "subjunctive",
+                "value": "δεδίῃ"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "3rd",
+                "mood": "optative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "singular",
+                "person": "3rd",
+                "mood": "imperative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "pluperfect",
+                "number": "singular",
+                "person": "3rd",
+                "mood": "indicative",
+                "value": "ἐδεδίει"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": "dual"
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "number": "dual",
+                "value": "2nd"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "dual",
+                "person": "2nd",
+                "mood": "indicative",
+                "value": "δέδιτον"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "dual",
+                "person": "2nd",
+                "mood": "subjunctive",
+                "value": "δεδίητον"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "dual",
+                "person": "2nd",
+                "mood": "optative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "dual",
+                "person": "2nd",
+                "mood": "imperative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "pluperfect",
+                "number": "dual",
+                "person": "2nd",
+                "mood": "indicative",
+                "value": ""
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "number": "dual",
+                "value": "3rd"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "dual",
+                "person": "3rd",
+                "mood": "indicative",
+                "value": "δέδιτον"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "dual",
+                "person": "3rd",
+                "mood": "subjunctive",
+                "value": "δεδίητον"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "dual",
+                "person": "3rd",
+                "mood": "optative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "dual",
+                "person": "3rd",
+                "mood": "imperative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "pluperfect",
+                "number": "dual",
+                "person": "3rd",
+                "mood": "indicative",
+                "value": ""
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "number": "plural",
+                "value": "1st"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "1st",
+                "mood": "indicative",
+                "value": "δέδιμεν"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "1st",
+                "mood": "subjunctive",
+                "value": "δεδίωμεν"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "1st",
+                "mood": "optative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "1st",
+                "mood": "imperative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "pluperfect",
+                "number": "plural",
+                "person": "1st",
+                "mood": "indicative",
+                "value": "ἐδεδίειμεν"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "number": "plural",
+                "value": "2nd"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "2nd",
+                "mood": "indicative",
+                "value": "δέδιτε"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "2nd",
+                "mood": "subjunctive",
+                "value": "δεδίητε"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "2nd",
+                "mood": "optative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "2nd",
+                "mood": "imperative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "pluperfect",
+                "number": "plural",
+                "person": "2nd",
+                "mood": "indicative",
+                "value": "ἐδεδίειτε"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "tense": "perfect",
+                "number": "plural",
+                "value": "3rd"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "3rd",
+                "mood": "indicative",
+                "value": "δέδιᾱσῐ(ν)"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "3rd",
+                "mood": "subjunctive",
+                "value": "δεδίωσῐ(ν)"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "3rd",
+                "mood": "optative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "number": "plural",
+                "person": "3rd",
+                "mood": "imperative",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "tense": "pluperfect",
+                "number": "plural",
+                "person": "3rd",
+                "mood": "indicative",
+                "value": "ἐδεδίεσαν or ἐδέδισαν"
+            }
+        ]}
+    ]},
+    "subTables": [{"rows": [
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": "infinitive"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "mood": "infinitive",
+                "value": "δεδιέναι"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "tense": "perfect",
+                "value": "participle"
+            },
+            {
+                "role": "data",
+                "tense": "perfect",
+                "value": "δεδιώς, δεδιυῖᾰ, δεδιός",
+                "reflink": {
+                    "text": "(see declension)",
+                    "id": "verbpdgm64"
+                }
+            }
+        ]}
+    ]}]
+}
