@@ -1,7 +1,7 @@
 {
-    "ID": "verbpdgm43",
+    "ID": "verbpdgm43b",
     "partOfSpeech": "verb",
-    "title": "δύναμαι: Present System Middle-Passive",
+    "title": "ἐπίσταμαι: Present System Middle-Passive",
     "credits": "Verb paradigm tables derived from <a href=\"http://ucbclassics.dreamhosters.com/ancgreek/\">Ancient Greek Tutorials<\/a>, by Donald J. Mastronarde, Berkeley Language Center of the University of California, Berkeley.<br>©1999-2005 The Regents of the University of California.",
     "table": {"rows": [
         {"cells": [
@@ -74,7 +74,7 @@
                 "number": "singular",
                 "person": "1st",
                 "mood": "indicative",
-                "value": "δύναμαι"
+                "value": "ἐπίσταμαι"
             },
             {
                 "role": "data",
@@ -83,7 +83,7 @@
                 "number": "singular",
                 "person": "1st",
                 "mood": "subjunctive",
-                "value": "δύνωμαι"
+                "value": "ἐπίστωμαι"
             },
             {
                 "role": "data",
@@ -92,7 +92,7 @@
                 "number": "singular",
                 "person": "1st",
                 "mood": "optative",
-                "value": "δυναίμην"
+                "value": "ἐπισταίμην"
             },
             {
                 "role": "data",
@@ -110,7 +110,7 @@
                 "number": "singular",
                 "person": "1st",
                 "mood": "indicative",
-                "value": "ἐδυνάμην"
+                "value": "ἠπιστάμην"
             }
         ]},
         {"cells": [
@@ -134,7 +134,7 @@
                 "number": "singular",
                 "person": "2nd",
                 "mood": "indicative",
-                "value": "δύνασαι (or δύνᾳ)"
+                "value": "ἐπίστασαι or ἐπίστᾳ"
             },
             {
                 "role": "data",
@@ -143,7 +143,7 @@
                 "number": "singular",
                 "person": "2nd",
                 "mood": "subjunctive",
-                "value": "δύνῃ"
+                "value": "ἐπίστῃ"
             },
             {
                 "role": "data",
@@ -152,7 +152,7 @@
                 "number": "singular",
                 "person": "2nd",
                 "mood": "optative",
-                "value": "δύναιο"
+                "value": "ἐπίσταιο"
             },
             {
                 "role": "data",
@@ -161,7 +161,7 @@
                 "number": "singular",
                 "person": "2nd",
                 "mood": "imperative",
-                "value": ""
+                "value": "ἐπίστασο or ἐπίστω"
             },
             {
                 "role": "data",
@@ -170,7 +170,7 @@
                 "number": "singular",
                 "person": "2nd",
                 "mood": "indicative",
-                "value": "ἐδύνω"
+                "value": "ἠπίστω or ἠπίστασο"
             }
         ]},
         {"cells": [
@@ -194,7 +194,7 @@
                 "number": "singular",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "δύναται"
+                "value": "ἐπίσταται"
             },
             {
                 "role": "data",
@@ -203,7 +203,7 @@
                 "number": "singular",
                 "person": "3rd",
                 "mood": "subjunctive",
-                "value": "δύνηται"
+                "value": "ἐπίστηται"
             },
             {
                 "role": "data",
@@ -212,7 +212,7 @@
                 "number": "singular",
                 "person": "3rd",
                 "mood": "optative",
-                "value": "δύναιτο"
+                "value": "ἐπίσταιτο"
             },
             {
                 "role": "data",
@@ -221,7 +221,7 @@
                 "number": "singular",
                 "person": "3rd",
                 "mood": "imperative",
-                "value": "δυνάσθω"
+                "value": "ἐπιστάσθω"
             },
             {
                 "role": "data",
@@ -230,7 +230,7 @@
                 "number": "singular",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "ἐδύνατο"
+                "value": "ἠπίστατο"
             }
         ]},
         {"cells": [
@@ -254,7 +254,7 @@
                 "number": "dual",
                 "person": "2nd",
                 "mood": "indicative",
-                "value": ""
+                "value": "ἐπίστασθον"
             },
             {
                 "role": "data",
@@ -263,7 +263,7 @@
                 "number": "dual",
                 "person": "2nd",
                 "mood": "subjunctive",
-                "value": "δύνησθον"
+                "value": ""
             },
             {
                 "role": "data",
@@ -314,7 +314,7 @@
                 "number": "dual",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "δύνασθον"
+                "value": ""
             },
             {
                 "role": "data",
@@ -332,7 +332,7 @@
                 "number": "dual",
                 "person": "3rd",
                 "mood": "optative",
-                "value": ""
+                "value": "ἐπίσταίσθην"
             },
             {
                 "role": "data",
@@ -350,7 +350,7 @@
                 "number": "dual",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "ἐδυνάσθην"
+                "value": "ἠπιστάσθην"
             }
         ]},
         {"cells": [
@@ -374,7 +374,7 @@
                 "number": "plural",
                 "person": "1st",
                 "mood": "indicative",
-                "value": "δυνάμεθα"
+                "value": "ἐπιστάμεθα"
             },
             {
                 "role": "data",
@@ -383,7 +383,7 @@
                 "number": "plural",
                 "person": "1st",
                 "mood": "subjunctive",
-                "value": "δυνώμεθα"
+                "value": "ἐπιστώμεθα"
             },
             {
                 "role": "data",
@@ -392,7 +392,7 @@
                 "number": "plural",
                 "person": "1st",
                 "mood": "optative",
-                "value": "δυναίμεθα"
+                "value": "ἐπισταίμεθα"
             },
             {
                 "role": "data",
@@ -410,7 +410,7 @@
                 "number": "plural",
                 "person": "1st",
                 "mood": "indicative",
-                "value": "ἐδυνάμεθα"
+                "value": "ἠπιστάμεθα"
             }
         ]},
         {"cells": [
@@ -434,7 +434,7 @@
                 "number": "plural",
                 "person": "2nd",
                 "mood": "indicative",
-                "value": "δύνασθε"
+                "value": "ἐπίστασθε"
             },
             {
                 "role": "data",
@@ -443,7 +443,7 @@
                 "number": "plural",
                 "person": "2nd",
                 "mood": "subjunctive",
-                "value": "δύνησθε"
+                "value": "ἐπίστησθε"
             },
             {
                 "role": "data",
@@ -452,7 +452,7 @@
                 "number": "plural",
                 "person": "2nd",
                 "mood": "optative",
-                "value": "δύναισθε"
+                "value": ""
             },
             {
                 "role": "data",
@@ -461,7 +461,7 @@
                 "number": "plural",
                 "person": "2nd",
                 "mood": "imperative",
-                "value": ""
+                "value": "ἐπίστασθε"
             },
             {
                 "role": "data",
@@ -470,7 +470,7 @@
                 "number": "plural",
                 "person": "2nd",
                 "mood": "indicative",
-                "value": "ἐδύνασθε"
+                "value": "ἠπίστασθε"
             }
         ]},
         {"cells": [
@@ -494,7 +494,7 @@
                 "number": "plural",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "δύνανται"
+                "value": "ἐπίστανται"
             },
             {
                 "role": "data",
@@ -503,7 +503,7 @@
                 "number": "plural",
                 "person": "3rd",
                 "mood": "subjunctive",
-                "value": "δύνωνται"
+                "value": "ἐπίστωνται"
             },
             {
                 "role": "data",
@@ -512,7 +512,7 @@
                 "number": "plural",
                 "person": "3rd",
                 "mood": "optative",
-                "value": "δύναιντο"
+                "value": "ἐπίσταιντο"
             },
             {
                 "role": "data",
@@ -521,7 +521,7 @@
                 "number": "plural",
                 "person": "3rd",
                 "mood": "imperative",
-                "value": ""
+                "value": "ἐπιστάσθων"
             },
             {
                 "role": "data",
@@ -530,7 +530,7 @@
                 "number": "plural",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "ἐδύναντο"
+                "value": "ἠπίσταντο"
             }
         ]}
     ]},
@@ -547,7 +547,7 @@
                 "tense": "present",
                 "voice": "mediopassive middle",
                 "mood": "infinitive",
-                "value": "δύνασθαι"
+                "value": "ἐπίστασθαι"
             }
         ]},
         {"cells": [
@@ -561,7 +561,7 @@
                 "role": "data",
                 "tense": "present",
                 "voice": "mediopassive middle",
-                "value": "δυνάμενος, -η, -ον",
+                "value": "ἐπιστάμενος, -η, -ον",
                 "reflink": {
                     "text": "(see declension)",
                     "id": "verbpdgm65"
