@@ -1994,6 +1994,8 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender).getImporter()
       .map(this.constructor.constants.GEND_MASCULINE_FEMININE, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE])
       .map(this.constructor.constants.GEND_MASCULINE_FEMININE_NEUTER, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER])
+    this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense).getImporter()
+      .map('future_perfect', [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE_PERFECT])
   }
 
   static get languageID () {
@@ -4731,6 +4733,10 @@ class Paradigm {
           }
           for (const feature of cellFeatures) {
             const values = cell[feature].split(' ')
+            // TODO this should be done via an importer but changing this code
+            // would require retesting of all of the paradigm table matching
+            // so hacking a specific workaround for now
+            values.forEach((v, index, values) => { values[index] = v.replace(/future_perfect/, 'future perfect') })
             cell[feature] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_1__["Feature"](feature, values, this.languageID)
           }
           cell[alpheios_data_models__WEBPACK_IMPORTED_MODULE_1__["Feature"].types.part] = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_1__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_1__["Feature"].types.part, this.partOfSpeech, this.languageID)
