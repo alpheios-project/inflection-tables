@@ -4724,7 +4724,25 @@ class Paradigm {
     this.rules = []
 
     // Convert string feature values to Feature objects for later comparison
-    for (let row of this.table.rows) {
+    this.tableCellValuesToFeatures(this.table)
+    if (this.subTables) {
+      for (let table of this.subTables) {
+        this.tableCellValuesToFeatures(table)
+      }
+    }
+
+    /**
+     * Sometimes paradigm sub tables may have links to another paradigms.
+     * Those supplemental paradigms will be saved in the map.
+     * @type {Map<{string} paradigmID, {Paradigm} paradigm>}
+     * @private
+     */
+    this._suppParadigms = new Map()
+  }
+
+  // Convert string feature values of a table to Feature objects for later comparison
+  tableCellValuesToFeatures (table) {
+    for (let row of table.rows) {
       for (let cell of row.cells) {
         if (cell.role === 'data') {
           let cellFeatures = []
@@ -4746,14 +4764,6 @@ class Paradigm {
         }
       }
     }
-
-    /**
-     * Sometimes paradigm sub tables may have links to another paradigms.
-     * Those supplemental paradigms will be saved in the map.
-     * @type {Map<{string} paradigmID, {Paradigm} paradigm>}
-     * @private
-     */
-    this._suppParadigms = new Map()
   }
 
   /**
