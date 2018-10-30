@@ -471,9 +471,33 @@
                 "mood": "indicative",
                 "value": "γεγραμμένοι (-αι) ἦσαν or γεγραμμένα ἦν"
             }
-        ]}
-    ]},
-    "subTables": [{"rows": [
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "value": ""
+            }
+        ]},
         {"cells": [
             {
                 "role": "label",
@@ -842,7 +866,7 @@
                 "number": "plural",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "πεπραγμένοι (-αι) ἦσαν"
+                "value": "πεπραγμένοι (-αι) ἦσαν or πεπραγμένα ἦν"
             },
             {
                 "role": "data",
@@ -851,7 +875,7 @@
                 "number": "plural",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "ἠγγελμένοι (-αι) ἦσαν"
+                "value": "ἠγγελμένοι (-αι) ἦσαν or ἠγγελμένα ἦν"
             },
             {
                 "role": "data",
@@ -860,52 +884,9 @@
                 "number": "plural",
                 "person": "3rd",
                 "mood": "indicative",
-                "value": "πεφασμένοι (-αι) ἦσαν"
-            }
-        ]},
-        {"cells": [
-            {
-                "role": "label",
-                "tense": "pluperfect",
-                "voice": "mediopassive middle",
-                "mood": "indicative",
-                "value": ""
-            },
-            {
-                "role": "label",
-                "tense": "pluperfect",
-                "voice": "mediopassive middle",
-                "number": "plural",
-                "mood": "indicative",
-                "value": ""
-            },
-            {
-                "role": "data",
-                "tense": "pluperfect",
-                "voice": "mediopassive middle",
-                "number": "plural",
-                "person": "3rd",
-                "mood": "indicative",
-                "value": "πεπραγμένα ἦν"
-            },
-            {
-                "role": "data",
-                "tense": "pluperfect",
-                "voice": "mediopassive middle",
-                "number": "plural",
-                "person": "3rd",
-                "mood": "indicative",
-                "value": "ἠγγελμένα ἦν"
-            },
-            {
-                "role": "data",
-                "tense": "pluperfect",
-                "voice": "mediopassive middle",
-                "number": "plural",
-                "person": "3rd",
-                "mood": "indicative",
-                "value": "πεφασμένα ἦν"
+                "value": "πεφασμένοι (-αι) ἦσαν or πεφασμένα ἦν"
             }
         ]}
-    ]}]
+    ]},
+    "subTables": []
 }
