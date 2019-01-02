@@ -17544,7 +17544,7 @@ class Table {
         }
 
         // let headerCell = new HeaderCell(feature.value, currentFeature, columnSpan)
-        let headerCell = currentFeature.createHeaderCell(`INFLECTIONS_HEADER_${feature.value}`, columnSpan)
+        let headerCell = currentFeature.createHeaderCell(feature.value, columnSpan)
         headerCell.children = subCells
         for (let cell of subCells) {
           cell.parent = headerCell
@@ -17554,7 +17554,7 @@ class Table {
           headers[currentLevel] = new _row_js__WEBPACK_IMPORTED_MODULE_3__["default"]()
         }
         headers[currentLevel].titleCell = currentFeature.createRowTitleCell(
-          `INFLECTIONS_HEADER_${currentFeature.groupTitle}`, this.features.firstColumnFeature.size)
+          currentFeature.groupTitle, this.features.firstColumnFeature.size)
 
         headers[currentLevel].add(headerCell)
         cells.push(headerCell)
@@ -17568,7 +17568,7 @@ class Table {
 
         headers[currentLevel].add(headerCell)
         headers[currentLevel].titleCell = currentFeature.createRowTitleCell(
-          `INFLECTIONS_HEADER_${currentFeature.groupTitle}`, this.features.firstColumnFeature.size)
+          currentFeature.groupTitle, this.features.firstColumnFeature.size)
         cells.push(headerCell)
       }
     }
