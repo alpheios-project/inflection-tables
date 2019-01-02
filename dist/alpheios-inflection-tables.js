@@ -17544,7 +17544,7 @@ class Table {
         }
 
         // let headerCell = new HeaderCell(feature.value, currentFeature, columnSpan)
-        let headerCell = currentFeature.createHeaderCell(feature.value, columnSpan)
+        let headerCell = currentFeature.createHeaderCell(`INFLECTIONS_HEADER_${feature.value}`, columnSpan)
         headerCell.children = subCells
         for (let cell of subCells) {
           cell.parent = headerCell
