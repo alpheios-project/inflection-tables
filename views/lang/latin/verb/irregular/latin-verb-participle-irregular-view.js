@@ -51,7 +51,11 @@ export default class LatinVerbParticipleIrregularView extends LatinVerbIrregular
    * A list of constructors of linked views.
    * @return {View[]}
    */
-  static get linkedViewConstructors () {
-    return [LatinVerbIrregularView, LatinVerbIrregularVoiceView, LatinVerbSupineIrregularView]
+  static linkedViewConstructors (homonym) {
+    const views = [LatinVerbIrregularView, LatinVerbIrregularVoiceView]
+    if (homonym.inflections.some(i => this.supineEnabledHdwds.includes(i.word.value))) {
+      views.push(LatinVerbSupineIrregularView)
+    }
+    return views
   }
 }
