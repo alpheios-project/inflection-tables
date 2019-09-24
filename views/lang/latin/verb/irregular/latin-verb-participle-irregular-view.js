@@ -52,7 +52,7 @@ export default class LatinVerbParticipleIrregularView extends LatinVerbIrregular
    * @return {View[]}
    */
   static linkedViewConstructors (homonym) {
-    const views = [LatinVerbIrregularView, LatinVerbIrregularVoiceView]
+    let views = [LatinVerbIrregularView, LatinVerbIrregularVoiceView] // eslint-disable-line prefer-const
     if (homonym.inflections.some(i => this.supineEnabledHdwds.includes(i.word.value))) {
       views.push(LatinVerbSupineIrregularView)
     }

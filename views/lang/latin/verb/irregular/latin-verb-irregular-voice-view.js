@@ -67,7 +67,7 @@ export default class LatinVerbIrregularVoiceView extends LatinVerbIrregularBaseV
    * @return {View[]}
    */
   static linkedViewConstructors (homonym) {
-    const views = [LatinVerbParicipleIrregularView]
+    let views = [LatinVerbParicipleIrregularView] // eslint-disable-line prefer-const
     if (homonym.inflections.some(i => this.supineEnabledHdwds.includes(i.word.value))) {
       views.push(LatinVerbSupineIrregularView)
     }

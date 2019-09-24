@@ -15584,7 +15584,7 @@ class LatinVerbIrregularView extends _views_lang_latin_verb_irregular_latin_verb
    * @return {View[]}
    */
   static linkedViewConstructors (homonym) {
-    const views = [_views_lang_latin_verb_irregular_latin_verb_participle_irregular_view_js__WEBPACK_IMPORTED_MODULE_2__["default"]]
+    let views = [_views_lang_latin_verb_irregular_latin_verb_participle_irregular_view_js__WEBPACK_IMPORTED_MODULE_2__["default"]] // eslint-disable-line prefer-const
     if (homonym.inflections.some(i => this.supineEnabledHdwds.includes(i.word.value))) {
       views.push(_views_lang_latin_verb_irregular_latin_verb_supine_irregular_view_js__WEBPACK_IMPORTED_MODULE_3__["default"])
     }
@@ -15680,7 +15680,7 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_verb_irregular_latin
    * @return {View[]}
    */
   static linkedViewConstructors (homonym) {
-    const views = [_views_lang_latin_verb_irregular_latin_verb_participle_irregular_view_js__WEBPACK_IMPORTED_MODULE_2__["default"]]
+    let views = [_views_lang_latin_verb_irregular_latin_verb_participle_irregular_view_js__WEBPACK_IMPORTED_MODULE_2__["default"]] // eslint-disable-line prefer-const
     if (homonym.inflections.some(i => this.supineEnabledHdwds.includes(i.word.value))) {
       views.push(_views_lang_latin_verb_irregular_latin_verb_supine_irregular_view_js__WEBPACK_IMPORTED_MODULE_3__["default"])
     }
@@ -15763,7 +15763,7 @@ class LatinVerbParticipleIrregularView extends _views_lang_latin_verb_irregular_
    * @return {View[]}
    */
   static linkedViewConstructors (homonym) {
-    const views = [_views_lang_latin_verb_irregular_latin_verb_irregular_view_js__WEBPACK_IMPORTED_MODULE_2__["default"], _views_lang_latin_verb_irregular_latin_verb_irregular_voice_view_js__WEBPACK_IMPORTED_MODULE_3__["default"]]
+    let views = [_views_lang_latin_verb_irregular_latin_verb_irregular_view_js__WEBPACK_IMPORTED_MODULE_2__["default"], _views_lang_latin_verb_irregular_latin_verb_irregular_voice_view_js__WEBPACK_IMPORTED_MODULE_3__["default"]] // eslint-disable-line prefer-const
     if (homonym.inflections.some(i => this.supineEnabledHdwds.includes(i.word.value))) {
       views.push(_views_lang_latin_verb_irregular_latin_verb_supine_irregular_view_js__WEBPACK_IMPORTED_MODULE_4__["default"])
     }
