@@ -3123,7 +3123,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         // This is an irregular verb that was identified by a morphological analyzer
         return true
       } else if (inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word]) {
-        return this.irregularLemmas.get(pofs).some(item => inflection.modelCompareWords(item.word, inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value))
+        return this.irregularLemmas.get(pofs).some(item => item.word === inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
       }
     }
     return false
@@ -3142,7 +3142,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     const pofs = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value
     return Boolean(
       !this.isIrregular(inflection) ||
-      this.irregularLemmas.get(pofs).some(item => inflection.modelCompareWords(item.word, inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value))
+      this.irregularLemmas.get(pofs).some(item => item.word === inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
     )
   }
 
@@ -3156,7 +3156,7 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     for (const inflection of inflections) {
       const pofs = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value
       if (this.irregularLemmas.has(pofs)) {
-        const lemma = this.irregularLemmas.get(pofs).find(item => inflection.modelCompareWords(item.word, inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value))
+        const lemma = this.irregularLemmas.get(pofs).find(item => item.word === inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word].value)
         if (lemma) {
           lemmas.push(lemma)
         }
