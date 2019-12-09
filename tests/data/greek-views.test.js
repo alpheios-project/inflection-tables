@@ -121,4 +121,16 @@ describe('greek-views.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekGenderPronounView')
     expect(inflectionsViewSet.matchingViews[0].title).toEqual('Indefinite Pronoun Declension')
   })
+
+  it('6 - checked Greek Views - ὅδε - GreekGenderPronounView', async () => {
+    const inflectionsViewSet = await getInflectionSet('ὅδε')
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    
+    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekLemmaGenderPronounView')
+    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Demonstrative Pronoun Declension')
+  })
 })
