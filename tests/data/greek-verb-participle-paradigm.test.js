@@ -28,11 +28,11 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     jest.clearAllMocks()
   })
 
-  async function getInflectionSet(targetWord) {
+  async function getInflectionSet(targetWord, languageID) {
     const adapterTuftsRes = await ClientAdapters.morphology.tufts({
       method: 'getHomonym',
       params: {
-        languageID: Constants.LANG_GREEK,
+        languageID: languageID,
         word: targetWord
       }
     })
@@ -42,8 +42,9 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     return inflectionsViewSet
   }
 
+
   it('54 - checked Verb Particile Paradigm54 - ἄγοντος', async () => {
-    const inflectionsViewSet = await getInflectionSet('ἄγοντος')
+    const inflectionsViewSet = await getInflectionSet('ἄγοντος', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -55,10 +56,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm54')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ων, -ουσα, -ον (present and future active, uncontracted)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('55 - checked Verb Particile Paradigm55 - μενοῦν', async () => {
-    const inflectionsViewSet = await getInflectionSet('μενοῦν')
+    const inflectionsViewSet = await getInflectionSet('μενοῦν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -70,10 +73,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm55')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ῶν, -οῦσα, -οῦν (present and future active, ε- and ο-contract)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('56 - checked Verb Particile Paradigm56 - ὁρώσᾱ', async () => {
-    const inflectionsViewSet = await getInflectionSet('ὁρώσᾱ')
+    const inflectionsViewSet = await getInflectionSet('ὁρώσᾱ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -85,10 +90,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm56')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ῶν, -ῶσα, -ῶν (present and future active, α-contract)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('57 - checked Verb Particile Paradigm57 - λιπόν', async () => {
-    const inflectionsViewSet = await getInflectionSet('λιπόν')
+    const inflectionsViewSet = await getInflectionSet('λιπόν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -100,10 +107,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm57')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ών, -οῦσα, -όν (strong aorist active; present of εἰμί and εἶμι)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('58 - checked Verb Particile Paradigm58 - λύσαντᾰ', async () => {
-    const inflectionsViewSet = await getInflectionSet('λύσαντᾰ')
+    const inflectionsViewSet = await getInflectionSet('λύσαντᾰ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -115,10 +124,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm58')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ᾱς, -ᾶσα, -αν (weak aorist active)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('59 - checked Verb Particile Paradigm59 - ἱστάντε', async () => {
-    const inflectionsViewSet = await getInflectionSet('ἱστάντε')
+    const inflectionsViewSet = await getInflectionSet('ἱστάντε', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -130,10 +141,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm59')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -άς, -ᾶσα, -άν (μι-verb present and aorist active)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('60 - checked Verb Particile Paradigm60 - λυθέντος', async () => {
-    const inflectionsViewSet = await getInflectionSet('λυθέντος')
+    const inflectionsViewSet = await getInflectionSet('λυθέντος', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -145,10 +158,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm60')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -είς, -εῖσα, -έν')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('61 - checked Verb Particile Paradigm61 - διδόντοιν', async () => {
-    const inflectionsViewSet = await getInflectionSet('διδόντοιν')
+    const inflectionsViewSet = await getInflectionSet('διδόντοιν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -160,10 +175,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm61')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ούς, -οῦσᾰ, -όν (μι-verb active)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('62 - checked Verb Particile Paradigm62 - δεικνύντᾰ', async () => {
-    const inflectionsViewSet = await getInflectionSet('δεικνύντᾰ')
+    const inflectionsViewSet = await getInflectionSet('δεικνύντᾰ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -175,10 +192,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm62')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ύς, -ῦσᾰ, -ύν (μι-verb active)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('63 - checked Verb Particile Paradigm63 - λελοιπότων', async () => {
-    const inflectionsViewSet = await getInflectionSet('λελοιπότων')
+    const inflectionsViewSet = await getInflectionSet('λελοιπότων', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -190,10 +209,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm63')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ώς, -υῖᾰ, -ός (perfect active)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('64 - checked Verb Particile Paradigm64 - ἑστῶσαι', async () => {
-    const inflectionsViewSet = await getInflectionSet('ἑστῶσαι')
+    const inflectionsViewSet = await getInflectionSet('ἑστῶσαι', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -205,10 +226,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm64')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ώς, -ῶσα, -ός (some athematic perfects)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('65 - checked Verb Particile Paradigm65 - πεμπομένους', async () => {
-    const inflectionsViewSet = await getInflectionSet('πεμπομένους')
+    const inflectionsViewSet = await getInflectionSet('πεμπομένους', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -220,10 +243,12 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm65')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -μενος, -μένη, -μενον (all middle-passive and middle except perfect)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 
   it('66 - checked Verb Particile Paradigm66 - γεγραμμένοιν', async () => {
-    const inflectionsViewSet = await getInflectionSet('γεγραμμένοιν')
+    const inflectionsViewSet = await getInflectionSet('γεγραμμένοιν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -235,6 +260,8 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm).toBeDefined()
     expect(inflectionsViewSet.matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm66')
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -μένος, -μένη, -μένον (perfect middle-passive)')
+
+    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
   })
 })
 
