@@ -7,7 +7,7 @@ import { Constants, Feature, LanguageModelFactory } from 'alpheios-data-models'
 import ViewSetFactory from '@views/lib/view-set-factory.js'
 // import LanguageDatasetFactory from '@views/lib/language-dataset-factory.js'
 
-describe('greek-views.test.js', () => {
+describe('latin-views.test.js', () => {
   console.error = function () {}
   console.log = function () {}
   console.warn = function () {}
