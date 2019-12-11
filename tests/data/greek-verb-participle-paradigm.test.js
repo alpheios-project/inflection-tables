@@ -58,6 +58,8 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ων, -ουσα, -ον (present and future active, uncontracted)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('55 - checked Verb Particile Paradigm55 - μενοῦν', async () => {
@@ -75,6 +77,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ῶν, -οῦσα, -οῦν (present and future active, ε- and ο-contract)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('56 - checked Verb Particile Paradigm56 - ὁρώσᾱ', async () => {
@@ -92,6 +95,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ῶν, -ῶσα, -ῶν (present and future active, α-contract)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('57 - checked Verb Particile Paradigm57 - λιπόν', async () => {
@@ -109,6 +113,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ών, -οῦσα, -όν (strong aorist active; present of εἰμί and εἶμι)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('58 - checked Verb Particile Paradigm58 - λύσαντᾰ', async () => {
@@ -126,6 +131,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ᾱς, -ᾶσα, -αν (weak aorist active)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('59 - checked Verb Particile Paradigm59 - ἱστάντε', async () => {
@@ -143,6 +149,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -άς, -ᾶσα, -άν (μι-verb present and aorist active)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('60 - checked Verb Particile Paradigm60 - λυθέντος', async () => {
@@ -160,6 +167,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -είς, -εῖσα, -έν')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('61 - checked Verb Particile Paradigm61 - διδόντοιν', async () => {
@@ -177,6 +185,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ούς, -οῦσᾰ, -όν (μι-verb active)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('62 - checked Verb Particile Paradigm62 - δεικνύντᾰ', async () => {
@@ -194,6 +203,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ύς, -ῦσᾰ, -ύν (μι-verb active)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('63 - checked Verb Particile Paradigm63 - λελοιπότων', async () => {
@@ -211,6 +221,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ώς, -υῖᾰ, -ός (perfect active)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('64 - checked Verb Particile Paradigm64 - ἑστῶσαι', async () => {
@@ -228,6 +239,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -ώς, -ῶσα, -ός (some athematic perfects)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('65 - checked Verb Particile Paradigm65 - πεμπομένους', async () => {
@@ -245,6 +257,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -μενος, -μένη, -μενον (all middle-passive and middle except perfect)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 
   it('66 - checked Verb Particile Paradigm66 - γεγραμμένοιν', async () => {
@@ -262,6 +275,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     expect(inflectionsViewSet.matchingViews[0].paradigm.title).toEqual('Participles in -μένος, -μένη, -μένον (perfect middle-passive)')
 
     expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    expect(inflectionsViewSet.matchingViews[0].hasSuppParadigms).toBeFalsy()
   })
 })
 
