@@ -36,21 +36,33 @@ describe('greek-views.test.js', () => {
 
     expect(inflectionsViewSet.matchingViews.length).toEqual(4)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekNounView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Noun declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekNounView',
+      title: 'Noun declension',
+      linkedViewsLength: 0
+    })
 
-    expect(inflectionsViewSet.matchingViews[1].constructor.name).toEqual('GreekNounSimplifiedView')
-    expect(inflectionsViewSet.matchingViews[1].title).toEqual('Noun declension (simplified)')
-    expect(inflectionsViewSet.matchingViews[1].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekNounSimplifiedView',
+      title: 'Noun declension (simplified)',
+      linkedViewsLength: 0
+    })
 
-    expect(inflectionsViewSet.matchingViews[2].constructor.name).toEqual('GreekAdjectiveView')
-    expect(inflectionsViewSet.matchingViews[2].title).toEqual('Adjective declension')
-    expect(inflectionsViewSet.matchingViews[2].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekAdjectiveView',
+      title: 'Adjective declension',
+      linkedViewsLength: 0
+    })
 
-    expect(inflectionsViewSet.matchingViews[3].constructor.name).toEqual('GreekAdjectiveSimplifiedView')
-    expect(inflectionsViewSet.matchingViews[3].title).toEqual('Adjective declension (simplified)')
-    expect(inflectionsViewSet.matchingViews[3].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekAdjectiveSimplifiedView',
+      title: 'Adjective declension (simplified)',
+      linkedViewsLength: 0
+    })
   })
 
   it('2 - checked Greek Views - οἱ - GreekArticleView, GreekGenderPronounView, GreekPersonPronounView', async () => {
@@ -62,17 +74,26 @@ describe('greek-views.test.js', () => {
 
     expect(inflectionsViewSet.matchingViews.length).toEqual(3)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekArticleView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Article Declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekArticleView',
+      title: 'Article Declension',
+      linkedViewsLength: 0
+    })
 
-    expect(inflectionsViewSet.matchingViews[1].constructor.name).toEqual('GreekGenderPronounView')
-    expect(inflectionsViewSet.matchingViews[1].title).toEqual('Relative Pronoun Declension')
-    expect(inflectionsViewSet.matchingViews[1].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekGenderPronounView',
+      title: 'Relative Pronoun Declension',
+      linkedViewsLength: 0
+    })
 
-    expect(inflectionsViewSet.matchingViews[2].constructor.name).toEqual('GreekPersonPronounView')
-    expect(inflectionsViewSet.matchingViews[2].title).toEqual('Personal Pronoun Declension')
-    expect(inflectionsViewSet.matchingViews[2].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekPersonPronounView',
+      title: 'Personal Pronoun Declension',
+      linkedViewsLength: 0
+    })
   })
 
   it('3 - checked Greek Views - αὐτὴν - GreekGenderPronounView', async () => {
@@ -83,9 +104,12 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekGenderPronounView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Intensive Pronoun Declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekGenderPronounView',
+      title: 'Intensive Pronoun Declension',
+      linkedViewsLength: 0
+    })
   })
 
   it('4 - checked Greek Views - φυήν - GreekNounView, GreekNounSimplifiedView', async () => {
@@ -96,13 +120,19 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
     expect(inflectionsViewSet.matchingViews.length).toEqual(2)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekNounView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Noun declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekNounView',
+      title: 'Noun declension',
+      linkedViewsLength: 0
+    })
 
-    expect(inflectionsViewSet.matchingViews[1].constructor.name).toEqual('GreekNounSimplifiedView')
-    expect(inflectionsViewSet.matchingViews[1].title).toEqual('Noun declension (simplified)')
-    expect(inflectionsViewSet.matchingViews[1].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekNounSimplifiedView',
+      title: 'Noun declension (simplified)',
+      linkedViewsLength: 0
+    })
   })
 
   it('5 - checked Greek Views - τις - GreekGenderPronounView', async () => {
@@ -113,9 +143,12 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekGenderPronounView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Indefinite Pronoun Declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekGenderPronounView',
+      title: 'Indefinite Pronoun Declension',
+      linkedViewsLength: 0
+    })
   })
 
   it('6 - checked Greek Views - ὅδε - GreekLemmaGenderPronounView', async () => {
@@ -126,9 +159,12 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekLemmaGenderPronounView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Demonstrative Pronoun Declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekLemmaGenderPronounView',
+      title: 'Demonstrative Pronoun Declension',
+      linkedViewsLength: 0
+    })
   })
 
   it('7 - checked Greek Views - αὑτῶν - GreekPersonGenderPronounView', async () => {
@@ -139,9 +175,12 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekPersonGenderPronounView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Reflexive Pronoun Declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekPersonGenderPronounView',
+      title: 'Reflexive Pronoun Declension',
+      linkedViewsLength: 0
+    })
   })
 
   it('8 - checked Greek Views - τοὺς - GreekArticleView', async () => {
@@ -152,9 +191,12 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekArticleView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Article Declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekArticleView',
+      title: 'Article Declension',
+      linkedViewsLength: 0
+    })
   })
 
   it('9 - checked Greek Views - αὐτοῖς - GreekGenderPronounView, GreekPersonGenderPronounView', async () => {
@@ -165,13 +207,19 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
     expect(inflectionsViewSet.matchingViews.length).toEqual(2)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekGenderPronounView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Intensive Pronoun Declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekGenderPronounView',
+      title: 'Intensive Pronoun Declension',
+      linkedViewsLength: 0
+    })
 
-    expect(inflectionsViewSet.matchingViews[1].constructor.name).toEqual('GreekPersonGenderPronounView')
-    expect(inflectionsViewSet.matchingViews[1].title).toEqual('Reflexive Pronoun Declension')
-    expect(inflectionsViewSet.matchingViews[1].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekPersonGenderPronounView',
+      title: 'Reflexive Pronoun Declension',
+      linkedViewsLength: 0
+    })
   })
 
   it('10 - checked Greek Views - δύο - GreekNumeralView', async () => {
@@ -182,8 +230,11 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
     
-    expect(inflectionsViewSet.matchingViews[0].constructor.name).toEqual('GreekNumeralView')
-    expect(inflectionsViewSet.matchingViews[0].title).toEqual('Numeral declension')
-    expect(inflectionsViewSet.matchingViews[0].linkedViews.length).toEqual(0)
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekNumeralView',
+      title: 'Numeral declension',
+      linkedViewsLength: 0
+    })
   })
 })
