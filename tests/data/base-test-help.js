@@ -29,13 +29,39 @@ export default class BaseTestHelp {
 
     expect(data.view.linkedViews.length).toEqual(0)
 
-    if (!data.hasSuppParadigms) {
-      expect(data.view.hasSuppParadigms).toBeFalsy()
-    } else {
-      expect(data.view.hasSuppParadigms).toBeTruthy()
-      data.suppParadigms.forEach((paradigmID, paradigmIndex) => {
-        expect(data.view.suppParadigms[paradigmIndex].paradigmID).toEqual(paradigmID)
-      })
+    if (typeof data.hasSuppParadigms !== 'undefined') {
+      if (!data.hasSuppParadigms) {
+        expect(data.view.hasSuppParadigms).toBeFalsy()
+      } else {
+        expect(data.view.hasSuppParadigms).toBeTruthy()
+        data.suppParadigms.forEach((paradigmID, paradigmIndex) => {
+            expect(data.view.suppParadigms[paradigmIndex].paradigmID).toEqual(paradigmID)
+        })
+      }
+    }
+  }
+
+  static checkView(data) {
+    const result = data.inflectionsViewSet.matchingViews.filter(view => view.constructor.name === data.viewName)
+    expect(result.length).toBeGreaterThanOrEqual(1)
+    
+    if (data.title) {
+      expect(result[0].title).toEqual(data.title)
+    }
+
+    if (data.additionalTitle) {
+      expect(result[0].additionalTitle).toEqual(data.additionalTitle)
+    }
+
+    if (typeof data.linkedViewsLength !== 'undefined') {
+      expect(result[0].linkedViews.length).toEqual(data.linkedViewsLength)
+
+      if (data.linkedViews) {
+        data.linkedViews.forEach( (viewData, viewIndex) => {
+            expect(result[0].linkedViews[viewIndex].constructor.name).toEqual(viewData.viewName)
+            expect(result[0].linkedViews[viewIndex].title).toEqual(viewData.title)
+        })
+      }
     }
   }
 }
