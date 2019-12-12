@@ -1,11 +1,10 @@
 /* eslint-env jest */
 /* eslint-disable no-unused-vars */
-import 'whatwg-fetch'
-import { ClientAdapters } from 'alpheios-client-adapters'
 import { Constants, Feature, LanguageModelFactory } from 'alpheios-data-models'
 
-import ViewSetFactory from '@views/lib/view-set-factory.js'
 // import LanguageDatasetFactory from '@views/lib/language-dataset-factory.js'
+
+import BaseTestHelp from '@tests/data/base-test-help.js'
 
 describe('greek-views.test.js', () => {
   console.error = function () {}
@@ -28,22 +27,8 @@ describe('greek-views.test.js', () => {
     jest.clearAllMocks()
   })
 
-  async function getInflectionSet(targetWord, languageID) {
-    const adapterTuftsRes = await ClientAdapters.morphology.tufts({
-      method: 'getHomonym',
-      params: {
-        languageID: languageID,
-        word: targetWord
-      }
-    })
-  
-    const testHomonym = adapterTuftsRes.result
-    const inflectionsViewSet = ViewSetFactory.create(testHomonym, locale)
-    return inflectionsViewSet
-  }
-
   it('1 - checked Greek Views - πᾶσι - GreekNounView, GreekNounSimplifiedView, GreekAdjectiveView, GreekAdjectiveSimplifiedView', async () => {
-    const inflectionsViewSet = await getInflectionSet('πᾶσι', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πᾶσι', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -69,7 +54,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('2 - checked Greek Views - οἱ - GreekArticleView, GreekGenderPronounView, GreekPersonPronounView', async () => {
-    const inflectionsViewSet = await getInflectionSet('οἱ', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('οἱ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -91,7 +76,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('3 - checked Greek Views - αὐτὴν - GreekGenderPronounView', async () => {
-    const inflectionsViewSet = await getInflectionSet('αὐτὴν', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('αὐτὴν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -104,7 +89,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('4 - checked Greek Views - φυήν - GreekNounView, GreekNounSimplifiedView', async () => {
-    const inflectionsViewSet = await getInflectionSet('φυήν', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('φυήν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -121,7 +106,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('5 - checked Greek Views - τις - GreekGenderPronounView', async () => {
-    const inflectionsViewSet = await getInflectionSet('τις', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τις', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -134,7 +119,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('6 - checked Greek Views - ὅδε - GreekLemmaGenderPronounView', async () => {
-    const inflectionsViewSet = await getInflectionSet('ὅδε', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ὅδε', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -147,7 +132,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('7 - checked Greek Views - αὑτῶν - GreekPersonGenderPronounView', async () => {
-    const inflectionsViewSet = await getInflectionSet('αὑτῶν', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('αὑτῶν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -160,7 +145,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('8 - checked Greek Views - τοὺς - GreekArticleView', async () => {
-    const inflectionsViewSet = await getInflectionSet('τοὺς', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τοὺς', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -173,7 +158,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('9 - checked Greek Views - αὐτοῖς - GreekGenderPronounView, GreekPersonGenderPronounView', async () => {
-    const inflectionsViewSet = await getInflectionSet('αὐτοῖς', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('αὐτοῖς', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -190,7 +175,7 @@ describe('greek-views.test.js', () => {
   })
 
   it('10 - checked Greek Views - δύο - GreekNumeralView', async () => {
-    const inflectionsViewSet = await getInflectionSet('δύο', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δύο', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 

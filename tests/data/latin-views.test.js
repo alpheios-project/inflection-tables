@@ -1,11 +1,10 @@
 /* eslint-env jest */
 /* eslint-disable no-unused-vars */
-import 'whatwg-fetch'
-import { ClientAdapters } from 'alpheios-client-adapters'
 import { Constants, Feature, LanguageModelFactory } from 'alpheios-data-models'
 
-import ViewSetFactory from '@views/lib/view-set-factory.js'
 // import LanguageDatasetFactory from '@views/lib/language-dataset-factory.js'
+
+import BaseTestHelp from '@tests/data/base-test-help.js'
 
 describe('latin-views.test.js', () => {
   console.error = function () {}
@@ -28,22 +27,8 @@ describe('latin-views.test.js', () => {
     jest.clearAllMocks()
   })
 
-  async function getInflectionSet(targetWord, languageID) {
-    const adapterTuftsRes = await ClientAdapters.morphology.tufts({
-      method: 'getHomonym',
-      params: {
-        languageID: languageID,
-        word: targetWord
-      }
-    })
-  
-    const testHomonym = adapterTuftsRes.result
-    const inflectionsViewSet = ViewSetFactory.create(testHomonym, locale)
-    return inflectionsViewSet
-  }
-
   it('1 - checked Latin Views - curru - LatinNounView', async () => {
-    const inflectionsViewSet = await getInflectionSet('curru', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('curru', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -57,7 +42,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('2 - checked Latin Views - nitido - LatinAdjectiveView', async () => {
-    const inflectionsViewSet = await getInflectionSet('nitido', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('nitido', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -71,7 +56,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('3 - checked Latin Views - iugandis - LatinVerbParticipleView', async () => {
-    const inflectionsViewSet = await getInflectionSet('iugandis', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('iugandis', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -85,7 +70,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('4 - checked Latin Views - servet - Latin Verb Conjugation', async () => {
-    const inflectionsViewSet = await getInflectionSet('servet', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('servet', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -119,7 +104,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('5 - checked Latin Views - cecinisse - Latin Verb Conjugation Infinitive', async () => {
-    const inflectionsViewSet = await getInflectionSet('cecinisse', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('cecinisse', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -157,7 +142,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('6 - checked Latin Views - marita - Latin Verb Conjugation Imperative', async () => {
-    const inflectionsViewSet = await getInflectionSet('marita', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('marita', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -203,7 +188,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('7 - checked Latin Views - cursu - LatinSupineView', async () => {
-    const inflectionsViewSet = await getInflectionSet('cursu', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('cursu', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -221,7 +206,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('8 - checked Latin Views - colendi - LatinVerbParticipleView', async () => {
-    const inflectionsViewSet = await getInflectionSet('colendi', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('colendi', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -235,7 +220,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('9 - checked Latin Views - iam - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('iam', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('iam', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -281,7 +266,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('10 - checked Latin Views - sum - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('sum', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('sum', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -329,7 +314,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('11 - checked Latin Views - possum - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('possum', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('possum', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -372,7 +357,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('12 - checked Latin Views - volui - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('volui', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('volui', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -420,7 +405,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('13 - checked Latin Views - nolo - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('nolo', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('nolo', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -463,7 +448,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('14 - checked Latin Views - maluerimus - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('maluerimus', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('maluerimus', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -506,7 +491,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('15 - checked Latin Views - tuleritis - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('tuleritis', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('tuleritis', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -552,7 +537,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('16 - checked Latin Views - tuleritis - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('tuleritis', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('tuleritis', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -598,7 +583,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('17 - checked Latin Views - veneo - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('veneo', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('veneo', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -644,7 +629,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('18 - checked Latin Views - ineo - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('ineo', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ineo', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -690,7 +675,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('19 - checked Latin Views - adeo - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('adeo', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('adeo', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -736,7 +721,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('20 - checked Latin Views - nequeo - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('nequeo', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('nequeo', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -782,7 +767,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('21 - checked Latin Views - queo - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('queo', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('queo', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -828,7 +813,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('22 - checked Latin Views - praefuistis - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('praefuistis', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('praefuistis', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -871,7 +856,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('23 - checked Latin Views - obsum - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('obsum', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('obsum', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -914,7 +899,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('24 - checked Latin Views - inerimus - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('inerimus', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('inerimus', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -957,7 +942,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('25 - checked Latin Views - supersum - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('supersum', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('supersum', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -1000,7 +985,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('26 - checked Latin Views - subsum - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('subsum', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('subsum', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -1043,7 +1028,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('27 - checked Latin Views - adfuimus - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('adfuimus', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('adfuimus', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -1086,7 +1071,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('28 - checked Latin Views - afueras - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('afueras', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('afueras', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -1129,7 +1114,7 @@ describe('latin-views.test.js', () => {
   })
 
   it('29 - checked Latin Views - proderitis - Latin Verb Conjugation Irregular', async () => {
-    const inflectionsViewSet = await getInflectionSet('proderitis', Constants.LANG_LATIN)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('proderitis', Constants.LANG_LATIN)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 

@@ -1,10 +1,7 @@
 /* eslint-env jest */
 /* eslint-disable no-unused-vars */
-import 'whatwg-fetch'
-import { ClientAdapters } from 'alpheios-client-adapters'
 import { Constants, Feature, LanguageModelFactory } from 'alpheios-data-models'
-
-import ViewSetFactory from '@views/lib/view-set-factory.js'
+import BaseTestHelp from '@tests/data/base-test-help.js'
 // import LanguageDatasetFactory from '@views/lib/language-dataset-factory.js'
 
 describe('greek-verb-participle-paradigm.test.js', () => {
@@ -28,23 +25,9 @@ describe('greek-verb-participle-paradigm.test.js', () => {
     jest.clearAllMocks()
   })
 
-  async function getInflectionSet(targetWord, languageID) {
-    const adapterTuftsRes = await ClientAdapters.morphology.tufts({
-      method: 'getHomonym',
-      params: {
-        languageID: languageID,
-        word: targetWord
-      }
-    })
-  
-    const testHomonym = adapterTuftsRes.result
-    const inflectionsViewSet = ViewSetFactory.create(testHomonym, locale)
-    return inflectionsViewSet
-  }
-
 
   it('54 - checked Verb Particile Paradigm54 - ἄγοντος', async () => {
-    const inflectionsViewSet = await getInflectionSet('ἄγοντος', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἄγοντος', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -63,7 +46,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('55 - checked Verb Particile Paradigm55 - μενοῦν', async () => {
-    const inflectionsViewSet = await getInflectionSet('μενοῦν', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μενοῦν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -81,7 +64,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('56 - checked Verb Particile Paradigm56 - ὁρώσᾱ', async () => {
-    const inflectionsViewSet = await getInflectionSet('ὁρώσᾱ', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ὁρώσᾱ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -99,7 +82,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('57 - checked Verb Particile Paradigm57 - λιπόν', async () => {
-    const inflectionsViewSet = await getInflectionSet('λιπόν', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λιπόν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -117,7 +100,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('58 - checked Verb Particile Paradigm58 - λύσαντᾰ', async () => {
-    const inflectionsViewSet = await getInflectionSet('λύσαντᾰ', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λύσαντᾰ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -135,7 +118,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('59 - checked Verb Particile Paradigm59 - ἱστάντε', async () => {
-    const inflectionsViewSet = await getInflectionSet('ἱστάντε', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἱστάντε', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -153,7 +136,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('60 - checked Verb Particile Paradigm60 - λυθέντος', async () => {
-    const inflectionsViewSet = await getInflectionSet('λυθέντος', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λυθέντος', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -171,7 +154,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('61 - checked Verb Particile Paradigm61 - διδόντοιν', async () => {
-    const inflectionsViewSet = await getInflectionSet('διδόντοιν', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('διδόντοιν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -189,7 +172,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('62 - checked Verb Particile Paradigm62 - δεικνύντᾰ', async () => {
-    const inflectionsViewSet = await getInflectionSet('δεικνύντᾰ', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δεικνύντᾰ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -207,7 +190,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('63 - checked Verb Particile Paradigm63 - λελοιπότων', async () => {
-    const inflectionsViewSet = await getInflectionSet('λελοιπότων', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λελοιπότων', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -225,7 +208,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('64 - checked Verb Particile Paradigm64 - ἑστῶσαι', async () => {
-    const inflectionsViewSet = await getInflectionSet('ἑστῶσαι', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἑστῶσαι', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -243,7 +226,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('65 - checked Verb Particile Paradigm65 - πεμπομένους', async () => {
-    const inflectionsViewSet = await getInflectionSet('πεμπομένους', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πεμπομένους', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
@@ -261,7 +244,7 @@ describe('greek-verb-participle-paradigm.test.js', () => {
   })
 
   it('66 - checked Verb Particile Paradigm66 - γεγραμμένοιν', async () => {
-    const inflectionsViewSet = await getInflectionSet('γεγραμμένοιν', Constants.LANG_GREEK)
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γεγραμμένοιν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
 
