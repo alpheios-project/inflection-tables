@@ -1,5 +1,5 @@
 import { Constants, Feature } from 'alpheios-data-models'
-import Paradigm from '@lib/paradigm.js'
+import Paradigm from '@/paradigm/lib/paradigm.js'
 import View from '@views/lib/view.js'
 import GreekView from '@views/lang/greek/greek-view.js'
 

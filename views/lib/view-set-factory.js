@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { Constants, LanguageModelFactory as LMF } from 'alpheios-data-models'
 import ViewSet from './view-set.js'
 import LatinViewSet from '../lang/latin/latin-view-set.js'
@@ -6,14 +7,14 @@ import GreekViewSet from '../lang/greek/greek-view-set.js'
 export default class ViewSetFactory {
   static create (homonym) {
     let viewSet
-    try {
-      const Constructor = this.getConstructor(homonym.languageID)
-      viewSet = new Constructor(homonym)
-    } catch (e) {
+    /* try { */
+    const Constructor = this.getConstructor(homonym.languageID)
+    viewSet = new Constructor(homonym)
+    /* } catch (e) {
       console.error(`Cannot build inflection tables: ${e}`)
       // Create an empty ViewSet with no inflection data
       viewSet = new ViewSet()
-    }
+    } */
     return viewSet
   }
 

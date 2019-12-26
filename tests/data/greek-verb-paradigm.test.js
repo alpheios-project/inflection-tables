@@ -7,10 +7,11 @@ import BaseTestHelp from '@tests/data/base-test-help.js'
 // import LanguageDatasetFactory from '@views/lib/language-dataset-factory.js'
 
 describe('greek-verb-paradigm.test.js', () => {
+  /*
   console.error = function () {}
   console.log = function () {}
   console.warn = function () {}
-
+  */
   const locale = "en-US"
   beforeAll(async () => {
   })
@@ -30,6 +31,7 @@ describe('greek-verb-paradigm.test.js', () => {
   it('1 - checked Verb Paradigm1 - βουλεύῃς', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('βουλεύῃς', Constants.LANG_GREEK)
 
+    // console.info(inflectionsViewSet)
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
 
@@ -43,8 +45,8 @@ describe('greek-verb-paradigm.test.js', () => {
       suppParadigms: [ 'verbpdgm54' ]
     })
   })
-
-  it('2 - checked Verb Paradigm2 - βουλευέσθων', async () => {
+/*
+  it.skip('2 - checked Verb Paradigm2 - βουλευέσθων', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('βουλευέσθων', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -64,7 +66,7 @@ describe('greek-verb-paradigm.test.js', () => {
    
   })
 
-  it('4, 8, 9 - checked Verb Paradigm4, 8, 9 - βουλεύσω', async () => {
+  it.skip('4, 8, 9 - checked Verb Paradigm4, 8, 9 - βουλεύσω', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('βουλεύσω', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -101,7 +103,7 @@ describe('greek-verb-paradigm.test.js', () => {
   it.skip('5 - no matchesx - checked Verb Paradigm5', async () => {
   })
 
-  it('6 - checked Verb Paradigm6 - ἀγάγοις', async () => {
+  it.skip('6 - checked Verb Paradigm6 - ἀγάγοις', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀγάγοις', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -117,7 +119,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('7 - checked Verb Paradigm7 - ἀγαγοῦ', async () => {
+  it.skip('7 - checked Verb Paradigm7 - ἀγαγοῦ', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀγαγοῦ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -133,7 +135,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('10 - checked Verb Paradigm10 - βουλευθῇς', async () => {
+  it.skip('10 - checked Verb Paradigm10 - βουλευθῇς', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('βουλευθῇς', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -149,7 +151,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('11 - checked Verb Paradigm11 - λελοίπῃ', async () => {
+  it.skip('11 - checked Verb Paradigm11 - λελοίπῃ', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λελοίπῃ', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -165,7 +167,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('12 - checked Verb Paradigm12 - γέγραψαι', async () => {
+  it.skip('12 - checked Verb Paradigm12 - γέγραψαι', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γέγραψαι', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -180,7 +182,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('13, 14 - checked Verb Paradigm13, 14 - μεμνῶμαι', async () => {
+  it.skip('13, 14 - checked Verb Paradigm13, 14 - μεμνῶμαι', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μεμνῶμαι', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -203,7 +205,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('15 - checked Verb Paradigm15 - ἐγέγραψο', async () => {
+  it.skip('15 - checked Verb Paradigm15 - ἐγέγραψο', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐγέγραψο', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -218,7 +220,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('16 - checked Verb Paradigm16 - τεθνήξεις', async () => {
+  it.skip('16 - checked Verb Paradigm16 - τεθνήξεις', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τεθνήξεις', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
@@ -234,7 +236,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('17 - checked Verb Paradigm17 - ἕσταθι', async () => {
+  it.skip('17 - checked Verb Paradigm17 - ἕσταθι', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἕσταθι', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -251,7 +253,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('17b - checked Verb Paradigm17b - τέθνατον', async () => {
+  it.skip('17b - checked Verb Paradigm17b - τέθνατον', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τέθνατον', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -268,7 +270,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('17c - checked Verb Paradigm17c - δέδιμεν', async () => {
+  it.skip('17c - checked Verb Paradigm17c - δέδιμεν', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δέδιμεν', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -285,7 +287,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('18 - checked Verb Paradigm18 - ποιεῖτον', async () => {
+  it.skip('18 - checked Verb Paradigm18 - ποιεῖτον', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ποιεῖτον', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -302,7 +304,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('19 - checked Verb Paradigm19 - ἔπλει', async () => {
+  it.skip('19 - checked Verb Paradigm19 - ἔπλει', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἔπλει', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -319,7 +321,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('20, 27 - checked Verb Paradigm20, 27 - ἐποιοῦ', async () => {
+  it.skip('20, 27 - checked Verb Paradigm20, 27 - ἐποιοῦ', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐποιοῦ', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -345,7 +347,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('20, 21 - checked Verb Paradigm 20, 21 - ἐδέοντο', async () => {
+  it.skip('20, 21 - checked Verb Paradigm 20, 21 - ἐδέοντο', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐδέοντο', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -371,7 +373,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('22 - checked Verb Paradigm 22 - ὁρᾷς', async () => {
+  it.skip('22 - checked Verb Paradigm 22 - ὁρᾷς', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ὁρᾷς', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -388,7 +390,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('22, 23 - checked Verb Paradigm 22, 23 - χρῷμεν', async () => {
+  it.skip('22, 23 - checked Verb Paradigm 22, 23 - χρῷμεν', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χρῷμεν', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -414,7 +416,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('24 - checked Verb Paradigm 24 - ἑωρᾶσθον', async () => {
+  it.skip('24 - checked Verb Paradigm 24 - ἑωρᾶσθον', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἑωρᾶσθον', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -431,7 +433,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('24, 25 - checked Verb Paradigm 24, 25 - χρῷντο', async () => {
+  it.skip('24, 25 - checked Verb Paradigm 24, 25 - χρῷντο', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χρῷντο', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -457,7 +459,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('26 - checked Verb Paradigm 26 - δηλοῖς', async () => {
+  it.skip('26 - checked Verb Paradigm 26 - δηλοῖς', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δηλοῖς', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -474,7 +476,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('27 - checked Verb Paradigm 27 - δηλοῦσθον', async () => {
+  it.skip('27 - checked Verb Paradigm 27 - δηλοῦσθον', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δηλοῦσθον', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -491,7 +493,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('28 - checked Verb Paradigm 28 - ἐτιθέτην', async () => {
+  it.skip('28 - checked Verb Paradigm 28 - ἐτιθέτην', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐτιθέτην', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -508,7 +510,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('29 - checked Verb Paradigm 29 - τιθέσθων', async () => {
+  it.skip('29 - checked Verb Paradigm 29 - τιθέσθων', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τιθέσθων', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -525,7 +527,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('30 - checked Verb Paradigm 30 - ἔθεσαν', async () => {
+  it.skip('30 - checked Verb Paradigm 30 - ἔθεσαν', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἔθεσαν', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -542,7 +544,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('31 - checked Verb Paradigm 31 - ἐθέμεθα', async () => {
+  it.skip('31 - checked Verb Paradigm 31 - ἐθέμεθα', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐθέμεθα', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -559,7 +561,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('32 - checked Verb Paradigm 32 - ἵην', async () => {
+  it.skip('32 - checked Verb Paradigm 32 - ἵην', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἵην', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -576,7 +578,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('33 - checked Verb Paradigm 33 - ἵεσθον', async () => {
+  it.skip('33 - checked Verb Paradigm 33 - ἵεσθον', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἵεσθον', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -599,7 +601,7 @@ describe('greek-verb-paradigm.test.js', () => {
   it.skip('35 - no matches - checked Verb Paradigm 35', async () => {
   })
 
-  it('36 - checked Verb Paradigm 36 - διδῷ', async () => {
+  it.skip('36 - checked Verb Paradigm 36 - διδῷ', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('διδῷ', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -616,7 +618,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('37 - checked Verb Paradigm 37 - διδοῖο', async () => {
+  it.skip('37 - checked Verb Paradigm 37 - διδοῖο', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('διδοῖο', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -633,7 +635,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('38 - checked Verb Paradigm 38 - ἔδοτον', async () => {
+  it.skip('38 - checked Verb Paradigm 38 - ἔδοτον', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἔδοτον', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -650,7 +652,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('39 - checked Verb Paradigm 39 - δῶται', async () => {
+  it.skip('39 - checked Verb Paradigm 39 - δῶται', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δῶται', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -667,7 +669,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('40, 22 - checked Verb Paradigm 40, 22 - ἱστάτην', async () => {
+  it.skip('40, 22 - checked Verb Paradigm 40, 22 - ἱστάτην', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἱστάτην', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -693,7 +695,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('41 - checked Verb Paradigm 41 - ἵσταται', async () => {
+  it.skip('41 - checked Verb Paradigm 41 - ἵσταται', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἵσταται', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -710,7 +712,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('42 - checked Verb Paradigm 42 - ἐστήτην', async () => {
+  it.skip('42 - checked Verb Paradigm 42 - ἐστήτην', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐστήτην', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -727,7 +729,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('43 - checked Verb Paradigm 43 - ἐδύνατο', async () => {
+  it.skip('43 - checked Verb Paradigm 43 - ἐδύνατο', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐδύνατο', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -744,7 +746,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('43b - checked Verb Paradigm 43b - ἐπίστησθε', async () => {
+  it.skip('43b - checked Verb Paradigm 43b - ἐπίστησθε', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐπίστησθε', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -761,7 +763,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('44 - checked Verb Paradigm 44 - ἐδείκνῠτε', async () => {
+  it.skip('44 - checked Verb Paradigm 44 - ἐδείκνῠτε', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἐδείκνῠτε', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -778,7 +780,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('45 - checked Verb Paradigm 45 - δείκνῠται', async () => {
+  it.skip('45 - checked Verb Paradigm 45 - δείκνῠται', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δείκνῠται', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -795,7 +797,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('46 - checked Verb Paradigm 46 - ἔστων', async () => {
+  it.skip('46 - checked Verb Paradigm 46 - ἔστων', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἔστων', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -812,7 +814,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('47 - checked Verb Paradigm 47 - ἴτων', async () => {
+  it.skip('47 - checked Verb Paradigm 47 - ἴτων', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἴτων', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -829,7 +831,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('48 - checked Verb Paradigm 48 - φαίης', async () => {
+  it.skip('48 - checked Verb Paradigm 48 - φαίης', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('φαίης', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -846,7 +848,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('49 - checked Verb Paradigm 49 - βήτω', async () => {
+  it.skip('49 - checked Verb Paradigm 49 - βήτω', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('βήτω', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -863,7 +865,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('50, 51 - checked Verb Paradigm 50, 51 - γνῶτον', async () => {
+  it.skip('50, 51 - checked Verb Paradigm 50, 51 - γνῶτον', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γνῶτον', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -889,7 +891,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('52 - checked Verb Paradigm 52 - δῦθι', async () => {
+  it.skip('52 - checked Verb Paradigm 52 - δῦθι', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δῦθι', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -906,7 +908,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('53 - checked Verb Paradigm 53 - ᾔδεις', async () => {
+  it.skip('53 - checked Verb Paradigm 53 - ᾔδεις', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ᾔδεις', Constants.LANG_GREEK)
     // console.info(inflectionsViewSet.matchingViews)
     
@@ -922,6 +924,6 @@ describe('greek-verb-paradigm.test.js', () => {
       suppParadigms: [ 'verbpdgm63' ]
     })
   })
-
+*/
 })
 
