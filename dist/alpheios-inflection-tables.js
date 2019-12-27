@@ -2363,42 +2363,20 @@ class LanguageDataset {
     return { fullMatch: result, matchedItems: matches }
   }
 
-  /**
-   * Sets inflection grammar properties based on inflection data
-   * @param {Inflection} inflection - An inflection data object
-   * @param {Lemma} lemma
-   * @return {Inflection} A modified inflection data object
-   */
-  setInflectionData (inflection, lemma) {
-    /*
-     Sets possible constraints by language model. It uses part of speech matching mostly.
-     However, language model cannot always determine those constraints reliably.
-     In that case it will return a list of all possible constraints and we would need
-     to verify with ones hold and which ones not. For example, verbs in Latin
-     can be both suffix based and full form based. A language model will return both
-     suffixBased and fullFormBased flags set to true and we will need to determine
-     which one of those makes sense for each particular verb.
-     */
-
-    _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_9__["default"].setParadigmInflectionData(this.pos, inflection, lemma)
-
-    let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
-
-    if (!partOfSpeech) {
-      throw new Error('Part of speech data is missing in an inflection')
-    }
-
-    if (!partOfSpeech.isSingle) {
-      throw new Error('Part of speech data should have only one value')
-    }
-    partOfSpeech = partOfSpeech.value
-
-    // add the lemma to the inflection before setting inflection constraints
+  setBaseInflectionData (inflection, lemma) {
     inflection.lemma = lemma
     inflection.addFeature(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word, lemma.word, lemma.languageID))
-
     inflection.constraints = this.model.getInflectionConstraints(inflection)
 
+    inflection.constraints.implemented = this.isImplemented(inflection)
+    if (inflection.constraints.implemented) {
+      inflection.constraints.obligatoryMatches = this.constructor.getObligatoryMatchList(inflection)
+      inflection.constraints.optionalMatches = this.constructor.getOptionalMatchList(inflection)
+      inflection.constraints.morphologyMatches = this.constructor.getMorphologyMatchList(inflection)
+    }
+  }
+
+  setPronounInflectionData (partOfSpeech, inflection) {
     if (inflection.constraints.pronounClassRequired) {
       /*
       A `class` grammatical feature is an obligatory match for Greek pronouns. Class, however, is not present in
@@ -2417,7 +2395,9 @@ class LanguageDataset {
         inflection.addFeature(grmClasses)
       }
     }
+  }
 
+  setIrregularInflectionData (inflection) {
     // Check if this is an irregular word after a `word` feature is added
     inflection.constraints.irregular = this.isIrregular(inflection)
     if (inflection.constraints.irregular) {
@@ -2425,9 +2405,45 @@ class LanguageDataset {
       inflection.constraints.fullFormBased = true
       // inflection.constraints.suffixBased = false // Turn this on to not show regular tables for irregular verbs
     }
-    inflection.constraints.implemented = this.isImplemented(inflection)
+  }
 
-    if (inflection.constraints.implemented) {
+  /**
+   * Sets inflection grammar properties based on inflection data
+   * @param {Inflection} inflection - An inflection data object
+   * @param {Lemma} lemma
+   * @return {Inflection} A modified inflection data object
+   */
+  setInflectionData (inflection, lemma) {
+    /*
+     Sets possible constraints by language model. It uses part of speech matching mostly.
+     However, language model cannot always determine those constraints reliably.
+     In that case it will return a list of all possible constraints and we would need
+     to verify with ones hold and which ones not. For example, verbs in Latin
+     can be both suffix based and full form based. A language model will return both
+     suffixBased and fullFormBased flags set to true and we will need to determine
+     which one of those makes sense for each particular verb.
+     */
+
+    let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
+
+    if (!partOfSpeech) {
+      throw new Error('Part of speech data is missing in an inflection')
+    }
+
+    if (!partOfSpeech.isSingle) {
+      throw new Error('Part of speech data should have only one value')
+    }
+    partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value
+
+    this.setBaseInflectionData(inflection, lemma)
+    this.setPronounInflectionData(partOfSpeech, inflection)
+    this.setIrregularInflectionData(inflection)
+
+    if (this.languageID === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK) {
+      _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_9__["default"].setParadigmInflectionData(this.pos, inflection)
+    }
+
+    if (inflection.constraints.implemented && !inflection.constraints.paradigmBased) {
       if (!this.pos.get(partOfSpeech)) {
         // There is no source data for this part of speech
         console.warn(`There is no source data for the following part of speech: ${partOfSpeech}`)
@@ -2438,23 +2454,22 @@ class LanguageDataset {
       // inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
 
       // Set match features data
-      inflection.constraints.obligatoryMatches = this.constructor.getObligatoryMatchList(inflection)
-      inflection.constraints.optionalMatches = this.constructor.getOptionalMatchList(inflection)
-      inflection.constraints.morphologyMatches = this.constructor.getMorphologyMatchList(inflection)
 
+      // console.info('inflection.constraints 3', inflection.constraints)
       /*
       Check if inflection if full form based if `fullFormBased` flag is set
       (i.e. inflection model knows it can be full form based)
       or if no other flags are set (we don't know what type of inflection it is and want to check all to figure out).
        */
-      if (inflection.constraints.fullFormBased || !(inflection.constraints.suffixBased /* || inflection.constraints.paradigmBased */)) {
+
+      if (inflection.constraints.fullFormBased || !inflection.constraints.suffixBased) {
         /*
-        If we don't know what inflection is based upon, let's assume
-        this inflection is full form based and let's try to find matching forms.
-        For this, we need set a `fullFormBased` flag on inflection temporarily
-        and clear it if no matching forms are found (because it cannot be based on full forms then).
-        This flag is required for matcher to compare full forms, not suffixes.
-         */
+          If we don't know what inflection is based upon, let's assume
+          this inflection is full form based and let's try to find matching forms.
+          For this, we need set a `fullFormBased` flag on inflection temporarily
+          and clear it if no matching forms are found (because it cannot be based on full forms then).
+          This flag is required for matcher to compare full forms, not suffixes.
+          */
         inflection.constraints.fullFormBased = true
         // TODO: This is done for almost every word and it does scan across many items. Need to optimize
         const hasMatchingForms = this.hasMatchingForms(partOfSpeech, inflection)
@@ -2464,16 +2479,20 @@ class LanguageDataset {
           // This cannot be a full form based inflection
           inflection.constraints.fullFormBased = false
         }
+        // console.info('inflection.constraints 4', inflection.constraints)
       }
 
       /*
-      If we did not figure out what type of inflection it is,
-      then it is probably suffix based as this type is more prevalent
-       */
+        If we did not figure out what type of inflection it is,
+        then it is probably suffix based as this type is more prevalent
+        */
       if (!inflection.constraints.fullFormBased && !inflection.constraints.paradigmBased) {
         // If it is not full form based, then probably it is suffix base
         inflection.constraints.suffixBased = true
+        // console.info('inflection.constraints 5', inflection.constraints)
       }
+
+      // console.info('inflection.constraints 6', inflection.constraints)
     }
     return inflection
   }
@@ -12677,28 +12696,13 @@ class GreekParadigmDataset {
     return footnotes
   }
 
-  static setParadigmInflectionData (pos, inflection, lemma) {
-    let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
-
-    if (!partOfSpeech) {
-      throw new Error('Part of speech data is missing in an inflection')
-    }
-
-    if (!partOfSpeech.isSingle) {
-      throw new Error('Part of speech data should have only one value')
-    }
-    partOfSpeech = partOfSpeech.value
-
-    inflection.constraints = this.model.getInflectionConstraints(inflection)
-    inflection.constraints.implemented = true
-    if (!pos.get(partOfSpeech)) {
-      return inflection
-    }
-    inflection.constraints.paradigmBased = pos.get(partOfSpeech).hasMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflection)
-    if (inflection.constraints.paradigmBased) {
-      inflection.constraints.fullFormBased = true
+  static setParadigmInflectionData (pos, inflection) {
+    let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value
+    if (pos.get(partOfSpeech)) {
+      inflection.constraints.paradigmBased = pos.get(partOfSpeech).hasMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflection)
     }
   }
+
 }
 
 /***/ }),
@@ -18204,6 +18208,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _view_set_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view-set.js */ "./views/lib/view-set.js");
 /* harmony import */ var _lang_latin_latin_view_set_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../lang/latin/latin-view-set.js */ "./views/lang/latin/latin-view-set.js");
 /* harmony import */ var _lang_greek_greek_view_set_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../lang/greek/greek-view-set.js */ "./views/lang/greek/greek-view-set.js");
+/* eslint-disable prefer-const */
 
 
 

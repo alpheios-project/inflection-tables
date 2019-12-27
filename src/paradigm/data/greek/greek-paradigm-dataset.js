@@ -172,27 +172,10 @@ export default class GreekParadigmDataset {
   }
 
   static setParadigmInflectionData (pos, inflection) {
-    let partOfSpeech = inflection[Feature.types.part]
-
-    if (!partOfSpeech) {
-      throw new Error('Part of speech data is missing in an inflection')
-    }
-
-    if (!partOfSpeech.isSingle) {
-      throw new Error('Part of speech data should have only one value')
-    }
-    partOfSpeech = partOfSpeech.value
-
-    inflection.constraints = this.model.getInflectionConstraints(inflection)
-    inflection.constraints.implemented = true
-
-    if (!pos.get(partOfSpeech)) {
-      return inflection
-    }
-    inflection.constraints.paradigmBased = pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
-
-    if (inflection.constraints.paradigmBased) {
-      // inflection.constraints.fullFormBased = true
+    let partOfSpeech = inflection[Feature.types.part].value
+    if (pos.get(partOfSpeech)) {
+      inflection.constraints.paradigmBased = pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
     }
   }
+
 }
