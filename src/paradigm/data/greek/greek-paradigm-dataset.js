@@ -178,4 +178,14 @@ export default class GreekParadigmDataset {
     }
   }
 
+  static createParadigmInflectionSet (sourceSet, inflections, inflectionSet) {
+    
+    const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
+
+    if (paradigmBased) {
+      const paradigms = sourceSet.getMatchingItems(Paradigm, inflections)
+      inflectionSet.addInflectionItems(paradigms)
+    }
+
+  }
 }
