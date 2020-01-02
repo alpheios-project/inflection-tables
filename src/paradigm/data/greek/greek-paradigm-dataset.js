@@ -10,6 +10,7 @@ import papaparse from 'papaparse'
 let typeFeatures = new Map()
 let typeFeaturesInitialized = false
 
+let pos = new Map()
 
 export default class GreekParadigmDataset {
   static get languageID () {
@@ -102,10 +103,12 @@ export default class GreekParadigmDataset {
       paradigm.sortRules()
       paradigm.addSuppTables(suppParadigmTables)
     }
+
+    console.info('setParadigmData - ')
     return Array.from(paradigms.values())
   }
 
-  static loadVerbParadigmData (pos) {
+  static loadVerbParadigmData () {
     const verbParadigmTables = GreekParadigmData.verbParadigmTables
     const verbParticipleParadigmTables = GreekParadigmData.verbParticipleParadigmTables
     const verbAndParticipleParadigmTables = new Map([...verbParadigmTables, ...verbParticipleParadigmTables])
@@ -117,11 +120,11 @@ export default class GreekParadigmDataset {
 
     // console.info(paradigms)
 
-    this.addParadigms(pos, partOfSpeech, paradigms)
-    this.addFootnotes(pos, partOfSpeech, Paradigm, papaparse.parse(GreekParadigmData.verbParadigmFootnotes, { skipEmptyLines: true }).data)
+    this.addParadigms(partOfSpeech, paradigms)
+    this.addFootnotes(partOfSpeech, Paradigm, papaparse.parse(GreekParadigmData.verbParadigmFootnotes, { skipEmptyLines: true }).data)
   }
 
-  static loadVerbParticipleParadigmData (pos) {
+  static loadVerbParticipleParadigmData () {
     const verbParadigmTables = GreekParadigmData.verbParadigmTables
     const verbParticipleParadigmTables = GreekParadigmData.verbParticipleParadigmTables
     const verbAndParticipleParadigmTables = new Map([...verbParadigmTables, ...verbParticipleParadigmTables])
@@ -131,17 +134,17 @@ export default class GreekParadigmDataset {
       partOfSpeech, verbParticipleParadigmTables,
       papaparse.parse(GreekParadigmData.verbParticipleParadigmRules, { skipEmptyLines: true }).data, verbAndParticipleParadigmTables)
     
-    this.addParadigms(pos, partOfSpeech, paradigms)
+    this.addParadigms(partOfSpeech, paradigms)
   }
 
-  static addParadigms (pos, partOfSpeech, paradigms) {
+  static addParadigms (partOfSpeech, paradigms) {
     if (!pos.has(partOfSpeech.value)) {
       pos.set(partOfSpeech.value, new InflectionSet(partOfSpeech.value, this.languageID))
     }
     pos.get(partOfSpeech.value).addInflectionItems(paradigms)
   }
 
-  static addFootnote (pos, partOfSpeech, classType, index, text) {
+  static addFootnote (partOfSpeech, classType, index, text) {
     if (!index) {
       throw new Error('Footnote index data should not be empty.')
     }
@@ -161,31 +164,42 @@ export default class GreekParadigmDataset {
     return footnote
   }
 
-  static addFootnotes (pos, partOfSpeech, classType, data) {
+  static addFootnotes (partOfSpeech, classType, data) {
     let footnotes = [] // eslint-disable-line prefer-const
     // First row are headers
     for (let i = 1; i < data.length; i++) {
-      const footnote = this.addFootnote(pos, partOfSpeech.value, classType, data[i][0], data[i][1])
+      const footnote = this.addFootnote(partOfSpeech.value, classType, data[i][0], data[i][1])
       footnotes.push(footnote)
     }
     return footnotes
   }
 
-  static setParadigmInflectionData (pos, inflection) {
+  static setParadigmInflectionData (inflection) {
     let partOfSpeech = inflection[Feature.types.part].value
+    // console.info('setParadigmInflectionData - ', pos)
     if (pos.get(partOfSpeech)) {
       inflection.constraints.paradigmBased = pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
     }
   }
 
-  static createParadigmInflectionSet (sourceSet, inflections, inflectionSet) {
-    
+  static createParadigmInflectionSet (pofsValue, inflections, inflectionSet) {
+    if (!this.sourceSet(pofsValue)) {
+      return
+    }
     const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
     if (paradigmBased) {
-      const paradigms = sourceSet.getMatchingItems(Paradigm, inflections)
+      const paradigms = this.sourceSet(pofsValue).getMatchingItems(Paradigm, inflections)
       inflectionSet.addInflectionItems(paradigms)
     }
 
+  }
+
+  static sourceSet (pofsValue) {
+    return pos.get(pofsValue)
+  }
+
+  static getParadigmStandardForm (partOfSpeech, paradigmID) {
+    return pos.get(partOfSpeech).types.get(Paradigm).getByID(paradigmID)
   }
 }

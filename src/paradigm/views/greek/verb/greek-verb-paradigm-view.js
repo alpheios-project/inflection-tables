@@ -3,6 +3,8 @@ import Paradigm from '@/paradigm/lib/paradigm.js'
 import View from '@views/lib/view.js'
 import GreekView from '@views/lang/greek/greek-view.js'
 
+import GreekParadigmDataset from '@/paradigm/data/greek/greek-paradigm-dataset.js'
+
 /**
  * This is a base class for all pronoun views. This class should not be used to create tables. Its purpose
  * is to define common features and properties for all pronoun classes.
@@ -146,7 +148,8 @@ export default class GreekVerbParadigmView extends GreekView {
     if (!options || !options.paradigmID) {
       throw new Error(`Obligatory options property, "paradigmID", is missing`)
     }
-    const paradigm = this.dataset.pos.get(this.mainPartOfSpeech).types.get(Paradigm).getByID(options.paradigmID)
+    const paradigm = GreekParadigmDataset.getParadigmStandardForm(this.mainPartOfSpeech).types.get(Paradigm).getByID(paradigmID)
+    // const paradigm = this.dataset.pos.get(this.mainPartOfSpeech).types.get(Paradigm).getByID(options.paradigmID)
     if (paradigm) {
       return new this(paradigm, null, null).render().noSuffixMatchesGroupsHidden(false)
     }

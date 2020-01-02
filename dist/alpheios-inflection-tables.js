@@ -1080,8 +1080,8 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     this.addNumeralForms(partOfSpeech, forms.data, footnotes)
 
     // Paradigms
-    _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_14__["default"].loadVerbParadigmData(this.pos)
-    _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_14__["default"].loadVerbParticipleParadigmData(this.pos)
+    _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_14__["default"].loadVerbParadigmData()
+    _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_14__["default"].loadVerbParticipleParadigmData()
 
     this.dataLoaded = true
     return this
@@ -2190,7 +2190,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import Paradigm from '@/paradigm/lib/paradigm.js'
+
 
 
 
@@ -2435,7 +2435,7 @@ class LanguageDataset {
     this.setIrregularInflectionData(inflection)
 
     if (this.languageID === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK) {
-      _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].setParadigmInflectionData(this.pos, inflection)
+      _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].setParadigmInflectionData(inflection)
     }
 
     if (inflection.constraints.implemented && !inflection.constraints.paradigmBased) {
@@ -2450,7 +2450,6 @@ class LanguageDataset {
 
       // Set match features data
 
-      // console.info('inflection.constraints 3', inflection.constraints)
       /*
       Check if inflection if full form based if `fullFormBased` flag is set
       (i.e. inflection model knows it can be full form based)
@@ -2474,7 +2473,6 @@ class LanguageDataset {
           // This cannot be a full form based inflection
           inflection.constraints.fullFormBased = false
         }
-        // console.info('inflection.constraints 4', inflection.constraints)
       }
 
       /*
@@ -2484,10 +2482,7 @@ class LanguageDataset {
       if (!inflection.constraints.fullFormBased && !inflection.constraints.paradigmBased) {
         // If it is not full form based, then probably it is suffix base
         inflection.constraints.suffixBased = true
-        // console.info('inflection.constraints 5', inflection.constraints)
       }
-
-      // console.info('inflection.constraints 6', inflection.constraints)
     }
     return inflection
   }
@@ -2557,8 +2552,11 @@ class LanguageDataset {
     inflectionSet.isImplemented = inflectionSet.inflections.length > 0
 
     if (inflectionSet.isImplemented) {
+      // Get paradigm matches
+      _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].createParadigmInflectionSet(pofsValue, inflections, inflectionSet)
+
       const sourceSet = this.pos.get(pofsValue)
-      if (!sourceSet) {
+      if (!sourceSet && !_paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].sourceSet(pofsValue)) {
         // There is no source data for this part of speech
         console.warn(`There is no source data for the following part of speech: ${pofsValue}`)
         return inflectionSet
@@ -2576,7 +2574,7 @@ class LanguageDataset {
       // const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
       // Check for suffix matches
-      if (suffixBased) {
+      if (suffixBased && sourceSet) {
         if (sourceSet.types.has(_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"])) {
           const items = sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.reduce(this.reducerGen(inflectionSet.inflections, options), [])
           if (items.length > 0) {
@@ -2586,7 +2584,7 @@ class LanguageDataset {
       }
 
       // If there is at least on full form based inflection, search for full form items
-      if (formBased) {
+      if (formBased && sourceSet) {
         // Match against form based inflection only
         const formInflections = inflectionSet.inflections.filter(i => i.constraints.fullFormBased)
         const items = sourceSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items.reduce(this.reducerGen(formInflections, options), [])
@@ -2595,20 +2593,11 @@ class LanguageDataset {
         }
       }
 
-      // Get paradigm matches
-      /*
-      if (paradigmBased) {
-        const paradigms = sourceSet.getMatchingItems(Paradigm, inflections)
-        inflectionSet.addInflectionItems(paradigms)
-      }
-      */
-
-      _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].createParadigmInflectionSet(sourceSet, inflections)
-
       // Add footnotes
       if (inflectionSet.hasTypes) {
+        const finalSourceSet = sourceSet || _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].sourceSet(pofsValue)
         for (const inflectionType of inflectionSet.inflectionTypes) {
-          const footnotesSource = sourceSet.types.get(inflectionType).footnotesMap
+          const footnotesSource = finalSourceSet.types.get(inflectionType).footnotesMap
           const footnotesInUse = inflectionSet.types.get(inflectionType).footnotesInUse
           for (const footnote of footnotesSource.values()) {
             if (footnotesInUse.includes(footnote.index)) {
@@ -12534,6 +12523,7 @@ __webpack_require__.r(__webpack_exports__);
 let typeFeatures = new Map()
 let typeFeaturesInitialized = false
 
+let pos = new Map()
 
 class GreekParadigmDataset {
   static get languageID () {
@@ -12626,10 +12616,12 @@ class GreekParadigmDataset {
       paradigm.sortRules()
       paradigm.addSuppTables(suppParadigmTables)
     }
+
+    console.info('setParadigmData - ')
     return Array.from(paradigms.values())
   }
 
-  static loadVerbParadigmData (pos) {
+  static loadVerbParadigmData () {
     const verbParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParadigmTables
     const verbParticipleParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParticipleParadigmTables
     const verbAndParticipleParadigmTables = new Map([...verbParadigmTables, ...verbParticipleParadigmTables])
@@ -12641,11 +12633,11 @@ class GreekParadigmDataset {
 
     // console.info(paradigms)
 
-    this.addParadigms(pos, partOfSpeech, paradigms)
-    this.addFootnotes(pos, partOfSpeech, _paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], papaparse__WEBPACK_IMPORTED_MODULE_5___default.a.parse(_paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParadigmFootnotes, { skipEmptyLines: true }).data)
+    this.addParadigms(partOfSpeech, paradigms)
+    this.addFootnotes(partOfSpeech, _paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], papaparse__WEBPACK_IMPORTED_MODULE_5___default.a.parse(_paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParadigmFootnotes, { skipEmptyLines: true }).data)
   }
 
-  static loadVerbParticipleParadigmData (pos) {
+  static loadVerbParticipleParadigmData () {
     const verbParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParadigmTables
     const verbParticipleParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParticipleParadigmTables
     const verbAndParticipleParadigmTables = new Map([...verbParadigmTables, ...verbParticipleParadigmTables])
@@ -12655,17 +12647,17 @@ class GreekParadigmDataset {
       partOfSpeech, verbParticipleParadigmTables,
       papaparse__WEBPACK_IMPORTED_MODULE_5___default.a.parse(_paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParticipleParadigmRules, { skipEmptyLines: true }).data, verbAndParticipleParadigmTables)
     
-    this.addParadigms(pos, partOfSpeech, paradigms)
+    this.addParadigms(partOfSpeech, paradigms)
   }
 
-  static addParadigms (pos, partOfSpeech, paradigms) {
+  static addParadigms (partOfSpeech, paradigms) {
     if (!pos.has(partOfSpeech.value)) {
       pos.set(partOfSpeech.value, new _lib_inflection_set_js__WEBPACK_IMPORTED_MODULE_3__["default"](partOfSpeech.value, this.languageID))
     }
     pos.get(partOfSpeech.value).addInflectionItems(paradigms)
   }
 
-  static addFootnote (pos, partOfSpeech, classType, index, text) {
+  static addFootnote (partOfSpeech, classType, index, text) {
     if (!index) {
       throw new Error('Footnote index data should not be empty.')
     }
@@ -12685,32 +12677,43 @@ class GreekParadigmDataset {
     return footnote
   }
 
-  static addFootnotes (pos, partOfSpeech, classType, data) {
+  static addFootnotes (partOfSpeech, classType, data) {
     let footnotes = [] // eslint-disable-line prefer-const
     // First row are headers
     for (let i = 1; i < data.length; i++) {
-      const footnote = this.addFootnote(pos, partOfSpeech.value, classType, data[i][0], data[i][1])
+      const footnote = this.addFootnote(partOfSpeech.value, classType, data[i][0], data[i][1])
       footnotes.push(footnote)
     }
     return footnotes
   }
 
-  static setParadigmInflectionData (pos, inflection) {
+  static setParadigmInflectionData (inflection) {
     let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value
+    // console.info('setParadigmInflectionData - ', pos)
     if (pos.get(partOfSpeech)) {
       inflection.constraints.paradigmBased = pos.get(partOfSpeech).hasMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflection)
     }
   }
 
-  static createParadigmInflectionSet (sourceSet, inflections) {
-    
+  static createParadigmInflectionSet (pofsValue, inflections, inflectionSet) {
+    if (!this.sourceSet(pofsValue)) {
+      return
+    }
     const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
     if (paradigmBased) {
-      const paradigms = sourceSet.getMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflections)
+      const paradigms = this.sourceSet(pofsValue).getMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflections)
       inflectionSet.addInflectionItems(paradigms)
     }
 
+  }
+
+  static sourceSet (pofsValue) {
+    return pos.get(pofsValue)
+  }
+
+  static getParadigmStandardForm (partOfSpeech, paradigmID) {
+    return pos.get(partOfSpeech).types.get(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"]).getByID(paradigmID)
   }
 }
 
@@ -13872,6 +13875,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/paradigm/lib/paradigm.js */ "./src/paradigm/lib/paradigm.js");
 /* harmony import */ var _views_lib_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lib/view.js */ "./views/lib/view.js");
 /* harmony import */ var _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lang/greek/greek-view.js */ "./views/lang/greek/greek-view.js");
+/* harmony import */ var _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/paradigm/data/greek/greek-paradigm-dataset.js */ "./src/paradigm/data/greek/greek-paradigm-dataset.js");
+
+
 
 
 
@@ -14020,7 +14026,8 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     if (!options || !options.paradigmID) {
       throw new Error(`Obligatory options property, "paradigmID", is missing`)
     }
-    const paradigm = this.dataset.pos.get(this.mainPartOfSpeech).types.get(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"]).getByID(options.paradigmID)
+    const paradigm = _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_4__["default"].getParadigmStandardForm(this.mainPartOfSpeech).types.get(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"]).getByID(paradigmID)
+    // const paradigm = this.dataset.pos.get(this.mainPartOfSpeech).types.get(Paradigm).getByID(options.paradigmID)
     if (paradigm) {
       return new this(paradigm, null, null).render().noSuffixMatchesGroupsHidden(false)
     }
