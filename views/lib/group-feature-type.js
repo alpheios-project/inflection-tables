@@ -30,7 +30,7 @@ export default class GroupFeatureType {
     this.languageID = languageID
     this.featureMap = new Map(features.map(f => [f.value, f]))
     this.comparisonType = comparisonType
-    console.info('GroupFeatureType getDataset', this.languageID)
+    // console.info('GroupFeatureType getDataset', this.languageID)
     this.dataset = LDF.getDataset(this.languageID)
 
     this.groupTitle = titleMessageID

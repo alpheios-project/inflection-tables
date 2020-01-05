@@ -49,7 +49,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 */
-  it('2 - GPD', async () => {
+  it.skip('2 - GPD', async () => {
     // stage 1 ViewSetFactory.create
     //  -- new GreekViewSet()
     //  ---- this.dataset = LanguageDatasetFactory.getDataset(homonym.languageID)
@@ -94,12 +94,12 @@ describe('greek-verb-paradigm.test.js', () => {
     let matchingViews = []
     let views = LatinViewSet.views
 
-    console.info('views', views)
+    // console.info('views', views)
     
     matchingViews.push(...views.reduce(
       (acc, view) => acc.concat(...view.getMatchingInstances(homonym)), []))
     
-    console.info('matchingViews', matchingViews)
+    // console.info('matchingViews', matchingViews)
     // console.info('matchingViews', matchingViews.map(view => view.constructor.name + ' - ' + (view.paradigm ? view.paradigm.paradigmID : '')))
   })
 })

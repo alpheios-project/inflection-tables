@@ -26,7 +26,7 @@ describe('latin-views.test.js', () => {
   afterAll(() => {
     jest.clearAllMocks()
   })
-/*
+
   it('1 - checked Latin Views - curru - LatinNounView', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('curru', Constants.LANG_LATIN)
 
@@ -302,7 +302,7 @@ describe('latin-views.test.js', () => {
       linkedViewsLength: 0
     })
   })
-*/
+
   it('9 - checked Latin Views - iam - Latin Verb Conjugation Irregular', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('iam', Constants.LANG_LATIN)
 
@@ -366,7 +366,7 @@ describe('latin-views.test.js', () => {
       linkedViewsLength: 0
     })
   })
-/*
+
   it('10 - checked Latin Views - sum - Latin Verb Conjugation Irregular', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('sum', Constants.LANG_LATIN)
 
@@ -1648,5 +1648,5 @@ describe('latin-views.test.js', () => {
       linkedViewsLength: 0
     })
   })
- */
+
 })
