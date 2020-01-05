@@ -4,6 +4,7 @@ import View from '@views/lib/view.js'
 import GreekView from '@views/lang/greek/greek-view.js'
 
 import GreekParadigmDataset from '@/paradigm/data/greek/greek-paradigm-dataset.js'
+import LDF from '@lib/language-dataset-factory.js'
 
 /**
  * This is a base class for all pronoun views. This class should not be used to create tables. Its purpose
@@ -47,6 +48,10 @@ export default class GreekVerbParadigmView extends GreekView {
 
     this.hasCredits = this.paradigm.hasCredits
     this.creditsText = this.paradigm.creditsText
+  }
+
+  static get dataset () {
+    return LDF.getDataset(this.languageID, 'GreekParadigmDataset')
   }
 
   static get viewID () {
@@ -114,6 +119,8 @@ export default class GreekVerbParadigmView extends GreekView {
     const inflectionData = this.getInflectionsData(homonym)
     if (this.matchFilter(homonym.languageID, homonym.inflections, inflectionData)) {
       const paradigms = inflectionData.types.get(this.inflectionType).items
+
+      // console.info('getMatchingInstances paradigms', inflectionData.types)
       return paradigms.map(paradigm => new this(paradigm, homonym, inflectionData))
     }
     return []

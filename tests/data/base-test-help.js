@@ -29,6 +29,8 @@ export default class BaseTestHelp {
       
     const testHomonym = await BaseTestHelp.getHomonym(targetWord, languageID)
     const inflectionsViewSet = ViewSetFactory.create(testHomonym, locale)
+
+    // console.info('BTH.getInflectionSet mmatchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name), ' dataset - ', inflectionsViewSet.dataset.constructor.name)
     return inflectionsViewSet
   }
 

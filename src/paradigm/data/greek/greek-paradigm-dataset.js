@@ -6,13 +6,25 @@ import InflectionSet from '@lib//inflection-set.js'
 import Footnote from '@lib/footnote.js'
 
 import papaparse from 'papaparse'
+import LanguageDataset from '@lib/language-dataset.js'
 
-let typeFeatures = new Map()
-let typeFeaturesInitialized = false
+export default class GreekParadigmDataset extends LanguageDataset {
+  constructor () {
+    super(GreekParadigmDataset.languageID)
 
-let pos = new Map()
+    this.typeFeatures = this.model.typeFeatures
+    this.typeFeatures.set(Feature.types.footnote, new Feature(Feature.types.footnote, [], GreekParadigmDataset.languageID))
+    this.typeFeatures.set(Feature.types.dialect, new Feature(Feature.types.dialect, [], GreekParadigmDataset.languageID))
 
-export default class GreekParadigmDataset {
+    // Create an importer with default values for every feature
+    for (let feature of this.typeFeatures.values()) { // eslint-disable-line prefer-const
+      feature.addImporter(new FeatureImporter(feature.values, true))
+    }
+
+    this.typeFeatures.get(Feature.types.tense).getImporter()
+      .map('future_perfect', [Constants.TENSE_FUTURE_PERFECT])
+  }
+
   static get languageID () {
     return Constants.LANG_GREEK
   }
@@ -21,40 +33,7 @@ export default class GreekParadigmDataset {
     return LMF.getLanguageModel(this.languageID)
   }
 
-  static get constants () {
-    // TODO: Shall we move it to constants in data models?
-    return {
-      GEND_MASCULINE_FEMININE: 'masculine feminine',
-      GEND_MASCULINE_FEMININE_NEUTER: 'masculine feminine neuter'
-    }
-  }
-
-  static get typeFeatures () {
-    if (!typeFeaturesInitialized) { this.initTypeFeatures() }
-    return typeFeatures
-  }
-
-  static initTypeFeatures () {
-    typeFeatures = this.model.typeFeatures
-    typeFeatures.set(Feature.types.footnote, new Feature(Feature.types.footnote, [], this.languageID))
-    typeFeatures.set(Feature.types.fullForm, new Feature(Feature.types.fullForm, [], this.languageID))
-    typeFeatures.set(Feature.types.hdwd, new Feature(Feature.types.hdwd, [], this.languageID))
-    typeFeatures.set(Feature.types.dialect, new Feature(Feature.types.dialect, [], this.languageID))
-
-    // Create an importer with default values for every feature
-    for (let feature of typeFeatures.values()) { // eslint-disable-line prefer-const
-      feature.addImporter(new FeatureImporter(feature.values, true))
-    }
-
-    // Custom importers for Greek-specific feature values
-    typeFeatures.get(Feature.types.gender).getImporter()
-      .map(this.constants.GEND_MASCULINE_FEMININE, [Constants.GEND_MASCULINE, Constants.GEND_FEMININE])
-      .map(this.constants.GEND_MASCULINE_FEMININE_NEUTER, [Constants.GEND_MASCULINE, Constants.GEND_FEMININE, Constants.GEND_NEUTER])
-    typeFeatures.get(Feature.types.tense).getImporter()
-      .map('future_perfect', [Constants.TENSE_FUTURE_PERFECT])
-  }
-
-  static setParadigmData (partOfSpeech, paradigms, rulesData, suppParadigmTables) {
+  setParadigmData (partOfSpeech, paradigms, rulesData, suppParadigmTables) {
     // An order of columns in a data CSV file
     const n = {
       id: 0,
@@ -104,11 +83,17 @@ export default class GreekParadigmDataset {
       paradigm.addSuppTables(suppParadigmTables)
     }
 
-    console.info('setParadigmData - ')
     return Array.from(paradigms.values())
   }
 
-  static loadVerbParadigmData () {
+  loadData () {
+    this.loadVerbParadigmData()
+    this.loadVerbParticipleParadigmData()
+
+    this.dataLoaded = true
+  }
+
+  loadVerbParadigmData () {
     const verbParadigmTables = GreekParadigmData.verbParadigmTables
     const verbParticipleParadigmTables = GreekParadigmData.verbParticipleParadigmTables
     const verbAndParticipleParadigmTables = new Map([...verbParadigmTables, ...verbParticipleParadigmTables])
@@ -124,7 +109,7 @@ export default class GreekParadigmDataset {
     this.addFootnotes(partOfSpeech, Paradigm, papaparse.parse(GreekParadigmData.verbParadigmFootnotes, { skipEmptyLines: true }).data)
   }
 
-  static loadVerbParticipleParadigmData () {
+  loadVerbParticipleParadigmData () {
     const verbParadigmTables = GreekParadigmData.verbParadigmTables
     const verbParticipleParadigmTables = GreekParadigmData.verbParticipleParadigmTables
     const verbAndParticipleParadigmTables = new Map([...verbParadigmTables, ...verbParticipleParadigmTables])
@@ -137,34 +122,14 @@ export default class GreekParadigmDataset {
     this.addParadigms(partOfSpeech, paradigms)
   }
 
-  static addParadigms (partOfSpeech, paradigms) {
-    if (!pos.has(partOfSpeech.value)) {
-      pos.set(partOfSpeech.value, new InflectionSet(partOfSpeech.value, this.languageID))
+  addParadigms (partOfSpeech, paradigms) {
+    if (!this.pos.has(partOfSpeech.value)) {
+      this.pos.set(partOfSpeech.value, new InflectionSet(partOfSpeech.value, this.languageID))
     }
-    pos.get(partOfSpeech.value).addInflectionItems(paradigms)
+    this.pos.get(partOfSpeech.value).addInflectionItems(paradigms)
   }
 
-  static addFootnote (partOfSpeech, classType, index, text) {
-    if (!index) {
-      throw new Error('Footnote index data should not be empty.')
-    }
-
-    if (!text) {
-      throw new Error('Footnote text data should not be empty.')
-    }
-
-    const footnote = new Footnote(index, text, partOfSpeech)
-
-    // this.footnotes.push(footnote)
-
-    if (!pos.has(partOfSpeech)) {
-      pos.set(partOfSpeech, new InflectionSet(partOfSpeech, this.languageID))
-    }
-    pos.get(partOfSpeech).addFootnote(classType, index, footnote)
-    return footnote
-  }
-
-  static addFootnotes (partOfSpeech, classType, data) {
+  addFootnotes (partOfSpeech, classType, data) {
     let footnotes = [] // eslint-disable-line prefer-const
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -174,29 +139,41 @@ export default class GreekParadigmDataset {
     return footnotes
   }
 
-  static setParadigmInflectionData (inflection) {
+  setBaseInflectionData (inflection, lemma) {
+    inflection.lemma = lemma
+    inflection.addFeature(new Feature(Feature.types.word, lemma.word, lemma.languageID))
+    inflection.constraints.implemented = this.isImplemented(inflection)
+  }
+
+  setInflectionData (inflection, lemma) {
     let partOfSpeech = inflection[Feature.types.part].value
-    // console.info('setParadigmInflectionData - ', pos)
-    if (pos.get(partOfSpeech)) {
-      inflection.constraints.paradigmBased = pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
+    if (this.pos.get(partOfSpeech)) {
+      this.setBaseInflectionData(inflection, lemma)
+      inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
     }
+    // return inflection
   }
 
-  static createParadigmInflectionSet (pofsValue, inflections, inflectionSet) {
-    if (!this.sourceSet(pofsValue)) {
-      return
+  createInflectionSet (pofsValue, inflections, options) {
+    let inflectionSet = new InflectionSet(pofsValue, this.languageID) // eslint-disable-line prefer-const
+    inflectionSet.inflections = inflections.filter(i => i.constraints.implemented === true)
+    inflectionSet.isImplemented = inflectionSet.inflections.length > 0
+
+    const sourceSet = this.pos.get(pofsValue)
+    if (!sourceSet) {
+      return inflectionSet
     }
-    const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
-    if (paradigmBased) {
-      const paradigms = this.sourceSet(pofsValue).getMatchingItems(Paradigm, inflections)
-      inflectionSet.addInflectionItems(paradigms)
+    if (inflectionSet.isImplemented) {      
+      const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
+
+      if (paradigmBased) {
+        // console.info('sourceSet', sourceSet.types)
+        const paradigms = sourceSet.getMatchingItems(Paradigm, inflections)
+        inflectionSet.addInflectionItems(paradigms)
+      }
     }
-
-  }
-
-  static sourceSet (pofsValue) {
-    return pos.get(pofsValue)
+    return inflectionSet
   }
 
   static getParadigmStandardForm (partOfSpeech, paradigmID) {

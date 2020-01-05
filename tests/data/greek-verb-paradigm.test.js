@@ -7,11 +7,11 @@ import BaseTestHelp from '@tests/data/base-test-help.js'
 // import LanguageDatasetFactory from '@views/lib/language-dataset-factory.js'
 
 describe('greek-verb-paradigm.test.js', () => {
-  /*
+  
   console.error = function () {}
   console.log = function () {}
   console.warn = function () {}
-  */
+  
   const locale = "en-US"
   beforeAll(async () => {
   })

@@ -114,7 +114,7 @@ export default class View {
    * @return {LanguageDataset}
    */
   static get dataset () {
-    return LDF.getDataset(this.languageID)
+    return LDF.getDatasets(this.languageID)[0]
   }
 
   static get model () {
@@ -336,6 +336,8 @@ export default class View {
 
   static getInflectionsData (homonym, options) {
     // Select inflections this view needs
+    // console.info('View getInflectionsData - createInflectionSet', this.name)
+    // const dataset = LDF.getDataset(this.languageID, this.dataset.name)
     return this.dataset.createInflectionSet(this.mainPartOfSpeech, this.getRelatedInflections(homonym.inflections), options)
   }
 
@@ -353,6 +355,7 @@ export default class View {
 
       if (inflectionData.types.has(this.inflectionType)) {
         // There is some inflection data found for the view's morpheme type
+        // console.info('getMatchingInstances - ', this.name)
         const view = new this(homonym, inflectionData)
         return [view]
       }
