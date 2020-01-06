@@ -2082,11 +2082,9 @@ class LatinLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return LanguageDatasetFactory; });
-/* harmony import */ var _inflection_data_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inflection-data.js */ "./lib/inflection-data.js");
-/* harmony import */ var _lang_latin_latin_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lang/latin/latin-language-dataset.js */ "./lib/lang/latin/latin-language-dataset.js");
-/* harmony import */ var _lang_greek_greek_language_dataset_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lang/greek/greek-language-dataset.js */ "./lib/lang/greek/greek-language-dataset.js");
-/* harmony import */ var _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/paradigm/data/greek/greek-paradigm-dataset.js */ "./src/paradigm/data/greek/greek-paradigm-dataset.js");
-
+/* harmony import */ var _lang_latin_latin_language_dataset_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lang/latin/latin-language-dataset.js */ "./lib/lang/latin/latin-language-dataset.js");
+/* harmony import */ var _lang_greek_greek_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lang/greek/greek-language-dataset.js */ "./lib/lang/greek/greek-language-dataset.js");
+/* harmony import */ var _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/paradigm/data/greek/greek-paradigm-dataset.js */ "./src/paradigm/data/greek/greek-paradigm-dataset.js");
 
 
 
@@ -2102,7 +2100,7 @@ class LanguageDatasetFactory {
   /**
    * @param {Constructor[]} languageData - Language datasets of supported languages.
    */
-  constructor (languageData = [_lang_latin_latin_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__["default"], _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_3__["default"], _lang_greek_greek_language_dataset_js__WEBPACK_IMPORTED_MODULE_2__["default"]]) {
+  constructor (languageData = [_lang_latin_latin_language_dataset_js__WEBPACK_IMPORTED_MODULE_0__["default"], _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_2__["default"], _lang_greek_greek_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__["default"]]) {
     this.sets = new Map()
     for (const LngDataset of languageData) {
       if (!this.sets.has(LngDataset.languageID)) {
@@ -2151,27 +2149,6 @@ class LanguageDatasetFactory {
       return datasets.find(dataset => dataset.constructor.name.indexOf(constructorName) === (dataset.constructor.name.length - constructorName.length))
     }
     return datasets[0]
-  }
-
-  /**
-   * Finds matching forms or suffixes for a homonym.
-   * @deprecated Will be removed when will have no usages
-   * @param {Homonym} homonym - A homonym for which matching suffixes must be found.
-   * @return {InflectionData} A return value of an inflection query.
-   */
-  static getInflectionData (homonym) {
-    const instance = this.instance
-    if (instance.sets.has(homonym.languageID)) {
-      const datasets = this.getDatasets(homonym.languageID)
-      for (let inflection of homonym.inflections) { // eslint-disable-line prefer-const
-        // Set grammar rules for an inflection
-        inflection.setConstraints()
-        // dataset.setInflectionConstraints(inflection)
-      }
-      return datasets[1].getInflectionData(homonym)
-    } else {
-      return new _inflection_data_js__WEBPACK_IMPORTED_MODULE_0__["default"](homonym) // Return an empty inflection data set
-    }
   }
 }
 

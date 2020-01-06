@@ -28,7 +28,8 @@ describe('column.test.js', () => {
 
   beforeAll(async () => {
     testHomonym = await BaseTestHelp.getHomonym('δύο', Constants.LANG_GREEK)
-    testInflectionData = await LanguageDatasetFactory.getInflectionData(testHomonym)
+    const dataset = LanguageDatasetFactory.getDataset(Constants.LANG_GREEK, 'GreekLanguageDataset')
+    testInflectionData = dataset.getInflectionData(testHomonym)
     testMorphemes = testInflectionData.pos.get('numeral').types.get(Form).items
 
     testFeatures = []

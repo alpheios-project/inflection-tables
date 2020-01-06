@@ -66,17 +66,4 @@ describe('language-dataset-factory.test.js', () => {
     expect(LanguageDatasetFactory.getDataset(Constants.LANG_ARABIC)).toBeUndefined()
   })
 
-  it('5 LanguageDatasetFactory - getInflectionData returns an empty InflectionData for unsupported language', () => {
-    let LDFAra = LanguageDatasetFactory.getInflectionData(testHomonymARA)
-    expect(LDFAra).toBeInstanceOf(InflectionData)
-    expect(LDFAra.pos.size).toEqual(0)
-  })
-
-  it('6 LanguageDatasetFactory - getInflectionData returns a filled InflectionData for supported language', () => {
-    // console.info('***********testHomonymGRC', testHomonymGRC.inflections)
-    let LDFGrc = LanguageDatasetFactory.getInflectionData(testHomonymGRC)
-    expect(LDFGrc).toBeInstanceOf(InflectionData)
-    expect(Array.from(LDFGrc.pos.keys())).toEqual(['numeral'])
-    expect(LDFGrc.pos.get('numeral').types.size).toBeGreaterThan(0)
-  })
 })

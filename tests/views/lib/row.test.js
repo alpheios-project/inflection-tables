@@ -24,7 +24,8 @@ describe('row.test.js', () => {
 
   beforeAll(async () => {
     let testHomonym = await BaseTestHelp.getHomonym('δύο', Constants.LANG_GREEK)
-    let testInflectionData = await LanguageDatasetFactory.getInflectionData(testHomonym)
+    const dataset = LanguageDatasetFactory.getDataset(Constants.LANG_GREEK, 'GreekLanguageDataset')
+    let testInflectionData = dataset.getInflectionData(testHomonym)
     testMorphemes = testInflectionData.pos.get('numeral').types.get(Form).items
 
     testFeatures = []
