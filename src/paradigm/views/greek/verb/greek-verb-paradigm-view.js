@@ -105,22 +105,12 @@ export default class GreekVerbParadigmView extends GreekView {
     return (this.languageID === languageID &&
       inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech)) &&
       inflectionData.types.has(this.inflectionType)
-
-    /* if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value)) {
-      let inflectionSet = inflectionData.pos.get(inflection[Feature.types.part].value)
-      if (inflectionSet.types.has(this.inflectionType)) {
-        return true
-      }
-    }
-    return false */
   }
 
   static getMatchingInstances (homonym) {
     const inflectionData = this.getInflectionsData(homonym)
     if (this.matchFilter(homonym.languageID, homonym.inflections, inflectionData)) {
       const paradigms = inflectionData.types.get(this.inflectionType).items
-
-      // console.info('getMatchingInstances paradigms', inflectionData.types)
       return paradigms.map(paradigm => new this(paradigm, homonym, inflectionData))
     }
     return []

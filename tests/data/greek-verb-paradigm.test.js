@@ -3,9 +3,6 @@
 import { Constants, Feature, LanguageModelFactory } from 'alpheios-data-models'
 
 import BaseTestHelp from '@tests/data/base-test-help.js'
-
-// import LanguageDatasetFactory from '@views/lib/language-dataset-factory.js'
-
 describe('greek-verb-paradigm.test.js', () => {
   
   console.error = function () {}
@@ -31,7 +28,6 @@ describe('greek-verb-paradigm.test.js', () => {
   it('1 - checked Verb Paradigm1 - βουλεύῃς', async () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('βουλεύῃς', Constants.LANG_GREEK)
 
-    // console.info(inflectionsViewSet)
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
 
@@ -100,7 +96,7 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('5 - no matchesx - checked Verb Paradigm5', async () => {
+  it.skip('5 - no matchesx - checked Verb Paradigm5', async () => {
   })
 
   it('6 - checked Verb Paradigm6 - ἀγάγοις', async () => {
@@ -595,10 +591,10 @@ describe('greek-verb-paradigm.test.js', () => {
     })
   })
 
-  it('34 - no matches - checked Verb Paradigm 34', async () => {
+  it.skip('34 - no matches - checked Verb Paradigm 34', async () => {
   })
 
-  it('35 - no matches - checked Verb Paradigm 35', async () => {
+  it.skip('35 - no matches - checked Verb Paradigm 35', async () => {
   })
 
   it('36 - checked Verb Paradigm 36 - διδῷ', async () => {

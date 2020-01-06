@@ -29,10 +29,6 @@ export default class GreekParadigmDataset extends LanguageDataset {
     return Constants.LANG_GREEK
   }
 
-  static get model () {
-    return LMF.getLanguageModel(this.languageID)
-  }
-
   setParadigmData (partOfSpeech, paradigms, rulesData, suppParadigmTables) {
     // An order of columns in a data CSV file
     const n = {
@@ -168,7 +164,6 @@ export default class GreekParadigmDataset extends LanguageDataset {
       const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
       if (paradigmBased) {
-        // console.info('sourceSet', sourceSet.types)
         const paradigms = sourceSet.getMatchingItems(Paradigm, inflections)
         inflectionSet.addInflectionItems(paradigms)
       }

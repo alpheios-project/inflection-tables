@@ -27,7 +27,6 @@ describe('cell.test.js', () => {
     const dataset = LanguageDatasetFactory.getDataset(Constants.LANG_GREEK, 'GreekLanguageDataset')
 
     testInflectionData = dataset.getInflectionData(testHomonym)
-    // console.info('testInflectionData - ', testInflectionData)
     testMorphemes = testInflectionData.pos.get('numeral').types.get(Form).items.slice(0, 1)
 
     testFeatures = []

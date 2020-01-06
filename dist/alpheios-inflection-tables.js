@@ -12523,10 +12523,6 @@ class GreekParadigmDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK
   }
 
-  static get model () {
-    return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].getLanguageModel(this.languageID)
-  }
-
   setParadigmData (partOfSpeech, paradigms, rulesData, suppParadigmTables) {
     // An order of columns in a data CSV file
     const n = {
@@ -12662,12 +12658,11 @@ class GreekParadigmDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
       const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
       if (paradigmBased) {
-        // console.info('sourceSet', sourceSet.types)
         const paradigms = sourceSet.getMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflections)
         inflectionSet.addInflectionItems(paradigms)
       }
 
-      this.createInflectionSetFootnote (inflectionSet, sourceSet)
+      this.createInflectionSetFootnote(inflectionSet, sourceSet)
     }
     return inflectionSet
   }
@@ -13945,22 +13940,12 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     return (this.languageID === languageID &&
       inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)) &&
       inflectionData.types.has(this.inflectionType)
-
-    /* if (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value)) {
-      let inflectionSet = inflectionData.pos.get(inflection[Feature.types.part].value)
-      if (inflectionSet.types.has(this.inflectionType)) {
-        return true
-      }
-    }
-    return false */
   }
 
   static getMatchingInstances (homonym) {
     const inflectionData = this.getInflectionsData(homonym)
     if (this.matchFilter(homonym.languageID, homonym.inflections, inflectionData)) {
       const paradigms = inflectionData.types.get(this.inflectionType).items
-
-      // console.info('getMatchingInstances paradigms', inflectionData.types)
       return paradigms.map(paradigm => new this(paradigm, homonym, inflectionData))
     }
     return []
