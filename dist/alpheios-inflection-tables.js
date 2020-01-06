@@ -2183,7 +2183,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import GreekParadigmDataset from '@/paradigm/data/greek/greek-paradigm-dataset.js'
 
 /**
  * Stores inflection language data
@@ -2429,11 +2428,7 @@ class LanguageDataset {
     this.setIrregularInflectionData(inflection)
 
     if (inflection.constraints.implemented && !inflection.constraints.paradigmBased) {
-      // This cannot be determined by language model so we have to check it manually
-      // inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
-
       // Set match features data
-
       /*
       Check if inflection if full form based if `fullFormBased` flag is set
       (i.e. inflection model knows it can be full form based)
@@ -2537,8 +2532,6 @@ class LanguageDataset {
     inflectionSet.isImplemented = inflectionSet.inflections.length > 0
 
     if (inflectionSet.isImplemented) {
-      // Get paradigm matches
-
       const sourceSet = this.pos.get(pofsValue)
       if (!sourceSet) {
         // There is no source data for this part of speech
@@ -2557,7 +2550,7 @@ class LanguageDataset {
       const formBased = inflections.some(i => i.constraints.fullFormBased)
 
       // Check for suffix matches
-      if (suffixBased && sourceSet) {
+      if (suffixBased) {
         if (sourceSet.types.has(_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"])) {
           const items = sourceSet.types.get(_suffix_js__WEBPACK_IMPORTED_MODULE_2__["default"]).items.reduce(this.reducerGen(inflectionSet.inflections, options), [])
           if (items.length > 0) {
@@ -2567,7 +2560,7 @@ class LanguageDataset {
       }
 
       // If there is at least on full form based inflection, search for full form items
-      if (formBased && sourceSet) {
+      if (formBased) {
         // Match against form based inflection only
         const formInflections = inflectionSet.inflections.filter(i => i.constraints.fullFormBased)
         const items = sourceSet.types.get(_form_js__WEBPACK_IMPORTED_MODULE_3__["default"]).items.reduce(this.reducerGen(formInflections, options), [])
@@ -2576,22 +2569,26 @@ class LanguageDataset {
         }
       }
 
-      // Add footnotes
-      if (inflectionSet.hasTypes) {
-        const finalSourceSet = sourceSet
-        for (const inflectionType of inflectionSet.inflectionTypes) {
-          const footnotesSource = finalSourceSet.types.get(inflectionType).footnotesMap
-          const footnotesInUse = inflectionSet.types.get(inflectionType).footnotesInUse
-          for (const footnote of footnotesSource.values()) {
-            if (footnotesInUse.includes(footnote.index)) {
-              inflectionSet.addFootnote(inflectionType, footnote.index, footnote)
-            }
+      this.createInflectionSetFootnote(inflectionSet, sourceSet)
+    }
+
+    return inflectionSet
+  }
+
+  createInflectionSetFootnote (inflectionSet, sourceSet) {
+    // Add footnotes
+    if (inflectionSet.hasTypes) {
+      const finalSourceSet = sourceSet
+      for (const inflectionType of inflectionSet.inflectionTypes) {
+        const footnotesSource = finalSourceSet.types.get(inflectionType).footnotesMap
+        const footnotesInUse = inflectionSet.types.get(inflectionType).footnotesInUse
+        for (const footnote of footnotesSource.values()) {
+          if (footnotesInUse.includes(footnote.index)) {
+            inflectionSet.addFootnote(inflectionType, footnote.index, footnote)
           }
         }
       }
     }
-
-    return inflectionSet
   }
 
   /**
@@ -12669,9 +12666,12 @@ class GreekParadigmDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
         const paradigms = sourceSet.getMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflections)
         inflectionSet.addInflectionItems(paradigms)
       }
+
+      this.createInflectionSetFootnote (inflectionSet, sourceSet)
     }
     return inflectionSet
   }
+
 
   static getParadigmStandardForm (partOfSpeech, paradigmID) {
     return pos.get(partOfSpeech).types.get(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"]).getByID(paradigmID)

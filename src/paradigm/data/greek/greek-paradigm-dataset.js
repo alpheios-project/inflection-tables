@@ -172,9 +172,12 @@ export default class GreekParadigmDataset extends LanguageDataset {
         const paradigms = sourceSet.getMatchingItems(Paradigm, inflections)
         inflectionSet.addInflectionItems(paradigms)
       }
+
+      this.createInflectionSetFootnote(inflectionSet, sourceSet)
     }
     return inflectionSet
   }
+
 
   static getParadigmStandardForm (partOfSpeech, paradigmID) {
     return pos.get(partOfSpeech).types.get(Paradigm).getByID(paradigmID)
