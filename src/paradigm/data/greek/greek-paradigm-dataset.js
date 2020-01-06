@@ -151,7 +151,7 @@ export default class GreekParadigmDataset extends LanguageDataset {
       this.setBaseInflectionData(inflection, lemma)
       inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
     }
-    // return inflection
+    return inflection
   }
 
   createInflectionSet (pofsValue, inflections, options) {

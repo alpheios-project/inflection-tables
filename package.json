@@ -11,7 +11,7 @@
     "test-data": "npm run lint && jest tests/data/*",
     "test-c": "npm run lint && jest tests/lib/lang/greek-language-dataset.test.js --no-cache --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "test-a": "npm run lint && jest tests/data/latin-views.test.js",
-    "test-o": "npm run lint && jest tests/new-paradigm.test.js",
+    "test-o": "npm run lint && jest tests/views/lib/cell.test.js",
     "build": "npm run lint && node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs webpack all lib config.mjs",
     "build-prod": "npm run lint && node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs webpack production lib config.mjs",
     "build-dev": "npm run lint && node --experimental-modules ./node_modules/alpheios-node-build/dist/build.mjs webpack development lib config.mjs",

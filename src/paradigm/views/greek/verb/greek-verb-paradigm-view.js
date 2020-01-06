@@ -155,8 +155,7 @@ export default class GreekVerbParadigmView extends GreekView {
     if (!options || !options.paradigmID) {
       throw new Error(`Obligatory options property, "paradigmID", is missing`)
     }
-    const paradigm = GreekParadigmDataset.getParadigmStandardForm(this.mainPartOfSpeech).types.get(Paradigm).getByID(paradigmID)
-    // const paradigm = this.dataset.pos.get(this.mainPartOfSpeech).types.get(Paradigm).getByID(options.paradigmID)
+    const paradigm = this.dataset.pos.get(this.mainPartOfSpeech).types.get(Paradigm).getByID(options.paradigmID)
     if (paradigm) {
       return new this(paradigm, null, null).render().noSuffixMatchesGroupsHidden(false)
     }

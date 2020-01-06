@@ -728,9 +728,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lang_greek_data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @lib/lang/greek/data/numeral/footnotes.csv */ "./lib/lang/greek/data/numeral/footnotes.csv");
 /* harmony import */ var _lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @lib/lang/greek/data/pronoun/forms.csv */ "./lib/lang/greek/data/pronoun/forms.csv");
 /* harmony import */ var _lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @lib/lang/greek/data/pronoun/footnotes.csv */ "./lib/lang/greek/data/pronoun/footnotes.csv");
-/* harmony import */ var _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @/paradigm/data/greek/greek-paradigm-dataset.js */ "./src/paradigm/data/greek/greek-paradigm-dataset.js");
-/* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! papaparse */ "./node_modules/papaparse/papaparse.js");
-/* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(papaparse__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! papaparse */ "./node_modules/papaparse/papaparse.js");
+/* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(papaparse__WEBPACK_IMPORTED_MODULE_14__);
 /*
  * Greek language data module
  */
@@ -761,8 +760,6 @@ __webpack_require__.r(__webpack_exports__);
 import adjectiveFootnotesCSV from './data/adjective/footnotes.csv';
 import verbSuffixesCSV from './data/verb/suffixes.csv';
 import verbFootnotesCSV from './data/verb/footnotes.csv'; */
-
-
 
 
 
@@ -1048,40 +1045,36 @@ class GreekLanguageDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
 
     // Nouns
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN)
-    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_6__["default"], { skipEmptyLines: true })
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_noun_footnotes_csv__WEBPACK_IMPORTED_MODULE_6__["default"], { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], pofsFootnotes.data)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_5__["default"], { skipEmptyLines: true })
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_noun_suffixes_csv__WEBPACK_IMPORTED_MODULE_5__["default"], { skipEmptyLines: true })
     this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Adjective
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ADJECTIVE)
-    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_8__["default"], { skipEmptyLines: true })
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_adjective_footnotes_csv__WEBPACK_IMPORTED_MODULE_8__["default"], { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_suffix_js__WEBPACK_IMPORTED_MODULE_3__["default"], pofsFootnotes.data)
-    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_7__["default"], { skipEmptyLines: true })
+    suffixes = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_adjective_suffixes_csv__WEBPACK_IMPORTED_MODULE_7__["default"], { skipEmptyLines: true })
     this.addSuffixes(partOfSpeech, suffixes.data, footnotes)
 
     // Articles
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_ARTICLE)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_9__["default"], { skipEmptyLines: true })
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_article_forms_csv__WEBPACK_IMPORTED_MODULE_9__["default"], { skipEmptyLines: true })
     this.addArticleForms(partOfSpeech, forms.data)
 
     // Pronouns
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
-    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_13__["default"], { skipEmptyLines: true })
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_pronoun_footnotes_csv__WEBPACK_IMPORTED_MODULE_13__["default"], { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], pofsFootnotes.data)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_12__["default"], { skipEmptyLines: true })
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_pronoun_forms_csv__WEBPACK_IMPORTED_MODULE_12__["default"], { skipEmptyLines: true })
     this.addPronounForms(partOfSpeech, forms.data, footnotes)
 
     // Numerals
     partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NUMERAL)
-    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_11__["default"], { skipEmptyLines: true })
+    pofsFootnotes = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_numeral_footnotes_csv__WEBPACK_IMPORTED_MODULE_11__["default"], { skipEmptyLines: true })
     footnotes = this.addFootnotes(partOfSpeech, _lib_form_js__WEBPACK_IMPORTED_MODULE_4__["default"], pofsFootnotes.data)
-    forms = papaparse__WEBPACK_IMPORTED_MODULE_15___default.a.parse(_lib_lang_greek_data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_10__["default"], { skipEmptyLines: true })
+    forms = papaparse__WEBPACK_IMPORTED_MODULE_14___default.a.parse(_lib_lang_greek_data_numeral_forms_csv__WEBPACK_IMPORTED_MODULE_10__["default"], { skipEmptyLines: true })
     this.addNumeralForms(partOfSpeech, forms.data, footnotes)
-
-    // Paradigms
-    _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_14__["default"].loadVerbParadigmData()
-    _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_14__["default"].loadVerbParticipleParadigmData()
 
     this.dataLoaded = true
     return this
@@ -2092,6 +2085,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _inflection_data_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./inflection-data.js */ "./lib/inflection-data.js");
 /* harmony import */ var _lang_latin_latin_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./lang/latin/latin-language-dataset.js */ "./lib/lang/latin/latin-language-dataset.js");
 /* harmony import */ var _lang_greek_greek_language_dataset_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./lang/greek/greek-language-dataset.js */ "./lib/lang/greek/greek-language-dataset.js");
+/* harmony import */ var _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/paradigm/data/greek/greek-paradigm-dataset.js */ "./src/paradigm/data/greek/greek-paradigm-dataset.js");
+
 
 
 
@@ -2107,10 +2102,13 @@ class LanguageDatasetFactory {
   /**
    * @param {Constructor[]} languageData - Language datasets of supported languages.
    */
-  constructor (languageData = [_lang_latin_latin_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__["default"], _lang_greek_greek_language_dataset_js__WEBPACK_IMPORTED_MODULE_2__["default"]]) {
+  constructor (languageData = [_lang_latin_latin_language_dataset_js__WEBPACK_IMPORTED_MODULE_1__["default"], _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_3__["default"], _lang_greek_greek_language_dataset_js__WEBPACK_IMPORTED_MODULE_2__["default"]]) {
     this.sets = new Map()
     for (const LngDataset of languageData) {
-      this.sets.set(LngDataset.languageID, new LngDataset())
+      if (!this.sets.has(LngDataset.languageID)) {
+        this.sets.set(LngDataset.languageID, [])
+      }
+      this.sets.get(LngDataset.languageID).push(new LngDataset())
     }
   }
 
@@ -2130,15 +2128,29 @@ class LanguageDatasetFactory {
    * @param {symbol} languageID - A language ID of a dataset to be retrieved.
    * @return {LanguageDataset} An instance of a language dataset.
    */
-  static getDataset (languageID) {
+  static getDatasets (languageID) {
     const instance = this.instance
+
     if (instance.sets.has(languageID)) {
-      let dataset = instance.sets.get(languageID) // eslint-disable-line prefer-const
-      if (!dataset.dataLoaded) {
-        dataset.loadData()
-      }
-      return dataset
+      let datasets = instance.sets.get(languageID) // eslint-disable-line prefer-const
+      datasets.forEach(dataset => {
+        if (!dataset.dataLoaded) {
+          dataset.loadData()
+        }
+      })
+      return datasets
     }
+  }
+
+  static getDataset (languageID, constructorName) {
+    const datasets = this.getDatasets(languageID)
+    if (!datasets) {
+      return
+    }
+    if (constructorName) {
+      return datasets.find(dataset => dataset.constructor.name.indexOf(constructorName) === (dataset.constructor.name.length - constructorName.length))
+    }
+    return datasets[0]
   }
 
   /**
@@ -2150,13 +2162,13 @@ class LanguageDatasetFactory {
   static getInflectionData (homonym) {
     const instance = this.instance
     if (instance.sets.has(homonym.languageID)) {
-      const dataset = this.getDataset(homonym.languageID)
+      const datasets = this.getDatasets(homonym.languageID)
       for (let inflection of homonym.inflections) { // eslint-disable-line prefer-const
         // Set grammar rules for an inflection
         inflection.setConstraints()
         // dataset.setInflectionConstraints(inflection)
       }
-      return dataset.getInflectionData(homonym)
+      return datasets[1].getInflectionData(homonym)
     } else {
       return new _inflection_data_js__WEBPACK_IMPORTED_MODULE_0__["default"](homonym) // Return an empty inflection data set
     }
@@ -2185,7 +2197,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./inflection-set.js */ "./lib/inflection-set.js");
 /* harmony import */ var _inflection_data_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./inflection-data.js */ "./lib/inflection-data.js");
 /* harmony import */ var _match_data_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./match-data.js */ "./lib/match-data.js");
-/* harmony import */ var _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/paradigm/data/greek/greek-paradigm-dataset.js */ "./src/paradigm/data/greek/greek-paradigm-dataset.js");
 
 
 
@@ -2195,7 +2206,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
+// import GreekParadigmDataset from '@/paradigm/data/greek/greek-paradigm-dataset.js'
 
 /**
  * Stores inflection language data
@@ -2430,21 +2441,17 @@ class LanguageDataset {
     }
     partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value
 
+    if (!this.pos.get(partOfSpeech)) {
+      // There is no source data for this part of speech
+      console.warn(`There is no source data for the following part of speech: ${partOfSpeech}`)
+      return inflection
+    }
+
     this.setBaseInflectionData(inflection, lemma)
     this.setPronounInflectionData(partOfSpeech, inflection)
     this.setIrregularInflectionData(inflection)
 
-    if (this.languageID === alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK) {
-      _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].setParadigmInflectionData(inflection)
-    }
-
     if (inflection.constraints.implemented && !inflection.constraints.paradigmBased) {
-      if (!this.pos.get(partOfSpeech)) {
-        // There is no source data for this part of speech
-        console.warn(`There is no source data for the following part of speech: ${partOfSpeech}`)
-        return inflection
-      }
-
       // This cannot be determined by language model so we have to check it manually
       // inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
 
@@ -2548,15 +2555,15 @@ class LanguageDataset {
    */
   createInflectionSet (pofsValue, inflections, options) {
     let inflectionSet = new _inflection_set_js__WEBPACK_IMPORTED_MODULE_5__["default"](pofsValue, this.languageID) // eslint-disable-line prefer-const
+
     inflectionSet.inflections = inflections.filter(i => i.constraints.implemented === true)
     inflectionSet.isImplemented = inflectionSet.inflections.length > 0
 
     if (inflectionSet.isImplemented) {
       // Get paradigm matches
-      _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].createParadigmInflectionSet(pofsValue, inflections, inflectionSet)
 
       const sourceSet = this.pos.get(pofsValue)
-      if (!sourceSet && !_paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].sourceSet(pofsValue)) {
+      if (!sourceSet) {
         // There is no source data for this part of speech
         console.warn(`There is no source data for the following part of speech: ${pofsValue}`)
         return inflectionSet
@@ -2571,7 +2578,6 @@ class LanguageDataset {
       // If at least one inflection in a group has a constraint, we'll search for data based on that criteria
       const suffixBased = inflections.some(i => i.constraints.suffixBased)
       const formBased = inflections.some(i => i.constraints.fullFormBased)
-      // const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
       // Check for suffix matches
       if (suffixBased && sourceSet) {
@@ -2595,7 +2601,7 @@ class LanguageDataset {
 
       // Add footnotes
       if (inflectionSet.hasTypes) {
-        const finalSourceSet = sourceSet || _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_8__["default"].sourceSet(pofsValue)
+        const finalSourceSet = sourceSet
         for (const inflectionType of inflectionSet.inflectionTypes) {
           const footnotesSource = finalSourceSet.types.get(inflectionType).footnotesMap
           const footnotesInUse = inflectionSet.types.get(inflectionType).footnotesInUse
@@ -12511,6 +12517,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_footnote_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @lib/footnote.js */ "./lib/footnote.js");
 /* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! papaparse */ "./node_modules/papaparse/papaparse.js");
 /* harmony import */ var papaparse__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(papaparse__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @lib/language-dataset.js */ "./lib/language-dataset.js");
 
 
 
@@ -12520,12 +12527,24 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-let typeFeatures = new Map()
-let typeFeaturesInitialized = false
 
-let pos = new Map()
+class GreekParadigmDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MODULE_6__["default"] {
+  constructor () {
+    super(GreekParadigmDataset.languageID)
 
-class GreekParadigmDataset {
+    this.typeFeatures = this.model.typeFeatures
+    this.typeFeatures.set(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote, new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote, [], GreekParadigmDataset.languageID))
+    this.typeFeatures.set(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.dialect, new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.dialect, [], GreekParadigmDataset.languageID))
+
+    // Create an importer with default values for every feature
+    for (let feature of this.typeFeatures.values()) { // eslint-disable-line prefer-const
+      feature.addImporter(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["FeatureImporter"](feature.values, true))
+    }
+
+    this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense).getImporter()
+      .map('future_perfect', [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE_PERFECT])
+  }
+
   static get languageID () {
     return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK
   }
@@ -12534,40 +12553,7 @@ class GreekParadigmDataset {
     return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["LanguageModelFactory"].getLanguageModel(this.languageID)
   }
 
-  static get constants () {
-    // TODO: Shall we move it to constants in data models?
-    return {
-      GEND_MASCULINE_FEMININE: 'masculine feminine',
-      GEND_MASCULINE_FEMININE_NEUTER: 'masculine feminine neuter'
-    }
-  }
-
-  static get typeFeatures () {
-    if (!typeFeaturesInitialized) { this.initTypeFeatures() }
-    return typeFeatures
-  }
-
-  static initTypeFeatures () {
-    typeFeatures = this.model.typeFeatures
-    typeFeatures.set(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote, new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.footnote, [], this.languageID))
-    typeFeatures.set(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm, new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.fullForm, [], this.languageID))
-    typeFeatures.set(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.hdwd, [], this.languageID))
-    typeFeatures.set(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.dialect, new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.dialect, [], this.languageID))
-
-    // Create an importer with default values for every feature
-    for (let feature of typeFeatures.values()) { // eslint-disable-line prefer-const
-      feature.addImporter(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["FeatureImporter"](feature.values, true))
-    }
-
-    // Custom importers for Greek-specific feature values
-    typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender).getImporter()
-      .map(this.constants.GEND_MASCULINE_FEMININE, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE])
-      .map(this.constants.GEND_MASCULINE_FEMININE_NEUTER, [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_MASCULINE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_FEMININE, alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].GEND_NEUTER])
-    typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.tense).getImporter()
-      .map('future_perfect', [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].TENSE_FUTURE_PERFECT])
-  }
-
-  static setParadigmData (partOfSpeech, paradigms, rulesData, suppParadigmTables) {
+  setParadigmData (partOfSpeech, paradigms, rulesData, suppParadigmTables) {
     // An order of columns in a data CSV file
     const n = {
       id: 0,
@@ -12617,11 +12603,17 @@ class GreekParadigmDataset {
       paradigm.addSuppTables(suppParadigmTables)
     }
 
-    console.info('setParadigmData - ')
     return Array.from(paradigms.values())
   }
 
-  static loadVerbParadigmData () {
+  loadData () {
+    this.loadVerbParadigmData()
+    this.loadVerbParticipleParadigmData()
+
+    this.dataLoaded = true
+  }
+
+  loadVerbParadigmData () {
     const verbParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParadigmTables
     const verbParticipleParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParticipleParadigmTables
     const verbAndParticipleParadigmTables = new Map([...verbParadigmTables, ...verbParticipleParadigmTables])
@@ -12637,7 +12629,7 @@ class GreekParadigmDataset {
     this.addFootnotes(partOfSpeech, _paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], papaparse__WEBPACK_IMPORTED_MODULE_5___default.a.parse(_paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParadigmFootnotes, { skipEmptyLines: true }).data)
   }
 
-  static loadVerbParticipleParadigmData () {
+  loadVerbParticipleParadigmData () {
     const verbParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParadigmTables
     const verbParticipleParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].verbParticipleParadigmTables
     const verbAndParticipleParadigmTables = new Map([...verbParadigmTables, ...verbParticipleParadigmTables])
@@ -12650,34 +12642,14 @@ class GreekParadigmDataset {
     this.addParadigms(partOfSpeech, paradigms)
   }
 
-  static addParadigms (partOfSpeech, paradigms) {
-    if (!pos.has(partOfSpeech.value)) {
-      pos.set(partOfSpeech.value, new _lib_inflection_set_js__WEBPACK_IMPORTED_MODULE_3__["default"](partOfSpeech.value, this.languageID))
+  addParadigms (partOfSpeech, paradigms) {
+    if (!this.pos.has(partOfSpeech.value)) {
+      this.pos.set(partOfSpeech.value, new _lib_inflection_set_js__WEBPACK_IMPORTED_MODULE_3__["default"](partOfSpeech.value, this.languageID))
     }
-    pos.get(partOfSpeech.value).addInflectionItems(paradigms)
+    this.pos.get(partOfSpeech.value).addInflectionItems(paradigms)
   }
 
-  static addFootnote (partOfSpeech, classType, index, text) {
-    if (!index) {
-      throw new Error('Footnote index data should not be empty.')
-    }
-
-    if (!text) {
-      throw new Error('Footnote text data should not be empty.')
-    }
-
-    const footnote = new _lib_footnote_js__WEBPACK_IMPORTED_MODULE_4__["default"](index, text, partOfSpeech)
-
-    // this.footnotes.push(footnote)
-
-    if (!pos.has(partOfSpeech)) {
-      pos.set(partOfSpeech, new _lib_inflection_set_js__WEBPACK_IMPORTED_MODULE_3__["default"](partOfSpeech, this.languageID))
-    }
-    pos.get(partOfSpeech).addFootnote(classType, index, footnote)
-    return footnote
-  }
-
-  static addFootnotes (partOfSpeech, classType, data) {
+  addFootnotes (partOfSpeech, classType, data) {
     let footnotes = [] // eslint-disable-line prefer-const
     // First row are headers
     for (let i = 1; i < data.length; i++) {
@@ -12687,29 +12659,41 @@ class GreekParadigmDataset {
     return footnotes
   }
 
-  static setParadigmInflectionData (inflection) {
+  setBaseInflectionData (inflection, lemma) {
+    inflection.lemma = lemma
+    inflection.addFeature(new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"](alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.word, lemma.word, lemma.languageID))
+    inflection.constraints.implemented = this.isImplemented(inflection)
+  }
+
+  setInflectionData (inflection, lemma) {
     let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value
-    // console.info('setParadigmInflectionData - ', pos)
-    if (pos.get(partOfSpeech)) {
-      inflection.constraints.paradigmBased = pos.get(partOfSpeech).hasMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflection)
+    if (this.pos.get(partOfSpeech)) {
+      this.setBaseInflectionData(inflection, lemma)
+      inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflection)
     }
+    return inflection
   }
 
-  static createParadigmInflectionSet (pofsValue, inflections, inflectionSet) {
-    if (!this.sourceSet(pofsValue)) {
-      return
+  createInflectionSet (pofsValue, inflections, options) {
+    let inflectionSet = new _lib_inflection_set_js__WEBPACK_IMPORTED_MODULE_3__["default"](pofsValue, this.languageID) // eslint-disable-line prefer-const
+    inflectionSet.inflections = inflections.filter(i => i.constraints.implemented === true)
+    inflectionSet.isImplemented = inflectionSet.inflections.length > 0
+
+    const sourceSet = this.pos.get(pofsValue)
+    if (!sourceSet) {
+      return inflectionSet
     }
-    const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
 
-    if (paradigmBased) {
-      const paradigms = this.sourceSet(pofsValue).getMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflections)
-      inflectionSet.addInflectionItems(paradigms)
+    if (inflectionSet.isImplemented) {      
+      const paradigmBased = inflections.some(i => i.constraints.paradigmBased)
+
+      if (paradigmBased) {
+        // console.info('sourceSet', sourceSet.types)
+        const paradigms = sourceSet.getMatchingItems(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"], inflections)
+        inflectionSet.addInflectionItems(paradigms)
+      }
     }
-
-  }
-
-  static sourceSet (pofsValue) {
-    return pos.get(pofsValue)
+    return inflectionSet
   }
 
   static getParadigmStandardForm (partOfSpeech, paradigmID) {
@@ -13876,6 +13860,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_lib_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lib/view.js */ "./views/lib/view.js");
 /* harmony import */ var _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lang/greek/greek-view.js */ "./views/lang/greek/greek-view.js");
 /* harmony import */ var _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/paradigm/data/greek/greek-paradigm-dataset.js */ "./src/paradigm/data/greek/greek-paradigm-dataset.js");
+/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
+
 
 
 
@@ -13925,6 +13911,10 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
 
     this.hasCredits = this.paradigm.hasCredits
     this.creditsText = this.paradigm.creditsText
+  }
+
+  static get dataset () {
+    return _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_5__["default"].getDataset(this.languageID, 'GreekParadigmDataset')
   }
 
   static get viewID () {
@@ -13992,6 +13982,8 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     const inflectionData = this.getInflectionsData(homonym)
     if (this.matchFilter(homonym.languageID, homonym.inflections, inflectionData)) {
       const paradigms = inflectionData.types.get(this.inflectionType).items
+
+      // console.info('getMatchingInstances paradigms', inflectionData.types)
       return paradigms.map(paradigm => new this(paradigm, homonym, inflectionData))
     }
     return []
@@ -14026,8 +14018,7 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     if (!options || !options.paradigmID) {
       throw new Error(`Obligatory options property, "paradigmID", is missing`)
     }
-    const paradigm = _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_4__["default"].getParadigmStandardForm(this.mainPartOfSpeech).types.get(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"]).getByID(paradigmID)
-    // const paradigm = this.dataset.pos.get(this.mainPartOfSpeech).types.get(Paradigm).getByID(options.paradigmID)
+    const paradigm = this.dataset.pos.get(this.mainPartOfSpeech).types.get(_paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"]).getByID(options.paradigmID)
     if (paradigm) {
       return new this(paradigm, null, null).render().noSuffixMatchesGroupsHidden(false)
     }
@@ -14300,16 +14291,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekView; });
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
 /* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _lib_table_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/table.js */ "./views/lib/table.js");
-/* harmony import */ var _lib_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/view.js */ "./views/lib/view.js");
-/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
-
-// import LanguageDatasetFactory from '../../../lib/language-dataset-factory.js'
-
+/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
+/* harmony import */ var _lib_table_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/table.js */ "./views/lib/table.js");
+/* harmony import */ var _lib_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/view.js */ "./views/lib/view.js");
+/* harmony import */ var _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/group-feature-type.js */ "./views/lib/group-feature-type.js");
 
 
 
-class GreekView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
+
+
+
+// import GreekLanguageDataset from '@lib/lang/greek/greek-language-dataset.js'
+
+class GreekView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_3__["default"] {
   constructor (homonym, inflectionData) {
     super(homonym, inflectionData)
 
@@ -14318,12 +14312,12 @@ class GreekView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
     those values in child objects.
      */
     this.features = {
-      numbers: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number, this.constructor.languageID, 'Number'),
-      cases: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase, this.constructor.languageID, 'Case'),
-      declensions: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension, this.constructor.languageID, 'Declension Stem'),
-      genders: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender, this.constructor.languageID, 'Gender'),
-      types: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type, this.constructor.languageID, 'Type'),
-      persons: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_3__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person, this.constructor.languageID, 'Person')
+      numbers: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.number, this.constructor.languageID, 'Number'),
+      cases: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmCase, this.constructor.languageID, 'Case'),
+      declensions: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.declension, this.constructor.languageID, 'Declension Stem'),
+      genders: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender, this.constructor.languageID, 'Gender'),
+      types: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.type, this.constructor.languageID, 'Type'),
+      persons: _lib_group_feature_type_js__WEBPACK_IMPORTED_MODULE_4__["default"].createFromType(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person, this.constructor.languageID, 'Person')
     }
     this.features.numbers.getOrderedFeatures = this.constructor.getOrderedNumbers
     this.features.genders.addFeature(GreekView.datasetConsts.GEND_MASCULINE_FEMININE,
@@ -14340,12 +14334,16 @@ class GreekView extends _lib_view_js__WEBPACK_IMPORTED_MODULE_2__["default"] {
     return alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].LANG_GREEK
   }
 
+  static get dataset () {
+    return _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDataset(this.languageID, 'GreekLanguageDataset')
+  }
+
   /**
    * Creates and initializes an inflection table. Redefine this method in child objects in order to create
    * an inflection table differently.
    */
   createTable () {
-    this.table = new _lib_table_js__WEBPACK_IMPORTED_MODULE_1__["default"]([this.features.declensions, this.features.genders,
+    this.table = new _lib_table_js__WEBPACK_IMPORTED_MODULE_2__["default"]([this.features.declensions, this.features.genders,
       this.features.types, this.features.numbers, this.features.cases])
 
     let features = this.table.features // eslint-disable-line prefer-const
@@ -15693,6 +15691,7 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
       for (const infl of inflections) {
         let clone = infl.clone()
         clone[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] = clone[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].createFeature(Constructor.mainPartOfSpeech)
+
         clone = this.constructor.dataset.setInflectionData(clone, infl.lemma)
         linkedViewInflections.push(clone)
       }
@@ -18312,7 +18311,7 @@ class ViewSet {
 
     if (this.homonym) {
       this.languageID = homonym.languageID
-      this.dataset = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDataset(homonym.languageID)
+      this.datasets = _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDatasets(homonym.languageID)
 
       /**
        * Whether inflections are enabled for the homonym's language
@@ -18321,9 +18320,12 @@ class ViewSet {
 
       if (this.enabled) {
         for (const lexeme of homonym.lexemes) {
-          for (let inflection of lexeme.inflections) {
+          for (const inflection of lexeme.inflections) {
             // Inflections are grouped by part of speech
-            inflection = this.dataset.setInflectionData(inflection, lexeme.lemma)
+            // inflection = this.dataset.setInflectionData(inflection, lexeme.lemma)
+            this.datasets.forEach(dataset => {
+              dataset.setInflectionData(inflection, lexeme.lemma)
+            })
           }
         }
 
@@ -18532,7 +18534,7 @@ class View {
    * @return {LanguageDataset}
    */
   static get dataset () {
-    return _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDataset(this.languageID)
+    return _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDatasets(this.languageID)[0]
   }
 
   static get model () {
@@ -18754,7 +18756,8 @@ class View {
 
   static getInflectionsData (homonym, options) {
     // Select inflections this view needs
-    return this.dataset.createInflectionSet(this.mainPartOfSpeech, this.getRelatedInflections(homonym.inflections), options)
+    const dataset = this.dataset
+    return dataset.createInflectionSet(this.mainPartOfSpeech, this.getRelatedInflections(homonym.inflections), options)
   }
 
   /**

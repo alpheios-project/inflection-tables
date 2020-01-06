@@ -9,7 +9,6 @@ export default class ViewSetFactory {
     let viewSet
     try {
       const Constructor = this.getConstructor(homonym.languageID)
-      // console.info('ViewSetFactory.create - ', Constructor.name)
       viewSet = new Constructor(homonym)
     } catch (e) {
       console.error(`Cannot build inflection tables: ${e}`)

@@ -53,7 +53,6 @@ export default class LatinVerbSupineIrregularView extends LatinVerbIrregularBase
       i => i[Feature.types.part].value === this.mainPartOfSpeech &&
         i.constraints && i.constraints.irregular
     )
-    // console.info('getInflectionsData inflections', inflections)
     return this.dataset.createInflectionSet(this.mainPartOfSpeech, inflections, options)
   }
 

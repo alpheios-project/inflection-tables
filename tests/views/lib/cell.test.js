@@ -24,7 +24,10 @@ describe('cell.test.js', () => {
 
   beforeAll(async () => {
     testHomonym = await BaseTestHelp.getHomonym('δύο', Constants.LANG_GREEK)
-    testInflectionData = await LanguageDatasetFactory.getInflectionData(testHomonym)
+    const dataset = LanguageDatasetFactory.getDataset(Constants.LANG_GREEK, 'GreekLanguageDataset')
+
+    testInflectionData = dataset.getInflectionData(testHomonym)
+    // console.info('testInflectionData - ', testInflectionData)
     testMorphemes = testInflectionData.pos.get('numeral').types.get(Form).items.slice(0, 1)
 
     testFeatures = []
@@ -137,4 +140,5 @@ describe('cell.test.js', () => {
     expect(cell.column.clearHighlighting).toHaveBeenCalled()
     expect(cell.row.clearHighlighting).toHaveBeenCalled()
   })
+  
 })
