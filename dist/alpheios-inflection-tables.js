@@ -13883,6 +13883,32 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
 
     this.hasCredits = this.paradigm.hasCredits
     this.creditsText = this.paradigm.creditsText
+
+    this.defineComparativeFeatures()
+  }
+
+  
+  defineComparativeFeatures () {
+    let comparativeFeatures = []
+    let dataCell
+
+    for (const row of this.wideTable.rows) {
+      for (const cell of row.cells) {
+        if (cell.role === 'data') {
+          dataCell = cell
+          break
+        }
+      }
+      if (dataCell) { break }
+    }
+
+    Object.keys(dataCell).forEach(prop => {
+      if (prop !== 'role' && prop !== 'value') {
+        comparativeFeatures.push(prop)
+      }
+    })    
+
+    this.comparativeFeatures = comparativeFeatures
   }
 
   static get dataset () {
@@ -13953,7 +13979,40 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
 
   render (options) {
     // Do nothing as there is no need to render anything
+    this.fillFullMatch()
     return this
+  }
+
+  fillFullMatch () {
+    this.wideTable.rows.forEach(row => {
+      row.cells.forEach(cell => {
+        cell.fullMatch = this.defineCellFullMatch(cell)
+      })
+    })
+  }
+
+  defineCellFullMatch (cell) {
+    if (cell.role !== 'data') { return }
+    if (this.homonym && this.homonym.inflections) {
+
+      for (const inflection of this.homonym.inflections) {
+        let fullMatch = true
+
+        for (const feature of this.comparativeFeatures) {
+          if (inflection.hasOwnProperty(feature)) {
+            fullMatch = fullMatch && cell[feature].hasValues(inflection[feature].values)
+            if (!fullMatch) {
+              break
+            } // If at least one feature does not match, there is no reason to check others
+          }
+        }
+
+        if (fullMatch) {
+          return true
+        }
+      }
+    }
+    return false
   }
 
   get wideViewNodes () {
