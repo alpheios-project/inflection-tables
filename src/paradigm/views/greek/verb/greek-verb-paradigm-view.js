@@ -3,7 +3,6 @@ import Paradigm from '@/paradigm/lib/paradigm.js'
 import View from '@views/lib/view.js'
 import GreekView from '@views/lang/greek/greek-view.js'
 
-import GreekParadigmDataset from '@/paradigm/data/greek/greek-paradigm-dataset.js'
 import LDF from '@lib/language-dataset-factory.js'
 
 /**
@@ -50,6 +49,7 @@ export default class GreekVerbParadigmView extends GreekView {
     this.creditsText = this.paradigm.creditsText
 
     this.defineComparativeFeatures()
+    this.fullMatchDefined = false
   }
 
   
@@ -144,7 +144,7 @@ export default class GreekVerbParadigmView extends GreekView {
 
   render (options) {
     // Do nothing as there is no need to render anything
-    this.fillFullMatch()
+    if (!this.fullMatchDefined) { this.fillFullMatch() }
     return this
   }
 
@@ -154,6 +154,7 @@ export default class GreekVerbParadigmView extends GreekView {
         cell.fullMatch = this.defineCellFullMatch(cell)
       })
     })
+    this.fullMatchDefined = true
   }
 
   defineCellFullMatch (cell) {

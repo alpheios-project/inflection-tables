@@ -13831,9 +13831,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/paradigm/lib/paradigm.js */ "./src/paradigm/lib/paradigm.js");
 /* harmony import */ var _views_lib_view_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @views/lib/view.js */ "./views/lib/view.js");
 /* harmony import */ var _views_lang_greek_greek_view_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @views/lang/greek/greek-view.js */ "./views/lang/greek/greek-view.js");
-/* harmony import */ var _paradigm_data_greek_greek_paradigm_dataset_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/paradigm/data/greek/greek-paradigm-dataset.js */ "./src/paradigm/data/greek/greek-paradigm-dataset.js");
-/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
-
+/* harmony import */ var _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @lib/language-dataset-factory.js */ "./lib/language-dataset-factory.js");
 
 
 
@@ -13885,6 +13883,7 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     this.creditsText = this.paradigm.creditsText
 
     this.defineComparativeFeatures()
+    this.fullMatchDefined = false
   }
 
   
@@ -13912,7 +13911,7 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
   }
 
   static get dataset () {
-    return _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_5__["default"].getDataset(this.languageID, 'GreekParadigmDataset')
+    return _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_4__["default"].getDataset(this.languageID, 'GreekParadigmDataset')
   }
 
   static get viewID () {
@@ -13979,7 +13978,7 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
 
   render (options) {
     // Do nothing as there is no need to render anything
-    this.fillFullMatch()
+    if (!this.fullMatchDefined) { this.fillFullMatch() }
     return this
   }
 
@@ -13989,6 +13988,7 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
         cell.fullMatch = this.defineCellFullMatch(cell)
       })
     })
+    this.fullMatchDefined = true
   }
 
   defineCellFullMatch (cell) {
