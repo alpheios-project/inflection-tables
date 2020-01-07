@@ -13882,32 +13882,8 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     this.hasCredits = this.paradigm.hasCredits
     this.creditsText = this.paradigm.creditsText
 
-    this.defineComparativeFeatures()
+    // this.defineComparativeFeatures()
     this.fullMatchDefined = false
-  }
-
-  
-  defineComparativeFeatures () {
-    let comparativeFeatures = []
-    let dataCell
-
-    for (const row of this.wideTable.rows) {
-      for (const cell of row.cells) {
-        if (cell.role === 'data') {
-          dataCell = cell
-          break
-        }
-      }
-      if (dataCell) { break }
-    }
-
-    Object.keys(dataCell).forEach(prop => {
-      if (prop !== 'role' && prop !== 'value') {
-        comparativeFeatures.push(prop)
-      }
-    })    
-
-    this.comparativeFeatures = comparativeFeatures
   }
 
   static get dataset () {
@@ -13988,17 +13964,40 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
         cell.fullMatch = this.defineCellFullMatch(cell)
       })
     })
+
+    if (this.wideSubTables && this.wideSubTables.length > 0) {
+      this.wideSubTables.forEach(table => {
+        table.rows.forEach(row => {
+          row.cells.forEach(cell => {
+            cell.fullMatch = this.defineCellFullMatch(cell)
+          })
+        })
+      })
+
+    }
     this.fullMatchDefined = true
+  }
+
+  defineComparativeFeatures (cell) {
+    let comparativeFeatures = []
+    Object.keys(cell).forEach(prop => {
+      if (prop !== 'role' && prop !== 'value') {
+        comparativeFeatures.push(prop)
+      }
+    })    
+
+    return comparativeFeatures
   }
 
   defineCellFullMatch (cell) {
     if (cell.role !== 'data') { return }
     if (this.homonym && this.homonym.inflections) {
+      const comparativeFeatures = this.defineComparativeFeatures(cell)
 
       for (const inflection of this.homonym.inflections) {
         let fullMatch = true
 
-        for (const feature of this.comparativeFeatures) {
+        for (const feature of comparativeFeatures) {
           if (inflection.hasOwnProperty(feature)) {
             fullMatch = fullMatch && cell[feature].hasValues(inflection[feature].values)
             if (!fullMatch) {
