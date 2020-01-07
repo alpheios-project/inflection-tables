@@ -2146,7 +2146,7 @@ class LanguageDatasetFactory {
       return
     }
     if (constructorName) {
-      return datasets.find(dataset => dataset.constructor.name.indexOf(constructorName) === (dataset.constructor.name.length - constructorName.length))
+      return datasets.find(dataset => dataset.constructor.name.endsWith(constructorName))
     }
     return datasets[0]
   }
@@ -18496,6 +18496,9 @@ class View {
    * @return {LanguageDataset}
    */
   static get dataset () {
+    // Every view should have its own dataset property.
+    // But if it is not defined explicitly then this would be used.
+    // At this case we get the first defined dataset in all datasets defined for the language (by default).
     return _lib_language_dataset_factory_js__WEBPACK_IMPORTED_MODULE_1__["default"].getDatasets(this.languageID)[0]
   }
 
@@ -18718,8 +18721,7 @@ class View {
 
   static getInflectionsData (homonym, options) {
     // Select inflections this view needs
-    const dataset = this.dataset
-    return dataset.createInflectionSet(this.mainPartOfSpeech, this.getRelatedInflections(homonym.inflections), options)
+    return this.dataset.createInflectionSet(this.mainPartOfSpeech, this.getRelatedInflections(homonym.inflections), options)
   }
 
   /**
