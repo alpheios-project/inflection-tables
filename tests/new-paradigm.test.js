@@ -36,7 +36,7 @@ describe('greek-verb-paradigm.test.js', () => {
     jest.clearAllMocks()
   })
 
-  it.skip('1 - check paradigm (paradigm1) - βουλεύῃς', async () => {
+  it('1 - check paradigm (paradigm1) - βουλεύῃς', async () => {
     const locale = "en-US"
     let homonym = await BaseTestHelp.getHomonym('βουλεύῃς', Constants.LANG_GREEK)
     const inflectionsViewSet = ViewSetFactory.create(homonym, locale)
