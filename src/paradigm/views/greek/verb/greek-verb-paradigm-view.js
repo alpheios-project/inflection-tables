@@ -169,9 +169,7 @@ export default class GreekVerbParadigmView extends GreekView {
           }
         }
 
-        if (fullMatch) {
-          return true
-        }
+        if (fullMatch) { return true }
       }
     }
     return false

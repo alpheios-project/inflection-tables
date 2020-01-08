@@ -13882,7 +13882,6 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
     this.hasCredits = this.paradigm.hasCredits
     this.creditsText = this.paradigm.creditsText
 
-    // this.defineComparativeFeatures()
     this.fullMatchDefined = false
   }
 
@@ -13959,24 +13958,22 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
   }
 
   fillFullMatch () {
-    this.wideTable.rows.forEach(row => {
+    this.checkTableForFullMatch(this.wideTable)
+
+    if (this.wideSubTables && this.wideSubTables.length > 0) {
+      this.wideSubTables.forEach(table => this.checkTableForFullMatch(table))
+    }
+    this.fullMatchDefined = true
+  }
+
+  checkTableForFullMatch (table) {
+    table.rows.forEach(row => {
       row.cells.forEach(cell => {
         cell.fullMatch = this.defineCellFullMatch(cell)
       })
     })
-
-    if (this.wideSubTables && this.wideSubTables.length > 0) {
-      this.wideSubTables.forEach(table => {
-        table.rows.forEach(row => {
-          row.cells.forEach(cell => {
-            cell.fullMatch = this.defineCellFullMatch(cell)
-          })
-        })
-      })
-
-    }
-    this.fullMatchDefined = true
   }
+
 
   defineComparativeFeatures (cell) {
     let comparativeFeatures = []
@@ -14006,9 +14003,7 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
           }
         }
 
-        if (fullMatch) {
-          return true
-        }
+        if (fullMatch) { return true }
       }
     }
     return false
