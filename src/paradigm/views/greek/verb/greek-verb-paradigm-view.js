@@ -48,7 +48,6 @@ export default class GreekVerbParadigmView extends GreekView {
     this.hasCredits = this.paradigm.hasCredits
     this.creditsText = this.paradigm.creditsText
 
-    // this.defineComparativeFeatures()
     this.fullMatchDefined = false
   }
 
@@ -125,24 +124,22 @@ export default class GreekVerbParadigmView extends GreekView {
   }
 
   fillFullMatch () {
-    this.wideTable.rows.forEach(row => {
+    this.checkTableForFullMatch(this.wideTable)
+
+    if (this.wideSubTables && this.wideSubTables.length > 0) {
+      this.wideSubTables.forEach(table => this.checkTableForFullMatch(table))
+    }
+    this.fullMatchDefined = true
+  }
+
+  checkTableForFullMatch (table) {
+    table.rows.forEach(row => {
       row.cells.forEach(cell => {
         cell.fullMatch = this.defineCellFullMatch(cell)
       })
     })
-
-    if (this.wideSubTables && this.wideSubTables.length > 0) {
-      this.wideSubTables.forEach(table => {
-        table.rows.forEach(row => {
-          row.cells.forEach(cell => {
-            cell.fullMatch = this.defineCellFullMatch(cell)
-          })
-        })
-      })
-
-    }
-    this.fullMatchDefined = true
   }
+
 
   defineComparativeFeatures (cell) {
     let comparativeFeatures = []
