@@ -17,8 +17,8 @@ import GreekParadigmDataset from '@/paradigm/data/greek/greek-paradigm-dataset.j
 
 describe('greek-verb-paradigm.test.js', () => {
   // console.error = function () {}
-  // console.log = function () {}
-  // console.warn = function () {}
+  console.log = function () {}
+  console.warn = function () {}
 
   const locale = "en-US"
   beforeAll(async () => {
@@ -49,7 +49,7 @@ describe('greek-verb-paradigm.test.js', () => {
     expect(matchingViews[0].paradigm.paradigmID).toEqual('verbpdgm1')
   })
 
-  it('2 - check paradigm (paradigm1) - βουλεύῃς', async () => {
+  it.skip('2 - check paradigm (paradigm1) - βουλεύῃς', async () => {
     let homonym = await BaseTestHelp.getHomonym('βουλεύῃς', Constants.LANG_GREEK)
     
     let dataset = new GreekParadigmDataset()
