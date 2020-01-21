@@ -2407,7 +2407,6 @@ class LanguageDataset {
      */
 
     let partOfSpeech = inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part]
-
     if (!partOfSpeech) {
       throw new Error('Part of speech data is missing in an inflection')
     }
@@ -13936,7 +13935,7 @@ class GreekVerbParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMP
    */
   static matchFilter (languageID, inflections, inflectionData) {
     return (this.languageID === languageID &&
-      inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)) &&
+      inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] && i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)) &&
       inflectionData.types.has(this.inflectionType)
   }
 
@@ -18337,9 +18336,13 @@ class ViewSet {
         for (const lexeme of homonym.lexemes) {
           for (const inflection of lexeme.inflections) {
             // Inflections are grouped by part of speech
-            this.datasets.forEach(dataset => {
-              dataset.setInflectionData(inflection, lexeme.lemma)
-            })
+            try {
+              this.datasets.forEach(dataset => {
+                dataset.setInflectionData(inflection, lexeme.lemma)
+              })
+            } catch (e) {
+              console.error(`Cannot set inflection data: ${e}`)
+            }
           }
         }
 
@@ -18769,7 +18772,7 @@ class View {
    * @return {Inflection[]}
    */
   static getRelatedInflections (inflections) {
-    return inflections.filter(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)
+    return inflections.filter(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] && i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)
   }
 
   static getInflectionsData (homonym, options) {
@@ -18788,10 +18791,10 @@ class View {
   static getMatchingInstances (homonym) {
     if (this.matchFilter(homonym.languageID, homonym.inflections)) {
       const inflectionData = this.getInflectionsData(homonym)
-
       if (inflectionData.types.has(this.inflectionType)) {
         // There is some inflection data found for the view's morpheme type
         const view = new this(homonym, inflectionData)
+
         return [view]
       }
     }

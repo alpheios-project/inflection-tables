@@ -29,9 +29,13 @@ export default class ViewSet {
         for (const lexeme of homonym.lexemes) {
           for (const inflection of lexeme.inflections) {
             // Inflections are grouped by part of speech
-            this.datasets.forEach(dataset => {
-              dataset.setInflectionData(inflection, lexeme.lemma)
-            })
+            try {
+              this.datasets.forEach(dataset => {
+                dataset.setInflectionData(inflection, lexeme.lemma)
+              })
+            } catch (e) {
+              console.error(`Cannot set inflection data: ${e}`)
+            }
           }
         }
 
