@@ -15108,7 +15108,7 @@ class GreekPronounView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
    * @return {boolean}
    */
   static matchFilter (languageID, inflections, inflectionData) {
-    if (this.languageID === languageID && inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)) {
+    if (this.languageID === languageID && inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] && i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)) {
       if (inflectionData.types.has(this.inflectionType)) {
         const inflections = inflectionData.types.get(this.inflectionType)
         const found = inflections.items.find(form => {
@@ -15669,7 +15669,8 @@ class LatinVerbIrregularVoiceView extends _views_lang_latin_latin_view_js__WEBPA
   }
 
   static enabledForInflection (inflection) {
-    return inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech &&
+    return inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] &&
+      inflection[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech &&
       inflection.constraints &&
       inflection.constraints.irregular
   }
@@ -18253,6 +18254,7 @@ class ViewSetFactory {
       // Create an empty ViewSet with no inflection data
       viewSet = new _view_set_js__WEBPACK_IMPORTED_MODULE_1__["default"]()
     }
+
     return viewSet
   }
 
@@ -18335,7 +18337,6 @@ class ViewSet {
         for (const lexeme of homonym.lexemes) {
           for (const inflection of lexeme.inflections) {
             // Inflections are grouped by part of speech
-            // inflection = this.dataset.setInflectionData(inflection, lexeme.lemma)
             this.datasets.forEach(dataset => {
               dataset.setInflectionData(inflection, lexeme.lemma)
             })
@@ -18344,6 +18345,7 @@ class ViewSet {
 
         this.matchingViews.push(...this.constructor.views.reduce(
           (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym)), []))
+
         this.updateMatchingViewsMap(this.matchingViews)
       }
     }
@@ -18609,7 +18611,7 @@ class View {
   static matchFilter (languageID, inflections) {
     // return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
     // Disable multiple parts of speech for now
-    return (this.languageID === languageID && inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech))
+    return (this.languageID === languageID && inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] && i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech))
   }
 
   /**

@@ -176,7 +176,7 @@ export default class View {
   static matchFilter (languageID, inflections) {
     // return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
     // Disable multiple parts of speech for now
-    return (this.languageID === languageID && inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech))
+    return (this.languageID === languageID && inflections.some(i => i[Feature.types.part] && i[Feature.types.part].value === this.mainPartOfSpeech))
   }
 
   /**

@@ -29,7 +29,6 @@ export default class ViewSet {
         for (const lexeme of homonym.lexemes) {
           for (const inflection of lexeme.inflections) {
             // Inflections are grouped by part of speech
-            // inflection = this.dataset.setInflectionData(inflection, lexeme.lemma)
             this.datasets.forEach(dataset => {
               dataset.setInflectionData(inflection, lexeme.lemma)
             })
@@ -38,6 +37,7 @@ export default class ViewSet {
 
         this.matchingViews.push(...this.constructor.views.reduce(
           (acc, view) => acc.concat(...view.getMatchingInstances(this.homonym)), []))
+
         this.updateMatchingViewsMap(this.matchingViews)
       }
     }
