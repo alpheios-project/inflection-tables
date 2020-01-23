@@ -42,10 +42,8 @@ describe('greek-noun-paradigm.test.js', () => {
 
     const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
 
-    console.info(renderedTable.rows[0])
-
-    expect(renderedTable.rows[0].cells[2].fullMatch).toBeFalsy() // βουλεύεις
-    expect(renderedTable.rows[0].cells[3].fullMatch).toBeTruthy() // βουλεύῃς
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeTruthy() // βουλεύεις
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeFalsy() // βουλεύῃς
 
   })
 

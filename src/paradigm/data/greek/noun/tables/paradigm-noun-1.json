@@ -9,14 +9,14 @@
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
-                "value": "single"
+                "number": "singular",
+                "value": "singular"
             },
             {
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "case": "nominative",
                 "value": "nominative"
             },
@@ -25,7 +25,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "masculine",
-                "number": "single",
+                "number": "singular",
                 "case": "nominative",
                 "value": "ἄνθρωπος"
             },
@@ -34,7 +34,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "neuter",
-                "number": "single",
+                "number": "singular",
                 "case": "nominative",
                 "value": "ἔργον"
             }
@@ -44,14 +44,14 @@
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "value": ""
             },
             {
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "case": "genitive",
                 "value": "genitive"
             },
@@ -60,7 +60,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "masculine",
-                "number": "single",
+                "number": "singular",
                 "case": "genitive",
                 "value": "ἀνθρώπου"
             },
@@ -69,7 +69,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "neuter",
-                "number": "single",
+                "number": "singular",
                 "case": "genitive",
                 "value": "ἔργου"
             }
@@ -79,14 +79,14 @@
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "value": ""
             },
             {
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "case": "dative",
                 "value": "dative"
             },
@@ -95,7 +95,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "masculine",
-                "number": "single",
+                "number": "singular",
                 "case": "dative",
                 "value": "ἀνθρώπῳ"
             },
@@ -104,7 +104,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "neuter",
-                "number": "single",
+                "number": "singular",
                 "case": "dative",
                 "value": "ἔργῳ"
             }
@@ -114,14 +114,14 @@
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "value": ""
             },
             {
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "case": "accusative",
                 "value": "accusative"
             },
@@ -130,7 +130,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "masculine",
-                "number": "single",
+                "number": "singular",
                 "case": "accusative",
                 "value": "ἄνθρωπον"
             },
@@ -139,7 +139,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "neuter",
-                "number": "single",
+                "number": "singular",
                 "case": "accusative",
                 "value": "ἔργον"
             }
@@ -149,14 +149,14 @@
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "value": ""
             },
             {
                 "role": "label",
                 "declension": "2nd",
                 "stemtype": "os_ou",
-                "number": "single",
+                "number": "singular",
                 "case": "vocative",
                 "value": "vocative"
             },
@@ -165,7 +165,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "masculine",
-                "number": "single",
+                "number": "singular",
                 "case": "vocative",
                 "value": "ἄνθρωπε"
             },
@@ -174,7 +174,7 @@
                 "declension": "2nd",
                 "stemtype": "os_ou",
                 "gender": "neuter",
-                "number": "single",
+                "number": "singular",
                 "case": "vocative",
                 "value": "ἔργον"
             }
