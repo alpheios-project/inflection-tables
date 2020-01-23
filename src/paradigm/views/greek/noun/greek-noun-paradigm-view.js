@@ -9,5 +9,5 @@ export default class GreekNounParadigmView extends GreekVerbParadigmView {
   static get partsOfSpeech () {
     return [Constants.POFS_NOUN]
   }
-  
+
 }

@@ -30,10 +30,8 @@ describe('greek-noun-paradigm.test.js', () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἄνθρωπος', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
-    
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
 
-    console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
-/*
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
     BaseTestHelp.checkParadigm({
       view: inflectionsViewSet.matchingViews[0],
@@ -43,11 +41,12 @@ describe('greek-noun-paradigm.test.js', () => {
     })
 
     const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
-    */
-/*
-    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // βουλεύεις
-    expect(renderedTable.rows[2].cells[3].fullMatch).toBeTruthy() // βουλεύῃς
-    */
+
+    console.info(renderedTable.rows[0])
+
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeFalsy() // βουλεύεις
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeTruthy() // βουλεύῃς
+
   })
 
 })

@@ -174,9 +174,9 @@ export default class View {
    * @return {boolean}
    */
   static matchFilter (languageID, inflections) {
-    // return (this.languageID === inflection.languageID && this.partsOfSpeech.includes(inflection[Feature.types.part].value))
     // Disable multiple parts of speech for now
-    return (this.languageID === languageID && inflections.some(i => i[Feature.types.part].value === this.mainPartOfSpeech && !i.paradigmBased))
+    const res = (this.languageID === languageID && inflections.some(i => i[Feature.types.part] && i[Feature.types.part].value === this.mainPartOfSpeech))
+    return res
   }
 
   /**
@@ -334,7 +334,7 @@ export default class View {
    * @return {Inflection[]}
    */
   static getRelatedInflections (inflections) {
-    return inflections.filter(i => i[Feature.types.part].value === this.mainPartOfSpeech)
+    return inflections.filter(i => i[Feature.types.part] && i[Feature.types.part].value === this.mainPartOfSpeech)
   }
 
   static getInflectionsData (homonym, options) {
@@ -357,6 +357,7 @@ export default class View {
       if (inflectionData.types.has(this.inflectionType)) {
         // There is some inflection data found for the view's morpheme type
         const view = new this(homonym, inflectionData)
+
         return [view]
       }
     }

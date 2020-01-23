@@ -205,8 +205,7 @@ export default class GreekParadigmDataset extends LanguageDataset {
     let partOfSpeech = inflection[Feature.types.part].value
     if (this.pos.get(partOfSpeech)) {
       this.setBaseInflectionData(inflection, lemma)
-      const res = this.pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
-      inflection.constraints.paradigmBased = res
+      inflection.constraints.paradigmBased = this.pos.get(partOfSpeech).hasMatchingItems(Paradigm, inflection)
     }
     return inflection
   }
