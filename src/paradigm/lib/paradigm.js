@@ -147,8 +147,6 @@ export default class Paradigm {
    * @return {ParadigmRule[] | []} Array of matching rules or an empty array if no matches found.
    */
   matchingRules (inflection) {
-    const res = this.rules.filter(r => r.matches(inflection))
-    // ('matchingRules', res, inflection.constraints)
-    return res
+    return this.rules.filter(r => r.matches(inflection))
   }
 }
