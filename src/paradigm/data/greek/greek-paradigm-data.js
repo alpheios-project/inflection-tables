@@ -82,6 +82,7 @@ import verbParticipleParadigmRulesCSV from '@/paradigm/data/greek/verb-participl
 // Noun paradigm tables
 import paradigmNoun1 from '@/paradigm/data/greek/noun/tables/paradigm-noun-1.json'
 import paradigmNoun2 from '@/paradigm/data/greek/noun/tables/paradigm-noun-2.json'
+import paradigmNoun3 from '@/paradigm/data/greek/noun/tables/paradigm-noun-3.json'
 // Noun rules
 import nounParadigmRulesCSV from '@/paradigm/data/greek/noun/rules.csv'
 
@@ -189,7 +190,8 @@ export default class GreekParadigmData {
     const partOfSpeech = Constants.POFS_NOUN
     return new Map([
         ['nounpdgm1', new Paradigm(this.languageID, partOfSpeech, paradigmNoun1)],
-        ['nounpdgm2', new Paradigm(this.languageID, partOfSpeech, paradigmNoun2)]
+        ['nounpdgm2', new Paradigm(this.languageID, partOfSpeech, paradigmNoun2)],
+        ['nounpdgm3', new Paradigm(this.languageID, partOfSpeech, paradigmNoun3)]
     ])
   }
 

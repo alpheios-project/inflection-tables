@@ -155,4 +155,90 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[3].cells[3].fullMatch).toBeTruthy() // γνώμην
   })
 
+  it('3-1 - checked Verb Noun3 - ὑγιείᾳ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ὑγιείᾳ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Alpha-Declension Nouns: short-vowel feminines',
+      paradigmID: 'nounpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeFalsy() // θαλάττῃ
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeTruthy() // ὑγιείᾳ
+    
+  })
+
+  it('3-2 - checked Verb Noun3 - ὑγιείαιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ὑγιείαιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Alpha-Declension Nouns: short-vowel feminines',
+      paradigmID: 'nounpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // θαλάτταιν
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeTruthy() // ὑγιείαιν
+    
+  })
+
+  it('3-3 - checked Verb Noun3 - θάλαττᾰν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('θάλαττᾰν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Alpha-Declension Nouns: short-vowel feminines',
+      paradigmID: 'nounpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // ὑγίειᾰν
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeTruthy() // θάλαττᾰν
+    
+  })
+
+  it('3-4 - checked Verb Noun3 - θαλάττᾱς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('θαλάττᾱς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Alpha-Declension Nouns: short-vowel feminines',
+      paradigmID: 'nounpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeFalsy() // ὑγιείᾱς
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeTruthy() // θαλάττης
+    
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // ὑγιείᾱς
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeTruthy() // θαλάττᾱς
+  })
+
 })
