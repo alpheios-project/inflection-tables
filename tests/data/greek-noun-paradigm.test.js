@@ -241,4 +241,83 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[10].cells[3].fullMatch).toBeTruthy() // θαλάττᾱς
   })
 
+  it('4-1 - checked Verb Noun4 - νεανίου', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('νεανίου', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Alpha-Declension Nouns: masculines',
+      paradigmID: 'nounpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // νεανίου
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // στρατιώτου
+  })
+
+  it('4-2 - checked Verb Noun4 - νεανίαιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('νεανίαιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Alpha-Declension Nouns: masculines',
+      paradigmID: 'nounpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeTruthy() // νεανίαιν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // στρατιώταιν
+  })
+
+  it('4-3 - checked Verb Noun4 - στρατιώτην', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('στρατιώτην', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Alpha-Declension Nouns: masculines',
+      paradigmID: 'nounpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeTruthy() // στρατιώτην
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // νεανίᾱν
+  })
+
+  it('4-4 - checked Verb Noun4 - στρατιώταις', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('στρατιώταις', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Alpha-Declension Nouns: masculines',
+      paradigmID: 'nounpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[9].cells[3].fullMatch).toBeTruthy() // στρατιώταις
+    expect(renderedTable.rows[9].cells[2].fullMatch).toBeFalsy() // νεανίαις
+  })
 })
