@@ -49,7 +49,7 @@ export default class Paradigm {
           let cellFeatures = [] // eslint-disable-line prefer-const
           for (const prop of Object.keys(cell)) {
             // Eliminate "non-feature" keys
-            if (prop !== 'role' && prop !== 'value') {
+            if (prop !== 'role' && prop !== 'value'  && prop !== 'lemma') {
               cellFeatures.push(prop)
             }
           }
