@@ -320,4 +320,86 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[9].cells[3].fullMatch).toBeTruthy() // στρατιώταις
     expect(renderedTable.rows[9].cells[2].fullMatch).toBeFalsy() // νεανίαις
   })
+
+  it('5-1 - checked Verb Noun4 - κλώψ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('κλώψ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: labial and velar plosive stems',
+      paradigmID: 'nounpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeTruthy() // κλώψ
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeFalsy() // φύλαξ
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeTruthy() // κλώψ
+  })
+
+  it('5-2 - checked Verb Noun4 - κλῶπε', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('κλῶπε', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: labial and velar plosive stems',
+      paradigmID: 'nounpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeTruthy() // κλῶπε
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeFalsy() // φύλακε
+  })
+
+  it('5-3 - checked Verb Noun4 - φυλάκων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('φυλάκων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: labial and velar plosive stems',
+      paradigmID: 'nounpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeTruthy() // φυλάκων
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // κλωπῶν
+  })
+
+  it('5-4 - checked Verb Noun4 - φύλαξ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('φύλαξ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: labial and velar plosive stems',
+      paradigmID: 'nounpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeTruthy() // φύλαξ
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeFalsy() // κλώψ
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeTruthy() // φύλαξ
+  })
 })
