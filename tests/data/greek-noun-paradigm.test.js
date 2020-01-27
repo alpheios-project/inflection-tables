@@ -656,4 +656,88 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // γίγαντος
     expect(renderedTable.rows[1].cells[4].fullMatch).toBeTruthy() // ὀδόντος
   }) 
+
+
+  it('8-1 - checked Verb Noun8 - πράγματος', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πράγματος', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: neuter τ-stems',
+      paradigmID: 'nounpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // πράγματος
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // τέρατος
+  })
+
+  it('8-2 - checked Verb Noun8 - πραγμάτοιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πραγμάτοιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: neuter τ-stems',
+      paradigmID: 'nounpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeTruthy() // πραγμάτοιν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // τεράτοιν
+  })
+
+  it('8-3 - checked Verb Noun8 - τέρατι', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τέρατι', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: neuter τ-stems',
+      paradigmID: 'nounpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // πράγματι
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeTruthy() // τέρατι
+  })
+
+  it('8-4 - checked Verb Noun8 - τεράτων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τεράτων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: neuter τ-stems',
+      paradigmID: 'nounpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // πραγμάτων
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeTruthy() // τεράτων
+  })
+
+
+
 })
