@@ -86,6 +86,7 @@ import paradigmNoun3 from '@/paradigm/data/greek/noun/tables/paradigm-noun-3.jso
 import paradigmNoun4 from '@/paradigm/data/greek/noun/tables/paradigm-noun-4.json'
 import paradigmNoun5 from '@/paradigm/data/greek/noun/tables/paradigm-noun-5.json'
 import paradigmNoun6 from '@/paradigm/data/greek/noun/tables/paradigm-noun-6.json'
+import paradigmNoun7 from '@/paradigm/data/greek/noun/tables/paradigm-noun-7.json'
 // Noun rules
 import nounParadigmRulesCSV from '@/paradigm/data/greek/noun/rules.csv'
 
@@ -197,7 +198,8 @@ export default class GreekParadigmData {
         ['nounpdgm3', new Paradigm(this.languageID, partOfSpeech, paradigmNoun3)],
         ['nounpdgm4', new Paradigm(this.languageID, partOfSpeech, paradigmNoun4)],
         ['nounpdgm5', new Paradigm(this.languageID, partOfSpeech, paradigmNoun5)],
-        ['nounpdgm6', new Paradigm(this.languageID, partOfSpeech, paradigmNoun6)]
+        ['nounpdgm6', new Paradigm(this.languageID, partOfSpeech, paradigmNoun6)],
+        ['nounpdgm7', new Paradigm(this.languageID, partOfSpeech, paradigmNoun7)]
     ])
   }
 
