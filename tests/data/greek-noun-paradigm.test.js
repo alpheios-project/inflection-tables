@@ -1833,4 +1833,190 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // περίπλου
     expect(renderedTable.rows[6].cells[4].fullMatch).toBeTruthy() // κανοῖν
   })
+
+  it('16-1 - checked Verb Noun16 - γῆς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γῆς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: A-Declension',
+      paradigmID: 'nounpdgm16'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // γῆς
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // συκῆς
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // μνᾶς
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // Ἑρμοῦ
+  })
+
+  it('16-2 - checked Verb Noun16 - γῆν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γῆν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: A-Declension',
+      paradigmID: 'nounpdgm16'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeTruthy() // γῆν
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // συκῆν
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // μνᾶν
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // Ἑρμῆν
+  })
+
+  it('16-3 - checked Verb Noun16 - συκῆς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('συκῆς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[1],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: A-Declension',
+      paradigmID: 'nounpdgm16'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[1].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeFalsy() // γῆς
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeTruthy() // συκῆς
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // μνᾶς
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // Ἑρμοῦ
+  })
+
+  it('16-4 - checked Verb Noun16 - συκαῖ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('συκαῖ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: A-Declension',
+      paradigmID: 'nounpdgm16'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeFalsy() // νοῖν
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeTruthy() // περίπλου
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // κανοῖν
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeFalsy() // κανοῖν
+  })
+
+  it('16-5 - checked Verb Noun16 - μνᾶς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μνᾶς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: A-Declension',
+      paradigmID: 'nounpdgm16'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeFalsy() // γῆς
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // συκῆς
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeTruthy() // μνᾶς
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // Ἑρμοῦ
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeFalsy() // συκᾶς
+    expect(renderedTable.rows[10].cells[4].fullMatch).toBeTruthy() // μνᾶς
+    expect(renderedTable.rows[10].cells[5].fullMatch).toBeFalsy() // Ἑρμοῦ
+  })
+
+  it('16-6 - checked Verb Noun16 - μναῖς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μναῖς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: A-Declension',
+      paradigmID: 'nounpdgm16'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[9].cells[2].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[9].cells[3].fullMatch).toBeFalsy() // συκαῖς
+    expect(renderedTable.rows[9].cells[4].fullMatch).toBeTruthy() // μναῖς
+    expect(renderedTable.rows[9].cells[5].fullMatch).toBeFalsy() // Ἑρμαῖς
+  })
+
+  it('16-7 - checked Verb Noun16 - Ἑρμῆν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('Ἑρμῆν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: A-Declension',
+      paradigmID: 'nounpdgm16'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // γῆν
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // συκῆν
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // μνᾶν
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeTruthy() // Ἑρμῆν
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // συκῶν
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeFalsy() // μνῶν
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeTruthy() // Ἑρμῶν
+  })
+
+  it('16-8 - checked Verb Noun16 - Ἑρμᾶς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('Ἑρμᾶς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[1],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: A-Declension',
+      paradigmID: 'nounpdgm16'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[1].render().wideTable
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeFalsy() // συκᾶς
+    expect(renderedTable.rows[10].cells[4].fullMatch).toBeFalsy() // μνᾶς
+    expect(renderedTable.rows[10].cells[5].fullMatch).toBeTruthy() // Ἑρμᾶς
+  })
 })
