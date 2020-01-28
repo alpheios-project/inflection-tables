@@ -1564,4 +1564,273 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // θυγατέρες
     expect(renderedTable.rows[7].cells[5].fullMatch).toBeTruthy() // ἄνδρες
   })
+
+  it('14-1 - checked Verb Noun14 - ἱππέως', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἱππέως', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
+      paradigmID: 'nounpdgm14'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeTruthy() // ἱππεύς
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeFalsy() // γραῦς
+    expect(renderedTable.rows[0].cells[4].fullMatch).toBeFalsy() // ναῦς
+    expect(renderedTable.rows[0].cells[5].fullMatch).toBeFalsy() // βοῦς
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // ἱππέως
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // γρᾱός
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // νεώς
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // βοός
+  })
+
+  it('14-2 - checked Verb Noun14 - ἱππέοιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἱππέοιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
+      paradigmID: 'nounpdgm14'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeTruthy() // ἱππέοιν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // γρᾱοῖν
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeFalsy() // νεοῖν
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeFalsy() // βοοῖν
+  })
+
+  it('14-3 - checked Verb Noun14 - γραῦν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γραῦν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
+      paradigmID: 'nounpdgm14'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // ἱππέᾱ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeTruthy() // γραῦν
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // ναῦν
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // βοῦν
+  })
+
+  it('14-4 - checked Verb Noun14 - γρᾱοῖν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γρᾱοῖν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
+      paradigmID: 'nounpdgm14'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeFalsy() // ἱππέοιν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeTruthy() // γρᾱοῖν
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeFalsy() // νεοῖν
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeFalsy() // βοοῖν
+  })
+
+  it('14-5 - checked Verb Noun14 - ναῦν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ναῦν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
+      paradigmID: 'nounpdgm14'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // ἱππέᾱ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // γραῦν
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeTruthy() // ναῦν
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // βοῦν
+  })
+
+  it('14-6 - checked Verb Noun14 - νεῶν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('νεῶν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toBeGreaterThan(5)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[5],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
+      paradigmID: 'nounpdgm14'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[5].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // ἱππέων
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // γρᾱῶν
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeTruthy() // νεῶν
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeFalsy() // βοῶν
+  })
+
+  it('14-7 - checked Verb Noun14 - βοῦν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('βοῦν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
+      paradigmID: 'nounpdgm14'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // ἱππέᾱ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // γραῦν
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // ναῦν
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeTruthy() // βοῦν
+  })
+
+  it('14-8 - checked Verb Noun14 - βοῶν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('βοῶν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toBeGreaterThan(7)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[7],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
+      paradigmID: 'nounpdgm14'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[7].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // ἱππέων
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // γρᾱῶν
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeFalsy() // νεῶν
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeTruthy() // βοῶν
+  })
+
+  it('15-1 - checked Verb Noun15 - νοῦ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('νοῦ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[1],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: O-Declension',
+      paradigmID: 'nounpdgm15'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[1].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // νοῦ
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // περίπλου
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // κανοῦ
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeTruthy() // νοῦ
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeFalsy() // περίπλου
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeFalsy() // κανοῦν
+  })
+
+  it('15-2 - checked Verb Noun15 - νοῖν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('νοῖν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: O-Declension',
+      paradigmID: 'nounpdgm15'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeTruthy() // νοῖν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // περίπλοιν
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeFalsy() // κανοῖν
+  })
+
+  it('15-5 - checked Verb Noun15 - κανοῦ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('κανοῦ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[1],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: O-Declension',
+      paradigmID: 'nounpdgm15'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[1].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeFalsy() // νοῦ
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // περίπλου
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeTruthy() // κανοῦ
+  })
+
+  it('15-6 - checked Verb Noun15 - κανοῖν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('κανοῖν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns with Contraction: O-Declension',
+      paradigmID: 'nounpdgm15'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeFalsy() // νοῖν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // περίπλου
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeTruthy() // κανοῖν
+  })
 })
