@@ -738,6 +738,502 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[8].cells[3].fullMatch).toBeTruthy() // τεράτων
   })
 
+  it('9-1 - checked Verb Noun9 - ῥήτορος', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ῥήτορος', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: liquid and nasal stems',
+      paradigmID: 'nounpdgm9'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // ῥήτορος
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // δαίμονος
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // ἀγῶνος
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // ἁλός
+  })
+
+  it('9-2 - checked Verb Noun9 - ῥήτορες', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ῥήτορες', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: liquid and nasal stems',
+      paradigmID: 'nounpdgm9'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeTruthy() // ῥήτορες
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeFalsy() // δαίμονες
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // ἀγῶνες
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeFalsy() // ἅλες
+  })
+
+  it('9-3 - checked Verb Noun9 - δαῖμον', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δαῖμον', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: liquid and nasal stems',
+      paradigmID: 'nounpdgm9'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeFalsy() // ῥῆτορ
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeTruthy() // δαῖμον
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeFalsy() // ἀγών
+    expect(renderedTable.rows[4].cells[5].fullMatch).toBeFalsy() // ---
+  })
+
+  it('9-4 - checked Verb Noun9 - δαίμονᾰς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('δαίμονᾰς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: liquid and nasal stems',
+      paradigmID: 'nounpdgm9'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // ῥήτορᾰς
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeTruthy() // δαίμονᾰς
+    expect(renderedTable.rows[10].cells[4].fullMatch).toBeFalsy() // ἀγῶνᾰς
+    expect(renderedTable.rows[10].cells[5].fullMatch).toBeFalsy() // ἅλᾰς
+  })
+
+  it('9-5 - checked Verb Noun9 - ἀγῶνᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀγῶνᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: liquid and nasal stems',
+      paradigmID: 'nounpdgm9'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // ῥήτορᾰ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // δαίμονᾰ
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeTruthy() // ἀγῶνᾰ
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // ἅλᾰ
+  })
+
+  it('9-6 - checked Verb Noun9 - ἀγώνων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀγώνων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: liquid and nasal stems',
+      paradigmID: 'nounpdgm9'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // ῥητόρων
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // δαιμόνων
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeTruthy() // ἀγώνων
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeFalsy() // ἁλῶν
+  })
+
+  it('9-7 - checked Verb Noun9 - ἁλί', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἁλί', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: liquid and nasal stems',
+      paradigmID: 'nounpdgm9'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // ῥήτορι
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeFalsy() // δαίμονι
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeFalsy() // ἀγῶνι
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeTruthy() // ἁλί
+  })
+
+  it('9-8 - checked Verb Noun9 - ἁλοῖν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἁλοῖν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: liquid and nasal stems',
+      paradigmID: 'nounpdgm9'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeFalsy() // ῥητόροιν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // δαιμόνοιν
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeFalsy() // ἀγώνοιν
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeTruthy() // ἁλοῖν
+  })
 
 
+  it('10-1 - checked Verb Noun10 - πατρί', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πατρί', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: irregular ρ-stems',
+      paradigmID: 'nounpdgm10'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeTruthy() // πατρί
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeFalsy() // μητρί
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeFalsy() // θυγατρί
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeFalsy() // ἀνδρί
+  })
+
+  it('10-2 - checked Verb Noun10 - πατέροιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πατέροιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: irregular ρ-stems',
+      paradigmID: 'nounpdgm10'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeTruthy() // πατέροιν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // μητέροιν
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeFalsy() // θυγατέροιν
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeFalsy() // ἀνδροῖν
+  })
+
+  it('10-3 - checked Verb Noun10 - μητέρᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μητέρᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: irregular ρ-stems',
+      paradigmID: 'nounpdgm10'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // πατέρᾰ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeTruthy() // μητέρᾰ
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // θυγατέρᾰ
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // ἄνδρᾰ
+  })
+
+  it('10-4 - checked Verb Noun10 - μητέρων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μητέρων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: irregular ρ-stems',
+      paradigmID: 'nounpdgm10'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // πατέρων
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeTruthy() // μητέρων
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeFalsy() // θυγατέρων
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeFalsy() // ἀνδρῶν
+  })
+
+  it('10-5 - checked Verb Noun10 - θυγατέρᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('θυγατέρᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: irregular ρ-stems',
+      paradigmID: 'nounpdgm10'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // πατέρᾰ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // μητέρᾰ
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeTruthy() // θυγατέρᾰ
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // ἄνδρᾰ
+  })
+
+  it('10-6 - checked Verb Noun10 - θυγατέροιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('θυγατέροιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: irregular ρ-stems',
+      paradigmID: 'nounpdgm10'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeFalsy() // πατέροιν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // μητέροιν
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeTruthy() // θυγατέροιν
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeFalsy() // ἀνδροῖν
+  })
+
+  it('10-7 - checked Verb Noun10 - ἀνδρί', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀνδρί', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: irregular ρ-stems',
+      paradigmID: 'nounpdgm10'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // πατρί
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeFalsy() // μητρί
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeFalsy() // θυγατρί
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeTruthy() // ἀνδρί
+  })
+
+  it('10-8 - checked Verb Noun10 - ἀνδρῶν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀνδρῶν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: irregular ρ-stems',
+      paradigmID: 'nounpdgm10'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // πατέρων
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // μητέρων
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeFalsy() // θυγατέρων
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeTruthy() // ἀνδρῶν
+  })
+
+  it('11-1 - checked Verb Noun11 - τριήρους', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τριήρους', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: σ-stems',
+      paradigmID: 'nounpdgm11'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // τριήρους
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // γένους
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // γέρως
+  })
+
+  it('11-2 - checked Verb Noun11 - τριήρεις', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('τριήρεις', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: σ-stems',
+      paradigmID: 'nounpdgm11'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeTruthy() // τριήρεις
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeFalsy() // γένη
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // γέρᾱ
+  })
+
+  it('11-3 - checked Verb Noun11 - γένει', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γένει', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: σ-stems',
+      paradigmID: 'nounpdgm11'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // τριήρει
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeTruthy() // γένει
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeFalsy() // γέρᾳ
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeFalsy() // τριήρει
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeTruthy() // γένει
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeFalsy() // γέρᾳ
+  })
+
+  it('11-4 - checked Verb Noun11 - γένη', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γένη', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: σ-stems',
+      paradigmID: 'nounpdgm11'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeFalsy() // τριήρει
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeTruthy() // γένει
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeFalsy() // γέρᾳ
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeFalsy() // τριήρεις
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeTruthy() // γένη
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // γέρᾱ
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // τριήρεις
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeTruthy() // γένη
+    expect(renderedTable.rows[10].cells[4].fullMatch).toBeFalsy() // γέρᾱ
+  })
+
+  it('11-5 - checked Verb Noun11 - γέρᾱ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γέρᾱ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: σ-stems',
+      paradigmID: 'nounpdgm11'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeFalsy() // τριήρει
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeFalsy() // γένει
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeTruthy() // γέρᾳ
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeFalsy() // τριήρεις
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeFalsy() // γένη
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeTruthy() // γέρᾱ
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // τριήρεις
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeFalsy() // γένη
+    expect(renderedTable.rows[10].cells[4].fullMatch).toBeTruthy() // γέρᾱ
+  })
+
+  it('11-6 - checked Verb Noun11 - γερῶν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('γερῶν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[1],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Consonant-Declension Nouns: σ-stems',
+      paradigmID: 'nounpdgm11'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[1].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // τριήρων
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // γενῶν
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeTruthy() // γερῶν
+  })
 })
