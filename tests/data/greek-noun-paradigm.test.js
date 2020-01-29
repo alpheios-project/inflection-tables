@@ -1688,13 +1688,13 @@ describe('greek-noun-paradigm.test.js', () => {
 
     expect(inflectionsViewSet.matchingViews.length).toBeGreaterThan(5)
     BaseTestHelp.checkParadigm({
-      view: inflectionsViewSet.matchingViews[5],
+      view: inflectionsViewSet.matchingViews[6],
       viewName: 'GreekNounParadigmView',
       viewTitle: 'Consonant-Declension Nouns: stems in ευ, αυ, or ου',
       paradigmID: 'nounpdgm14'
     })
 
-    const renderedTable = inflectionsViewSet.matchingViews[5].render().wideTable
+    const renderedTable = inflectionsViewSet.matchingViews[6].render().wideTable
 
     expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // ἱππέων
     expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // γρᾱῶν
@@ -2018,5 +2018,196 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[10].cells[3].fullMatch).toBeFalsy() // συκᾶς
     expect(renderedTable.rows[10].cells[4].fullMatch).toBeFalsy() // μνᾶς
     expect(renderedTable.rows[10].cells[5].fullMatch).toBeTruthy() // Ἑρμᾶς
+  })
+
+  it('17-1 - checked Verb Noun17 - νεώ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('νεώ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns: Attic Declension',
+      paradigmID: 'nounpdgm17'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // νεώ
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // λεώ
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // ἕω
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // λαγώ
+  })
+
+  it('17-2 - checked Verb Noun17 - νεῴς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('νεῴς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns: Attic Declension',
+      paradigmID: 'nounpdgm17'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[9].cells[2].fullMatch).toBeTruthy() // νεῴς
+    expect(renderedTable.rows[9].cells[3].fullMatch).toBeFalsy() // λεῴς
+    expect(renderedTable.rows[9].cells[4].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[9].cells[5].fullMatch).toBeFalsy() // λαγῴς
+  })
+
+  it('17-3 - checked Verb Noun17 - λεών', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λεών', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns: Attic Declension',
+      paradigmID: 'nounpdgm17'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // νεών
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeTruthy() // λεών
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // ἕω
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // λαγών, λαγώ
+  })
+
+  it('17-4 - checked Verb Noun17 - λεώς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λεώς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns: Attic Declension',
+      paradigmID: 'nounpdgm17'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeFalsy() // νεώς
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeTruthy() // λεώς
+    expect(renderedTable.rows[0].cells[4].fullMatch).toBeFalsy() // ἕως
+    expect(renderedTable.rows[0].cells[5].fullMatch).toBeFalsy() // λαγώς
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeFalsy() // νεῴ
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeTruthy() // λεῴ
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeFalsy() // λαγῴ
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // νεώς
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeTruthy() // λεώς
+    expect(renderedTable.rows[10].cells[4].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[10].cells[5].fullMatch).toBeFalsy() // λαγώς
+  })
+
+  it('17-5 - checked Verb Noun17 - ἕως', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἕως', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns: Attic Declension',
+      paradigmID: 'nounpdgm17'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeFalsy() // νεώς
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeFalsy() // λεώς
+    expect(renderedTable.rows[0].cells[4].fullMatch).toBeTruthy() // ἕως
+    expect(renderedTable.rows[0].cells[5].fullMatch).toBeFalsy() // λαγώς
+  })
+
+  it('17-6 - checked Verb Noun17 - ἕω', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἕω', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns: Attic Declension',
+      paradigmID: 'nounpdgm17'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // νεών
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // λεών
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeTruthy() // ἕω
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // λαγών, λαγώ
+  })
+
+  it('17-7 - checked Verb Noun17 - λαγώ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λαγώ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns: Attic Declension',
+      paradigmID: 'nounpdgm17'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeFalsy() // νεώ
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // λεώ
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // ἕω
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeTruthy() // λαγώ
+  })
+
+  it('17-8 - checked Verb Noun17 - λαγώς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('λαγώς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns: Attic Declension',
+      paradigmID: 'nounpdgm17'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeFalsy() // νεώς
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeFalsy() // λεώς
+    expect(renderedTable.rows[0].cells[4].fullMatch).toBeFalsy() // ἕως
+    expect(renderedTable.rows[0].cells[5].fullMatch).toBeTruthy() // λαγώς
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // νεώς
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeFalsy() // λεώς
+    expect(renderedTable.rows[10].cells[4].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[10].cells[5].fullMatch).toBeTruthy() // λαγώς
   })
 })
