@@ -2210,4 +2210,84 @@ describe('greek-noun-paradigm.test.js', () => {
     expect(renderedTable.rows[10].cells[4].fullMatch).toBeFalsy() // 
     expect(renderedTable.rows[10].cells[5].fullMatch).toBeTruthy() // λαγώς
   })
+
+  it('18-1 - checked Verb Noun18 - αἰδοῦς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('αἰδοῦς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns in -ως',
+      paradigmID: 'nounpdgm18'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // αἰδοῦς
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // ἥρωος, ἥρω
+  })
+
+  it('18-2 - checked Verb Noun18 - αἰδώς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('αἰδώς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns in -ως',
+      paradigmID: 'nounpdgm18'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[0].cells[2].fullMatch).toBeTruthy() // αἰδώς
+    expect(renderedTable.rows[0].cells[3].fullMatch).toBeFalsy() // ἥρως
+  })
+
+  it('18-3 - checked Verb Noun18 - ἥρωᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἥρωᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns in -ως',
+      paradigmID: 'nounpdgm18'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // αἰδώς
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeTruthy() // ἥρως
+  })
+
+  it('18-4 - checked Verb Noun18 - ἡρώων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἡρώων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekNounParadigmView',
+      viewTitle: 'Nouns in -ως',
+      paradigmID: 'nounpdgm18'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeTruthy() // ἡρώων
+  })
 })
