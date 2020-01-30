@@ -673,7 +673,7 @@ describe('greek-adjective-paradigm.test.js', () => {
     const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἡδέοιν', Constants.LANG_GREEK)
 
     expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
-    console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
 
     expect(inflectionsViewSet.matchingViews.length).toEqual(1)
     BaseTestHelp.checkParadigm({
@@ -948,5 +948,310 @@ describe('greek-adjective-paradigm.test.js', () => {
 
     expect(renderedTable.rows[9].cells[7].fullMatch).toBeTruthy() // μέλανᾰ
     expect(renderedTable.rows[12].cells[7].fullMatch).toBeTruthy() // μέλανᾰ
+  })
+
+  it('5-1 - checked Adjective5 - χαρίεντος', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χαρίεντος', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeTruthy() // χαρίεντος
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // χαριέσσης
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeTruthy() // χαρίεντος
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // παντός	
+    expect(renderedTable.rows[3].cells[6].fullMatch).toBeFalsy() // πάσης
+    expect(renderedTable.rows[3].cells[7].fullMatch).toBeFalsy() // παντός
+
+  })
+
+  it('5-2 - checked Adjective5 - χαρίεντε', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χαρίεντε', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeTruthy() // χαρίεντε
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeFalsy() // χαριέσσᾱ
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeTruthy() // χαρίεντε
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeFalsy() // 	
+    expect(renderedTable.rows[7].cells[6].fullMatch).toBeFalsy() // μέλαινᾰν
+    expect(renderedTable.rows[7].cells[7].fullMatch).toBeFalsy() // 
+
+  })
+
+  it('5-3 - checked Adjective5 - χαριέσσαιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χαριέσσαιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // χαριέντοιν
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeTruthy() // χαριέσσαιν
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeFalsy() // χαριέντοιν
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeFalsy() // 	
+    expect(renderedTable.rows[8].cells[6].fullMatch).toBeFalsy() // 
+    expect(renderedTable.rows[8].cells[7].fullMatch).toBeFalsy() // 
+
+  })
+
+  it('5-4 - checked Adjective5 - χαριέσσαις', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χαριέσσαις', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[11].cells[2].fullMatch).toBeFalsy() // χαρίεσι(ν)
+    expect(renderedTable.rows[11].cells[3].fullMatch).toBeTruthy() // χαριέσσαις
+    expect(renderedTable.rows[11].cells[4].fullMatch).toBeFalsy() // χαρίεσι(ν)
+    expect(renderedTable.rows[11].cells[5].fullMatch).toBeFalsy() // πᾶσι(ν)	
+    expect(renderedTable.rows[11].cells[6].fullMatch).toBeFalsy() // πάσαις
+    expect(renderedTable.rows[11].cells[7].fullMatch).toBeFalsy() // πᾶσι(ν)
+
+  })
+
+  it('5-5 - checked Adjective5 - χαρίεντι', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χαρίεντι', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeTruthy() // χαρίεντι
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeFalsy() // χαριέσσῃ
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeTruthy() // χαρίεντι
+    expect(renderedTable.rows[4].cells[5].fullMatch).toBeFalsy() // παντί	
+    expect(renderedTable.rows[4].cells[6].fullMatch).toBeFalsy() // πάσῃ
+    expect(renderedTable.rows[4].cells[7].fullMatch).toBeFalsy() // παντί
+
+  })
+
+  it('5-6 - checked Adjective5 - χαρίεντᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χαρίεντᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[12].cells[2].fullMatch).toBeFalsy() // χαρίεντᾰς
+    expect(renderedTable.rows[12].cells[3].fullMatch).toBeFalsy() // χαριέσσᾱς
+    expect(renderedTable.rows[12].cells[4].fullMatch).toBeTruthy() // χαρίεντᾰ
+    expect(renderedTable.rows[12].cells[5].fullMatch).toBeFalsy() // πάντᾰς	
+    expect(renderedTable.rows[12].cells[6].fullMatch).toBeFalsy() // πάσᾱς
+    expect(renderedTable.rows[12].cells[7].fullMatch).toBeFalsy() // πάντᾰ
+
+    expect(renderedTable.rows[9].cells[4].fullMatch).toBeTruthy() // χαρίεντᾰ
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeTruthy() // χαρίεντᾰ
+  })
+
+  it('5-7 - checked Adjective5 - πᾶς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πᾶς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // χαρίεις
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeFalsy() // χαρίεσσᾰ
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeFalsy() // χαρίεν
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeTruthy() // πᾶς	
+    expect(renderedTable.rows[2].cells[6].fullMatch).toBeFalsy() // πᾶσᾰ
+    expect(renderedTable.rows[2].cells[7].fullMatch).toBeFalsy() // πᾶν
+
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeTruthy() // πᾶς	
+
+  })
+
+  it('5-8 - checked Adjective5 - πάντες', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πάντες', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[9].cells[2].fullMatch).toBeFalsy() // χαρίεντες
+    expect(renderedTable.rows[9].cells[3].fullMatch).toBeFalsy() // χαρίεσσαι
+    expect(renderedTable.rows[9].cells[4].fullMatch).toBeFalsy() // χαρίεντᾰ
+    expect(renderedTable.rows[9].cells[5].fullMatch).toBeTruthy() // πάντες	
+    expect(renderedTable.rows[9].cells[6].fullMatch).toBeFalsy() // πᾶσαι
+    expect(renderedTable.rows[9].cells[7].fullMatch).toBeFalsy() // πάντᾰ
+  })
+
+  it('5-9 - checked Adjective5 - πάσῃ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πάσῃ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toBeGreaterThan(5)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[5],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[5].render().wideTable
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeFalsy() // χαρίεντι
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeFalsy() // χαριέσσῃ
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeFalsy() // χαρίεντι
+    expect(renderedTable.rows[4].cells[5].fullMatch).toBeFalsy() // παντί	
+    expect(renderedTable.rows[4].cells[6].fullMatch).toBeTruthy() // πάσῃ
+    expect(renderedTable.rows[4].cells[7].fullMatch).toBeFalsy() // παντί
+  })
+
+  it('5-10 - checked Adjective5 - πάσᾱς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πάσᾱς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[1],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[1].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // χαρίεντος
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // χαριέσσης
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // χαρίεντος
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // παντός	
+    expect(renderedTable.rows[3].cells[6].fullMatch).toBeTruthy() // πάσης
+    expect(renderedTable.rows[3].cells[7].fullMatch).toBeFalsy() // παντός
+
+    expect(renderedTable.rows[12].cells[6].fullMatch).toBeTruthy() // πάσᾱς
+  })
+
+  it('5-11 - checked Adjective5 - παντί', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('παντί', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeFalsy() // χαρίεντι
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeFalsy() // χαριέσσῃ
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeFalsy() // χαρίεντι
+    expect(renderedTable.rows[4].cells[5].fullMatch).toBeTruthy() // παντί	
+    expect(renderedTable.rows[4].cells[6].fullMatch).toBeFalsy() // πάσῃ
+    expect(renderedTable.rows[4].cells[7].fullMatch).toBeTruthy() // παντί
+  })
+
+  it('5-12 - checked Adjective5 - πάντᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πάντᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm5'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+
+    expect(renderedTable.rows[12].cells[2].fullMatch).toBeFalsy() // χαρίεντᾰς
+    expect(renderedTable.rows[12].cells[3].fullMatch).toBeFalsy() // χαριέσσᾱς
+    expect(renderedTable.rows[12].cells[4].fullMatch).toBeFalsy() // χαρίεντᾰ
+    expect(renderedTable.rows[12].cells[5].fullMatch).toBeFalsy() // πάντᾰς	
+    expect(renderedTable.rows[12].cells[6].fullMatch).toBeFalsy() // πάσᾱς
+    expect(renderedTable.rows[12].cells[7].fullMatch).toBeTruthy() // πάντᾰ
+
+    expect(renderedTable.rows[9].cells[7].fullMatch).toBeTruthy() // πάντᾰ
+    expect(renderedTable.rows[5].cells[5].fullMatch).toBeTruthy() // πάντᾰ
   })
 })
