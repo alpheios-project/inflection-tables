@@ -105,6 +105,7 @@ import nounParadigmRulesCSV from '@/paradigm/data/greek/noun/rules.csv'
 // Adjective paradigm tables
 import paradigmAdj1 from '@/paradigm/data/greek/adjective/tables/paradigm-adjective-1.json'
 import paradigmAdj2 from '@/paradigm/data/greek/adjective/tables/paradigm-adjective-2.json'
+import paradigmAdj3 from '@/paradigm/data/greek/adjective/tables/paradigm-adjective-3.json'
 
 // Adjective rules
 import adjectiveParadigmRulesCSV from '@/paradigm/data/greek/adjective/rules.csv'
@@ -239,7 +240,8 @@ export default class GreekParadigmData {
     const partOfSpeech = Constants.POFS_ADJECTIVE
     return new Map([
         ['adjpdgm1', new Paradigm(this.languageID, partOfSpeech, paradigmAdj1)],
-        ['adjpdgm2', new Paradigm(this.languageID, partOfSpeech, paradigmAdj2)]
+        ['adjpdgm2', new Paradigm(this.languageID, partOfSpeech, paradigmAdj2)],
+        ['adjpdgm3', new Paradigm(this.languageID, partOfSpeech, paradigmAdj3)]
     ])
   }
 

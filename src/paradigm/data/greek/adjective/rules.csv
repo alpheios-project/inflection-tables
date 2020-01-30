@@ -2,3 +2,6 @@ ID ref,Match order,Part of speech,Stem type,Declension,Gender,Lemma,Morph flags,
 adjpdgm1,1,adjective,os_h_on,1st 2nd,,ἄξιος,,
 adjpdgm1,1,adjective,os_h_on,1st 2nd,,ἀγαθός,,
 adjpdgm2,1,adjective,os_on,1st 2nd,,ἄδικος,,
+
+adjpdgm3,1,adjective,hs_es,3rd,,ἀληθής,,
+adjpdgm3,1,adjective,wn_on,3rd,,σώφρων,,

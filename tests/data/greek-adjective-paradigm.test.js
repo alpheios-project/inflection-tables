@@ -455,4 +455,192 @@ describe('greek-adjective-paradigm.test.js', () => {
     expect(renderedTable.rows[11].cells[2].fullMatch).toBeFalsy() // ἀδίκους
     expect(renderedTable.rows[11].cells[3].fullMatch).toBeTruthy() // ἀδίκους
   })
+
+  it('3-1 - checked Adjective3 - ἀληθοῦς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀληθοῦς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeTruthy() // ἀληθοῦς
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeTruthy() // ἀδίκου
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeFalsy() // σώφρονος
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeFalsy() // σώφρονος
+  })
+
+  it('3-2 - checked Adjective3 - ἀληθεῖς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀληθεῖς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeTruthy() // ἀληθεῖς
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // ἀληθῆ
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeFalsy() // σώφρονες
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeFalsy() // σώφρονᾰ
+
+    expect(renderedTable.rows[11].cells[2].fullMatch).toBeTruthy() // ἀληθεῖς
+    expect(renderedTable.rows[11].cells[3].fullMatch).toBeFalsy() // ἀληθῆ
+    expect(renderedTable.rows[11].cells[4].fullMatch).toBeFalsy() // σώφρονᾰς
+    expect(renderedTable.rows[11].cells[5].fullMatch).toBeFalsy() // σώφρονᾰ
+  })
+
+  it('3-3 - checked Adjective3 - ἀληθές', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀληθές', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeFalsy() // ἀληθής
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeTruthy() // ἀληθές
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // ἀληθής
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // ἀληθές
+
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeTruthy() // ἀληθές
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeTruthy() // ἀληθές
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeTruthy() // ἀληθές
+  })
+
+  it('3-4 - checked Adjective3 - ἀληθοῖν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀληθοῖν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeTruthy() // ἀληθοῖν
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeTruthy() // ἀληθοῖν
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // σωφρόνοιν
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeFalsy() // σωφρόνοιν
+  })
+
+  it('3-5 - checked Adjective3 - σώφρων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('σώφρων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeFalsy() // ἀληθής
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // ἀληθές
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeTruthy() // ἀληθής
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // ἀληθές
+  })
+
+  it('3-6 - checked Adjective3 - σώφρονᾰς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('σώφρονᾰς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[11].cells[2].fullMatch).toBeFalsy() // ἀληθεῖς
+    expect(renderedTable.rows[11].cells[3].fullMatch).toBeFalsy() // ἀληθῆ
+    expect(renderedTable.rows[11].cells[4].fullMatch).toBeTruthy() // σώφρονᾰς
+    expect(renderedTable.rows[11].cells[5].fullMatch).toBeFalsy() // σώφρονᾰ
+  })
+
+  it('3-7 - checked Adjective3 - σώφρονε', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('σώφρονε', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeFalsy() // ἀληθεῖ
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // ἀληθεῖ
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeTruthy() // σώφρονε
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeTruthy() // σώφρονε
+  })
+
+  it('3-8 - checked Adjective3 - σώφρονᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('σώφρονᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm3'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeFalsy() // ἀληθῆ
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeFalsy() // ἀληθές
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeTruthy() // σώφρονᾰ
+    expect(renderedTable.rows[4].cells[5].fullMatch).toBeFalsy() // σῶφρον
+
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeTruthy() // σώφρονᾰ
+    expect(renderedTable.rows[11].cells[5].fullMatch).toBeTruthy() // σώφρονᾰ
+  })
 })
