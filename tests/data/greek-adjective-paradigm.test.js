@@ -643,4 +643,310 @@ describe('greek-adjective-paradigm.test.js', () => {
     expect(renderedTable.rows[8].cells[5].fullMatch).toBeTruthy() // σώφρονᾰ
     expect(renderedTable.rows[11].cells[5].fullMatch).toBeTruthy() // σώφρονᾰ
   })
+
+  it('4-1 - checked Adjective4 - ἡδέος', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἡδέος', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeTruthy() // ἡδέος
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // ἡδείᾱς
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeTruthy() // ἡδέος
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // μέλανος
+    expect(renderedTable.rows[3].cells[6].fullMatch).toBeFalsy() // μελαίνης
+    expect(renderedTable.rows[3].cells[7].fullMatch).toBeFalsy() // μέλανος
+
+  })
+
+  it('4-2 - checked Adjective4 - ἡδέοιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἡδέοιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeTruthy() // ἡδέοιν
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // ἡδείαιν
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeTruthy() // ἡδέοιν
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeFalsy() // μελάνοιν
+    expect(renderedTable.rows[8].cells[6].fullMatch).toBeFalsy() // μελαίναιν
+    expect(renderedTable.rows[8].cells[7].fullMatch).toBeFalsy() // μελάνοιν
+
+  })
+
+  it('4-3 - checked Adjective4 - ἡδεῖᾰν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἡδεῖᾰν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeFalsy() // ἡδέοιν
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeTruthy() // ἡδείαιν
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeFalsy() // ἡδέοιν
+    expect(renderedTable.rows[5].cells[5].fullMatch).toBeFalsy() // μελάνοιν
+    expect(renderedTable.rows[5].cells[6].fullMatch).toBeFalsy() // μελαίναιν
+    expect(renderedTable.rows[5].cells[7].fullMatch).toBeFalsy() // μελάνοιν
+
+  })
+
+  it('4-4 - checked Adjective4 - ἡδείαις', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἡδείαις', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[11].cells[2].fullMatch).toBeFalsy() // ἡδέσι(ν)
+    expect(renderedTable.rows[11].cells[3].fullMatch).toBeTruthy() // ἡδείαις
+    expect(renderedTable.rows[11].cells[4].fullMatch).toBeFalsy() // ἡδέσι(ν)
+    expect(renderedTable.rows[11].cells[5].fullMatch).toBeFalsy() // μέλασι(ν)	
+    expect(renderedTable.rows[11].cells[6].fullMatch).toBeFalsy() // μελαίναις
+    expect(renderedTable.rows[11].cells[7].fullMatch).toBeFalsy() // μέλασι(ν)
+  })
+
+  it('4-5 - checked Adjective4 - ἡδύ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἡδύ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // ἡδύς
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeFalsy() // ἡδεῖᾰ
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeTruthy() // ἡδύ
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeFalsy() // μέλας
+    expect(renderedTable.rows[2].cells[6].fullMatch).toBeFalsy() // μέλαινᾰ
+    expect(renderedTable.rows[2].cells[7].fullMatch).toBeFalsy() // μέλαν
+
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeTruthy() // ἡδύ
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeTruthy() // ἡδύ
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeTruthy() // ἡδύ
+  })
+
+  it('4-6 - checked Adjective4 - ἡδέᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἡδέᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // ἡδύς
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeTruthy() // ἡδεῖᾰ
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeFalsy() // ἡδύ
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeFalsy() // μέλας
+    expect(renderedTable.rows[2].cells[6].fullMatch).toBeFalsy() // μέλαινᾰ
+    expect(renderedTable.rows[2].cells[7].fullMatch).toBeFalsy() // μέλαν
+
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeTruthy() // ἡδεῖᾰ
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeTruthy() // ἡδεῖᾰ
+    expect(renderedTable.rows[9].cells[4].fullMatch).toBeTruthy() // ἡδεῖᾰ
+    expect(renderedTable.rows[12].cells[4].fullMatch).toBeTruthy() // ἡδεῖᾰ
+  })
+
+  it('4-7 - checked Adjective4 - μέλανι', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μέλανι', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeFalsy() // ἡδεῖ
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeFalsy() // ἡδείᾳ
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeFalsy() // ἡδεῖ
+    expect(renderedTable.rows[4].cells[5].fullMatch).toBeTruthy() // μέλανι
+    expect(renderedTable.rows[4].cells[6].fullMatch).toBeFalsy() // μελαίνῃ
+    expect(renderedTable.rows[4].cells[7].fullMatch).toBeTruthy() // μέλανι
+  })
+
+  it('4-8 - checked Adjective4 - μελάνοιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μελάνοιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // ἡδέοιν
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeFalsy() // ἡδείαιν
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeFalsy() // ἡδέοιν
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeTruthy() // μελάνοιν
+    expect(renderedTable.rows[8].cells[6].fullMatch).toBeFalsy() // μελαίναιν
+    expect(renderedTable.rows[8].cells[7].fullMatch).toBeTruthy() // μελάνοιν
+  })
+
+  it('4-9 - checked Adjective4 - μελαίνης', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μελαίνης', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // ἡδέος
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // ἡδείᾱς
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // ἡδέος
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // μέλανος
+    expect(renderedTable.rows[3].cells[6].fullMatch).toBeTruthy() // μελαίνης
+    expect(renderedTable.rows[3].cells[7].fullMatch).toBeFalsy() // μέλανος
+  })
+
+  it('4-10 - checked Adjective4 - μελαίναις', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μελαίναις', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[11].cells[2].fullMatch).toBeFalsy() // ἡδέσι(ν)
+    expect(renderedTable.rows[11].cells[3].fullMatch).toBeFalsy() // ἡδείαις
+    expect(renderedTable.rows[11].cells[4].fullMatch).toBeFalsy() // ἡδέσι(ν)
+    expect(renderedTable.rows[11].cells[5].fullMatch).toBeFalsy() // μέλασι(ν)	
+    expect(renderedTable.rows[11].cells[6].fullMatch).toBeTruthy() // μελαίναις
+    expect(renderedTable.rows[11].cells[7].fullMatch).toBeFalsy() // μέλασι(ν)
+  })
+
+  it('4-11 - checked Adjective4 - μέλαν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μέλαν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeFalsy() // ἡδύ
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // ἡδεῖᾰ
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeFalsy() // ἡδύ
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeTruthy() // μέλαν	
+    expect(renderedTable.rows[6].cells[6].fullMatch).toBeFalsy() // μέλαινᾰ
+    expect(renderedTable.rows[6].cells[7].fullMatch).toBeTruthy() // μέλαν
+
+    expect(renderedTable.rows[5].cells[7].fullMatch).toBeTruthy() // μέλαν
+    expect(renderedTable.rows[2].cells[7].fullMatch).toBeTruthy() // μέλαν
+  })
+
+  it('4-12 - checked Adjective4 - μέλανᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('μέλανᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Consonant-Declension Adjectives with Three Endings',
+      paradigmID: 'adjpdgm4'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeFalsy() // ἡδύν
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeFalsy() // ἡδεῖᾰν
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeFalsy() // ἡδύ
+    expect(renderedTable.rows[5].cells[5].fullMatch).toBeTruthy() // μέλανᾰ	
+    expect(renderedTable.rows[5].cells[6].fullMatch).toBeFalsy() // μέλαινᾰν
+    expect(renderedTable.rows[5].cells[7].fullMatch).toBeFalsy() // μέλαν
+
+    expect(renderedTable.rows[9].cells[7].fullMatch).toBeTruthy() // μέλανᾰ
+    expect(renderedTable.rows[12].cells[7].fullMatch).toBeTruthy() // μέλανᾰ
+  })
 })
