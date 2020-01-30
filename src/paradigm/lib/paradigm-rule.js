@@ -26,7 +26,7 @@ export default class ParadigmRule {
     for (const feature of this.features) {
       match = match && inflection.hasOwnProperty(feature.type) && feature.value === inflection[feature.type].value // eslint-disable-line no-prototype-builtins
       if (inflection.hasOwnProperty(feature.type)) {
-        // console.info('Rule lemma1', feature.value, feature.value === inflection[feature.type].value, match)
+        // console.info('Rule lemma1', feature.value, inflection[feature.type].value, feature.value === inflection[feature.type].value, match)
       }
       if (!match) {
         return false
