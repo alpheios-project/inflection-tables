@@ -366,4 +366,93 @@ describe('greek-adjective-paradigm.test.js', () => {
     expect(renderedTable.rows[9].cells[7].fullMatch).toBeTruthy() // ἀγαθά
     expect(renderedTable.rows[12].cells[7].fullMatch).toBeTruthy() // ἀγαθά
   })
+
+  it('2-1 - checked Adjective2 - ἀδίκου', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀδίκου', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm2'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeTruthy() // ἀδίκου
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeTruthy() // ἀδίκου
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // ἀδίκῳ
+  })
+
+  it('2-2 - checked Adjective2 - ἀδίκων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀδίκων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm2'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[9].cells[2].fullMatch).toBeTruthy() // ἀδίκων
+    expect(renderedTable.rows[9].cells[3].fullMatch).toBeTruthy() // ἀδίκων
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // ἀδίκοις
+  })
+
+  it('2-3 - checked Adjective2 - ἀδίκοιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀδίκοιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm2'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeTruthy() // ἀδίκοιν
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeTruthy() // ἀδίκοιν
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // ἄδικοι
+  })
+
+  it('2-4 - checked Adjective2 - ἄδικᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἄδικᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Two Endings',
+      paradigmID: 'adjpdgm2'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeFalsy() // ἄδικοι
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeTruthy() // ἄδικᾰ
+
+    expect(renderedTable.rows[11].cells[2].fullMatch).toBeFalsy() // ἀδίκους
+    expect(renderedTable.rows[11].cells[3].fullMatch).toBeTruthy() // ἀδίκους
+  })
 })
