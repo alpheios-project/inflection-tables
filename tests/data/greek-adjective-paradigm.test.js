@@ -1745,4 +1745,267 @@ describe('greek-adjective-paradigm.test.js', () => {
     expect(renderedTable.rows[7].cells[6].fullMatch).toBeTruthy() // ἁπλόᾰ
     expect(renderedTable.rows[10].cells[6].fullMatch).toBeTruthy() // ἁπλόᾰ
   })
+
+
+  it('8-1 - checked Adjective8 - ἵλεως', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἵλεως', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeTruthy() // ἵλεως
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeFalsy() // ἵλεων
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // πλέως
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // πλέᾱ	
+    expect(renderedTable.rows[1].cells[6].fullMatch).toBeFalsy() // πλέων
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeTruthy() // ἵλεῳ
+  })
+
+  it('8-2 - checked Adjective8 - ἵλεω', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἵλεω', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeTruthy() // ἵλεω
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeTruthy() // ἵλεω
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeFalsy() // πλέω
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeFalsy() // πλέᾱς	
+    expect(renderedTable.rows[2].cells[6].fullMatch).toBeFalsy() // πλέω
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeTruthy() // ἵλεω
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeTruthy() // ἵλεῳ
+  })
+
+  it('8-3 - checked Adjective8 - ἵλεων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἵλεων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[1].cells[2].fullMatch).toBeFalsy() // ἵλεως
+    expect(renderedTable.rows[1].cells[3].fullMatch).toBeTruthy() // ἵλεων
+    expect(renderedTable.rows[1].cells[4].fullMatch).toBeFalsy() // πλέως
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeFalsy() // πλέᾱ	
+    expect(renderedTable.rows[1].cells[6].fullMatch).toBeFalsy() // πλέων
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeTruthy() // ἵλεων
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeTruthy() // ἵλεων
+
+    expect(renderedTable.rows[8].cells[2].fullMatch).toBeTruthy() // ἵλεων
+    expect(renderedTable.rows[8].cells[3].fullMatch).toBeTruthy() // ἵλεων
+  })
+
+  it('8-4 - checked Adjective8 - ἵλεᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἵλεᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeTruthy() // ἵλεῳ
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeTruthy() // ἵλεᾰ
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // πλέῳ
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeFalsy() // πλέαι	
+    expect(renderedTable.rows[7].cells[6].fullMatch).toBeFalsy() // πλέᾰ
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeTruthy() // ἵλεως
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeTruthy() // ἵλεᾰ
+  })
+
+  it('8-5 - checked Adjective8 - πλέω', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πλέω', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(4)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[3],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[3].render().wideTable
+
+    expect(renderedTable.rows[2].cells[2].fullMatch).toBeFalsy() // ἵλεω
+    expect(renderedTable.rows[2].cells[3].fullMatch).toBeFalsy() // ἵλεω
+    expect(renderedTable.rows[2].cells[4].fullMatch).toBeTruthy() // πλέω
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeTruthy() // πλέᾱς	
+    expect(renderedTable.rows[2].cells[6].fullMatch).toBeTruthy() // πλέω
+
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeTruthy() // πλέω
+    expect(renderedTable.rows[5].cells[5].fullMatch).toBeTruthy() // πλέᾱ	
+    expect(renderedTable.rows[5].cells[6].fullMatch).toBeTruthy() // πλέω
+
+  })
+
+  it('8-6 - checked Adjective8 - πλέῳς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πλέῳς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[9].cells[2].fullMatch).toBeFalsy() // ἵλεῳς
+    expect(renderedTable.rows[9].cells[3].fullMatch).toBeFalsy() // ἵλεῳς
+    expect(renderedTable.rows[9].cells[4].fullMatch).toBeTruthy() // πλέῳς
+    expect(renderedTable.rows[9].cells[5].fullMatch).toBeFalsy() // πλέαις	
+    expect(renderedTable.rows[9].cells[6].fullMatch).toBeTruthy() // πλέῳς
+  })
+
+  it('8-7 - checked Adjective8 - πλέᾳ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πλέᾳ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(4)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[3],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[3].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // ἵλεῳ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // ἵλεῳ
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // πλέῳ
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeTruthy() // πλέᾳ	
+    expect(renderedTable.rows[3].cells[6].fullMatch).toBeFalsy() // πλέῳ
+
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeTruthy() // πλέᾳ	
+  })
+
+  it('8-8 - checked Adjective8 - πλέαιν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πλέαιν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[6].cells[2].fullMatch).toBeFalsy() // ἵλεῳν
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeFalsy() // ἵλεῳν
+    expect(renderedTable.rows[6].cells[4].fullMatch).toBeFalsy() // πλέῳν
+    expect(renderedTable.rows[6].cells[5].fullMatch).toBeTruthy() // πλέαιν	
+    expect(renderedTable.rows[6].cells[6].fullMatch).toBeFalsy() // πλέῳν
+  })
+
+  it('8-9 - checked Adjective8 - πλέων', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πλέων', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(4)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[3],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[3].render().wideTable
+
+    expect(renderedTable.rows[1].cells[6].fullMatch).toBeTruthy() // πλέων
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeFalsy() // ἵλεων
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeFalsy() // ἵλεων
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeTruthy() // πλέων
+    expect(renderedTable.rows[4].cells[5].fullMatch).toBeTruthy() // πλέᾱν	
+    expect(renderedTable.rows[4].cells[6].fullMatch).toBeTruthy() // πλέων
+
+    expect(renderedTable.rows[8].cells[4].fullMatch).toBeTruthy() // πλέων
+    expect(renderedTable.rows[8].cells[5].fullMatch).toBeTruthy() // πλέων	
+    expect(renderedTable.rows[8].cells[6].fullMatch).toBeTruthy() // πλέων
+  })
+
+  it('8-10 - checked Adjective8 - πλέᾰ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('πλέᾰ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Adjectives with Attic Declension',
+      paradigmID: 'adjpdgm8'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[1].cells[5].fullMatch).toBeTruthy() // πλέᾱ
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeFalsy() // ἵλεω
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeFalsy() // ἵλεω
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeFalsy() // πλέω
+    expect(renderedTable.rows[5].cells[5].fullMatch).toBeTruthy() // πλέᾱ	
+    expect(renderedTable.rows[5].cells[6].fullMatch).toBeFalsy() // πλέω
+
+    expect(renderedTable.rows[7].cells[6].fullMatch).toBeTruthy() // πλέᾰ
+    expect(renderedTable.rows[10].cells[6].fullMatch).toBeTruthy() // πλέᾰ	
+  })
 })
