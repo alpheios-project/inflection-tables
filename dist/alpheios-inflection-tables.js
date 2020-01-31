@@ -14117,12 +14117,8 @@ class ParadigmRule {
    */
   matches (inflection) {
     let match = true
-    // console.info('*******************', this.features[0].value)
     for (const feature of this.features) {
       match = match && inflection.hasOwnProperty(feature.type) && feature.value === inflection[feature.type].value // eslint-disable-line no-prototype-builtins
-      if (inflection.hasOwnProperty(feature.type)) {
-        // console.info('Rule lemma1', feature.value, inflection[feature.type].value, feature.value === inflection[feature.type].value, match)
-      }
       if (!match) {
         return false
       }
@@ -14132,7 +14128,6 @@ class ParadigmRule {
       match = match && inflection.word && inflection.word.value === this.lemma.word
     }
 
-    // console.info('Rule lemma2', this.lemma.word, inflection.word.value, match)
     return match
   }
 }
@@ -14305,7 +14300,6 @@ class Paradigm {
    * @return {ParadigmRule[] | []} Array of matching rules or an empty array if no matches found.
    */
   matchingRules (inflection) {
-    // console.info('********************************************************matchingRules - ', this.paradigmID)
     return this.rules.filter(r => r.matches(inflection))
   }
 }
