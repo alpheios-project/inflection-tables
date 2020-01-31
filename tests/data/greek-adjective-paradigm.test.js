@@ -1254,4 +1254,254 @@ describe('greek-adjective-paradigm.test.js', () => {
     expect(renderedTable.rows[9].cells[7].fullMatch).toBeTruthy() // πάντᾰ
     expect(renderedTable.rows[5].cells[5].fullMatch).toBeTruthy() // πάντᾰ
   })
+
+  it('6-1 - checked Adjective6 - χρυσοῦ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χρυσοῦ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toBeGreaterThan(3)
+
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[3],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[3].render().wideTable
+
+    //  console.info(renderedTable.rows[3])
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeTruthy() // χρυσοῦ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // χρυσῆς
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeTruthy() // χρυσοῦ
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // ἀργυροῦ	
+    expect(renderedTable.rows[3].cells[6].fullMatch).toBeFalsy() // ἀργυρᾶς
+    expect(renderedTable.rows[3].cells[7].fullMatch).toBeFalsy() // ἀργυροῦ
+
+  })
+
+  it('6-2 - checked Adjective6 - χρυσοῖν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χρυσοῖν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toBeGreaterThan(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeTruthy() // χρυσοῖν
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeFalsy() // χρυσαῖν
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeTruthy() // χρυσοῖν
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeFalsy() // ἀργυροῖν	
+    expect(renderedTable.rows[7].cells[6].fullMatch).toBeFalsy() // ἀργυραῖν
+    expect(renderedTable.rows[7].cells[7].fullMatch).toBeFalsy() // ἀργυροῖν
+  })
+
+  it('6-3 - checked Adjective6 - χρυσῆν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χρυσῆν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[5].cells[2].fullMatch).toBeFalsy() // χρυσοῦν
+    expect(renderedTable.rows[5].cells[3].fullMatch).toBeTruthy() // χρυσῆν
+    expect(renderedTable.rows[5].cells[4].fullMatch).toBeFalsy() // χρυσοῦν
+    expect(renderedTable.rows[5].cells[5].fullMatch).toBeFalsy() // ἀργυροῦν	
+    expect(renderedTable.rows[5].cells[6].fullMatch).toBeFalsy() // ἀργυρᾷν
+    expect(renderedTable.rows[5].cells[7].fullMatch).toBeFalsy() // ἀργυροῦν
+  })
+
+  it('6-4 - checked Adjective6 - χρυσαῖς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χρυσαῖς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[10].cells[2].fullMatch).toBeFalsy() // χρυσοῖς
+    expect(renderedTable.rows[10].cells[3].fullMatch).toBeTruthy() // χρυσαῖς
+    expect(renderedTable.rows[10].cells[4].fullMatch).toBeFalsy() // χρυσοῖς
+    expect(renderedTable.rows[10].cells[5].fullMatch).toBeFalsy() // ἀργυροῖς	
+    expect(renderedTable.rows[10].cells[6].fullMatch).toBeFalsy() // ἀργυραῖς
+    expect(renderedTable.rows[10].cells[7].fullMatch).toBeFalsy() // ἀργυροῖς
+  })
+
+  it('6-5 - checked Adjective6 - χρυσῷ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χρυσῷ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(3)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[4].cells[2].fullMatch).toBeTruthy() // χρυσῷ
+    expect(renderedTable.rows[4].cells[3].fullMatch).toBeFalsy() // χρυσῇ
+    expect(renderedTable.rows[4].cells[4].fullMatch).toBeTruthy() // χρυσῷ
+    expect(renderedTable.rows[4].cells[5].fullMatch).toBeFalsy() // ἀργυρῷ	
+    expect(renderedTable.rows[4].cells[6].fullMatch).toBeFalsy() // ἀργυρᾷ
+    expect(renderedTable.rows[4].cells[7].fullMatch).toBeFalsy() // ἀργυρῷ
+  })
+
+  it('6-6 - checked Adjective6 - χρυσᾶ', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('χρυσᾶ', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[11].cells[2].fullMatch).toBeFalsy() // χρυσοῦς
+    expect(renderedTable.rows[11].cells[3].fullMatch).toBeFalsy() // χρυσᾶς
+    expect(renderedTable.rows[11].cells[4].fullMatch).toBeTruthy() // χρυσᾶ
+    expect(renderedTable.rows[11].cells[5].fullMatch).toBeFalsy() // ἀργυροῦς	
+    expect(renderedTable.rows[11].cells[6].fullMatch).toBeFalsy() // ἀργυρᾶς
+    expect(renderedTable.rows[11].cells[7].fullMatch).toBeFalsy() // ἀργυρᾶ
+
+    expect(renderedTable.rows[6].cells[3].fullMatch).toBeTruthy() // χρυσᾶ
+  })
+
+  it('6-7 - checked Adjective6 - ἀργυροῦς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀργυροῦς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[1],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[1].render().wideTable
+
+    expect(renderedTable.rows[11].cells[2].fullMatch).toBeFalsy() // χρυσοῦς
+    expect(renderedTable.rows[11].cells[3].fullMatch).toBeFalsy() // χρυσᾶς
+    expect(renderedTable.rows[11].cells[4].fullMatch).toBeFalsy() // χρυσᾶ
+    expect(renderedTable.rows[11].cells[5].fullMatch).toBeTruthy() // ἀργυροῦς	
+    expect(renderedTable.rows[11].cells[6].fullMatch).toBeFalsy() // ἀργυρᾶς
+    expect(renderedTable.rows[11].cells[7].fullMatch).toBeFalsy() // ἀργυρᾶ
+
+    expect(renderedTable.rows[2].cells[5].fullMatch).toBeTruthy() // ἀργυροῦς
+  })
+
+  it('6-8 - checked Adjective6 - ἀργυροῖν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀργυροῖν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[7].cells[2].fullMatch).toBeFalsy() // χρυσοῖν
+    expect(renderedTable.rows[7].cells[3].fullMatch).toBeFalsy() // χρυσαῖν
+    expect(renderedTable.rows[7].cells[4].fullMatch).toBeFalsy() // χρυσοῖν
+    expect(renderedTable.rows[7].cells[5].fullMatch).toBeTruthy() // ἀργυροῖν	
+    expect(renderedTable.rows[7].cells[6].fullMatch).toBeFalsy() // ἀργυραῖν
+    expect(renderedTable.rows[7].cells[7].fullMatch).toBeTruthy() // ἀργυροῖν
+  })
+
+  it('6-9 - checked Adjective6 - ἀργυρᾶς', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀργυρᾶς', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toEqual(1)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[0],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[0].render().wideTable
+
+    expect(renderedTable.rows[3].cells[2].fullMatch).toBeFalsy() // χρυσοῦ
+    expect(renderedTable.rows[3].cells[3].fullMatch).toBeFalsy() // χρυσῆς
+    expect(renderedTable.rows[3].cells[4].fullMatch).toBeFalsy() // χρυσοῦ
+    expect(renderedTable.rows[3].cells[5].fullMatch).toBeFalsy() // ἀργυροῦ	
+    expect(renderedTable.rows[3].cells[6].fullMatch).toBeTruthy() // ἀργυρᾶς
+    expect(renderedTable.rows[3].cells[7].fullMatch).toBeFalsy() // ἀργυροῦ
+
+    expect(renderedTable.rows[11].cells[6].fullMatch).toBeTruthy() // ἀργυρᾶς
+  })
+
+  it('6-10 - checked Adjective6 - ἀργυρῶν', async () => {
+    const inflectionsViewSet = await BaseTestHelp.getInflectionSet('ἀργυρῶν', Constants.LANG_GREEK)
+
+    expect(inflectionsViewSet.hasMatchingViews).toBeTruthy()
+    // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews.map(view => view.constructor.name))
+
+    expect(inflectionsViewSet.matchingViews.length).toBeGreaterThan(2)
+    BaseTestHelp.checkParadigm({
+      view: inflectionsViewSet.matchingViews[2],
+      viewName: 'GreekAdjectiveParadigmView',
+      viewTitle: 'Vowel-Declension Adjectives with Contraction (-εος)',
+      paradigmID: 'adjpdgm6'
+    })
+
+    const renderedTable = inflectionsViewSet.matchingViews[2].render().wideTable
+
+    expect(renderedTable.rows[9].cells[2].fullMatch).toBeFalsy() // χρυσῶν
+    expect(renderedTable.rows[9].cells[3].fullMatch).toBeFalsy() // χρυσῶν
+    expect(renderedTable.rows[9].cells[4].fullMatch).toBeFalsy() // χρυσῶν
+    expect(renderedTable.rows[9].cells[5].fullMatch).toBeTruthy() // ἀργυρῶν	
+    expect(renderedTable.rows[9].cells[6].fullMatch).toBeTruthy() // ἀργυρῶν
+    expect(renderedTable.rows[9].cells[7].fullMatch).toBeTruthy() // ἀργυρῶν
+  })
+
 })

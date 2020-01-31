@@ -108,6 +108,7 @@ import paradigmAdj2 from '@/paradigm/data/greek/adjective/tables/paradigm-adject
 import paradigmAdj3 from '@/paradigm/data/greek/adjective/tables/paradigm-adjective-3.json'
 import paradigmAdj4 from '@/paradigm/data/greek/adjective/tables/paradigm-adjective-4.json'
 import paradigmAdj5 from '@/paradigm/data/greek/adjective/tables/paradigm-adjective-5.json'
+import paradigmAdj6 from '@/paradigm/data/greek/adjective/tables/paradigm-adjective-6.json'
 
 // Adjective rules
 import adjectiveParadigmRulesCSV from '@/paradigm/data/greek/adjective/rules.csv'
@@ -245,7 +246,8 @@ export default class GreekParadigmData {
         ['adjpdgm2', new Paradigm(this.languageID, partOfSpeech, paradigmAdj2)],
         ['adjpdgm3', new Paradigm(this.languageID, partOfSpeech, paradigmAdj3)],
         ['adjpdgm4', new Paradigm(this.languageID, partOfSpeech, paradigmAdj4)],
-        ['adjpdgm5', new Paradigm(this.languageID, partOfSpeech, paradigmAdj5)]
+        ['adjpdgm5', new Paradigm(this.languageID, partOfSpeech, paradigmAdj5)],
+        ['adjpdgm6', new Paradigm(this.languageID, partOfSpeech, paradigmAdj6)]
     ])
   }
 
