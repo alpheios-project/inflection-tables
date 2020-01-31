@@ -1,7 +1,7 @@
 {
-    "ID": "adjpdgm6",
+    "ID": "adjpdgm7",
     "partOfSpeech": "adjective",
-    "title": "Vowel-Declension Adjectives with Contraction (-εος)",
+    "title": "Vowel-Declension Adjectives with Contraction (-οος)",
     "credits": "Adjective paradigm tables derived from <a target=\"_blank\" href=\"http://ucbclassics.dreamhosters.com/ancgreek/\">Ancient Greek Tutorials<\/a>, by Donald J. Mastronarde, Berkeley Language Center of the University of California, Berkeley.<br>©1999-2005 The Regents of the University of California.",
     "table": {"rows": [
         {"cells": [
@@ -18,54 +18,7 @@
             {
                 "role": "label",
                 "declension": "1st 2nd",
-                "value": "with η-fem."
-            },
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": ""
-            },
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": ""
-            },
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": "with α-fem."
-            },
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": ""
-            },
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": ""
-            }
-        ]},
-        {"cells": [
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": ""
-            },
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": ""
-            },
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": "masculine"
-            },
-            {
-                "role": "label",
-                "declension": "1st 2nd",
-                "value": "feminine"
+                "value": "masculine feminine"
             },
             {
                 "role": "label",
@@ -105,62 +58,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "singular",
                 "case": "nominative vocative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῦς"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "singular",
-                "case": "nominative vocative",
-                "lemma": "χρύσεος",
-                "value": "χρυσῆ"
+                "lemma": "εὔνους",
+                "value": "εὔνους"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "singular",
                 "case": "nominative vocative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῦν"
+                "lemma": "εὔνους",
+                "value": "εὔνουν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "nominative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῦς"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῦς"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "nominative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρᾶ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῆ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "nominative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῦν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῦν"
             }
 
         ]},
@@ -181,62 +124,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "singular",
                 "case": "genitive",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῦ"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "singular",
-                "case": "genitive",
-                "lemma": "χρύσεος",
-                "value": "χρυσῆς"
+                "lemma": "εὔνους",
+                "value": "εὔνου"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "singular",
                 "case": "genitive",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῦ"
+                "lemma": "εὔνους",
+                "value": "εὔνου"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "genitive",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῦ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῦ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "genitive",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρᾶς"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῆς"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "genitive",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῦ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῦ"
             }
         ]},
         {"cells": [
@@ -256,62 +189,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "singular",
                 "case": "dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσῷ"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "singular",
-                "case": "dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσῇ"
+                "lemma": "εὔνους",
+                "value": "εὔνῳ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "singular",
                 "case": "dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσῷ"
+                "lemma": "εὔνους",
+                "value": "εὔνῳ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρῷ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῷ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρᾷ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῇ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρῷ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῷ"
             }
         ]},
         {"cells": [
@@ -331,62 +254,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "singular",
                 "case": "accusative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῦν"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "singular",
-                "case": "accusative",
-                "lemma": "χρύσεος",
-                "value": "χρυσῆν"
+                "lemma": "εὔνους",
+                "value": "εὔνουν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "singular",
                 "case": "accusative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῦν"
+                "lemma": "εὔνους",
+                "value": "εὔνουν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "accusative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῦν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῦν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "accusative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρᾷν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῆν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "singular",
                 "case": "accusative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῦν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῦν"
             }
         ]},
         {"cells": [
@@ -406,62 +319,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "dual",
                 "case": "nominative accusative vocative",
-                "lemma": "χρύσεος",
-                "value": "χρυσώ"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "dual",
-                "case": "nominative accusative vocative",
-                "lemma": "χρύσεος",
-                "value": "χρυσᾶ"
+                "lemma": "εὔνους",
+                "value": "εὔνω"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "dual",
                 "case": "nominative accusative vocative",
-                "lemma": "χρύσεος",
-                "value": "χρυσώ"
+                "lemma": "εὔνους",
+                "value": "εὔνω"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "dual",
                 "case": "nominative accusative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρώ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλώ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "dual",
                 "case": "nominative accusative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρᾶ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλᾶ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "dual",
                 "case": "nominative accusative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρώ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλώ"
             }
         ]},
         {"cells": [
@@ -481,62 +384,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "dual",
                 "case": "genitive dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῖν"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "dual",
-                "case": "genitive dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσαῖν"
+                "lemma": "εὔνους",
+                "value": "εὔνοιν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "dual",
                 "case": "genitive dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῖν"
+                "lemma": "εὔνους",
+                "value": "εὔνοιν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "dual",
                 "case": "genitive dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῖν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῖν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "dual",
                 "case": "genitive dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυραῖν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλαῖν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "dual",
                 "case": "genitive dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῖν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῖν"
             }
         ]},
         {"cells": [
@@ -556,62 +449,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "plural",
                 "case": "nominative vocative",
-                "lemma": "χρύσεος",
-                "value": "χαρίεντες"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "plural",
-                "case": "nominative vocative",
-                "lemma": "χρύσεος",
-                "value": "χαρίεσσαι"
+                "lemma": "εὔνους",
+                "value": "εὔνοι"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "plural",
                 "case": "nominative vocative",
-                "lemma": "χρύσεος",
-                "value": "χαρίεντᾰ"
+                "lemma": "εὔνους",
+                "value": "εὔνοᾰ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "nominative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῖ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῖ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "nominative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυραῖ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλαῖ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "nominative vocative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρᾶ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλόᾰ"
             }
         ]},
         {"cells": [
@@ -631,62 +514,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "plural",
                 "case": "genitive",
-                "lemma": "χρύσεος",
-                "value": "χρυσῶν"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "plural",
-                "case": "genitive",
-                "lemma": "χρύσεος",
-                "value": "χρυσῶν"
+                "lemma": "εὔνους",
+                "value": "εὔνων"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "plural",
                 "case": "genitive",
-                "lemma": "χρύσεος",
-                "value": "χρυσῶν"
+                "lemma": "εὔνους",
+                "value": "εὔνων"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "genitive",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρῶν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῶν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "genitive",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρῶν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῶν"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "genitive",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρῶν"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλῶν"
             }
         ]},
         {"cells": [
@@ -706,62 +579,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "plural",
                 "case": "dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῖς"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "plural",
-                "case": "dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσαῖς"
+                "lemma": "εὔνους",
+                "value": "εὔνοις"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "plural",
                 "case": "dative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῖς"
+                "lemma": "εὔνους",
+                "value": "εὔνοις"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῖς"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῖς"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυραῖς"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλαῖς"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "dative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῖς"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῖς"
             }
         ]},
         {"cells": [
@@ -781,62 +644,52 @@
             {
                 "role": "data",
                 "declension": "1st 2nd",
-                "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "gender": "masculine feminine",
+                "stemtype": "oos_oon",
                 "number": "plural",
                 "case": "accusative",
-                "lemma": "χρύσεος",
-                "value": "χρυσοῦς"
-            },
-            {
-                "role": "data",
-                "declension": "1st 2nd",
-                "gender": "feminine",
-                "stemtype": "eos_eh_eon",
-                "number": "plural",
-                "case": "accusative",
-                "lemma": "χρύσεος",
-                "value": "χρυσᾶς"
+                "lemma": "εὔνους",
+                "value": "εὔνους"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oon",
                 "number": "plural",
                 "case": "accusative",
-                "lemma": "χρύσεος",
-                "value": "χρυσᾶ"
+                "lemma": "εὔνους",
+                "value": "εὔνοᾰ"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "masculine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "accusative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυροῦς"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλοῦς"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "feminine",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "accusative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρᾶς"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλᾶς"
             },
             {
                 "role": "data",
                 "declension": "1st 2nd",
                 "gender": "neuter",
-                "stemtype": "eos_eh_eon",
+                "stemtype": "oos_oh_oon",
                 "number": "plural",
                 "case": "accusative",
-                "lemma": "ἀργύρεος",
-                "value": "ἀργυρᾶ"
+                "lemma": "ἁπλόος",
+                "value": "ἁπλόᾰ"
             }
         ]}
 
