@@ -37,7 +37,7 @@
     "@babel/plugin-transform-runtime": "^7.7.6",
     "@babel/preset-env": "^7.7.7",
     "@babel/runtime": "^7.7.7",
-    "alpheios-client-adapters": "github:alpheios-project/client-adapters",
+    "alpheios-core": "github:alpheios-project/alpheios-core",
     "alpheios-data-models": "github:alpheios-project/data-models",
     "alpheios-fixtures": "github:alpheios-project/fixtures",
     "alpheios-node-build": "github:alpheios-project/node-build",

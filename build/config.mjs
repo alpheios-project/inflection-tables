@@ -11,6 +11,7 @@ const webpack = {
     },
     resolve: {
       alias: {
+        'alpheios-client-adapters': path.join(projectRoot, 'node_modules/alpheios-core/packages/client-adapters/dist/alpheios-client-adapters.js'),
         'alpheios-data-models': path.join(projectRoot, 'node_modules/alpheios-data-models/dist/alpheios-data-models.js'),
         '@lib': path.join(projectRoot, 'lib'),
         '@views': path.join(projectRoot, 'views'),
