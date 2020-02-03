@@ -1,0 +1,455 @@
+{
+    "ID": "artpdgm1",
+    "partOfSpeech": "article",
+    "title": "The Definite Article",
+    "credits": "Article paradigm tables derived from <a target=\"_blank\" href=\"http://ucbclassics.dreamhosters.com/ancgreek/\">Ancient Greek Tutorials<\/a>, by Donald J. Mastronarde, Berkeley Language Center of the University of California, Berkeley.<br>©1999-2005 The Regents of the University of California.",
+    "table": {"rows": [
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "value": "masculine"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "value": "feminine"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "value": "neuter"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "singular",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "singular",
+                "case": "nominative",
+                "value": "nominative"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "singular",
+                "case": "nominative",
+                "lemma": "ὁ",
+                "value": "ὁ"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "singular",
+                "case": "nominative",
+                "lemma": "ὁ",
+                "value": "ἡ"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "singular",
+                "case": "nominative",
+                "lemma": "ὁ",
+                "value": "τό"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "singular",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "singular",
+                "case": "genitive",
+                "value": "genitive"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "singular",
+                "case": "genitive",
+                "lemma": "ὁ",
+                "value": "τοῦ"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "singular",
+                "case": "genitive",
+                "lemma": "ὁ",
+                "value": "τῆς"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "singular",
+                "case": "genitive",
+                "lemma": "ὁ",
+                "value": "τοῦ"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "singular",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "singular",
+                "case": "dative",
+                "value": "dative"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "singular",
+                "case": "dative",
+                "lemma": "ὁ",
+                "value": "τῷ"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "singular",
+                "case": "dative",
+                "lemma": "ὁ",
+                "value": "τῇ"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "singular",
+                "case": "dative",
+                "lemma": "ὁ",
+                "value": "τῷ"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "singular",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "singular",
+                "case": "accusative",
+                "value": "accusative"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "singular",
+                "case": "accusative",
+                "lemma": "ὁ",
+                "value": "τόν"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "singular",
+                "case": "accusative",
+                "lemma": "ὁ",
+                "value": "τήν"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "singular",
+                "case": "accusative",
+                "lemma": "ὁ",
+                "value": "τό"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "dual",
+                "value": "dual"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "dual",
+                "case": "nominative accusative",
+                "value": "nominative accusative"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "dual",
+                "case": "nominative accusative",
+                "lemma": "ὁ",
+                "value": "τώ"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "dual",
+                "case": "nominative accusative",
+                "lemma": "ὁ",
+                "value": "τώ, τά"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "dual",
+                "case": "nominative accusative",
+                "lemma": "ὁ",
+                "value": "τώ"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "dual",
+                "value": "dual"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "dual",
+                "case": "genitive dative",
+                "value": "genitive dative"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "dual",
+                "case": "genitive dative",
+                "lemma": "ὁ",
+                "value": "τοῖν"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "dual",
+                "case": "genitive dative",
+                "lemma": "ὁ",
+                "value": "τοῖν, ταῖν"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "dual",
+                "case": "genitive dative",
+                "lemma": "ὁ",
+                "value": "τοῖν"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "plural",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "plural",
+                "case": "nominative",
+                "value": "nominative"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "plural",
+                "case": "nominative",
+                "lemma": "ὁ",
+                "value": "οἱ"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "plural",
+                "case": "nominative",
+                "lemma": "ὁ",
+                "value": "αἱ"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "plural",
+                "case": "nominative",
+                "lemma": "ὁ",
+                "value": "τά"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "plural",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "plural",
+                "case": "genitive",
+                "value": "genitive"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "plural",
+                "case": "genitive",
+                "lemma": "ὁ",
+                "value": "τῶν"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "plural",
+                "case": "genitive",
+                "lemma": "ὁ",
+                "value": "τῶν"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "plural",
+                "case": "genitive",
+                "lemma": "ὁ",
+                "value": "τῶν"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "plural",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "plural",
+                "case": "dative",
+                "value": "dative"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "plural",
+                "case": "dative",
+                "lemma": "ὁ",
+                "value": "τοῖς"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "plural",
+                "case": "dative",
+                "lemma": "ὁ",
+                "value": "ταῖς"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "plural",
+                "case": "dative",
+                "lemma": "ὁ",
+                "value": "τοῖς"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "plural",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "stemtype": "article",
+                "number": "plural",
+                "case": "accusative",
+                "value": "accusative"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "masculine",
+                "number": "plural",
+                "case": "accusative",
+                "lemma": "ὁ",
+                "value": "τούς"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "feminine",
+                "number": "plural",
+                "case": "accusative",
+                "lemma": "ὁ",
+                "value": "τάς"
+            },
+            {
+                "role": "data",
+                "stemtype": "article",
+                "gender": "neuter",
+                "number": "plural",
+                "case": "accusative",
+                "lemma": "ὁ",
+                "value": "τά"
+            }
+        ]}
+    ]}
+}

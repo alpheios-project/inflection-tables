@@ -115,6 +115,12 @@ import paradigmAdj8 from '@/paradigm/data/greek/adjective/tables/paradigm-adject
 // Adjective rules
 import adjectiveParadigmRulesCSV from '@/paradigm/data/greek/adjective/rules.csv'
 
+// Article paradigm tables
+import paradigmArt1 from '@/paradigm/data/greek/article/tables/paradigm-article-1.json'
+
+// Article rules
+import articleParadigmRulesCSV from '@/paradigm/data/greek/article/rules.csv'
+
 export default class GreekParadigmData {
   static get languageID () {
     return Constants.LANG_GREEK
@@ -257,5 +263,16 @@ export default class GreekParadigmData {
 
   static get adjectiveParadigmRules () {
     return adjectiveParadigmRulesCSV
+  }
+
+  static get articleParadigmTables () {
+    const partOfSpeech = Constants.POFS_ARTICLE
+    return new Map([
+        ['artpdgm1', new Paradigm(this.languageID, partOfSpeech, paradigmArt1)]
+    ])
+  }
+
+  static get articleParadigmRules () {
+    return articleParadigmRulesCSV
   }
 }

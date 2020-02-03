@@ -175,8 +175,8 @@ export default class View {
    */
   static matchFilter (languageID, inflections) {
     // Disable multiple parts of speech for now
-    const res = (this.languageID === languageID && inflections.some(i => i[Feature.types.part] && i[Feature.types.part].value === this.mainPartOfSpeech))
-    return res
+    // const res = (this.languageID === languageID && inflections.some(i => i[Feature.types.part] && i[Feature.types.part].value === this.mainPartOfSpeech))
+    return (this.languageID === languageID && inflections.some(i => i[Feature.types.part] && i[Feature.types.part].value === this.mainPartOfSpeech))
   }
 
   /**
