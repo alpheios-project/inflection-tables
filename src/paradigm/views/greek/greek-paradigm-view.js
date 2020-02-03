@@ -161,10 +161,13 @@ export default class GreekParadigmView extends GreekView {
         let fullMatch = true
 
         for (const feature of comparativeFeatures) {
+          
           if (inflection.hasOwnProperty(feature) || (feature === 'lemma')) {
 
             if (feature === 'lemma') {
               fullMatch = fullMatch && inflection.word && this.constructor.model.compareWords(cell[feature],inflection.word.value)
+            } else if (feature === 'morph') {
+              fullMatch = fullMatch && cell[feature].value === inflection[feature].value
             } else {
               fullMatch = fullMatch && cell[feature].hasValues(inflection[feature].values)
             }

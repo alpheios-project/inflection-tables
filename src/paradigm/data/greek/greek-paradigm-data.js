@@ -121,6 +121,12 @@ import paradigmArt1 from '@/paradigm/data/greek/article/tables/paradigm-article-
 // Article rules
 import articleParadigmRulesCSV from '@/paradigm/data/greek/article/rules.csv'
 
+// Pronoun paradigm tables
+import paradigmPron1 from '@/paradigm/data/greek/pronoun/tables/paradigm-pronoun-1.json'
+
+// Pronoun rules
+import pronounParadigmRulesCSV from '@/paradigm/data/greek/pronoun/rules.csv'
+
 export default class GreekParadigmData {
   static get languageID () {
     return Constants.LANG_GREEK
@@ -274,5 +280,16 @@ export default class GreekParadigmData {
 
   static get articleParadigmRules () {
     return articleParadigmRulesCSV
+  }
+
+  static get pronounParadigmTables () {
+    const partOfSpeech = Constants.POFS_PRONOUN
+    return new Map([
+        ['pronpdgm1', new Paradigm(this.languageID, partOfSpeech, paradigmPron1)]
+    ])
+  }
+
+  static get pronounParadigmRules () {
+    return pronounParadigmRulesCSV
   }
 }

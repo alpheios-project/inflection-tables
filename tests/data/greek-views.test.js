@@ -66,13 +66,6 @@ describe('greek-views.test.js', () => {
     // console.info('inflectionsViewSet.matchingViews - ', inflectionsViewSet.matchingViews)
 
     expect(inflectionsViewSet.matchingViews.length).toEqual(3)
-    
-    BaseTestHelp.checkView({
-      inflectionsViewSet,
-      viewName: 'GreekArticleView',
-      title: 'Article Declension',
-      linkedViewsLength: 0
-    })
 
     BaseTestHelp.checkView({
       inflectionsViewSet,
@@ -85,6 +78,13 @@ describe('greek-views.test.js', () => {
       inflectionsViewSet,
       viewName: 'GreekPersonPronounView',
       title: 'Personal Pronoun Declension',
+      linkedViewsLength: 0
+    })
+
+    BaseTestHelp.checkView({
+      inflectionsViewSet,
+      viewName: 'GreekArticleParadigmView',
+      title: 'The Definite Article',
       linkedViewsLength: 0
     })
   })
@@ -186,8 +186,8 @@ describe('greek-views.test.js', () => {
     
     BaseTestHelp.checkView({
       inflectionsViewSet,
-      viewName: 'GreekArticleView',
-      title: 'Article Declension',
+      viewName: 'GreekArticleParadigmView',
+      title: 'The Definite Article',
       linkedViewsLength: 0
     })
   })

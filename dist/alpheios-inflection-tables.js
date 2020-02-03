@@ -2429,8 +2429,11 @@ class LanguageDataset {
     }
 
     this.setBaseInflectionData(inflection, lemma)
-    this.setPronounInflectionData(partOfSpeech, inflection)
-    this.setIrregularInflectionData(inflection)
+
+    if (!inflection.constraints.paradigmBased) {
+      this.setPronounInflectionData(partOfSpeech, inflection)
+      this.setIrregularInflectionData(inflection)
+    }
 
     if (inflection.constraints.implemented && !inflection.constraints.paradigmBased) {
       // Set match features data
@@ -12476,6 +12479,9 @@ var _paradigm_data_greek_adjective_tables_paradigm_adjective_8_json__WEBPACK_IMP
 /* harmony import */ var _paradigm_data_greek_article_tables_paradigm_article_1_json__WEBPACK_IMPORTED_MODULE_102__ = __webpack_require__(/*! @/paradigm/data/greek/article/tables/paradigm-article-1.json */ "./src/paradigm/data/greek/article/tables/paradigm-article-1.json");
 var _paradigm_data_greek_article_tables_paradigm_article_1_json__WEBPACK_IMPORTED_MODULE_102___namespace = /*#__PURE__*/__webpack_require__.t(/*! @/paradigm/data/greek/article/tables/paradigm-article-1.json */ "./src/paradigm/data/greek/article/tables/paradigm-article-1.json", 1);
 /* harmony import */ var _paradigm_data_greek_article_rules_csv__WEBPACK_IMPORTED_MODULE_103__ = __webpack_require__(/*! @/paradigm/data/greek/article/rules.csv */ "./src/paradigm/data/greek/article/rules.csv");
+/* harmony import */ var _paradigm_data_greek_pronoun_tables_paradigm_pronoun_1_json__WEBPACK_IMPORTED_MODULE_104__ = __webpack_require__(/*! @/paradigm/data/greek/pronoun/tables/paradigm-pronoun-1.json */ "./src/paradigm/data/greek/pronoun/tables/paradigm-pronoun-1.json");
+var _paradigm_data_greek_pronoun_tables_paradigm_pronoun_1_json__WEBPACK_IMPORTED_MODULE_104___namespace = /*#__PURE__*/__webpack_require__.t(/*! @/paradigm/data/greek/pronoun/tables/paradigm-pronoun-1.json */ "./src/paradigm/data/greek/pronoun/tables/paradigm-pronoun-1.json", 1);
+/* harmony import */ var _paradigm_data_greek_pronoun_rules_csv__WEBPACK_IMPORTED_MODULE_105__ = __webpack_require__(/*! @/paradigm/data/greek/pronoun/rules.csv */ "./src/paradigm/data/greek/pronoun/rules.csv");
 
 
 
@@ -12597,6 +12603,12 @@ var _paradigm_data_greek_article_tables_paradigm_article_1_json__WEBPACK_IMPORTE
 
 
 // Article rules
+
+
+// Pronoun paradigm tables
+
+
+// Pronoun rules
 
 
 class GreekParadigmData {
@@ -12753,6 +12765,17 @@ class GreekParadigmData {
   static get articleParadigmRules () {
     return _paradigm_data_greek_article_rules_csv__WEBPACK_IMPORTED_MODULE_103__["default"]
   }
+
+  static get pronounParadigmTables () {
+    const partOfSpeech = alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN
+    return new Map([
+        ['pronpdgm1', new _paradigm_lib_paradigm_js__WEBPACK_IMPORTED_MODULE_1__["default"](this.languageID, partOfSpeech, _paradigm_data_greek_pronoun_tables_paradigm_pronoun_1_json__WEBPACK_IMPORTED_MODULE_104__)]
+    ])
+  }
+
+  static get pronounParadigmRules () {
+    return _paradigm_data_greek_pronoun_rules_csv__WEBPACK_IMPORTED_MODULE_105__["default"]
+  }
 }
 
 /***/ }),
@@ -12908,6 +12931,56 @@ class GreekParadigmDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     return Array.from(paradigms.values())
   }
 
+  setPronounParadigmData (partOfSpeech, paradigms, rulesData) {
+    // An order of columns in a data CSV file
+    const n = {
+      id: 0,
+      matchOrder: 1,
+      partOfSpeech: 2, // Ignored, an argument value will be used
+      stemtype: 3,
+      person: 4,
+      gender: 5,
+      lemma: 6,
+      morphFlags: 7,
+      dialect: 8
+    }
+
+    // First row contains headers
+    for (let i = 1; i < rulesData.length; i++) {
+      const item = rulesData[i]
+      const id = item[n.id]
+      const matchOrder = Number.parseInt(item[n.matchOrder])
+
+      let features = [partOfSpeech] // eslint-disable-line prefer-const
+
+      if (item[n.stemtype]) { features.push(this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.stemtype).createFromImporter(item[n.stemtype])) }
+      if (item[n.person]) { features.push(this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.person).createFromImporter(item[n.person])) }
+      if (item[n.gender]) { features.push(this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.gender).createFromImporter(item[n.gender])) }
+      if (item[n.dialect]) { features.push(this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.dialect).createFromImporter(item[n.dialect])) }
+
+      let lemma
+      if (item[n.lemma]) {
+        lemma = new alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Lemma"](item[n.lemma], this.languageID)
+      }
+
+      let morphFlags = ''
+      if (item[n.morphFlags]) {
+        morphFlags = item[n.morphFlags]
+      }
+
+      if (paradigms.has(id)) {
+        paradigms.get(id).addRule(matchOrder, features, lemma, morphFlags)
+      } else {
+        console.warn(`Cannot find a paradigm table for "${id}" index`)
+      }
+    }
+    for (let paradigm of paradigms.values()) { // eslint-disable-line prefer-const
+      paradigm.sortRules()
+    }
+
+    return Array.from(paradigms.values())
+  }
+
   setArticleParadigmData (partOfSpeech, paradigms, rulesData) {
     // An order of columns in a data CSV file
     const n = {
@@ -12962,6 +13035,7 @@ class GreekParadigmDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     this.loadNounParadigmData()
     this.loadAdjectiveParadigmData()
     this.loadArticleParadigmData()
+    this.loadPronounParadigmData()
 
     this.dataLoaded = true
   }
@@ -13029,6 +13103,17 @@ class GreekParadigmDataset extends _lib_language_dataset_js__WEBPACK_IMPORTED_MO
     const paradigms = this.setArticleParadigmData(
       partOfSpeech, articleParadigmTables,
       papaparse__WEBPACK_IMPORTED_MODULE_4___default.a.parse(_paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].articleParadigmRules, { skipEmptyLines: true }).data, articleParadigmTables)
+    
+    this.addParadigms(partOfSpeech, paradigms)
+  }
+
+  loadPronounParadigmData () {
+    const pronounParadigmTables = _paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].pronounParadigmTables
+    
+    const partOfSpeech = this.typeFeatures.get(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part).createFeature(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN)
+    const paradigms = this.setPronounParadigmData(
+      partOfSpeech, pronounParadigmTables,
+      papaparse__WEBPACK_IMPORTED_MODULE_4___default.a.parse(_paradigm_data_greek_greek_paradigm_data_js__WEBPACK_IMPORTED_MODULE_2__["default"].pronounParadigmRules, { skipEmptyLines: true }).data, pronounParadigmTables)
     
     this.addParadigms(partOfSpeech, paradigms)
   }
@@ -13304,6 +13389,30 @@ module.exports = JSON.parse("{\"ID\":\"nounpdgm8\",\"partOfSpeech\":\"noun\",\"t
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"ID\":\"nounpdgm9\",\"partOfSpeech\":\"noun\",\"title\":\"Consonant-Declension Nouns: liquid and nasal stems\",\"credits\":\"Noun paradigm tables derived from <a target=\\\"_blank\\\" href=\\\"http://ucbclassics.dreamhosters.com/ancgreek/\\\">Ancient Greek Tutorials</a>, by Donald J. Mastronarde, Berkeley Language Center of the University of California, Berkeley.<br>©1999-2005 The Regents of the University of California.\",\"table\":{\"rows\":[{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"value\":\"singular\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"case\":\"nominative\",\"value\":\"nominative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"singular\",\"case\":\"nominative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥήτωρ\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"singular\",\"case\":\"nominative\",\"lemma\":\"δαίμων\",\"value\":\"δαίμων\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"singular\",\"case\":\"nominative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγών\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"singular\",\"case\":\"nominative\",\"lemma\":\"ἅλς\",\"value\":\"ἅλς\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"value\":\"\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"case\":\"genitive\",\"value\":\"genitive\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"singular\",\"case\":\"genitive\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥήτορος\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"singular\",\"case\":\"genitive\",\"lemma\":\"δαίμων\",\"value\":\"δαίμονος\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"singular\",\"case\":\"genitive\",\"lemma\":\"ἀγών\",\"value\":\"ἀγῶνος\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"singular\",\"case\":\"genitive\",\"lemma\":\"ἅλς\",\"value\":\"ἁλός\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"value\":\"\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"case\":\"dative\",\"value\":\"dative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"singular\",\"case\":\"dative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥήτορι\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"singular\",\"case\":\"dative\",\"lemma\":\"δαίμων\",\"value\":\"δαίμονι\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"singular\",\"case\":\"dative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγῶνι\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"singular\",\"case\":\"dative\",\"lemma\":\"ἅλς\",\"value\":\"ἁλί\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"value\":\"\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"case\":\"accusative\",\"value\":\"accusative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"singular\",\"case\":\"accusative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥήτορᾰ\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"singular\",\"case\":\"accusative\",\"lemma\":\"δαίμων\",\"value\":\"δαίμονᾰ\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"singular\",\"case\":\"accusative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγῶνᾰ\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"singular\",\"case\":\"accusative\",\"lemma\":\"ἅλς\",\"value\":\"ἅλᾰ\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"value\":\"\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"singular\",\"case\":\"vocative\",\"value\":\"vocative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"singular\",\"case\":\"vocative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥῆτορ\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"singular\",\"case\":\"vocative\",\"lemma\":\"δαίμων\",\"value\":\"δαῖμον\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"singular\",\"case\":\"vocative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγών\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"singular\",\"case\":\"vocative\",\"lemma\":\"ἅλς\",\"value\":\"---\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"dual\",\"value\":\"dual\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"dual\",\"case\":\"nominative accusative vocative\",\"value\":\"nominative accusative vocative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"dual\",\"case\":\"nominative accusative vocative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥήτορε\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"dual\",\"case\":\"nominative accusative vocative\",\"lemma\":\"δαίμων\",\"value\":\"δαίμονε\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"dual\",\"case\":\"nominative accusative vocative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγῶνε\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"dual\",\"case\":\"nominative accusative vocative\",\"lemma\":\"ἅλς\",\"value\":\"ἅλε\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"dual\",\"value\":\"dual\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"dual\",\"case\":\"genitive dative\",\"value\":\"genitive dative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"dual\",\"case\":\"genitive dative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥητόροιν\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"dual\",\"case\":\"genitive dative\",\"lemma\":\"δαίμων\",\"value\":\"δαιμόνοιν\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"dual\",\"case\":\"genitive dative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγώνοιν\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"dual\",\"case\":\"genitive dative\",\"lemma\":\"ἅλς\",\"value\":\"ἁλοῖν\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"plural\",\"value\":\"plural\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"plural\",\"case\":\"nominative vocative\",\"value\":\"nominative vocative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"plural\",\"case\":\"nominative vocative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥήτορες\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"plural\",\"case\":\"nominative vocative\",\"lemma\":\"δαίμων\",\"value\":\"δαίμονες\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"plural\",\"case\":\"nominative vocative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγῶνες\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"plural\",\"case\":\"nominative vocative\",\"lemma\":\"ἅλς\",\"value\":\"ἅλες\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"plural\",\"value\":\"plural\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"plural\",\"case\":\"genitive\",\"value\":\"genitive\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"plural\",\"case\":\"genitive\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥητόρων\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"plural\",\"case\":\"genitive\",\"lemma\":\"δαίμων\",\"value\":\"δαιμόνων\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"plural\",\"case\":\"genitive\",\"lemma\":\"ἀγών\",\"value\":\"ἀγώνων\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"plural\",\"case\":\"genitive\",\"lemma\":\"ἅλς\",\"value\":\"ἁλῶν\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"plural\",\"value\":\"plural\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"plural\",\"case\":\"dative\",\"value\":\"dative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"plural\",\"case\":\"dative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥήτορσι(ν)\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"plural\",\"case\":\"dative\",\"lemma\":\"δαίμων\",\"value\":\"δαίμοσι(ν)\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"plural\",\"case\":\"dative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγῶσι(ν)\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"plural\",\"case\":\"dative\",\"lemma\":\"ἅλς\",\"value\":\"ἁλσί(ν)\"}]},{\"cells\":[{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"plural\",\"value\":\"plural\"},{\"role\":\"label\",\"declension\":\"3rd\",\"number\":\"plural\",\"case\":\"accusative\",\"value\":\"accusative\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wr_oros\",\"number\":\"plural\",\"case\":\"accusative\",\"lemma\":\"ῥήτωρ\",\"value\":\"ῥήτορᾰς\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"wn_onos\",\"number\":\"plural\",\"case\":\"accusative\",\"lemma\":\"δαίμων\",\"value\":\"δαίμονᾰς\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"n_nos\",\"number\":\"plural\",\"case\":\"accusative\",\"lemma\":\"ἀγών\",\"value\":\"ἀγῶνᾰς\"},{\"role\":\"data\",\"declension\":\"3rd\",\"stemtype\":\"irreg_decl3\",\"number\":\"plural\",\"case\":\"accusative\",\"lemma\":\"ἅλς\",\"value\":\"ἅλᾰς\"}]}]},\"subTables\":[]}");
+
+/***/ }),
+
+/***/ "./src/paradigm/data/greek/pronoun/rules.csv":
+/*!***************************************************!*\
+  !*** ./src/paradigm/data/greek/pronoun/rules.csv ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ("ID ref,Match order,Part of speech,Stem type,Person,Gender,Lemma,Morph flags,Dialect\r\npronpdgm1,1,pronoun,pron1,1st,,ἐγώ,,\r\npronpdgm1,1,pronoun,pron1,2nd,,σύ,,");
+
+/***/ }),
+
+/***/ "./src/paradigm/data/greek/pronoun/tables/paradigm-pronoun-1.json":
+/*!************************************************************************!*\
+  !*** ./src/paradigm/data/greek/pronoun/tables/paradigm-pronoun-1.json ***!
+  \************************************************************************/
+/*! exports provided: ID, partOfSpeech, title, credits, table, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"ID\":\"pronpdgm1\",\"partOfSpeech\":\"pronoun\",\"title\":\"Personal Pronouns (First and Second Person)\",\"credits\":\"Pronoun paradigm tables derived from <a target=\\\"_blank\\\" href=\\\"http://ucbclassics.dreamhosters.com/ancgreek/\\\">Ancient Greek Tutorials</a>, by Donald J. Mastronarde, Berkeley Language Center of the University of California, Berkeley.<br>©1999-2005 The Regents of the University of California.\",\"table\":{\"rows\":[{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"value\":\"\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"value\":\"\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"value\":\"1st person\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"value\":\"1st person unemphatic\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"value\":\"2nd person\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"value\":\"2nd person unemphatic\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"singular\",\"value\":\"singular\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"singular\",\"case\":\"nominative\",\"value\":\"nominative\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"singular\",\"case\":\"nominative\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"ἐγώ\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"singular\",\"case\":\"nominative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"singular\",\"case\":\"nominative\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"σύ\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"singular\",\"case\":\"nominative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"singular\",\"value\":\"singular\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"singular\",\"case\":\"genitive\",\"value\":\"genitive\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"singular\",\"case\":\"genitive\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"ἐμοῦ\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"singular\",\"case\":\"genitive\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"μου\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"singular\",\"case\":\"genitive\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"σοῦ\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"singular\",\"case\":\"genitive\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"σου\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"singular\",\"value\":\"singular\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"singular\",\"case\":\"dative\",\"value\":\"dative\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"singular\",\"case\":\"dative\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"ἐμοί\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"singular\",\"case\":\"dative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"μοι\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"singular\",\"case\":\"dative\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"σοί\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"singular\",\"case\":\"dative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"σοι\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"singular\",\"value\":\"singular\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"singular\",\"case\":\"accusative\",\"value\":\"accusative\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"singular\",\"case\":\"accusative\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"ἐμέ\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"singular\",\"case\":\"accusative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"με\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"singular\",\"case\":\"accusative\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"σέ\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"singular\",\"case\":\"accusative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"σε\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"dual\",\"value\":\"dual\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"dual\",\"case\":\"nominative accusative\",\"value\":\"nominative accusative\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"dual\",\"case\":\"nominative accusative\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"νώ\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"dual\",\"case\":\"nominative accusative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"dual\",\"case\":\"nominative accusative\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"σφώ\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"dual\",\"case\":\"nominative accusative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"dual\",\"value\":\"dual\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"dual\",\"case\":\"genitive dative\",\"value\":\"genitive dative\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"dual\",\"case\":\"genitive dative\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"νῷν\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"dual\",\"case\":\"genitive dative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"dual\",\"case\":\"genitive dative\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"σφῷν\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"dual\",\"case\":\"genitive dative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"plural\",\"value\":\"plural\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"plural\",\"case\":\"nominative\",\"value\":\"nominative\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"plural\",\"case\":\"nominative\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"ἡμεῖς\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"plural\",\"case\":\"nominative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"plural\",\"case\":\"nominative\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"ὑμεῖς\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"plural\",\"case\":\"nominative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"plural\",\"value\":\"plural\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"plural\",\"case\":\"genitive\",\"value\":\"genitive\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"plural\",\"case\":\"genitive\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"ἡμῶν\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"plural\",\"case\":\"genitive\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"plural\",\"case\":\"genitive\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"ὑμῶν\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"plural\",\"case\":\"genitive\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"plural\",\"value\":\"plural\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"plural\",\"case\":\"dative\",\"value\":\"dative\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"plural\",\"case\":\"dative\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"ἡμῖν\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"plural\",\"case\":\"dative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"plural\",\"case\":\"dative\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"ὑμῖν\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"plural\",\"case\":\"dative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"\"}]},{\"cells\":[{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"plural\",\"value\":\"plural\"},{\"role\":\"label\",\"stemtype\":\"pron1\",\"number\":\"plural\",\"case\":\"accusative\",\"value\":\"accusative\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"plural\",\"case\":\"accusative\",\"morph\":\"indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"ἡμᾶς\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"1st\",\"number\":\"plural\",\"case\":\"accusative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"ἐγώ\",\"value\":\"\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"plural\",\"case\":\"accusative\",\"morph\":\"indeclform\",\"lemma\":\"σύ\",\"value\":\"ὑμᾶς\"},{\"role\":\"data\",\"stemtype\":\"pron1\",\"person\":\"2nd\",\"number\":\"plural\",\"case\":\"accusative\",\"morph\":\"enclitic indeclform\",\"lemma\":\"σύ\",\"value\":\"\"}]}]}}");
 
 /***/ }),
 
@@ -14659,10 +14768,13 @@ class GreekParadigmView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTE
         let fullMatch = true
 
         for (const feature of comparativeFeatures) {
+          
           if (inflection.hasOwnProperty(feature) || (feature === 'lemma')) {
 
             if (feature === 'lemma') {
               fullMatch = fullMatch && inflection.word && this.constructor.model.compareWords(cell[feature],inflection.word.value)
+            } else if (feature === 'morph') {
+              fullMatch = fullMatch && cell[feature].value === inflection[feature].value
             } else {
               fullMatch = fullMatch && cell[feature].hasValues(inflection[feature].values)
             }
@@ -14736,6 +14848,36 @@ class GreekNounParadigmView extends _paradigm_views_greek_greek_paradigm_view_js
 
   static get partsOfSpeech () {
     return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_NOUN]
+  }
+
+}
+
+
+/***/ }),
+
+/***/ "./src/paradigm/views/greek/pronoun/greek-pronoun-paradigm-view.js":
+/*!*************************************************************************!*\
+  !*** ./src/paradigm/views/greek/pronoun/greek-pronoun-paradigm-view.js ***!
+  \*************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return GreekPronounParadigmView; });
+/* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! alpheios-data-models */ "alpheios-data-models");
+/* harmony import */ var alpheios_data_models__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _paradigm_views_greek_greek_paradigm_view_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/paradigm/views/greek/greek-paradigm-view.js */ "./src/paradigm/views/greek/greek-paradigm-view.js");
+
+
+
+class GreekPronounParadigmView extends _paradigm_views_greek_greek_paradigm_view_js__WEBPACK_IMPORTED_MODULE_1__["default"] {
+  static get viewID () {
+    return 'greek_pronoun_paradigm_view'
+  }
+
+  static get partsOfSpeech () {
+    return [alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Constants"].POFS_PRONOUN]
   }
 
 }
@@ -15010,6 +15152,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _paradigm_views_greek_noun_greek_noun_paradigm_view_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @/paradigm/views/greek/noun/greek-noun-paradigm-view.js */ "./src/paradigm/views/greek/noun/greek-noun-paradigm-view.js");
 /* harmony import */ var _paradigm_views_greek_adjective_greek_adjective_paradigm_view_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @/paradigm/views/greek/adjective/greek-adjective-paradigm-view.js */ "./src/paradigm/views/greek/adjective/greek-adjective-paradigm-view.js");
 /* harmony import */ var _paradigm_views_greek_article_greek_article_paradigm_view_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @/paradigm/views/greek/article/greek-article-paradigm-view.js */ "./src/paradigm/views/greek/article/greek-article-paradigm-view.js");
+/* harmony import */ var _paradigm_views_greek_pronoun_greek_pronoun_paradigm_view_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @/paradigm/views/greek/pronoun/greek-pronoun-paradigm-view.js */ "./src/paradigm/views/greek/pronoun/greek-pronoun-paradigm-view.js");
+
 
 
 
@@ -15054,7 +15198,8 @@ class GreekViewSet extends _lib_view_set_js__WEBPACK_IMPORTED_MODULE_0__["defaul
       _paradigm_views_greek_noun_greek_noun_paradigm_view_js__WEBPACK_IMPORTED_MODULE_13__["default"],
       _paradigm_views_greek_noun_greek_noun_paradigm_view_js__WEBPACK_IMPORTED_MODULE_13__["default"],
       _paradigm_views_greek_adjective_greek_adjective_paradigm_view_js__WEBPACK_IMPORTED_MODULE_14__["default"],
-      _paradigm_views_greek_article_greek_article_paradigm_view_js__WEBPACK_IMPORTED_MODULE_15__["default"]
+      _paradigm_views_greek_article_greek_article_paradigm_view_js__WEBPACK_IMPORTED_MODULE_15__["default"],
+      _paradigm_views_greek_pronoun_greek_pronoun_paradigm_view_js__WEBPACK_IMPORTED_MODULE_16__["default"]
     ]
   }
 }
@@ -15839,7 +15984,7 @@ class GreekPronounView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
     if (inflections && inflections.length > 0 && inflections[0][alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass]) {
       return inflections[0][alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.grmClass].values
     }
-    return ''
+    return []
   }
 
   static getID (grammarClass) {
@@ -15878,7 +16023,7 @@ class GreekPronounView extends _views_lang_greek_greek_view_js__WEBPACK_IMPORTED
    * @return {boolean}
    */
   static matchFilter (languageID, inflections, inflectionData) {
-    if (this.languageID === languageID && inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] && i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech)) {
+    if (this.languageID === languageID && inflections.some(i => i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part] && i[alpheios_data_models__WEBPACK_IMPORTED_MODULE_0__["Feature"].types.part].value === this.mainPartOfSpeech) && this.classes.length > 0) {
       if (inflectionData.types.has(this.inflectionType)) {
         const inflections = inflectionData.types.get(this.inflectionType)
         const found = inflections.items.find(form => {

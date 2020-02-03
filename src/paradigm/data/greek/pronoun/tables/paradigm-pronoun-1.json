@@ -1,0 +1,590 @@
+{
+    "ID": "pronpdgm1",
+    "partOfSpeech": "pronoun",
+    "title": "Personal Pronouns (First and Second Person)",
+    "credits": "Pronoun paradigm tables derived from <a target=\"_blank\" href=\"http://ucbclassics.dreamhosters.com/ancgreek/\">Ancient Greek Tutorials<\/a>, by Donald J. Mastronarde, Berkeley Language Center of the University of California, Berkeley.<br>©1999-2005 The Regents of the University of California.",
+    "table": {"rows": [
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "value": ""
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "value": "1st person"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "value": "1st person unemphatic"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "value": "2nd person"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "value": "2nd person unemphatic"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "singular",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "singular",
+                "case": "nominative",
+                "value": "nominative"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "singular",
+                "case": "nominative",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "ἐγώ"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "singular",
+                "case": "nominative",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "singular",
+                "case": "nominative",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "σύ"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "singular",
+                "case": "nominative",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": ""
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "singular",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "singular",
+                "case": "genitive",
+                "value": "genitive"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "singular",
+                "case": "genitive",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "ἐμοῦ"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "singular",
+                "case": "genitive",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": "μου"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "singular",
+                "case": "genitive",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "σοῦ"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "singular",
+                "case": "genitive",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": "σου"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "singular",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "singular",
+                "case": "dative",
+                "value": "dative"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "singular",
+                "case": "dative",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "ἐμοί"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "singular",
+                "case": "dative",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": "μοι"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "singular",
+                "case": "dative",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "σοί"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "singular",
+                "case": "dative",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": "σοι"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "singular",
+                "value": "singular"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "singular",
+                "case": "accusative",
+                "value": "accusative"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "singular",
+                "case": "accusative",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "ἐμέ"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "singular",
+                "case": "accusative",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": "με"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "singular",
+                "case": "accusative",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "σέ"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "singular",
+                "case": "accusative",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": "σε"
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "dual",
+                "value": "dual"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "dual",
+                "case": "nominative accusative",
+                "value": "nominative accusative"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "dual",
+                "case": "nominative accusative",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "νώ"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "dual",
+                "case": "nominative accusative",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "dual",
+                "case": "nominative accusative",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "σφώ"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "dual",
+                "case": "nominative accusative",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": ""
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "dual",
+                "value": "dual"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "dual",
+                "case": "genitive dative",
+                "value": "genitive dative"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "dual",
+                "case": "genitive dative",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "νῷν"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "dual",
+                "case": "genitive dative",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "dual",
+                "case": "genitive dative",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "σφῷν"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "dual",
+                "case": "genitive dative",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": ""
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "plural",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "plural",
+                "case": "nominative",
+                "value": "nominative"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "plural",
+                "case": "nominative",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "ἡμεῖς"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "plural",
+                "case": "nominative",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "plural",
+                "case": "nominative",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "ὑμεῖς"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "plural",
+                "case": "nominative",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": ""
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "plural",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "plural",
+                "case": "genitive",
+                "value": "genitive"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "plural",
+                "case": "genitive",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "ἡμῶν"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "plural",
+                "case": "genitive",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "plural",
+                "case": "genitive",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "ὑμῶν"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "plural",
+                "case": "genitive",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": ""
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "plural",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "plural",
+                "case": "dative",
+                "value": "dative"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "plural",
+                "case": "dative",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "ἡμῖν"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "plural",
+                "case": "dative",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "plural",
+                "case": "dative",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "ὑμῖν"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "plural",
+                "case": "dative",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": ""
+            }
+        ]},
+        {"cells": [
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "plural",
+                "value": "plural"
+            },
+            {
+                "role": "label",
+                "stemtype": "pron1",
+                "number": "plural",
+                "case": "accusative",
+                "value": "accusative"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "plural",
+                "case": "accusative",
+                "morph": "indeclform",
+                "lemma": "ἐγώ",
+                "value": "ἡμᾶς"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "1st",
+                "number": "plural",
+                "case": "accusative",
+                "morph": "enclitic indeclform",
+                "lemma": "ἐγώ",
+                "value": ""
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "plural",
+                "case": "accusative",
+                "morph": "indeclform",
+                "lemma": "σύ",
+                "value": "ὑμᾶς"
+            },
+            {
+                "role": "data",
+                "stemtype": "pron1",
+                "person": "2nd",
+                "number": "plural",
+                "case": "accusative",
+                "morph": "enclitic indeclform",
+                "lemma": "σύ",
+                "value": ""
+            }
+        ]}
+    ]}
+}

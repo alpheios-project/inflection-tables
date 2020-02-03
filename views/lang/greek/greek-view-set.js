@@ -19,6 +19,7 @@ import GreekVerbParticipleParadigmView from '@/paradigm/views/greek/verb-partici
 import GreekNounParadigmView from '@/paradigm/views/greek/noun/greek-noun-paradigm-view.js'
 import GreekAdjectiveParadigmView from '@/paradigm/views/greek/adjective/greek-adjective-paradigm-view.js'
 import GreekArticleParadigmView from '@/paradigm/views/greek/article/greek-article-paradigm-view.js'
+import GreekPronounParadigmView from '@/paradigm/views/greek/pronoun/greek-pronoun-paradigm-view.js'
 
 export default class GreekViewSet extends ViewSet {
   /**
@@ -42,7 +43,8 @@ export default class GreekViewSet extends ViewSet {
       GreekNounParadigmView,
       GreekNounParadigmView,
       GreekAdjectiveParadigmView,
-      GreekArticleParadigmView
+      GreekArticleParadigmView,
+      GreekPronounParadigmView
     ]
   }
 }

@@ -131,6 +131,56 @@ export default class GreekParadigmDataset extends LanguageDataset {
     return Array.from(paradigms.values())
   }
 
+  setPronounParadigmData (partOfSpeech, paradigms, rulesData) {
+    // An order of columns in a data CSV file
+    const n = {
+      id: 0,
+      matchOrder: 1,
+      partOfSpeech: 2, // Ignored, an argument value will be used
+      stemtype: 3,
+      person: 4,
+      gender: 5,
+      lemma: 6,
+      morphFlags: 7,
+      dialect: 8
+    }
+
+    // First row contains headers
+    for (let i = 1; i < rulesData.length; i++) {
+      const item = rulesData[i]
+      const id = item[n.id]
+      const matchOrder = Number.parseInt(item[n.matchOrder])
+
+      let features = [partOfSpeech] // eslint-disable-line prefer-const
+
+      if (item[n.stemtype]) { features.push(this.typeFeatures.get(Feature.types.stemtype).createFromImporter(item[n.stemtype])) }
+      if (item[n.person]) { features.push(this.typeFeatures.get(Feature.types.person).createFromImporter(item[n.person])) }
+      if (item[n.gender]) { features.push(this.typeFeatures.get(Feature.types.gender).createFromImporter(item[n.gender])) }
+      if (item[n.dialect]) { features.push(this.typeFeatures.get(Feature.types.dialect).createFromImporter(item[n.dialect])) }
+
+      let lemma
+      if (item[n.lemma]) {
+        lemma = new Lemma(item[n.lemma], this.languageID)
+      }
+
+      let morphFlags = ''
+      if (item[n.morphFlags]) {
+        morphFlags = item[n.morphFlags]
+      }
+
+      if (paradigms.has(id)) {
+        paradigms.get(id).addRule(matchOrder, features, lemma, morphFlags)
+      } else {
+        console.warn(`Cannot find a paradigm table for "${id}" index`)
+      }
+    }
+    for (let paradigm of paradigms.values()) { // eslint-disable-line prefer-const
+      paradigm.sortRules()
+    }
+
+    return Array.from(paradigms.values())
+  }
+
   setArticleParadigmData (partOfSpeech, paradigms, rulesData) {
     // An order of columns in a data CSV file
     const n = {
@@ -185,6 +235,7 @@ export default class GreekParadigmDataset extends LanguageDataset {
     this.loadNounParadigmData()
     this.loadAdjectiveParadigmData()
     this.loadArticleParadigmData()
+    this.loadPronounParadigmData()
 
     this.dataLoaded = true
   }
@@ -252,6 +303,17 @@ export default class GreekParadigmDataset extends LanguageDataset {
     const paradigms = this.setArticleParadigmData(
       partOfSpeech, articleParadigmTables,
       papaparse.parse(GreekParadigmData.articleParadigmRules, { skipEmptyLines: true }).data, articleParadigmTables)
+    
+    this.addParadigms(partOfSpeech, paradigms)
+  }
+
+  loadPronounParadigmData () {
+    const pronounParadigmTables = GreekParadigmData.pronounParadigmTables
+    
+    const partOfSpeech = this.typeFeatures.get(Feature.types.part).createFeature(Constants.POFS_PRONOUN)
+    const paradigms = this.setPronounParadigmData(
+      partOfSpeech, pronounParadigmTables,
+      papaparse.parse(GreekParadigmData.pronounParadigmRules, { skipEmptyLines: true }).data, pronounParadigmTables)
     
     this.addParadigms(partOfSpeech, paradigms)
   }
